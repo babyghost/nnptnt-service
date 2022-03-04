@@ -26,6 +26,7 @@ public class DmLoaiDongVatBusiness {
 		} else {
 			direction = Direction.DESC;
 		}
+		
 		Page<DmLoaiDongVat> pageDmLoaiDongVat = serviceLoaiDongVatService.findAll(search, trangThai,
 				PageRequest.of(page, size, direction, sortBy));
 		return pageDmLoaiDongVat;
