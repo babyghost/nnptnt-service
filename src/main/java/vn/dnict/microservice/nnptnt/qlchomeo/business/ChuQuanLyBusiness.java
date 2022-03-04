@@ -19,6 +19,7 @@ public class ChuQuanLyBusiness {
 	@Autowired
 	ChuQuanLyService serviceChuQuanLyService;
 
+	
 	public Page<ChuQuanLy> findAll(int page, int size, String sortBy, String sortDir, String chuHo,
 			String diaChi, Integer dienThoai) {
 		Direction direction;
