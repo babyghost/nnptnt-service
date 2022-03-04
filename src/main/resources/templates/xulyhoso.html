@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Hệ thống quản lý hồ sơ công ích</title>
+<link th:href="@{/bootstrap-3.4.1/css/bootstrap.css}" rel="stylesheet"/>
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/bootstrap-3.4.1/js/bootstrap.js}"></script>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
+</head>
+<body>
+<form th:object="${thongTinHoSoMotCua}">
+ <div class="form-group" id="form-container">
+ <div id="infoContent"></div>
+	<table class="table table-bordered">
+		<tr>
+			<td>
+				<label><b>Nội dung xử lý: </b></label>
+			</td>
+			<td colspan="3"><textarea rows="10" cols="5" style="width: 100%" name="noiDungXuLy" id="noiDungXuLy"></textarea></td>
+		</tr>
+		<tr>
+			<td colspan="4" style="text-align: center">
+				<input type="hidden" th:value="${thongTinHoSoMotCua.id}" name="thongTinHoSoMotCuaId" id="thongTinHoSoMotCuaId">
+				<button type="button" class="btn btn-primary" id="saveXuLyHoSo">Lưu thay đổi</button>
+			</td>
+		</tr>
+ </table>
+</div>
+</form>
+</body>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var thongTinHoSoId = $("#thongTinHoSoMotCuaId").val()
+		var objectKetQuaXuLy = null
+		$.get("/dvc/thongtinhoso/ketquaxuly/"+thongTinHoSoId, function( data ) {
+			if (data.hoSoCongIchId === undefined || data.hoSoCongIchId === null || data.hoSoCongIchId === 0) {
+	          var stringAlert = '<div class="alert alert-danger" role="alert">Lỗi thiếu dữ liệu chuyên ngành !!!</div>'
+				$('#infoContent').html(stringAlert)
+				$('#form-container').scrollTop(0)
+	        } else {
+	        	objectKetQuaXuLy = {...data}
+	        	$("#noiDungXuLy").html(objectKetQuaXuLy.noiDungXuLy)
+	        }
+		}).fail(function() {
+		  var stringAlert = '<div class="alert alert-danger" role="alert">Lỗi đường truyền !!!</div>'
+			$('#infoContent').html(stringAlert)
+			$('#form-container').scrollTop(0)
+		})
+		$('#saveXuLyHoSo').click(function() {
+			objectKetQuaXuLy.noiDungXuLy = $("#noiDungXuLy").val()
+			var objectDataString = JSON.stringify(objectKetQuaXuLy);
+			$.ajax({ url: '/dvc/thongtinhoso/ketquaxuly/save',
+			method: "POST",
+			dataType: 'json',
+			headers: {'X-Token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0YWloZDNAZGFuYW5nLmdvdi52biIsInJvbGUiOlsiUk9MRV9BRE1JTiJdLCJ1c3IiOiJ0YWloZDNAZGFuYW5nLmdvdi52biIsImlzcyI6ImFwcC1kdmMtc252LXNlcnZpY2UiLCJleHAiOjE2MzU3NTk3NzYsImlhdCI6MTYzNTE1NDk3Nn0.s7mAZmvtXmujnmZvQOvAh31jDmf6ftRlBbKIssOu3Og',
+				 'Content-Type': 'application/json'},
+			data: objectDataString,
+			success: function(response) {
+				$('#myModal').modal('toggle')
+				setInterval('location.reload()', 300);
+			}
+			});
+			
+		});
+	})
+</script>
+</html>

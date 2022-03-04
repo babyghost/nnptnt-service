@@ -1,0 +1,19 @@
+package vn.dnict.microservice.uaa.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class UserNotFoundException extends RuntimeException {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2803843152092716491L;
+
+	public UserNotFoundException() {
+	}
+
+	public UserNotFoundException(String message) {
+		super(message);
+	}
+}

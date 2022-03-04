@@ -1,0 +1,78 @@
+info:
+  component: CSDL chuyen nganh Nông nghiệp và Phát triển nông thôn
+server:
+  port: ${PORT:8494}
+  servlet:
+    context-path: /nnptnt
+  
+# Items that apply to ALL profiles:   
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka.dev.dnict.vn/eureka
+    register-with-eureka: false
+security:
+  #token:
+    #header: X-Token
+    #endpoint: http://103.101.76.123:8000/auth/uaa/user
+    #endpoint: http://49.156.54.118:8000/auth/uaa/user
+  token:
+    max-age-seconds: 604800 # 1 week
+    secret: bkr5aI5AAtS5kbwN
+    header: X-Token
+core:
+  attachment:
+    host:
+      download: http://49.156.54.118:8000/stttt/core
+    path:
+      upload: /opt/uploads
+      uploadtemp: /opt/uploads/temp
+  
+# ===============================
+# = DATA SOURCE
+# ===============================
+
+# Set here configurations for the database connection
+
+spring:
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+  datasource:   
+    url: jdbc:postgresql://10.49.55.112:5432/nnptnt_csdl_chuyennganh
+#    url: jdbc:postgresql://10.49.55.112:5432/snv_dichvucong
+#    url: jdbc:postgresql://localhost:5433/snv_dichvucong
+    username: postgres
+#   password: 
+    password: Abc@123
+  jpa:
+    properties:
+      hibernate.order_by.default_null_ordering: last
+      hibernate:
+        show_sql: true
+        format_sql: true
+        ddl-auto: none
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+# Fix Postgres JPA Error:
+# Method org.postgresql.jdbc.PgConnection.createClob() is not yet implemented.        
+        temp:
+          use_jdbc_metadata_defaults: false
+   # database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+  cloud:
+    refresh:
+      enabled: false
+  multipart:
+      location: /opt/uploads/temp
+      max-file-size: 50Mb
+      max-request-size: 50Mb
+
+logging:
+  level:
+    org:
+      hibernate:
+        type: trace
+    ROOT: ERROR
+    org.springframework.web: ERROR
+    vn.dnict: DEBUG
+  pattern: 
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"

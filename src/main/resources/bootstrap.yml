@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: app-dnict-trungtamso-service
+    #name: taihd-service 
+  cloud:
+    config:
+      #uri: http://config.dev.dnict.vn
+      uri: http://localhost:8888
+      

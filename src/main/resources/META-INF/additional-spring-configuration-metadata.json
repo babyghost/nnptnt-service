@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "core.attachment.path.upload",
+    "type": "java.lang.String",
+    "description": "A description for 'core.attachment.path.upload'"
+  },
+  {
+    "name": "core.attachment.path.uploadtemp",
+    "type": "java.lang.String",
+    "description": "A description for 'core.attachment.path.uploadtemp'"
+  },
+  {
+    "name": "ap.init.db",
+    "type": "java.lang.String",
+    "description": "A description for 'ap.init.db'"
+  }
+]}

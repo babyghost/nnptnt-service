@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Hệ thống quản lý hồ sơ công ích</title>
+<link th:href="@{/bootstrap-3.4.1/css/bootstrap.css}" rel="stylesheet"/>
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/bootstrap-3.4.1/js/bootstrap.js}"></script>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
+</head>
+<body>
+<form th:object="${thongTinHoSoMotCua}">
+ <div class="form-group" id="form-container">
+ <div id="infoContent"></div>
+	<table class="table table-bordered">
+		<tr width="250px">
+		  <td>
+		  	<label><b>Lĩnh vực: </b></label>
+		  </td>
+		  <td colspan="3"><span th:text="${thongTinHoSoMotCua.linhVucString}"/></td>
+		</tr>
+		<tr>
+		  <td>
+		  	<label><b>Thủ tục dịch vụ công: </b></label>
+		  </td>
+		  <td colspan="3"><span th:text="${thongTinHoSoMotCua.thuTucString}"/></td>
+		</tr>
+		<tr>
+		  <td>
+		  	<label><b>Mã hồ sơ: </b></label>
+		  </td>
+		  <td colspan="3"><span th:text="${thongTinHoSoMotCua.maSoHoSo}"/></td>
+		</tr>
+		<tr>
+		  <td>
+		  	<label><b>Người nộp hồ sơ: </b></label>
+		  </td>
+		  <td><span th:text="${thongTinHoSoMotCua.nguoiNopHoSo}"/></td>
+		  <td>
+		  	<label><b>Số điện thoại: </b></label>
+		  </td>
+		  <td><span th:text="${thongTinHoSoMotCua.dienThoaiNguoiNop}"/></td>
+		</tr>
+		<tr>
+			<td>
+			  	<label><b>Email: </b></label>
+			 </td>
+			 <td><span th:text="${thongTinHoSoMotCua.emailNguoiNop}"/></td>
+			<td>
+			 	<label><b>Địa chỉ người nộp: </b></label>
+			 </td>
+			 <td><span th:text="${thongTinHoSoMotCua.diaChiNguoiNop}"/></td>
+		</tr>
+		<tr>
+			<td>
+			 	<label><b>Chủ hồ sơ: </b></label>
+			 </td>
+			 <td><span th:text="${thongTinHoSoMotCua.chuHoSoString}"/></td>
+			 <td>
+			 	<label><b>Số điện thoai: </b></label>
+			 </td>
+			 <td><span th:text="${thongTinHoSoMotCua.dienThoaiChuHoSo}"/></td>
+		</tr>
+		<tr>
+			<td>
+			 	<label><b>Địa chỉ: </b></label>
+			 </td>
+			 <td colspan="3"><span th:text="${thongTinHoSoMotCua.diaChiChuHoSo}"/></td>
+		</tr>
+		<tr>
+			<td>
+				<label><b>Ngày nhận: </b></label>
+			</td>
+			<td><span th:text="${thongTinHoSoMotCua.ngayNhan}"/></td>
+			<td>
+				<label><b>Hạn xử lý: </b></label>
+			</td>
+			<td><span th:text="${thongTinHoSoMotCua.ngayHenTra}"/></td>
+		</tr>
+		<tr>
+			<td>
+				<label><b>Cán bộ tiếp nhận: </b></label>
+			</td>
+			<td><span th:text="${thongTinHoSoMotCua.canBoTiepNhanString}"/></td>
+			<td>
+				<label><b>Cơ quan tiếp nhận: </b></label>
+			</td>
+			<td><span th:text="${thongTinHoSoMotCua.coQuanTiepNhanString}"/></td>
+		</tr>
+		<tr>
+			<td>
+				<label><b>Trạng thái xử lý: </b></label>
+			</td>
+			<td colspan="3"><span th:text="${thongTinHoSoMotCua.trangThaiHoSoString}"/></td>
+		</tr>
+		<tr>
+			<td>
+				<label><b>Nội dung ý kiến: </b></label>
+			</td>
+			<td colspan="3"><p th:text="${thongTinHoSoMotCua.noiDungPhanAnh}"/></td>
+		</tr>
+		<tr>
+			<td>
+				<label><b>Nơi diễn ra: </b></label>
+			</td>
+			<td><p th:text="${thongTinHoSoMotCua.noiDienRaPhanAnh}"/></td>
+			<td>
+				<label><b>Ngày diện ra: </b></label>
+			</td>
+			<td><p th:text="${thongTinHoSoMotCua.ngayDienRaPhanAnh}"/></td>
+		</tr>
+		<tr>
+			<td>
+				<label><b>Kết quả xử lý hồ sơ </b></label>
+				<input type="hidden" th:value="${thongTinHoSoMotCua.id}" name="thongTinHoSoMotCuaId" id="thongTinHoSoMotCuaId">
+			</td>
+			<td colspan="3"><p id="noiDungXuLy"></p></td>
+		</tr>
+<!-- 		<tr> -->
+<!-- 			<td colspan="4" style="text-align: center"> -->
+<!-- 				<input type="hidden" th:value="${thongTinHoSoMotCua.id}" name="thongTinHoSoMotCuaId" id="thongTinHoSoMotCuaId"> -->
+<!-- 				<button th:if="${thongTinHoSoMotCua.trangThaiHoSoId == 2 && thongTinHoSoMotCua.ketQuaXuLyId != null && thongTinHoSoMotCua.ketQuaXuLyId > 0}" type="button" class="btn btn-primary btn-small" id="btnXuLyHoSoCongIch">Hiệu chỉnh kết quả</button> -->
+<!-- 				<button th:unless="${thongTinHoSoMotCua.trangThaiHoSoId == 2 && thongTinHoSoMotCua.ketQuaXuLyId != null && thongTinHoSoMotCua.ketQuaXuLyId > 0}" type="button" class="btn btn-primary btn-small" id="btnXuLyHoSoCongIch">Xử lý kết quả</button> -->
+<!-- 			</td> -->
+<!-- 		</tr> -->
+ </table>
+</div>
+</form>
+</body>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var thongTinHoSoId = $("#thongTinHoSoMotCuaId").val()
+		var objectKetQuaXuLy = null
+		$.get("/dvc/thongtinhoso/ketquaxuly/"+thongTinHoSoId, function( data ) {
+			console.log(data)
+			if (data.hoSoCongIchId === undefined || data.hoSoCongIchId === null || data.hoSoCongIchId === 0) {
+	          var stringAlert = '<div class="alert alert-danger" role="alert">Lỗi thiếu dữ liệu chuyên ngành !!!</div>'
+				$('#infoContent').html(stringAlert)
+				$('#form-container').scrollTop(0)
+	        } else {
+	        	objectKetQuaXuLy = {...data}
+	        	$('#myModal').modal('toggle')
+	        	$("#noiDungXuLy").html(objectKetQuaXuLy.noiDungXuLy)
+	        }
+		}).fail(function() {
+		  var stringAlert = '<div class="alert alert-danger" role="alert">Lỗi đường truyền !!!</div>'
+			$('#infoContent').html(stringAlert)
+			$('#form-container').scrollTop(0)
+		})
+		
+		$('#saveXuLyHoSo').click(function() {
+			console.log("test...")
+			console.log($("#noiDungXuLy").val())
+			objectKetQuaXuLy.noiDungXuLy = $("#noiDungXuLy").val()
+			var objectDataString = JSON.stringify(objectKetQuaXuLy);
+			console.log(objectKetQuaXuLy)
+			$.ajax({ url: '/dvc/thongtinhoso/ketquaxuly/save',
+			method: "POST",
+			dataType: 'json',
+			headers: {'X-Token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0YWloZDNAZGFuYW5nLmdvdi52biIsInJvbGUiOlsiUk9MRV9BRE1JTiJdLCJ1c3IiOiJ0YWloZDNAZGFuYW5nLmdvdi52biIsImlzcyI6ImFwcC1kdmMtc252LXNlcnZpY2UiLCJleHAiOjE2MzU3NTk3NzYsImlhdCI6MTYzNTE1NDk3Nn0.s7mAZmvtXmujnmZvQOvAh31jDmf6ftRlBbKIssOu3Og',
+				 'Content-Type': 'application/json'},
+			data: objectDataString,
+			success: function(response) {
+				console.log(response)
+				$('#myModal').modal('toggle')
+			}
+			});
+			
+		});
+	})
+</script>
+</html>
