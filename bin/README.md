@@ -1,2 +1,2 @@
-# app-csdl-chuyennganh-nnptnt-service
-App Trung tam so
+# nnptnt-service
+code version 1.0
