@@ -39,6 +39,7 @@ public class ThongTinChoMeoImportBusiness {
 		}
 		final Page<ThongTinChoMeoImport> result = serviceThongTinChoMeoImportService.findAll(search, thongTinChoMeoId, trangThai, PageRequest.of(page, size, direction, sortBy));
 		Page<ThongTinChoMeoImportOutput> dataConvert = result.map(this::thongTinChoMeoImportConvert2OutPut);
+		
 		return dataConvert;
 	}
 	
