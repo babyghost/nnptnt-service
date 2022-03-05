@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
+import vn.dnict.microservice.nnptnt.dm.loaivatnuoi.dao.model.DmLoaiVatNuoi;
+import vn.dnict.microservice.nnptnt.dm.loaivatnuoi.dao.service.DmLoaiVatNuoiService;
 import vn.dnict.microservice.nnptnt.qlvatnuoi.dao.model.CoSoChanNuoi;
-import vn.dnict.microservice.nnptnt.qlvatnuoi.dao.model.DmLoaiVatNuoi;
 import vn.dnict.microservice.nnptnt.qlvatnuoi.dao.model.HoatDongChanNuoi;
 import vn.dnict.microservice.nnptnt.qlvatnuoi.dao.model.NamChanNuoi;
 import vn.dnict.microservice.nnptnt.qlvatnuoi.dao.service.CoSoChanNuoiService;
-import vn.dnict.microservice.nnptnt.qlvatnuoi.dao.service.DmLoaiVatNuoiService;
 import vn.dnict.microservice.nnptnt.qlvatnuoi.dao.service.HoatDongChanNuoiService;
 import vn.dnict.microservice.nnptnt.qlvatnuoi.dao.service.NamChanNuoiService;
 import vn.dnict.microservice.nnptnt.qlvatnuoi.data.HoatDongChanNuoiInput;

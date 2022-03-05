@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
+import vn.dnict.microservice.nnptnt.dm.loaivatnuoi.dao.model.DmLoaiVatNuoi;
 import vn.dnict.microservice.nnptnt.qlvatnuoi.business.HoatDongChanNuoiBusiness;
 import vn.dnict.microservice.nnptnt.qlvatnuoi.dao.model.CoSoChanNuoi;
-import vn.dnict.microservice.nnptnt.qlvatnuoi.dao.model.DmLoaiVatNuoi;
 import vn.dnict.microservice.nnptnt.qlvatnuoi.dao.model.HoatDongChanNuoi;
 import vn.dnict.microservice.nnptnt.qlvatnuoi.dao.model.NamChanNuoi;
 import vn.dnict.microservice.nnptnt.qlvatnuoi.data.HoatDongChanNuoiInput;

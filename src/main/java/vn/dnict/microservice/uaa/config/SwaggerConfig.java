@@ -42,9 +42,7 @@ public class SwaggerConfig {
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.core.api"),
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.danhmuc.api"),
 
-						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.qlchomeo.api"),
-
-						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.qlvatnuoi.api"),
+						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.dm.giong.api"),
 
 						// RequestHandlerSelectors.basePackage("vn.dnict.microservice.dvcnoivu.hoso.controller"),
 						// RequestHandlerSelectors.basePackage("vn.dnict.microservice.trungtamso.baocaocongviec.controller"),
