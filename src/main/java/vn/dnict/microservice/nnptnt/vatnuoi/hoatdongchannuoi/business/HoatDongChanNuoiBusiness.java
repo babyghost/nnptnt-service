@@ -31,7 +31,7 @@ public class HoatDongChanNuoiBusiness {
 	@Autowired
 	CoSoChanNuoiService serviceCoSoChanNuoiService;
 	
-	@Autowired
+//	@Autowired
 //	NamChanNuoiService serviceNamChanNuoiService;
 	
 	public Page<HoatDongChanNuoi> findAll(int page, int size, String sortBy, String sortDir,String search,
