@@ -39,7 +39,7 @@ public class HoatDongChanNuoiBusiness {
 	public Page<HoatDongChanNuoi> findAll(int page, int size, String sortBy, String sortDir,String search,
 			Integer donViTinh, Integer soLuongNuoi,
 			String mucDichNuoi, LocalDate thoiGianBatDauNuoi, LocalDate thoiGianXuat, Integer slVatNuoiXuat,
-			Float sanLuongXuat, String ghiChu, Long loaiVatNuoiId, Long namChanNuoiId,Long coSoChanNuoiId
+			Float sanLuongXuat, String ghiChu, Long loaiVatNuoiId,Long coSoChanNuoiId,String nam, Integer quy
 			) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
@@ -49,7 +49,7 @@ public class HoatDongChanNuoiBusiness {
 		}
 		Page<HoatDongChanNuoi> pageHoatDongChanNuoi = serviceHoatDongChanNuoiService.findAll(search,donViTinh,soLuongNuoi,
 				mucDichNuoi,thoiGianBatDauNuoi,thoiGianXuat,slVatNuoiXuat,sanLuongXuat,ghiChu,
-				loaiVatNuoiId,namChanNuoiId,coSoChanNuoiId,
+				loaiVatNuoiId,coSoChanNuoiId,nam, quy,
 				PageRequest.of(page, size, direction, sortBy));
 		
 //		 Optional<CoSoChanNuoi> coSoChanNuoi= serviceCoSoChanNuoiService.findById(coSoChanNuoiId);
@@ -147,7 +147,7 @@ public class HoatDongChanNuoiBusiness {
 		HoatDongChanNuoi.setDaXoa(false);
 		HoatDongChanNuoi.setDonViTinh(HoatDongChanNuoiInput.getDonViTinh());
 		HoatDongChanNuoi.setLoaiVatNuoiId(HoatDongChanNuoiInput.getLoaiVatNuoiId());
-		HoatDongChanNuoi.setNamChanNuoiId(HoatDongChanNuoiInput.getNamChanNuoiId());
+//		HoatDongChanNuoi.setNamChanNuoiId(HoatDongChanNuoiInput.getNamChanNuoiId());
 		HoatDongChanNuoi.setCoSoChanNuoiId(HoatDongChanNuoiInput.getCoSoChanNuoiId());
 		HoatDongChanNuoi.setSlVatNuoiXuat(HoatDongChanNuoiInput.getSlVatNuoiXuat());
 		HoatDongChanNuoi.setMucDichNuoi(HoatDongChanNuoiInput.getMucDichNuoi());
@@ -156,10 +156,14 @@ public class HoatDongChanNuoiBusiness {
 		HoatDongChanNuoi.setThoiGianBatDauNuoi(HoatDongChanNuoiInput.getThoiGianBatDauNuoi());
 		HoatDongChanNuoi.setThoiGianXuat(HoatDongChanNuoiInput.getThoiGianXuat());
 		HoatDongChanNuoi.setGhiChu(HoatDongChanNuoiInput.getGhiChu());
+		HoatDongChanNuoi.setNam(HoatDongChanNuoiInput.getNam());
+		HoatDongChanNuoi.setQuy(HoatDongChanNuoiInput.getQuy());
 		HoatDongChanNuoi = serviceHoatDongChanNuoiService.save(HoatDongChanNuoi);
 
 		return HoatDongChanNuoi;
 	}
+	
+	
 	
 	public HoatDongChanNuoi update(Long id, HoatDongChanNuoiInput HoatDongChanNuoiInput) throws EntityNotFoundException {
 		Optional<HoatDongChanNuoi> optional = serviceHoatDongChanNuoiService.findById(id);
@@ -170,7 +174,7 @@ public class HoatDongChanNuoiBusiness {
 //		HoatDongChanNuoi.setDaXoa(true);
 		HoatDongChanNuoi.setDonViTinh(HoatDongChanNuoiInput.getDonViTinh());
 		HoatDongChanNuoi.setLoaiVatNuoiId(HoatDongChanNuoiInput.getLoaiVatNuoiId());
-		HoatDongChanNuoi.setNamChanNuoiId(HoatDongChanNuoiInput.getNamChanNuoiId());
+//		HoatDongChanNuoi.setNamChanNuoiId(HoatDongChanNuoiInput.getNamChanNuoiId());
 		HoatDongChanNuoi.setCoSoChanNuoiId(HoatDongChanNuoiInput.getCoSoChanNuoiId());
 		HoatDongChanNuoi.setMucDichNuoi(HoatDongChanNuoiInput.getMucDichNuoi());
 		HoatDongChanNuoi.setSlVatNuoiXuat(HoatDongChanNuoiInput.getSlVatNuoiXuat());
@@ -179,6 +183,8 @@ public class HoatDongChanNuoiBusiness {
 		HoatDongChanNuoi.setThoiGianBatDauNuoi(HoatDongChanNuoiInput.getThoiGianBatDauNuoi());
 		HoatDongChanNuoi.setThoiGianXuat(HoatDongChanNuoiInput.getThoiGianXuat());
 		HoatDongChanNuoi.setGhiChu(HoatDongChanNuoiInput.getGhiChu());
+		HoatDongChanNuoi.setNam(HoatDongChanNuoiInput.getNam());
+		HoatDongChanNuoi.setQuy(HoatDongChanNuoiInput.getQuy());
 		HoatDongChanNuoi = serviceHoatDongChanNuoiService.save(HoatDongChanNuoi);
 		return HoatDongChanNuoi;
 		

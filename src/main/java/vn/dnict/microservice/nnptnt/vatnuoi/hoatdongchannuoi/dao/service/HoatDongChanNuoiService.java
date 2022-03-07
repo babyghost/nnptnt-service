@@ -23,7 +23,8 @@ public interface HoatDongChanNuoiService {
 
 	public Page<HoatDongChanNuoi> findAll(String search, Integer donViTinh, Integer soLuongNuoi,
 			String mucDichNuoi, LocalDate thoiGianBatDauNuoi, LocalDate thoiGianXuat, Integer slVatNuoiXuat,
-			Float sanLuongXuat, String ghiChu, Long loaiVatNuoiId, Long namChanNuoiId,Long coSoChanNuoiId, Pageable pageable);
+			Float sanLuongXuat, String ghiChu, Long loaiVatNuoiId,Long coSoChanNuoiId, String nam, Integer quy, Pageable pageable);
 //	public List<HoatDongChanNuoi> findHoatDongChanNuoiByLoaiVatNuoiIdAndDaXoa(Long loaiVatNuoiId, Integer daXoa);
 
+	
 }
