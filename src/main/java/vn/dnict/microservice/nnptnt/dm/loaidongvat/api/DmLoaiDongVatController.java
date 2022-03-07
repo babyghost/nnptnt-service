@@ -24,7 +24,7 @@ import vn.dnict.microservice.nnptnt.dm.loaidongvat.dao.model.DmLoaiDongVat;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/qlchomeo/dmloaidongvat")
+@RequestMapping(value = "/dm/dmloaidongvat")
 public class DmLoaiDongVatController {
 	@Autowired
 	DmLoaiDongVatBusiness businessDmLoaiDongVatBusiness;

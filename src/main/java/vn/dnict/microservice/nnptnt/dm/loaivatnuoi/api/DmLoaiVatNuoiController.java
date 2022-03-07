@@ -24,7 +24,7 @@ import vn.dnict.microservice.nnptnt.vatnuoi.data.DmLoaiVatNuoiInput;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/qlvatnuoi/dmloaivatnuoi")
+@RequestMapping(value = "/dm/dmloaivatnuoi")
 public class DmLoaiVatNuoiController {
 	@Autowired
 	DmLoaiVatNuoiBusiness businessDmLoaiVatNuoiBusiness;
