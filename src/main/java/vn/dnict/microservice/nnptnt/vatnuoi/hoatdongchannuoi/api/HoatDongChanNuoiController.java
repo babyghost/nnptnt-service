@@ -36,6 +36,7 @@ public class HoatDongChanNuoiController {
 		
 		
 		
+		
 		@GetMapping(value = { "/", "" })
 		public ResponseEntity<Page<HoatDongChanNuoi>> findAll(
 				@RequestParam(name = "page", defaultValue = "0", required = false) int page,
@@ -51,13 +52,15 @@ public class HoatDongChanNuoiController {
 				@RequestParam(name= "slVatNuoiXuat",required = false) Integer slVatNuoiXuat,
 				@RequestParam(name= "sanLuongXuat",required = false) Float sanLuongXuat,
 				@RequestParam(name= "loaiVatNuoiId",required = false) Long loaiVatNuoiId,
-				@RequestParam(name= "namChanNuoiId",required = false) Long namChanNuoiId,
+//				@RequestParam(name= "namChanNuoiId",required = false) Long namChanNuoiId,
 				@RequestParam(name= "coSoChanNuoId",required = false) Long coSoChanNuoiId,
-				@RequestParam(name= "ghiChu",required = false) String ghiChu
+				@RequestParam(name= "ghiChu",required = false) String ghiChu,
+				@RequestParam(name= "nam",required = false) String nam,
+				@RequestParam(name= "quy",required = false) Integer quy
 				)
 				{
 			Page<HoatDongChanNuoi> pageHoatDongChanNuoi = (Page<HoatDongChanNuoi>) businessHoatDongChanNuoiBusiness.findAll(page, size, sortBy, sortDir, search,donViTinh,soLuongNuoi,
-					mucDichNuoi,thoiGianBatDauNuoi,thoiGianXuat,slVatNuoiXuat,sanLuongXuat,ghiChu,loaiVatNuoiId,namChanNuoiId,coSoChanNuoiId);
+					mucDichNuoi,thoiGianBatDauNuoi,thoiGianXuat,slVatNuoiXuat,sanLuongXuat,ghiChu,loaiVatNuoiId,coSoChanNuoiId,nam,quy);
 			
 			return ResponseEntity.ok(pageHoatDongChanNuoi);
 		}

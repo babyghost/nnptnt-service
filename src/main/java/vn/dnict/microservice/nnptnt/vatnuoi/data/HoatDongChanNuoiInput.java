@@ -36,5 +36,8 @@ public class HoatDongChanNuoiInput {
 	
 	private Long coSoChanNuoiId;
 
-	private Long namChanNuoiId;
+//	private Long namChanNuoiId;
+	private String nam;
+	private Integer quy;
+
 }

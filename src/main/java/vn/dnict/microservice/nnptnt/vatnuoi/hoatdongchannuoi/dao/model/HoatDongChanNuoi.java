@@ -111,4 +111,11 @@ public class HoatDongChanNuoi {
 	@JsonIgnore
 	@Column(name = "daxoa")
 	private boolean daXoa;
+	
+	@Column(name = "nam")
+	private String Nam;
+	
+	@Column(name = "quy")
+	private Integer quy;
+	
 }
