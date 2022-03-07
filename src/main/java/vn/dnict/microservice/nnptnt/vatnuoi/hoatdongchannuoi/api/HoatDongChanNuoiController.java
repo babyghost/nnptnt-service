@@ -25,7 +25,6 @@ import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.model.CoSoChanNuoi;
 import vn.dnict.microservice.nnptnt.vatnuoi.data.HoatDongChanNuoiInput;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.business.HoatDongChanNuoiBusiness;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.model.HoatDongChanNuoi;
-import vn.dnict.microservice.nnptnt.vatnuoi.namchannuoi.dao.model.NamChanNuoi;
 
 @CrossOrigin
 @RestController
@@ -80,12 +79,12 @@ public class HoatDongChanNuoiController {
 			return ResponseEntity.ok(coSoChanNuoi);
 		}
 		
-		@GetMapping(value = "/{id}/namchannuoi")
-		public ResponseEntity<NamChanNuoi> findNamChanNuoiByHoatDongChanNuoiId(@PathVariable("id") Long id)
-				throws EntityNotFoundException {
-			NamChanNuoi NamChanNuoi = businessHoatDongChanNuoiBusiness.findNamChanNuoiByHoatDongChanNuoiId(id);
-			return ResponseEntity.ok(NamChanNuoi);
-		}
+//		@GetMapping(value = "/{id}/namchannuoi")
+//		public ResponseEntity<NamChanNuoi> findNamChanNuoiByHoatDongChanNuoiId(@PathVariable("id") Long id)
+//				throws EntityNotFoundException {
+//			NamChanNuoi NamChanNuoi = businessHoatDongChanNuoiBusiness.findNamChanNuoiByHoatDongChanNuoiId(id);
+//			return ResponseEntity.ok(NamChanNuoi);
+//		}
 		
 		@GetMapping(value = "/{id}/loaivatnuoi")
 		public ResponseEntity<DmLoaiVatNuoi> findLoaiVatNuoiByHoatDongChanNuoiId(@PathVariable("id") Long id)

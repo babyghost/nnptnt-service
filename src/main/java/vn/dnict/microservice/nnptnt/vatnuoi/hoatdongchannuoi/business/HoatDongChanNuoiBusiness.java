@@ -18,8 +18,6 @@ import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.service.CoSoChanNuo
 import vn.dnict.microservice.nnptnt.vatnuoi.data.HoatDongChanNuoiInput;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.model.HoatDongChanNuoi;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.service.HoatDongChanNuoiService;
-import vn.dnict.microservice.nnptnt.vatnuoi.namchannuoi.dao.model.NamChanNuoi;
-import vn.dnict.microservice.nnptnt.vatnuoi.namchannuoi.dao.service.NamChanNuoiService;
 
 @Service
 public class HoatDongChanNuoiBusiness {
@@ -34,7 +32,7 @@ public class HoatDongChanNuoiBusiness {
 	CoSoChanNuoiService serviceCoSoChanNuoiService;
 	
 	@Autowired
-	NamChanNuoiService serviceNamChanNuoiService;
+//	NamChanNuoiService serviceNamChanNuoiService;
 	
 	public Page<HoatDongChanNuoi> findAll(int page, int size, String sortBy, String sortDir,String search,
 			Integer donViTinh, Integer soLuongNuoi,
@@ -98,18 +96,18 @@ public class HoatDongChanNuoiBusiness {
 	
 	
 	
-	public NamChanNuoi findNamChanNuoiByHoatDongChanNuoiId(Long id) throws EntityNotFoundException {
-		Optional<HoatDongChanNuoi> optional = serviceHoatDongChanNuoiService.findById(id);
-		if (!optional.isPresent()) {
-			throw new EntityNotFoundException(HoatDongChanNuoi.class, "id", String.valueOf(id));
-		}
-		HoatDongChanNuoi HoatDongChanNuoi = optional.get();
-		Optional<NamChanNuoi> optionalNamChanNuoi = serviceNamChanNuoiService.findById(HoatDongChanNuoi.getNamChanNuoiId());
-		if (!optionalNamChanNuoi.isPresent()) {
-			throw new EntityNotFoundException(CoSoChanNuoi.class, "id", String.valueOf(id));
-		}
-		return optionalNamChanNuoi.get();
-	}
+//	public NamChanNuoi findNamChanNuoiByHoatDongChanNuoiId(Long id) throws EntityNotFoundException {
+//		Optional<HoatDongChanNuoi> optional = serviceHoatDongChanNuoiService.findById(id);
+//		if (!optional.isPresent()) {
+//			throw new EntityNotFoundException(HoatDongChanNuoi.class, "id", String.valueOf(id));
+//		}
+//		HoatDongChanNuoi HoatDongChanNuoi = optional.get();
+//		Optional<NamChanNuoi> optionalNamChanNuoi = serviceNamChanNuoiService.findById(HoatDongChanNuoi.getNamChanNuoiId());
+//		if (!optionalNamChanNuoi.isPresent()) {
+//			throw new EntityNotFoundException(NamChanNuoi.class, "id", String.valueOf(id));
+//		}
+//		return optionalNamChanNuoi.get();
+//	}
 	
 	
 	
