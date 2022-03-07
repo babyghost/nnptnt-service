@@ -13,4 +13,6 @@ import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.model.HoatDongC
 	public interface HoatDongChanNuoiRepo extends JpaRepository<HoatDongChanNuoi, Long>,JpaSpecificationExecutor<HoatDongChanNuoi>{
 	public Optional<HoatDongChanNuoi> findByLoaiVatNuoiId(Long loaiVatNuoiId);
 //	public List<HoatDongChanNuoi> findHoatDongChanNuoiByLoaiIdAndDaXoa(Long loaiVatNuoiId, Integer daXoa);
+
+
 }

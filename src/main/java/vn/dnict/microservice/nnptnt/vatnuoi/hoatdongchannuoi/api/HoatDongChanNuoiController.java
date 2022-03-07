@@ -37,8 +37,6 @@ public class HoatDongChanNuoiController {
 		
 		
 		
-		
-		
 		@GetMapping(value = { "/", "" })
 		public ResponseEntity<Page<HoatDongChanNuoi>> findAll(
 				@RequestParam(name = "page", defaultValue = "0", required = false) int page,

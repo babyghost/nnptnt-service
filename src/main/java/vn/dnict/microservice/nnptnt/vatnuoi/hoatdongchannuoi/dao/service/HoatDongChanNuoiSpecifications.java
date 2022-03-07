@@ -31,8 +31,6 @@ public class HoatDongChanNuoiSpecifications {
 				Predicate loaiVatNuoiId  = cb.like(cb.lower(root.<String>get("loaiVatNuoiId")), "%" + search.toLowerCase() + "%");
 				predicates.add(cb.or(loaiVatNuoiId, coSoChanNuoiId));
 			}
-
-
 			
 			
 			if (!predicates.isEmpty()) {

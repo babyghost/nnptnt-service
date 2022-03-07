@@ -35,7 +35,6 @@ public class HoatDongChanNuoiServiceImpl implements  HoatDongChanNuoiService{
 	}
 	
 	
-	
 	public Optional<HoatDongChanNuoi> findById(Long id) {
 		// TODO Auto-generated method stub
 		return repo.findById(id);

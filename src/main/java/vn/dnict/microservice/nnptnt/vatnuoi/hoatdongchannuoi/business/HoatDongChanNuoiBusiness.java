@@ -164,7 +164,6 @@ public class HoatDongChanNuoiBusiness {
 	}
 	
 	
-	
 	public HoatDongChanNuoi update(Long id, HoatDongChanNuoiInput HoatDongChanNuoiInput) throws EntityNotFoundException {
 		Optional<HoatDongChanNuoi> optional = serviceHoatDongChanNuoiService.findById(id);
 		if (!optional.isPresent()) {

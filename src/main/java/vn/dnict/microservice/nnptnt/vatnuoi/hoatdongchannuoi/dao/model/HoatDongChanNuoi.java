@@ -33,8 +33,6 @@ public class HoatDongChanNuoi {
 	private Long id;
 	
 	
-	
-	
 //	
 //	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 //	@OneToOne(fetch = FetchType.LAZY)

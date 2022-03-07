@@ -26,5 +26,4 @@ public interface HoatDongChanNuoiService {
 			Float sanLuongXuat, String ghiChu, Long loaiVatNuoiId,Long coSoChanNuoiId, String nam, Integer quy, Pageable pageable);
 //	public List<HoatDongChanNuoi> findHoatDongChanNuoiByLoaiVatNuoiIdAndDaXoa(Long loaiVatNuoiId, Integer daXoa);
 
-	
 }

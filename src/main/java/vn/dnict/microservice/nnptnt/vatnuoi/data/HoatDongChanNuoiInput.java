@@ -19,8 +19,6 @@ public class HoatDongChanNuoiInput {
 	private Integer soLuongNuoi;
 	
 	
-	
-	
 	private String mucDichNuoi;
 	
 	
