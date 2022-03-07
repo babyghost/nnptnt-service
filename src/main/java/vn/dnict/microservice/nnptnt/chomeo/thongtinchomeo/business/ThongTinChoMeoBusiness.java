@@ -101,7 +101,7 @@ public class ThongTinChoMeoBusiness {
 			throw new EntityNotFoundException(ThongTinChoMeo.class, "id", String.valueOf(id));
 		}
 		ThongTinChoMeo ThongTinChoMeo = optional.get();
-		ThongTinChoMeo.setDaXoa(true);
+		ThongTinChoMeo.setDaXoa(false);
 		ThongTinChoMeo = serviceThongTinChoMeoService.save(ThongTinChoMeo);
 		return ThongTinChoMeo;
 	}
