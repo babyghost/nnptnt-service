@@ -61,4 +61,11 @@ public class DmGiong {
 	@JsonIgnore
 	@Column(name = "daxoa")
 	private Integer daXoa;
+	
+	
+	@Column(name = "loaidongvat_id")
+	private Long LoaiDongVatId;
+
+
+
 }

@@ -1,6 +1,7 @@
 package vn.dnict.microservice.nnptnt.dm.giong.api;
 
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
 import vn.dnict.microservice.nnptnt.chomeo.data.DmGiongInput;
 import vn.dnict.microservice.nnptnt.dm.giong.business.DmGiongBusiness;
 import vn.dnict.microservice.nnptnt.dm.giong.dao.model.DmGiong;
+import vn.dnict.microservice.nnptnt.dm.loaidongvat.dao.model.DmLoaiDongVat;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/qlchomeo/dmgiong")
@@ -33,8 +36,9 @@ public class DmGiongController {
 			@RequestParam(name = "sortBy", defaultValue = "ten", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
 			@RequestParam(name = "search", required = false) String search,
+			@RequestParam(name = "loaiVatNuoiId", required = false) Long loaiVatNuoiId,
 			@RequestParam(name = "trangThai",required=false) Integer trangThai) {
-		Page<DmGiong> pageGiong = businessDmGiongBusiness.findAll(page, size, sortBy, sortDir, search, trangThai);
+		Page<DmGiong> pageGiong = businessDmGiongBusiness.findAll(page, size, sortBy, sortDir, search,loaiVatNuoiId, trangThai);
 		return ResponseEntity.ok(pageGiong);
 	}
 
@@ -44,6 +48,12 @@ public class DmGiongController {
 	}
 
 
+	@GetMapping(value = "/{id}/dmloaidongvat")
+	public ResponseEntity<DmLoaiDongVat> findDmLoaiDongVatByDmGiongId(@PathVariable("id") Long id)
+			throws EntityNotFoundException {
+		DmLoaiDongVat loaiDongVat = businessDmGiongBusiness.findDmLoaiDongVatByDmGiongId(id);
+		return ResponseEntity.ok(loaiDongVat);
+	}
 
 
 	@PostMapping(value = { "" })
