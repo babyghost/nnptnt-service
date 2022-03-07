@@ -24,7 +24,7 @@ public class KeHoachTiemPhongSpecifications {
 			public Predicate toPredicate(Root<KeHoachTiemPhong> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<>();
-				predicates.add(cb.equal(root.<String>get("daXoa"), true));
+				predicates.add(cb.equal(root.<String>get("daXoa"), false));
 				if (search != null && !search.isEmpty()) {
 					Predicate tenkehoach = cb.like(cb.lower(root.<String>get("tenKeHoach")), "%" + search.toLowerCase() + "%");
 					Predicate sokehoach  = cb.like(cb.lower(root.<String>get("soKeHoach")), "%" + search.toLowerCase() + "%");
