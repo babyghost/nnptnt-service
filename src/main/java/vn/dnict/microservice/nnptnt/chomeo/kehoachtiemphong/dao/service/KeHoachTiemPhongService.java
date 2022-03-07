@@ -17,9 +17,6 @@ public interface KeHoachTiemPhongService {
 
 	public Page<KeHoachTiemPhong> findAll(String search, String noiDung, String soKeHoach, String tenKeHoach, LocalDateTime ngayBanHanh, Pageable pageable);
 
-	Page<KeHoachTiemPhong> findAll(String search, String noiDung, String soKeHoach, LocalDateTime ngayBanHanh,
-			String tenKeHoach, Pageable pageable);
-
 	Page<KeHoachTiemPhong> findAll(String search, String noiDung, String soKeHoach, String tenKeHoach,
 			LocalDateTime ngayBanHanh, LocalDateTime ngayDuKienTuNgay, LocalDateTime ngayDuKienDenNgay,
 			Pageable pageable);

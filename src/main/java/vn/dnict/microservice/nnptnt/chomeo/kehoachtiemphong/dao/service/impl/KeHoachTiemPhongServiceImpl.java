@@ -47,24 +47,11 @@ public class KeHoachTiemPhongServiceImpl implements KeHoachTiemPhongService{
 	
 	}
 
-	public Page<KeHoachTiemPhong> findAll(String search, String noiDung, String soKeHoach, LocalDateTime ngayBanHanh,LocalDateTime ngayDuKienTuNgay,LocalDateTime ngayDuKienDenNgay,
-			String tenKeHoach, Pageable pageable) {
-		// TODO Auto-generated method stub
-		return null;
-
-	}
-
 	@Override
 	public Page<KeHoachTiemPhong> findAll(String search, String noiDung, String soKeHoach, String tenKeHoach,
 			LocalDateTime ngayBanHanh, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public Page<KeHoachTiemPhong> findAll(String search, String noiDung, String soKeHoach, LocalDateTime ngayBanHanh,
-			String tenKeHoach, Pageable pageable) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
+
