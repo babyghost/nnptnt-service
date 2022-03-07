@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.model.CoSoChanNuoi;
-
+ 
 @Service
 public interface CoSoChanNuoiService {
 	public CoSoChanNuoi save(CoSoChanNuoi entity);

@@ -11,6 +11,6 @@ import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.model.CoSoChanNuoi;
 @Repository
 public interface CoSoChanNuoiRepo extends JpaRepository<CoSoChanNuoi, Long>,JpaSpecificationExecutor<CoSoChanNuoi>{
 
-	public Optional<CoSoChanNuoi> findByTenCoSo(String tenCoSo);
+	public Optional<CoSoChanNuoi> findByTenCoSo(String tenCoSo); 
 
 }

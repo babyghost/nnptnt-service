@@ -9,13 +9,9 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
-import vn.dnict.microservice.danhmuc.dao.model.DmPhuongXa;
-import vn.dnict.microservice.danhmuc.dao.model.DmQuanHuyen;
 import vn.dnict.microservice.danhmuc.dao.service.DmPhuongXaService;
 import vn.dnict.microservice.danhmuc.dao.service.DmQuanHuyenService;
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
-import vn.dnict.microservice.nnptnt.chomeo.chuquanly.dao.model.ChuQuanLy;
-import vn.dnict.microservice.nnptnt.chomeo.thongtinchomeo.dao.model.ThongTinChoMeo;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.model.CoSoChanNuoi;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.service.CoSoChanNuoiService;
 import vn.dnict.microservice.nnptnt.vatnuoi.data.CoSoChanNuoiInput;

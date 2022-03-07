@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
 import vn.dnict.microservice.nnptnt.dm.loaivatnuoi.dao.model.DmLoaiVatNuoi;
 import vn.dnict.microservice.nnptnt.dm.loaivatnuoi.dao.service.DmLoaiVatNuoiService;
-import vn.dnict.microservice.nnptnt.qlvatnuoi.data.DmLoaiVatNuoiInput;
+import vn.dnict.microservice.nnptnt.vatnuoi.data.DmLoaiVatNuoiInput; 
 
 @Service
 public class DmLoaiVatNuoiBusiness {

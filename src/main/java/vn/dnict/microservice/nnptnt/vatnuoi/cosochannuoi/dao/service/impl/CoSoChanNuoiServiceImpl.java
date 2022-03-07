@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.model.CoSoChanNuoi;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.service.CoSoChanNuoiService;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.service.CoSoChanNuoiSpecifications;
-import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.service.repo.CoSoChanNuoiRepo;
+import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.service.repo.CoSoChanNuoiRepo; 
 
 @Service
 @Transactional
