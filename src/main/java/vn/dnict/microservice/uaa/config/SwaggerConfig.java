@@ -41,9 +41,13 @@ public class SwaggerConfig {
 				.apis(Predicates.or(RequestHandlerSelectors.basePackage("vn.dnict.microservice.uaa.api"),
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.core.api"),
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.danhmuc.api"),
-
+						
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.dm.giong.api"),
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.chomeo.chuquanly.api"),
+						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.api"),
+						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.chomeo.thoigiantiemphong.api"),
+						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.chomeo.kehoach2chomeo.api"),
+						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.chomeo.thongtinchomeo.api"),
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.api"), 
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.api"),
 						// RequestHandlerSelectors.basePackage("vn.dnict.microservice.dvcnoivu.hoso.controller"),
