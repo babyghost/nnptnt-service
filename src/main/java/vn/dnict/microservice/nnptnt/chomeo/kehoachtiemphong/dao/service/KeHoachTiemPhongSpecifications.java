@@ -1,5 +1,6 @@
 package vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.dao.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +28,20 @@ public class KeHoachTiemPhongSpecifications {
 				if (search != null && !search.isEmpty()) {
 					Predicate tenkehoach = cb.like(cb.lower(root.<String>get("tenKeHoach")), "%" + search.toLowerCase() + "%");
 					Predicate sokehoach  = cb.like(cb.lower(root.<String>get("soKeHoach")), "%" + search.toLowerCase() + "%");
-					Predicate ngaybanhanh  = cb.like(cb.lower(root.<String>get("ngayBanHanh")), "%" + search.toLowerCase() + "%");
-					Predicate ngaydukientungay  = cb.like(cb.lower(root.<String>get("ngayDuKienTuNgay")), "%" + search.toLowerCase() + "%");
-					Predicate ngaydukiendenngay  = cb.like(cb.lower(root.<String>get("ngayDuKienDenNgay")), "%" + search.toLowerCase() + "%");
-					predicates.add(cb.or(tenkehoach, sokehoach, ngaybanhanh));
+					predicates.add(cb.or(tenkehoach, sokehoach));
 				}
 				if (noiDung != null) {
 					predicates.add(cb.equal(root.<String>get("noiDung"), noiDung));
 				}
-
+				if (ngayBanHanh != null) {
+					predicates.add(cb.equal(root.get("ngayBanHanh").as(LocalDate.class), ngayBanHanh));
+				}
+				if (ngayDuKienTuNgay != null) {
+					predicates.add(cb.equal(root.get("ngayDuKien").as(LocalDate.class), ngayDuKienTuNgay));
+				}
+				if (ngayDuKienDenNgay != null) {
+					predicates.add(cb.equal(root.get("ngayDuKien").as(LocalDate.class), ngayDuKienDenNgay));
+				}
 				if (!predicates.isEmpty()) {
 					return cb.and(predicates.toArray(new Predicate[] {}));
 				}

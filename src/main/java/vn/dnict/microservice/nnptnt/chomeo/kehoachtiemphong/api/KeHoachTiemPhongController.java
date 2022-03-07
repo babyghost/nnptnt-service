@@ -29,7 +29,7 @@ import vn.dnict.microservice.nnptnt.chomeo.thoigiantiemphong.business.ThoiGianTi
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/qlchomeo/kehoachtiemphong")
+@RequestMapping(value = "/chomeo/kehoachtiemphong")
 public class KeHoachTiemPhongController {
 	@Autowired
 	KeHoachTiemPhongBusiness businessKeHoachTiemPhongBusiness;
