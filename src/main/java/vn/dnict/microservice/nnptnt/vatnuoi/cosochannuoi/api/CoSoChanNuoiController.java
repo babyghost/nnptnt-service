@@ -24,7 +24,7 @@ import vn.dnict.microservice.nnptnt.vatnuoi.data.CoSoChanNuoiInput;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/qlvatnuoi/cosochannuoi")
+@RequestMapping(value = "/vatnuoi/cosochannuoi")
 public class CoSoChanNuoiController {
 	@Autowired
 	CoSoChanNuoiBusiness businessCoSoChanNuoiBusiness;

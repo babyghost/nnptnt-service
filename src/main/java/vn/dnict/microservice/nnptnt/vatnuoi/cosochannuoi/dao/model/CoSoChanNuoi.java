@@ -71,4 +71,7 @@ public class CoSoChanNuoi {
 
 	@Column(name = "ghichu")
 	private String ghiChu;
+	
+	@Column(name = "daxoa")
+	private boolean daXoa;
 }
