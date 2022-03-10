@@ -1,6 +1,6 @@
 package vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.business;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class KeHoachTiemPhongBusiness {
 	@Autowired
 	KeHoach2ChoMeoService serviceKeHoach2ChoMeoService;
 	
-	public Page<KeHoachTiemPhong> findAll(int page, int size, String sortBy, String sortDir, String search,String noiDung, String soKeHoach, String tenKeHoach, LocalDateTime ngayBanHanh,LocalDateTime ngayDuKienTuNgay,LocalDateTime ngayDuKienDenNgay) {
+	public Page<KeHoachTiemPhong> findAll(int page, int size, String sortBy, String sortDir, String search,String noiDung, String soKeHoach, String tenKeHoach, LocalDate ngayBanHanh,LocalDate ngayDuKienTuNgay,LocalDate ngayDuKienDenNgay) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;

@@ -1,7 +1,6 @@
 package vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.dao.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.dao.model.KeHoachTiemPhong;
 
 public class KeHoachTiemPhongSpecifications {
-	public static Specification<KeHoachTiemPhong> quickSearch(final String search, final String noiDung,final String soKeHoach, final LocalDateTime ngayBanHanh,LocalDateTime ngayDuKienTuNgay, LocalDateTime ngayDuKienDenNgay, final String tenKeHoach) {
+	public static Specification<KeHoachTiemPhong> quickSearch(final String search, final String noiDung,final String soKeHoach, final LocalDate ngayBanHanh,LocalDate ngayDuKienTuNgay, LocalDate ngayDuKienDenNgay, final String tenKeHoach) {
 		return new Specification<KeHoachTiemPhong>() {
 
 			private static final long serialVersionUID = -4615834727542993669L;

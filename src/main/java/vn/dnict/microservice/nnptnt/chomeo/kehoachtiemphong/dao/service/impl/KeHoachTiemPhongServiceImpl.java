@@ -1,6 +1,7 @@
 package vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.dao.service.impl;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,17 +42,11 @@ public class KeHoachTiemPhongServiceImpl implements KeHoachTiemPhongService{
 
 	@Override
 	public Page<KeHoachTiemPhong> findAll(String search, String noiDung, String soKeHoach, String tenKeHoach,
-			LocalDateTime ngayBanHanh,LocalDateTime ngayDuKienTuNgay,LocalDateTime ngayDuKienDenNgay, Pageable pageable) {
+			LocalDate ngayBanHanh,LocalDate ngayDuKienTuNgay,LocalDate ngayDuKienDenNgay, Pageable pageable) {
 		return repo.findAll(KeHoachTiemPhongSpecifications.quickSearch(search, noiDung, soKeHoach, ngayBanHanh, ngayDuKienTuNgay, ngayDuKienDenNgay, tenKeHoach), pageable);
 
 	
 	}
 
-	@Override
-	public Page<KeHoachTiemPhong> findAll(String search, String noiDung, String soKeHoach, String tenKeHoach,
-			LocalDateTime ngayBanHanh, Pageable pageable) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-}
+}	
 

@@ -1,6 +1,6 @@
 package vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.api;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.validation.Valid;
 
@@ -47,9 +47,9 @@ public class KeHoachTiemPhongController {
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
 			@RequestParam(name = "search", required = false) String search,
 			@RequestParam(name = "soKeHoach",required = false) String soKeHoach,
-			@RequestParam(name = "ngayBanHanh", required = false) LocalDateTime ngayBanHanh,
-			@RequestParam(name = "ngayDuKienTuNgay", required = false) LocalDateTime ngayDuKienTuNgay,
-			@RequestParam(name = "ngayDuKienDenNgay", required = false) LocalDateTime ngayDuKienDenNgay,
+			@RequestParam(name = "ngayBanHanh", required = false) LocalDate ngayBanHanh,
+			@RequestParam(name = "ngayDuKienTuNgay", required = false) LocalDate ngayDuKienTuNgay,
+			@RequestParam(name = "ngayDuKienDenNgay", required = false) LocalDate ngayDuKienDenNgay,
 			@RequestParam(name = "tenKeHoach", required = false) String tenKeHoach,
 			@RequestParam(name = "noiDung",required=false) String noiDung) {
 		Page<KeHoachTiemPhong> pageKeHoachTiemPhong = businessKeHoachTiemPhongBusiness.findAll(page, size, sortBy, sortDir, search, noiDung, soKeHoach, tenKeHoach,ngayDuKienDenNgay,ngayDuKienTuNgay, ngayBanHanh);

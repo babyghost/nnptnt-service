@@ -1,6 +1,6 @@
 package vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.dao.service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -15,9 +15,7 @@ public interface KeHoachTiemPhongService {
 
 	public Optional<KeHoachTiemPhong> findById(Long id);
 
-	public Page<KeHoachTiemPhong> findAll(String search, String noiDung, String soKeHoach, String tenKeHoach, LocalDateTime ngayBanHanh, Pageable pageable);
-
-	Page<KeHoachTiemPhong> findAll(String search, String noiDung, String soKeHoach, String tenKeHoach,
-			LocalDateTime ngayBanHanh, LocalDateTime ngayDuKienTuNgay, LocalDateTime ngayDuKienDenNgay,
+	public Page<KeHoachTiemPhong> findAll(String search, String noiDung, String soKeHoach, String tenKeHoach,
+			LocalDate ngayBanHanh, LocalDate ngayDuKienTuNgay, LocalDate ngayDuKienDenNgay,
 			Pageable pageable);
 }

@@ -1,6 +1,6 @@
 package vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.dao.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,9 +34,9 @@ public class KeHoachTiemPhong {
 	private String soKeHoach;
 
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Column(name = "ngaybanhanh")
-	private LocalDateTime ngayBanHanh;
+	private LocalDate ngayBanHanh;
 	
 	@Column(name = "tenkehoach", length = 500)
 	private String tenKeHoach;
@@ -45,32 +45,32 @@ public class KeHoachTiemPhong {
 	private String noiDung;
 	
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Column(name = "ngaydukien_tungay")
-	private LocalDateTime ngayDuKienTuNgay;
+	private LocalDate ngayDuKienTuNgay;
 	
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Column(name = "ngaydukien_denngay")
-	private LocalDateTime ngayDuKienDenNgay;
+	private LocalDate ngayDuKienDenNgay;
 	
 	@CreatedBy
 	@Column(name = "nguoitao")
 	private String nguoiTao;
 
 	@CreatedDate
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Column(name = "ngaytao")
-	private LocalDateTime ngayTao;
+	private LocalDate ngayTao;
 
 	@LastModifiedBy
 	@Column(name = "nguoicapnhat")
 	private String nguoiCapNhat;
 
 	@LastModifiedDate
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Column(name = "ngaycapnhat")
-	private LocalDateTime ngayCapNhat;
+	private LocalDate ngayCapNhat;
 
 	@JsonIgnore
 	@Column(name = "daxoa")
