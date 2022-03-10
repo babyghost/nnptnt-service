@@ -63,8 +63,10 @@ public class DmGiong {
 	private Integer daXoa;
 	
 	
+
+
 	@Column(name = "loaidongvat_id")
-	private Long LoaiDongVatId;
+	private Long loaiDongVatId;
 
 
 
