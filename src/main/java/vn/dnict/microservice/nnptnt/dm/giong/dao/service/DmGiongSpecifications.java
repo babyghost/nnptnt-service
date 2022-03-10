@@ -13,7 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.dm.giong.dao.model.DmGiong;
 
 public class DmGiongSpecifications {
-	public static Specification<DmGiong> quickSearch(final String search, final Integer trangThai) {
+	public static Specification<DmGiong> quickSearch( String search,Long loaiVatNuoiId, Integer trangThai) {
 		return new Specification<DmGiong>() {
 
 			private static final long serialVersionUID = -4615834727542993669L;

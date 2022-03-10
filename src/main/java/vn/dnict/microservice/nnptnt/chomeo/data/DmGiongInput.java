@@ -13,7 +13,7 @@ import lombok.Data;
 @Data
 public class DmGiongInput {
 	
-	private Long LoaiDongVatId;
+	private Long loaiDongVatId;
 
 	@NotBlank(message = "Vui lòng nhập tên")
 	@Size(max = 100, message = "tên không nhập quá 100 ký tự")

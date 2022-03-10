@@ -27,14 +27,14 @@ public class DmGiongBusiness {
 	@Autowired
 	DmLoaiDongVatService serviceDmLoaiDongVatService;
 	
-	public Page<DmGiong> findAll(int page, int size, String sortBy, String sortDir, String search,Long LoaiVatNuoiId,Integer trangThai) {
+	public Page<DmGiong> findAll(int page, int size, String sortBy, String sortDir, String search,Long loaiVatNuoiId,Integer trangThai) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-		Page<DmGiong> pageDmGiong = serviceGiongService.findAll(search,LoaiVatNuoiId, trangThai,
+		Page<DmGiong> pageDmGiong = serviceGiongService.findAll(search,loaiVatNuoiId, trangThai,
 				PageRequest.of(page, size, direction, sortBy));
 		return pageDmGiong;
 	}
@@ -54,7 +54,7 @@ public class DmGiongBusiness {
 			throw new EntityNotFoundException(DmGiong.class, "id", String.valueOf(id));
 		}
 		DmGiong DmGiong = optional.get();
-		Optional<DmLoaiDongVat> optionalDmLoaiDongVat = serviceDmLoaiDongVatService.findById(DmGiong.getLoaiDongVatId());
+		Optional<DmLoaiDongVat> optionalDmLoaiDongVat =serviceDmLoaiDongVatService.findById(DmGiong.getLoaiDongVatId());
 		if (!optionalDmLoaiDongVat.isPresent()) {
 			throw new EntityNotFoundException(DmLoaiDongVat.class, "id", String.valueOf(id));
 		}
@@ -64,14 +64,14 @@ public class DmGiongBusiness {
 
 
 	public DmGiong create(DmGiongInput DmGiongInput) {
-		DmGiong Giong = new DmGiong();
-		Giong.setDaXoa(0);
-		Giong.setLoaiDongVatId(DmGiongInput.getLoaiDongVatId());
-		Giong.setTen(DmGiongInput.getTen());
-		Giong.setMa(DmGiongInput.getMa());
-		Giong.setTrangThai(DmGiongInput.getTrangThai());
-		Giong = serviceGiongService.save(Giong);
-		return Giong;
+		DmGiong giong = new DmGiong();
+		giong.setDaXoa(0);
+		giong.setLoaiDongVatId(DmGiongInput.getLoaiDongVatId());
+		giong.setTen(DmGiongInput.getTen());
+		giong.setMa(DmGiongInput.getMa());
+		giong.setTrangThai(DmGiongInput.getTrangThai());
+		giong = serviceGiongService.save(giong);
+		return giong;
 	}
 
 	public DmGiong update(Long id, DmGiongInput DmGiongInput) throws EntityNotFoundException {
@@ -79,13 +79,13 @@ public class DmGiongBusiness {
 		if (!optional.isPresent()) {
 			throw new EntityNotFoundException(DmGiong.class, "id", String.valueOf(id));
 		}
-		DmGiong Giong = optional.get();
-		Giong.setLoaiDongVatId(DmGiongInput.getLoaiDongVatId());
-		Giong.setTen(DmGiongInput.getTen());
-		Giong.setMa(DmGiongInput.getMa());
-		Giong.setTrangThai(DmGiongInput.getTrangThai());
-		Giong = serviceGiongService.save(Giong);
-		return Giong;
+		DmGiong giong = optional.get();
+		giong.setLoaiDongVatId(DmGiongInput.getLoaiDongVatId());
+		giong.setTen(DmGiongInput.getTen());
+		giong.setMa(DmGiongInput.getMa());
+		giong.setTrangThai(DmGiongInput.getTrangThai());
+		giong = serviceGiongService.save(giong);
+		return giong;
 	}
 
 	@DeleteMapping(value = { "/{id}" })

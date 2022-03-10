@@ -19,37 +19,7 @@ import vn.dnict.microservice.nnptnt.dm.giong.dao.service.repo.DmGiongRepo;
 public class DmGiongServiceImpl implements DmGiongService{
 
 	
-//	@Autowired
-//	private DmGiongRepo repo;
-//	
-//	public DmGiong save(DmGiong entity) {
-//		return repo.save(entity);
-//	}
-//
-//	public void deleteById(Long id) {
-//		repo.deleteById(id);
-//	}
-//
-//	public Optional<DmGiong> findById(Long id) {
-//		return repo.findById(id);
-//	}
-//
-//
-//
-//	@Override
-//	public Page<DmGiong> findAll(String search, Integer trangThai, PageRequest pageable) {
-//		return repo.findAll(DmGiongSpecifications.quickSearch(search, trangThai),pageable);
-//		// TODO Auto-generated method stub
-//		
-//		
-//	}
-//
-//	@Override
-//	public List<DmGiong> findByIdIn(List<Long> ids) {
-//		// TODO Auto-generated method stub
-//		return null;
-	
-//	}
+
 	@Autowired
 	DmGiongRepo repo;
 	@Override
@@ -72,9 +42,9 @@ public class DmGiongServiceImpl implements DmGiongService{
 	}
 
 	@Override
-	public Page<DmGiong> findAll(String search,Long LoaiVatNuoiId, Integer trangThai, Pageable pageable) {
+	public Page<DmGiong> findAll(String search,Long loaiVatNuoiId, Integer trangThai, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findAll(DmGiongSpecifications.quickSearch(search, trangThai), pageable);
+		return repo.findAll(DmGiongSpecifications.quickSearch(search,loaiVatNuoiId, trangThai), pageable);
 	}
 
 
