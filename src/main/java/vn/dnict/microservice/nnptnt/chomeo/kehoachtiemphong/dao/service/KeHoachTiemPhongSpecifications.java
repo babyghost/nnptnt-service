@@ -14,7 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.dao.model.KeHoachTiemPhong;
 
 public class KeHoachTiemPhongSpecifications {
-	public static Specification<KeHoachTiemPhong> quickSearch(final String search, final String noiDung,final String soKeHoach, final LocalDate ngayBanHanh,LocalDate ngayDuKienTuNgay, LocalDate ngayDuKienDenNgay, final String tenKeHoach) {
+	public static Specification<KeHoachTiemPhong> quickSearch(final String search, final String soKeHoach, final LocalDate ngayBanHanh,final LocalDate ngayDuKienTuNgay,final LocalDate ngayDuKienDenNgay, final String tenKeHoach) {
 		return new Specification<KeHoachTiemPhong>() {
 
 			private static final long serialVersionUID = -4615834727542993669L;
@@ -26,11 +26,10 @@ public class KeHoachTiemPhongSpecifications {
 				predicates.add(cb.equal(root.<String>get("daXoa"), false));
 				if (search != null && !search.isEmpty()) {
 					Predicate tenkehoach = cb.like(cb.lower(root.<String>get("tenKeHoach")), "%" + search.toLowerCase() + "%");
-					Predicate sokehoach  = cb.like(cb.lower(root.<String>get("soKeHoach")), "%" + search.toLowerCase() + "%");
-					predicates.add(cb.or(tenkehoach, sokehoach));
+					predicates.add(cb.or(tenkehoach));
 				}
-				if (noiDung != null) {
-					predicates.add(cb.equal(root.<String>get("noiDung"), noiDung));
+				if (soKeHoach != null) {
+					predicates.add(cb.equal(root.<String>get("soKeHoach"), soKeHoach));
 				}
 				if (ngayBanHanh != null) {
 					predicates.add(cb.equal(root.get("ngayBanHanh").as(LocalDate.class), ngayBanHanh));

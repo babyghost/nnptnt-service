@@ -43,7 +43,7 @@ public class KeHoachTiemPhongServiceImpl implements KeHoachTiemPhongService{
 	@Override
 	public Page<KeHoachTiemPhong> findAll(String search, String noiDung, String soKeHoach, String tenKeHoach,
 			LocalDate ngayBanHanh,LocalDate ngayDuKienTuNgay,LocalDate ngayDuKienDenNgay, Pageable pageable) {
-		return repo.findAll(KeHoachTiemPhongSpecifications.quickSearch(search, noiDung, soKeHoach, ngayBanHanh, ngayDuKienTuNgay, ngayDuKienDenNgay, tenKeHoach), pageable);
+		return repo.findAll(KeHoachTiemPhongSpecifications.quickSearch(search, soKeHoach, ngayBanHanh, ngayDuKienTuNgay, ngayDuKienDenNgay, tenKeHoach), pageable);
 
 	
 	}
