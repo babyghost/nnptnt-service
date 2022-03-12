@@ -14,7 +14,9 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.dao.model.KeHoachTiemPhong;
 
 public class KeHoachTiemPhongSpecifications {
-	public static Specification<KeHoachTiemPhong> quickSearch(final String search, final String soKeHoach, final LocalDate ngayBanHanh,final LocalDate ngayDuKienTuNgay,final LocalDate ngayDuKienDenNgay, final String tenKeHoach) {
+	public static Specification<KeHoachTiemPhong> quickSearch(final String search, final String soKeHoach,
+			 final LocalDate ngayDuKienTuNgay, final LocalDate ngayDuKienDenNgay,final LocalDate ngayBanHanhTuNgay,final LocalDate ngayBanHanhDenNgay,
+			final String tenKeHoach) {
 		return new Specification<KeHoachTiemPhong>() {
 
 			private static final long serialVersionUID = -4615834727542993669L;
@@ -24,21 +26,29 @@ public class KeHoachTiemPhongSpecifications {
 
 				List<Predicate> predicates = new ArrayList<>();
 				predicates.add(cb.equal(root.<String>get("daXoa"), false));
+				query.distinct(true);
 				if (search != null && !search.isEmpty()) {
-					Predicate tenkehoach = cb.like(cb.lower(root.<String>get("tenKeHoach")), "%" + search.toLowerCase() + "%");
+					Predicate tenkehoach = cb.like(cb.lower(root.<String>get("tenKeHoach")),
+							"%" + search.toLowerCase() + "%");
 					predicates.add(cb.or(tenkehoach));
 				}
-				if (soKeHoach != null) {
-					predicates.add(cb.equal(root.<String>get("soKeHoach"), soKeHoach));
+				if (soKeHoach != null && !soKeHoach.isEmpty()) {
+					predicates
+							.add(cb.like(cb.lower(root.<String>get("soKeHoach")), "%" + soKeHoach.toLowerCase() + "%"));
+
 				}
-				if (ngayBanHanh != null) {
-					predicates.add(cb.equal(root.get("ngayBanHanh").as(LocalDate.class), ngayBanHanh));
+				
+				if (ngayBanHanhTuNgay != null) {
+					predicates.add(cb.greaterThanOrEqualTo(root.get("ngayBanHanh").as(LocalDate.class),ngayBanHanhTuNgay));
+				}
+				if (ngayBanHanhDenNgay != null) {
+					predicates.add(cb.lessThanOrEqualTo(root.get("ngayBanHanh").as(LocalDate.class), ngayBanHanhDenNgay));
 				}
 				if (ngayDuKienTuNgay != null) {
-					predicates.add(cb.equal(root.get("ngayDuKien").as(LocalDate.class), ngayDuKienTuNgay));
+					predicates.add(cb.lessThanOrEqualTo(root.get("ngayDuKienTuNgay").as(LocalDate.class),ngayDuKienTuNgay));
 				}
 				if (ngayDuKienDenNgay != null) {
-					predicates.add(cb.equal(root.get("ngayDuKien").as(LocalDate.class), ngayDuKienDenNgay));
+					predicates.add(cb.greaterThanOrEqualTo(root.get("ngayDuKienDenNgay").as(LocalDate.class), ngayDuKienDenNgay));
 				}
 				if (!predicates.isEmpty()) {
 					return cb.and(predicates.toArray(new Predicate[] {}));

@@ -26,14 +26,14 @@ public class KeHoachTiemPhongBusiness {
 	@Autowired
 	KeHoach2ChoMeoService serviceKeHoach2ChoMeoService;
 	
-	public Page<KeHoachTiemPhong> findAll(int page, int size, String sortBy, String sortDir, String search,String noiDung, String soKeHoach, String tenKeHoach, LocalDate ngayBanHanh,LocalDate ngayDuKienTuNgay,LocalDate ngayDuKienDenNgay) {
+	public Page<KeHoachTiemPhong> findAll(int page, int size, String sortBy, String sortDir, String search,String noiDung, String soKeHoach, String tenKeHoach, LocalDate ngayBanHanhTuNgay, LocalDate ngayBanHanhDenNgay,LocalDate ngayDuKienTuNgay,LocalDate ngayDuKienDenNgay) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-		Page<KeHoachTiemPhong> pageKeHoachTiemPhong = serviceKeHoachTiemPhongService.findAll(search, noiDung, soKeHoach, tenKeHoach, ngayBanHanh, ngayDuKienTuNgay, ngayDuKienDenNgay,
+		Page<KeHoachTiemPhong> pageKeHoachTiemPhong = serviceKeHoachTiemPhongService.findAll(search, noiDung, soKeHoach, tenKeHoach, ngayBanHanhTuNgay, ngayBanHanhDenNgay, ngayDuKienTuNgay, ngayDuKienDenNgay,
 				PageRequest.of(page, size, direction, sortBy));
 		return pageKeHoachTiemPhong;
 	}

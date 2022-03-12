@@ -42,11 +42,13 @@ public class KeHoachTiemPhongServiceImpl implements KeHoachTiemPhongService{
 
 	@Override
 	public Page<KeHoachTiemPhong> findAll(String search, String noiDung, String soKeHoach, String tenKeHoach,
-			LocalDate ngayBanHanh,LocalDate ngayDuKienTuNgay,LocalDate ngayDuKienDenNgay, Pageable pageable) {
-		return repo.findAll(KeHoachTiemPhongSpecifications.quickSearch(search, soKeHoach, ngayBanHanh, ngayDuKienTuNgay, ngayDuKienDenNgay, tenKeHoach), pageable);
-
-	
+			LocalDate ngayDuKienTuNgay, LocalDate ngayDuKienDenNgay, LocalDate ngayBanHanhTuNgay, LocalDate ngayBanHanhDenNgay,
+			Pageable pageable) {
+		// TODO Auto-generated method stub
+		return repo.findAll(KeHoachTiemPhongSpecifications.quickSearch(search, soKeHoach, ngayDuKienTuNgay, ngayDuKienDenNgay, ngayBanHanhTuNgay, ngayBanHanhDenNgay, tenKeHoach),pageable);
 	}
+
+
 
 }	
 
