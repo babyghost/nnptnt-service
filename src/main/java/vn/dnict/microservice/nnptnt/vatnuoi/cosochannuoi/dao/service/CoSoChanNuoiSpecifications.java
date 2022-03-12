@@ -13,7 +13,8 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.model.CoSoChanNuoi;
 
 public class CoSoChanNuoiSpecifications {
-	public static Specification<CoSoChanNuoi> quickSearch(final String search, final Long phuongXaId, Long quanHuyenId) {
+	public static Specification<CoSoChanNuoi> quickSearch(final String search, final String tenChuCoSo, final String dienThoai,
+			final String email, final Long phuongXaId, Long quanHuyenId) {
 		return new Specification<CoSoChanNuoi>() {
 
 			private static final long serialVersionUID = -4615834727542993669L;
@@ -25,9 +26,22 @@ public class CoSoChanNuoiSpecifications {
 				predicates.add(cb.equal(root.<String>get("daXoa"), true));
 				if (search != null && !search.isEmpty()) {
 					Predicate tencoso = cb.like(cb.lower(root.<String>get("tenCoSo")), "%" + search.toLowerCase() + "%");
-					Predicate tenchucoso = cb.like(cb.lower(root.<String>get("tenChuCoSo")), "%" + search.toLowerCase() + "%");
-					predicates.add(cb.or(tencoso, tenchucoso));
+
+					predicates.add(cb.or(tencoso));
 				}
+				
+				if (tenChuCoSo != null && !tenChuCoSo.isEmpty()) {
+					predicates.add(cb.equal(root.<String>get("tenChuCoSo"), tenChuCoSo));
+				}
+				
+				if (dienThoai != null && !dienThoai.isEmpty()) {
+					predicates.add(cb.equal(root.<String>get("dienThoai"), dienThoai));
+				}
+				
+				if (email != null && !email.isEmpty()) {
+					predicates.add(cb.equal(root.<String>get("email"), email));
+				}
+				
 				if (phuongXaId != null) {
 					predicates.add(cb.equal(root.<Long>get("phuongXaId"), phuongXaId));
 				}

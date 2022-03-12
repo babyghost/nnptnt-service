@@ -36,10 +36,13 @@ public class CoSoChanNuoiController {
 			@RequestParam(name = "sortBy", defaultValue = "tenCoSo", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
 			@RequestParam(name = "search", required = false) String search,
+			@RequestParam(name = "tenChuCoSo", required = false) String tenChuCoSo,
+			@RequestParam(name = "dienThoai", required = false) String dienThoai,
+			@RequestParam(name = "email", required = false) String email,
 			@RequestParam(name = "phuongXaId",required=false) Long phuongXaId,
 			@RequestParam(name = "quanHuyenId",required=false) Long quanHuyenId) {
 		Page<CoSoChanNuoi> pageCoSoChanNuoi = businessCoSoChanNuoiBusiness.findAll(page, size, sortBy, sortDir, search, 
-				phuongXaId, quanHuyenId);
+				tenChuCoSo, dienThoai, email, phuongXaId, quanHuyenId);
 		return ResponseEntity.ok(pageCoSoChanNuoi);
 	}
 

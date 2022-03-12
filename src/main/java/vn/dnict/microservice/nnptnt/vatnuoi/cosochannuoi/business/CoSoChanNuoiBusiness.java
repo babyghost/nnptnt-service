@@ -27,16 +27,16 @@ public class CoSoChanNuoiBusiness {
 	@Autowired
 	CoSoChanNuoiService serviceCoSoChanNuoiService;
 	
-	public Page<CoSoChanNuoi> findAll(int page, int size, String sortBy, String sortDir, String search,Long phuongXaId,
-			Long quanHuyenId) {
+	public Page<CoSoChanNuoi> findAll(int page, int size, String sortBy, String sortDir, String search, String tenChuCoSo, 
+			String dienThoai, String email, Long phuongXaId, Long quanHuyenId) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-		Page<CoSoChanNuoi> pageCoSoChanNuoi = serviceCoSoChanNuoiService.findAll(search, phuongXaId, quanHuyenId,
-				PageRequest.of(page, size, direction, sortBy));
+		Page<CoSoChanNuoi> pageCoSoChanNuoi = serviceCoSoChanNuoiService.findAll(search, tenChuCoSo, dienThoai, email, 
+				phuongXaId, quanHuyenId, PageRequest.of(page, size, direction, sortBy));
 		return pageCoSoChanNuoi;
 	}
 	public CoSoChanNuoi findById(Long id) throws EntityNotFoundException {
