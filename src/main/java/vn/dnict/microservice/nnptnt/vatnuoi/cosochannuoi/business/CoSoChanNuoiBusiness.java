@@ -28,7 +28,7 @@ public class CoSoChanNuoiBusiness {
 	CoSoChanNuoiService serviceCoSoChanNuoiService;
 	
 	public Page<CoSoChanNuoi> findAll(int page, int size, String sortBy, String sortDir, String search, String tenChuCoSo, 
-			String dienThoai, String email, Long phuongXaId, Long quanHuyenId) {
+			String dienThoai, String email, Long phuongXaId, Long quanHuyenId) { 
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;

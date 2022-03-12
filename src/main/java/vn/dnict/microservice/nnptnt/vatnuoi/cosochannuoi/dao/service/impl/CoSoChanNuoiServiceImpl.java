@@ -29,7 +29,6 @@ public class CoSoChanNuoiServiceImpl implements CoSoChanNuoiService{
 	public void deleteById(Long id) {
 		// TODO Auto-generated method stub
 		repo.deleteById(id);;
-		
 	}
 
 	@Override

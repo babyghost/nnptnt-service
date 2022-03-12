@@ -27,7 +27,7 @@ import vn.dnict.microservice.nnptnt.vatnuoi.data.CoSoChanNuoiInput;
 @RequestMapping(value = "/vatnuoi/cosochannuoi")
 public class CoSoChanNuoiController {
 	@Autowired
-	CoSoChanNuoiBusiness businessCoSoChanNuoiBusiness;
+	CoSoChanNuoiBusiness businessCoSoChanNuoiBusiness; 
 	
 	@GetMapping(value = { "/", "" })
 	public ResponseEntity<Page<CoSoChanNuoi>> findAll(

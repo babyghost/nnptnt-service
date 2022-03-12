@@ -26,7 +26,6 @@ public class CoSoChanNuoiSpecifications {
 				predicates.add(cb.equal(root.<String>get("daXoa"), true));
 				if (search != null && !search.isEmpty()) {
 					Predicate tencoso = cb.like(cb.lower(root.<String>get("tenCoSo")), "%" + search.toLowerCase() + "%");
-
 					predicates.add(cb.or(tencoso));
 				}
 				
