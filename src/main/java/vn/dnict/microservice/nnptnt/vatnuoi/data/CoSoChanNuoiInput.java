@@ -22,18 +22,16 @@ public class CoSoChanNuoiInput {
 	private String diaChi;
 	
 	@NotBlank(message = "Vui lòng nhập điện thoại")
-	@Size(max = 250, message = "tên không nhập quá 50 ký tự")
+	@Size(max = 250, message = "tên không nhập quá 250 ký tự")
 	private String dienThoai;
 	
 	@NotBlank(message = "Vui lòng nhập email")
-	@Size(max = 250, message = "tên không nhập quá 50 ký tự")
+	@Size(max = 250, message = "tên không nhập quá 250 ký tự")
 	private String email;
 
-	@NotNull(message = "Vui lòng chọn phường, xã")
-	private Long phuongXaId;
+	private Long phuongXaIds;
 	
-	@NotNull(message = "Vui lòng chọn quận, huyện")
-	private Long quanHuyenId;
+	private Long quanHuyenIds;
 	
 	private String ghiChu;
 }

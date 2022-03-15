@@ -44,9 +44,11 @@ public class CoSoChanNuoiServiceImpl implements CoSoChanNuoiService{
 	}
 
 	@Override
-	public Page<CoSoChanNuoi> findAll(String search, String tenChuCoSo, String dienThoai, String email, Long phuongXaId, Long quanHuyenId, Pageable pageable) {
+	public Page<CoSoChanNuoi> findAll(String search, String tenChuCoSo, String dienThoai, String email, Long phuongXaIds, 
+			Long quanHuyenIds, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findAll(CoSoChanNuoiSpecifications.quickSearch(search, tenChuCoSo, dienThoai, email, phuongXaId, quanHuyenId), pageable);
+		return repo.findAll(CoSoChanNuoiSpecifications.quickSearch(search, tenChuCoSo, dienThoai, email, phuongXaIds, 
+				quanHuyenIds), pageable);
 	}
 
 }

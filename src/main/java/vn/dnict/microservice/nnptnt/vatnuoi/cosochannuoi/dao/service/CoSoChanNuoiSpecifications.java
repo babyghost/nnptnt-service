@@ -14,7 +14,7 @@ import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.model.CoSoChanNuoi;
 
 public class CoSoChanNuoiSpecifications {
 	public static Specification<CoSoChanNuoi> quickSearch(final String search, final String tenChuCoSo, final String dienThoai,
-			final String email, final Long phuongXaId, Long quanHuyenId) {
+			final String email, final Long phuongXaIds, Long quanHuyenIds) {
 		return new Specification<CoSoChanNuoi>() {
 
 			private static final long serialVersionUID = -4615834727542993669L;
@@ -41,12 +41,12 @@ public class CoSoChanNuoiSpecifications {
 					predicates.add(cb.equal(root.<String>get("email"), email));
 				}
 				
-				if (phuongXaId != null) {
-					predicates.add(cb.equal(root.<Long>get("phuongXaId"), phuongXaId));
+				if (phuongXaIds != null) {
+					predicates.add(cb.equal(root.<Long>get("phuongXaIds"), phuongXaIds));
 				}
 				
-				if (quanHuyenId != null) {
-					predicates.add(cb.equal(root.<Long>get("quanHuyenId"), quanHuyenId));
+				if (quanHuyenIds != null) {
+					predicates.add(cb.equal(root.<Long>get("quanHuyenIds"), quanHuyenIds));
 				}
 
 				if (!predicates.isEmpty()) {

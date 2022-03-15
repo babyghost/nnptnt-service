@@ -39,10 +39,10 @@ public class CoSoChanNuoiController {
 			@RequestParam(name = "tenChuCoSo", required = false) String tenChuCoSo,
 			@RequestParam(name = "dienThoai", required = false) String dienThoai,
 			@RequestParam(name = "email", required = false) String email,
-			@RequestParam(name = "phuongXaId",required=false) Long phuongXaId,
-			@RequestParam(name = "quanHuyenId",required=false) Long quanHuyenId) {
+			@RequestParam(name = "phuongXaIds",required=false) Long phuongXaIds,
+			@RequestParam(name = "quanHuyenIds",required=false) Long quanHuyenIds) {
 		Page<CoSoChanNuoi> pageCoSoChanNuoi = businessCoSoChanNuoiBusiness.findAll(page, size, sortBy, sortDir, search, 
-				tenChuCoSo, dienThoai, email, phuongXaId, quanHuyenId);
+				tenChuCoSo, dienThoai, email, phuongXaIds, quanHuyenIds);
 		return ResponseEntity.ok(pageCoSoChanNuoi);
 	}
 
