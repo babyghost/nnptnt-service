@@ -46,10 +46,10 @@ public class CoSoChanNuoi {
 	private String email;
 
 	@Column(name = "phuongxa_id")
-	private Long phuongXaIds;
+	private Long phuongXaId;
 	
 	@Column(name = "quanhuyen_id")
-	private Long quanHuyenIds;
+	private Long quanHuyenId;
 
 	@CreatedBy
 	@Column(name = "nguoitao")

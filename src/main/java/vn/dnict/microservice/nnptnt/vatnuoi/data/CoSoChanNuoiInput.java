@@ -29,9 +29,9 @@ public class CoSoChanNuoiInput {
 	@Size(max = 250, message = "tên không nhập quá 250 ký tự")
 	private String email;
 
-	private Long phuongXaIds;
+	private Long phuongXaId;
 	
-	private Long quanHuyenIds;
+	private Long quanHuyenId;
 	
 	private String ghiChu;
 }

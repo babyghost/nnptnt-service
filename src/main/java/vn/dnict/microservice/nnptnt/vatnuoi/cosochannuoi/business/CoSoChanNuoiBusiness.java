@@ -28,7 +28,7 @@ public class CoSoChanNuoiBusiness {
 	CoSoChanNuoiService serviceCoSoChanNuoiService;
 	
 	public Page<CoSoChanNuoi> findAll(int page, int size, String sortBy, String sortDir, String search, String tenChuCoSo, 
-			String dienThoai, String email, Long phuongXaIds, Long quanHuyenIds) { 
+			String dienThoai, String email, Long phuongXaId, Long quanHuyenId) { 
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
@@ -36,7 +36,7 @@ public class CoSoChanNuoiBusiness {
 			direction = Direction.DESC;
 		}
 		Page<CoSoChanNuoi> pageCoSoChanNuoi = serviceCoSoChanNuoiService.findAll(search, tenChuCoSo, dienThoai, email, 
-				phuongXaIds, quanHuyenIds, PageRequest.of(page, size, direction, sortBy));
+				phuongXaId, quanHuyenId, PageRequest.of(page, size, direction, sortBy));
 		return pageCoSoChanNuoi;
 	}
 	public CoSoChanNuoi findById(Long id) throws EntityNotFoundException {
@@ -63,8 +63,8 @@ public class CoSoChanNuoiBusiness {
 		coSoChanNuoi.setDiaChi(CoSoChanNuoiInput.getDiaChi());
 		coSoChanNuoi.setDienThoai(CoSoChanNuoiInput.getDienThoai());
 		coSoChanNuoi.setEmail(CoSoChanNuoiInput.getEmail());
-		coSoChanNuoi.setPhuongXaIds(CoSoChanNuoiInput.getPhuongXaIds());
-		coSoChanNuoi.setQuanHuyenIds(CoSoChanNuoiInput.getQuanHuyenIds());
+		coSoChanNuoi.setPhuongXaId(CoSoChanNuoiInput.getPhuongXaId());
+		coSoChanNuoi.setQuanHuyenId(CoSoChanNuoiInput.getQuanHuyenId());
 		coSoChanNuoi.setGhiChu(CoSoChanNuoiInput.getGhiChu());
 		coSoChanNuoi = serviceCoSoChanNuoiService.save(coSoChanNuoi);
 		return coSoChanNuoi;
@@ -81,8 +81,8 @@ public class CoSoChanNuoiBusiness {
 		coSoChanNuoi.setDiaChi(CoSoChanNuoiInput.getDiaChi());
 		coSoChanNuoi.setDienThoai(CoSoChanNuoiInput.getDienThoai());
 		coSoChanNuoi.setEmail(CoSoChanNuoiInput.getEmail());
-		coSoChanNuoi.setPhuongXaIds(CoSoChanNuoiInput.getPhuongXaIds());
-		coSoChanNuoi.setQuanHuyenIds(CoSoChanNuoiInput.getQuanHuyenIds());
+		coSoChanNuoi.setPhuongXaId(CoSoChanNuoiInput.getPhuongXaId());
+		coSoChanNuoi.setQuanHuyenId(CoSoChanNuoiInput.getQuanHuyenId());
 		coSoChanNuoi.setGhiChu(CoSoChanNuoiInput.getGhiChu());
 		coSoChanNuoi = serviceCoSoChanNuoiService.save(coSoChanNuoi);
 		return coSoChanNuoi;
