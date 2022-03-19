@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.business.CoSoChanNuoiBusiness;
-import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.model.CoSoChanNuoi;
-import vn.dnict.microservice.nnptnt.vatnuoi.data.CoSoChanNuoiInput;
+import vn.dnict.microservice.nnptnt.vatnuoi.data.CoSoChanNuoiOutput;
 
 @CrossOrigin
 @RestController
@@ -30,7 +31,7 @@ public class CoSoChanNuoiController {
 	CoSoChanNuoiBusiness businessCoSoChanNuoiBusiness; 
 	
 	@GetMapping(value = { "/", "" })
-	public ResponseEntity<Page<CoSoChanNuoi>> findAll(
+	public ResponseEntity<Page<CoSoChanNuoiOutput>> findAll(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
 			@RequestParam(name = "sortBy", defaultValue = "tenCoSo", required = false) String sortBy,
@@ -41,39 +42,35 @@ public class CoSoChanNuoiController {
 			@RequestParam(name = "email", required = false) String email,
 			@RequestParam(name = "phuongXaId",required=false) Long phuongXaId,
 			@RequestParam(name = "quanHuyenId",required=false) Long quanHuyenId) {
-		Page<CoSoChanNuoi> pageCoSoChanNuoi = businessCoSoChanNuoiBusiness.findAll(page, size, sortBy, sortDir, search, 
+		Page<CoSoChanNuoiOutput> pageCoSoChanNuoiOutput = businessCoSoChanNuoiBusiness.findAll(page, size, sortBy, sortDir, search, 
 				tenChuCoSo, dienThoai, email, phuongXaId, quanHuyenId);
-		return ResponseEntity.ok(pageCoSoChanNuoi);
+		return ResponseEntity.ok(pageCoSoChanNuoiOutput);
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<CoSoChanNuoi> findById(@PathVariable("id") Long id) throws EntityNotFoundException {
-		return ResponseEntity.ok(businessCoSoChanNuoiBusiness.findById(id));
-	}
-
-	@GetMapping(value = "/id/{tenCoSo}")
-	public ResponseEntity<CoSoChanNuoi> findByTenCoSo(@PathVariable("tenCoSo") String tenCoSo) throws EntityNotFoundException {
-		return ResponseEntity.ok(businessCoSoChanNuoiBusiness.findByTenCoSo(tenCoSo));
+	public ResponseEntity<CoSoChanNuoiOutput> findById(@PathVariable("id") Long id) throws EntityNotFoundException {
+		CoSoChanNuoiOutput coSoChanNuoi = businessCoSoChanNuoiBusiness.findById(id);
+		return ResponseEntity.ok(coSoChanNuoi);
 	}
 
 	@PostMapping(value = { "" })
-	public ResponseEntity<CoSoChanNuoi> create(
-			@Valid @RequestBody CoSoChanNuoiInput CoSoChanNuoiInput) {
-		CoSoChanNuoi CoSoChanNuoi = businessCoSoChanNuoiBusiness.create(CoSoChanNuoiInput);
-		return ResponseEntity.status(HttpStatus.CREATED).body(CoSoChanNuoi);
-	} 
-	
+	public ResponseEntity<CoSoChanNuoiOutput> create(@Valid @RequestBody CoSoChanNuoiOutput CoSoChanNuoiOutput,
+			BindingResult result) throws MethodArgumentNotValidException {
+		CoSoChanNuoiOutput = businessCoSoChanNuoiBusiness.create(CoSoChanNuoiOutput, result);
+		return ResponseEntity.status(HttpStatus.CREATED).body(CoSoChanNuoiOutput);
+	}
+
 	@PutMapping(value = { "/{id}" })
-	public ResponseEntity<CoSoChanNuoi> update(@PathVariable("id") Long id,
-			@Valid @RequestBody CoSoChanNuoiInput CoSoChanNuoiInput) throws EntityNotFoundException {
-		CoSoChanNuoi CoSoChanNuoi = businessCoSoChanNuoiBusiness.update(id, CoSoChanNuoiInput);
-		return ResponseEntity.ok(CoSoChanNuoi);
+	public ResponseEntity<CoSoChanNuoiOutput> update(@PathVariable("id") Long id,
+			@Valid @RequestBody CoSoChanNuoiOutput CoSoChanNuoiOutput, BindingResult result)
+			throws EntityNotFoundException, MethodArgumentNotValidException {
+		CoSoChanNuoiOutput = businessCoSoChanNuoiBusiness.update(id, CoSoChanNuoiOutput, result);
+		return ResponseEntity.ok(CoSoChanNuoiOutput);
 	}
 
 	@DeleteMapping(value = { "/{id}" })
-	public ResponseEntity<CoSoChanNuoi> delete(@PathVariable("id") Long id)
-			throws EntityNotFoundException {
-		CoSoChanNuoi CoSoChanNuoi = businessCoSoChanNuoiBusiness.delete(id);
-		return ResponseEntity.ok(CoSoChanNuoi);
+	public ResponseEntity<CoSoChanNuoiOutput> delete(@PathVariable("id") Long id) throws EntityNotFoundException {
+		CoSoChanNuoiOutput CoSoChanNuoiOutput = businessCoSoChanNuoiBusiness.delete(id);
+		return ResponseEntity.ok(CoSoChanNuoiOutput);
 	}
 }

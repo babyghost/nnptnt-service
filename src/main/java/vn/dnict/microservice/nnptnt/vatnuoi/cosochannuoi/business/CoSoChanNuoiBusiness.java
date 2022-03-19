@@ -7,14 +7,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
+import vn.dnict.microservice.danhmuc.dao.model.DmPhuongXa;
+import vn.dnict.microservice.danhmuc.dao.model.DmQuanHuyen;
 import vn.dnict.microservice.danhmuc.dao.service.DmPhuongXaService;
 import vn.dnict.microservice.danhmuc.dao.service.DmQuanHuyenService;
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.model.CoSoChanNuoi;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.service.CoSoChanNuoiService;
-import vn.dnict.microservice.nnptnt.vatnuoi.data.CoSoChanNuoiInput;
+import vn.dnict.microservice.nnptnt.vatnuoi.data.CoSoChanNuoiOutput;
 
 @Service
 public class CoSoChanNuoiBusiness {
@@ -27,7 +31,7 @@ public class CoSoChanNuoiBusiness {
 	@Autowired
 	CoSoChanNuoiService serviceCoSoChanNuoiService;
 	
-	public Page<CoSoChanNuoi> findAll(int page, int size, String sortBy, String sortDir, String search, String tenChuCoSo, 
+	public Page<CoSoChanNuoiOutput> findAll(int page, int size, String sortBy, String sortDir, String search, String tenChuCoSo, 
 			String dienThoai, String email, Long phuongXaId, Long quanHuyenId) { 
 		Direction direction;
 		if (sortDir.equals("ASC")) {
@@ -35,61 +39,89 @@ public class CoSoChanNuoiBusiness {
 		} else {
 			direction = Direction.DESC;
 		}
-		Page<CoSoChanNuoi> pageCoSoChanNuoi = serviceCoSoChanNuoiService.findAll(search, tenChuCoSo, dienThoai, email, 
+		final Page<CoSoChanNuoi> pageCoSoChanNuoi = serviceCoSoChanNuoiService.findAll(search, tenChuCoSo, dienThoai, email, 
 				phuongXaId, quanHuyenId, PageRequest.of(page, size, direction, sortBy));
-		return pageCoSoChanNuoi;
-	}
-	public CoSoChanNuoi findById(Long id) throws EntityNotFoundException {
-		Optional<CoSoChanNuoi> optional = serviceCoSoChanNuoiService.findById(id);
-		if (!optional.isPresent()) {
-			throw new EntityNotFoundException(CoSoChanNuoi.class, "id", String.valueOf(id));
-		}
-		return optional.get();
+		final Page<CoSoChanNuoiOutput> pageCoSoChanNuoiOutput = pageCoSoChanNuoi
+				.map(this::convertToCoSoChanNuoiOutput);
+		return pageCoSoChanNuoiOutput;
 	}
 	
-	public CoSoChanNuoi findByTenCoSo(String tenCoSo) throws EntityNotFoundException {
-		Optional<CoSoChanNuoi> optional = serviceCoSoChanNuoiService.findByTenCoSo(tenCoSo);
-		if (!optional.isPresent()) {
-			throw new EntityNotFoundException(CoSoChanNuoi.class, "tenCoSo", String.valueOf(tenCoSo));
+	private CoSoChanNuoiOutput convertToCoSoChanNuoiOutput(
+			CoSoChanNuoi CoSoChanNuoi) {
+		CoSoChanNuoiOutput CoSoChanNuoiOutput = new CoSoChanNuoiOutput();
+		CoSoChanNuoiOutput.setId(CoSoChanNuoi.getId());
+		CoSoChanNuoiOutput.setTenCoSo(CoSoChanNuoi.getTenCoSo());
+		CoSoChanNuoiOutput.setTenChuCoSo(CoSoChanNuoi.getTenChuCoSo());
+		CoSoChanNuoiOutput.setDienThoai(CoSoChanNuoi.getDienThoai());
+		CoSoChanNuoiOutput.setEmail(CoSoChanNuoi.getEmail());
+		CoSoChanNuoiOutput.setDiaChi(CoSoChanNuoi.getDiaChi());
+		CoSoChanNuoiOutput.setPhuongXaId(CoSoChanNuoi.getPhuongXaId());
+		CoSoChanNuoiOutput.setQuanHuyenId(CoSoChanNuoi.getQuanHuyenId());
+		CoSoChanNuoiOutput.setGhiChu(CoSoChanNuoi.getGhiChu());
+		if(CoSoChanNuoi.getQuanHuyenId() != null && CoSoChanNuoi.getQuanHuyenId() > 0) {
+			Optional<DmQuanHuyen> optional = serviceDmQuanHuyenService.findById(CoSoChanNuoi.getQuanHuyenId());
+			if (optional.isPresent()) {
+				CoSoChanNuoiOutput.setQuanHuyenTen(optional.get().getTen());
+			}	
 		}
-		return optional.get();
+		if(CoSoChanNuoi.getPhuongXaId() != null && CoSoChanNuoi.getPhuongXaId() > 0) {
+			Optional<DmPhuongXa> optional = serviceDmPhuongXaService.findById(CoSoChanNuoi.getPhuongXaId());
+			if (optional.isPresent()) {
+				CoSoChanNuoiOutput.setPhuongXaTen(optional.get().getTen());
+			}	
+		}
+		return CoSoChanNuoiOutput;
+	}
+	
+	public CoSoChanNuoiOutput findById(Long id) throws EntityNotFoundException {
+		Optional<CoSoChanNuoi> optional = serviceCoSoChanNuoiService.findById(id);
+		if (!optional.isPresent()) {
+			throw new EntityNotFoundException(CoSoChanNuoiOutput.class, "id", String.valueOf(id));
+		}
+		CoSoChanNuoi coSoChanNuoi = optional.get();
+		return this.convertToCoSoChanNuoiOutput(coSoChanNuoi);
 	}
 
-	public CoSoChanNuoi create(CoSoChanNuoiInput CoSoChanNuoiInput) {
+	public CoSoChanNuoiOutput create(CoSoChanNuoiOutput CoSoChanNuoiOutput,
+			BindingResult result) throws MethodArgumentNotValidException {
+		if (result.hasErrors()) {
+			throw new MethodArgumentNotValidException(null, result);
+		}
 		CoSoChanNuoi coSoChanNuoi = new CoSoChanNuoi();
 		coSoChanNuoi.setDaXoa(true);
-		coSoChanNuoi.setTenCoSo(CoSoChanNuoiInput.getTenCoSo());
-		coSoChanNuoi.setTenChuCoSo(CoSoChanNuoiInput.getTenChuCoSo());
-		coSoChanNuoi.setDiaChi(CoSoChanNuoiInput.getDiaChi());
-		coSoChanNuoi.setDienThoai(CoSoChanNuoiInput.getDienThoai());
-		coSoChanNuoi.setEmail(CoSoChanNuoiInput.getEmail());
-		coSoChanNuoi.setPhuongXaId(CoSoChanNuoiInput.getPhuongXaId());
-		coSoChanNuoi.setQuanHuyenId(CoSoChanNuoiInput.getQuanHuyenId());
-		coSoChanNuoi.setGhiChu(CoSoChanNuoiInput.getGhiChu());
+		coSoChanNuoi.setTenCoSo(CoSoChanNuoiOutput.getTenCoSo());
+		coSoChanNuoi.setTenChuCoSo(CoSoChanNuoiOutput.getTenChuCoSo());
+		coSoChanNuoi.setDiaChi(CoSoChanNuoiOutput.getDiaChi());
+		coSoChanNuoi.setDienThoai(CoSoChanNuoiOutput.getDienThoai());
+		coSoChanNuoi.setEmail(CoSoChanNuoiOutput.getEmail());
+		coSoChanNuoi.setPhuongXaId(CoSoChanNuoiOutput.getPhuongXaId());
+		coSoChanNuoi.setQuanHuyenId(CoSoChanNuoiOutput.getQuanHuyenId());
+		coSoChanNuoi.setGhiChu(CoSoChanNuoiOutput.getGhiChu());
 		coSoChanNuoi = serviceCoSoChanNuoiService.save(coSoChanNuoi);
-		return coSoChanNuoi;
+		return this.convertToCoSoChanNuoiOutput(coSoChanNuoi);
 	}
 
-	public CoSoChanNuoi update(Long id, CoSoChanNuoiInput CoSoChanNuoiInput) throws EntityNotFoundException {
+	public CoSoChanNuoiOutput update(Long id, CoSoChanNuoiOutput CoSoChanNuoiOutput,
+			BindingResult result) throws EntityNotFoundException, MethodArgumentNotValidException {
 		Optional<CoSoChanNuoi> optional = serviceCoSoChanNuoiService.findById(id);
 		if (!optional.isPresent()) {
 			throw new EntityNotFoundException(CoSoChanNuoi.class, "id", String.valueOf(id));
 		}
 		CoSoChanNuoi coSoChanNuoi = optional.get();
-		coSoChanNuoi.setTenCoSo(CoSoChanNuoiInput.getTenCoSo());
-		coSoChanNuoi.setTenChuCoSo(CoSoChanNuoiInput.getTenChuCoSo());
-		coSoChanNuoi.setDiaChi(CoSoChanNuoiInput.getDiaChi());
-		coSoChanNuoi.setDienThoai(CoSoChanNuoiInput.getDienThoai());
-		coSoChanNuoi.setEmail(CoSoChanNuoiInput.getEmail());
-		coSoChanNuoi.setPhuongXaId(CoSoChanNuoiInput.getPhuongXaId());
-		coSoChanNuoi.setQuanHuyenId(CoSoChanNuoiInput.getQuanHuyenId());
-		coSoChanNuoi.setGhiChu(CoSoChanNuoiInput.getGhiChu());
+		coSoChanNuoi.setTenCoSo(CoSoChanNuoiOutput.getTenCoSo());
+		coSoChanNuoi.setTenChuCoSo(CoSoChanNuoiOutput.getTenChuCoSo());
+		coSoChanNuoi.setDiaChi(CoSoChanNuoiOutput.getDiaChi());
+		coSoChanNuoi.setDienThoai(CoSoChanNuoiOutput.getDienThoai());
+		coSoChanNuoi.setEmail(CoSoChanNuoiOutput.getEmail());
+		coSoChanNuoi.setPhuongXaId(CoSoChanNuoiOutput.getPhuongXaId());
+		coSoChanNuoi.setQuanHuyenId(CoSoChanNuoiOutput.getQuanHuyenId());
+		coSoChanNuoi.setGhiChu(CoSoChanNuoiOutput.getGhiChu());
 		coSoChanNuoi = serviceCoSoChanNuoiService.save(coSoChanNuoi);
-		return coSoChanNuoi;
+		return this.convertToCoSoChanNuoiOutput(coSoChanNuoi);
 	}
 
 	@DeleteMapping(value = { "/{id}" })
-	public CoSoChanNuoi delete(Long id) throws EntityNotFoundException {
+	public CoSoChanNuoiOutput delete(Long id) throws EntityNotFoundException {
 		Optional<CoSoChanNuoi> optional = serviceCoSoChanNuoiService.findById(id);
 		if (!optional.isPresent()) {
 			throw new EntityNotFoundException(CoSoChanNuoi.class, "id", String.valueOf(id));
@@ -97,6 +129,6 @@ public class CoSoChanNuoiBusiness {
 		CoSoChanNuoi coSoChanNuoi = optional.get();
 		coSoChanNuoi.setDaXoa(false);
 		coSoChanNuoi = serviceCoSoChanNuoiService.save(coSoChanNuoi);
-		return coSoChanNuoi;
+		return this.convertToCoSoChanNuoiOutput(coSoChanNuoi);
 	}
 }
