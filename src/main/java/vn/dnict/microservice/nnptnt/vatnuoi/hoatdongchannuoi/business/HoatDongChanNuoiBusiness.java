@@ -142,7 +142,7 @@ public class HoatDongChanNuoiBusiness {
 	
 	public HoatDongChanNuoi create(HoatDongChanNuoiInput HoatDongChanNuoiInput) {
 		HoatDongChanNuoi HoatDongChanNuoi = new HoatDongChanNuoi();
-		HoatDongChanNuoi.setDaXoa(false);
+		HoatDongChanNuoi.setDaXoa(true);
 		HoatDongChanNuoi.setDonViTinh(HoatDongChanNuoiInput.getDonViTinh());
 		HoatDongChanNuoi.setLoaiVatNuoiId(HoatDongChanNuoiInput.getLoaiVatNuoiId());
 //		HoatDongChanNuoi.setNamChanNuoiId(HoatDongChanNuoiInput.getNamChanNuoiId());
@@ -193,7 +193,7 @@ public class HoatDongChanNuoiBusiness {
 			throw new EntityNotFoundException(HoatDongChanNuoi.class, "id", String.valueOf(id));
 		}
 		HoatDongChanNuoi HoatDongChanNuoi = optional.get();
-		HoatDongChanNuoi.setDaXoa(true);
+		HoatDongChanNuoi.setDaXoa(false);
 		HoatDongChanNuoi = serviceHoatDongChanNuoiService.save(HoatDongChanNuoi);
 		return HoatDongChanNuoi;
 	}

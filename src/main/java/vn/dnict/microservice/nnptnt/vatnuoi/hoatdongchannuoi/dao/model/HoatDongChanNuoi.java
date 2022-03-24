@@ -113,7 +113,7 @@ public class HoatDongChanNuoi {
 	private boolean daXoa;
 	
 	@Column(name = "nam")
-	private String Nam;
+	private String nam;
 	
 	@Column(name = "quy")
 	private Integer quy;

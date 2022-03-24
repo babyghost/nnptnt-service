@@ -24,7 +24,7 @@ public class HoatDongChanNuoiSpecifications {
 			@Override
 			public Predicate toPredicate(Root<HoatDongChanNuoi> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 			List<Predicate> predicates = new ArrayList<>();
-			predicates.add(cb.equal(root.<String>get("daXoa"), false));
+			predicates.add(cb.equal(root.<String>get("daXoa"), true));
 			if (search != null && !search.isEmpty()) {
 				Predicate coSoChanNuoiId  = cb.like(cb.lower(root.<String>get("coSoChanNuoiId")), "%" + search.toLowerCase() + "%");
 //				Predicate namChanNuoiId  = cb.like(cb.lower(root.<String>get("namChanNuoiId")), "%" + search.toLowerCase() + "%");
