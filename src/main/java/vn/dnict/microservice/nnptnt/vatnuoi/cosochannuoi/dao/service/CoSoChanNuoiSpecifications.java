@@ -23,7 +23,7 @@ public class CoSoChanNuoiSpecifications {
 			public Predicate toPredicate(Root<CoSoChanNuoi> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<>();
-				predicates.add(cb.equal(root.<String>get("daXoa"), true));
+				predicates.add(cb.equal(root.<String>get("daXoa"), false));
 				if (search != null && !search.isEmpty()) {
 					Predicate tencoso = cb.like(cb.lower(root.<String>get("tenCoSo")), "%" + search.toLowerCase() + "%");
 					predicates.add(cb.or(tencoso));

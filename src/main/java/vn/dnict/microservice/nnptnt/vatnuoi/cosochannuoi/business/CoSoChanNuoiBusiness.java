@@ -88,7 +88,7 @@ public class CoSoChanNuoiBusiness {
 			throw new MethodArgumentNotValidException(null, result);
 		}
 		CoSoChanNuoi coSoChanNuoi = new CoSoChanNuoi();
-		coSoChanNuoi.setDaXoa(true);
+		coSoChanNuoi.setDaXoa(false);
 		coSoChanNuoi.setTenCoSo(CoSoChanNuoiOutput.getTenCoSo());
 		coSoChanNuoi.setTenChuCoSo(CoSoChanNuoiOutput.getTenChuCoSo());
 		coSoChanNuoi.setDiaChi(CoSoChanNuoiOutput.getDiaChi());
@@ -127,7 +127,7 @@ public class CoSoChanNuoiBusiness {
 			throw new EntityNotFoundException(CoSoChanNuoi.class, "id", String.valueOf(id));
 		}
 		CoSoChanNuoi coSoChanNuoi = optional.get();
-		coSoChanNuoi.setDaXoa(false);
+		coSoChanNuoi.setDaXoa(true);
 		coSoChanNuoi = serviceCoSoChanNuoiService.save(coSoChanNuoi);
 		return this.convertToCoSoChanNuoiOutput(coSoChanNuoi);
 	}
