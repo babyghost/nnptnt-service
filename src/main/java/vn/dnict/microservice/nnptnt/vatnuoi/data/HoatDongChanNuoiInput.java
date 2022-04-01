@@ -9,7 +9,6 @@ import lombok.Data;
 @Data
 public class HoatDongChanNuoiInput {
 
-//	@NotNull(message = "Vui lòng chon Loai Vat Nuoi")
 	private Long loaiVatNuoiId;
 	
 	
@@ -36,8 +35,8 @@ public class HoatDongChanNuoiInput {
 	
 	private Long coSoChanNuoiId;
 
-//	private Long namChanNuoiId;
 	private String nam;
+	
 	private Integer quy;
 
 }

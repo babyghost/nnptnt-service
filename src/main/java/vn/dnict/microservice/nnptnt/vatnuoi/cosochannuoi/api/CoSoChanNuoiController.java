@@ -54,23 +54,23 @@ public class CoSoChanNuoiController {
 	}
 
 	@PostMapping(value = { "" })
-	public ResponseEntity<CoSoChanNuoiOutput> create(@Valid @RequestBody CoSoChanNuoiOutput CoSoChanNuoiOutput,
+	public ResponseEntity<CoSoChanNuoiOutput> create(@Valid @RequestBody CoSoChanNuoiOutput coSoChanNuoiOutput,
 			BindingResult result) throws MethodArgumentNotValidException {
-		CoSoChanNuoiOutput = businessCoSoChanNuoiBusiness.create(CoSoChanNuoiOutput, result);
-		return ResponseEntity.status(HttpStatus.CREATED).body(CoSoChanNuoiOutput);
+		coSoChanNuoiOutput = businessCoSoChanNuoiBusiness.create(coSoChanNuoiOutput, result);
+		return ResponseEntity.status(HttpStatus.CREATED).body(coSoChanNuoiOutput);
 	}
 
 	@PutMapping(value = { "/{id}" })
 	public ResponseEntity<CoSoChanNuoiOutput> update(@PathVariable("id") Long id,
-			@Valid @RequestBody CoSoChanNuoiOutput CoSoChanNuoiOutput, BindingResult result)
+			@Valid @RequestBody CoSoChanNuoiOutput coSoChanNuoiOutput, BindingResult result)
 			throws EntityNotFoundException, MethodArgumentNotValidException {
-		CoSoChanNuoiOutput = businessCoSoChanNuoiBusiness.update(id, CoSoChanNuoiOutput, result);
-		return ResponseEntity.ok(CoSoChanNuoiOutput);
+		coSoChanNuoiOutput = businessCoSoChanNuoiBusiness.update(id, coSoChanNuoiOutput, result);
+		return ResponseEntity.ok(coSoChanNuoiOutput);
 	}
 
 	@DeleteMapping(value = { "/{id}" })
 	public ResponseEntity<CoSoChanNuoiOutput> delete(@PathVariable("id") Long id) throws EntityNotFoundException {
-		CoSoChanNuoiOutput CoSoChanNuoiOutput = businessCoSoChanNuoiBusiness.delete(id);
-		return ResponseEntity.ok(CoSoChanNuoiOutput);
+		CoSoChanNuoiOutput coSoChanNuoiOutput = businessCoSoChanNuoiBusiness.delete(id);
+		return ResponseEntity.ok(coSoChanNuoiOutput);
 	}
 }

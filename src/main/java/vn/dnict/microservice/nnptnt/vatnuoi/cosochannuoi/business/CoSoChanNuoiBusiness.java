@@ -47,30 +47,30 @@ public class CoSoChanNuoiBusiness {
 	}
 	
 	private CoSoChanNuoiOutput convertToCoSoChanNuoiOutput(
-			CoSoChanNuoi CoSoChanNuoi) {
-		CoSoChanNuoiOutput CoSoChanNuoiOutput = new CoSoChanNuoiOutput();
-		CoSoChanNuoiOutput.setId(CoSoChanNuoi.getId());
-		CoSoChanNuoiOutput.setTenCoSo(CoSoChanNuoi.getTenCoSo());
-		CoSoChanNuoiOutput.setTenChuCoSo(CoSoChanNuoi.getTenChuCoSo());
-		CoSoChanNuoiOutput.setDienThoai(CoSoChanNuoi.getDienThoai());
-		CoSoChanNuoiOutput.setEmail(CoSoChanNuoi.getEmail());
-		CoSoChanNuoiOutput.setDiaChi(CoSoChanNuoi.getDiaChi());
-		CoSoChanNuoiOutput.setPhuongXaId(CoSoChanNuoi.getPhuongXaId());
-		CoSoChanNuoiOutput.setQuanHuyenId(CoSoChanNuoi.getQuanHuyenId());
-		CoSoChanNuoiOutput.setGhiChu(CoSoChanNuoi.getGhiChu());
-		if(CoSoChanNuoi.getQuanHuyenId() != null && CoSoChanNuoi.getQuanHuyenId() > 0) {
-			Optional<DmQuanHuyen> optional = serviceDmQuanHuyenService.findById(CoSoChanNuoi.getQuanHuyenId());
+			CoSoChanNuoi coSoChanNuoi) {
+		CoSoChanNuoiOutput coSoChanNuoiOutput = new CoSoChanNuoiOutput();
+		coSoChanNuoiOutput.setId(coSoChanNuoi.getId());
+		coSoChanNuoiOutput.setTenCoSo(coSoChanNuoi.getTenCoSo());
+		coSoChanNuoiOutput.setTenChuCoSo(coSoChanNuoi.getTenChuCoSo());
+		coSoChanNuoiOutput.setDienThoai(coSoChanNuoi.getDienThoai());
+		coSoChanNuoiOutput.setEmail(coSoChanNuoi.getEmail());
+		coSoChanNuoiOutput.setDiaChi(coSoChanNuoi.getDiaChi());
+		coSoChanNuoiOutput.setPhuongXaId(coSoChanNuoi.getPhuongXaId());
+		coSoChanNuoiOutput.setQuanHuyenId(coSoChanNuoi.getQuanHuyenId());
+		coSoChanNuoiOutput.setGhiChu(coSoChanNuoi.getGhiChu());
+		if(coSoChanNuoi.getQuanHuyenId() != null && coSoChanNuoi.getQuanHuyenId() > 0) {
+			Optional<DmQuanHuyen> optional = serviceDmQuanHuyenService.findById(coSoChanNuoi.getQuanHuyenId());
 			if (optional.isPresent()) {
-				CoSoChanNuoiOutput.setQuanHuyenTen(optional.get().getTen());
+				coSoChanNuoiOutput.setQuanHuyenTen(optional.get().getTen());
 			}	
 		}
-		if(CoSoChanNuoi.getPhuongXaId() != null && CoSoChanNuoi.getPhuongXaId() > 0) {
-			Optional<DmPhuongXa> optional = serviceDmPhuongXaService.findById(CoSoChanNuoi.getPhuongXaId());
+		if(coSoChanNuoi.getPhuongXaId() != null && coSoChanNuoi.getPhuongXaId() > 0) {
+			Optional<DmPhuongXa> optional = serviceDmPhuongXaService.findById(coSoChanNuoi.getPhuongXaId());
 			if (optional.isPresent()) {
-				CoSoChanNuoiOutput.setPhuongXaTen(optional.get().getTen());
+				coSoChanNuoiOutput.setPhuongXaTen(optional.get().getTen());
 			}	
 		}
-		return CoSoChanNuoiOutput;
+		return coSoChanNuoiOutput;
 	}
 	
 	public CoSoChanNuoiOutput findById(Long id) throws EntityNotFoundException {
