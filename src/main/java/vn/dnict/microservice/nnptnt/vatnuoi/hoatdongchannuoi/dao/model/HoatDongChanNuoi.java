@@ -31,32 +31,22 @@ public class HoatDongChanNuoi {
 	@Column(name = "id", unique = true, nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	
-//	
-//	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-//	@OneToOne(fetch = FetchType.LAZY)
-//	@NotFound(action = NotFoundAction.IGNORE)
+
 	@Column(name = "loaivatnuoi_id")
 	private Long loaiVatNuoiId;
 
 	@Column(name = "donvitinh")
 	private Integer donViTinh;
 
-
 	@Column(name = "soluongnuoi")
 	private Integer soLuongNuoi;
 	
-	
 	@Column(name = "mucdichnuoi", length = 500)
 	private String mucDichNuoi;
-	
-	
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Column(name = "thoigianbatdaunuoi")
-	private LocalDate thoiGianBatDauNuoi;
-	
+	private LocalDate thoiGianBatDauNuoi;	
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Column(name = "thoigianxuat")
@@ -68,23 +58,12 @@ public class HoatDongChanNuoi {
 	@Column(name = "sanluongxuat")
 	private Float sanLuongXuat;
 
-
 	@Column(name = "ghichu")
 	private String ghiChu;
 
-	
-//	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-//	@OneToOne(fetch = FetchType.LAZY)
-//	@NotFound(action = NotFoundAction.IGNORE)
 	@Column(name = "namchannuoi_id")
 	private Long namChanNuoiId;
-	
-	
-	
-//	
-//	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-//	@OneToOne(fetch = FetchType.LAZY)
-//	@NotFound(action = NotFoundAction.IGNORE)
+
 	@Column(name = "cosochannuoi_id")
 	private Long coSoChanNuoiId;
 	
@@ -97,8 +76,6 @@ public class HoatDongChanNuoi {
 	@Column(name = "ngaytao")
 	private LocalDateTime ngayTao;
 
-	
-	
 	@LastModifiedBy
 	@Column(name = "nguoicapnhat")
 	private String nguoiCapNhat;

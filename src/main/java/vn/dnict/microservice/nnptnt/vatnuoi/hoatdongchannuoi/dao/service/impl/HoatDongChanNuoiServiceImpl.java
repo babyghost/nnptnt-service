@@ -34,15 +34,10 @@ public class HoatDongChanNuoiServiceImpl implements  HoatDongChanNuoiService{
 		
 	}
 	
-	
 	public Optional<HoatDongChanNuoi> findById(Long id) {
 		// TODO Auto-generated method stub
 		return repo.findById(id);
 	}
-
-
-
-
 	
 	@Override
 	public Page<HoatDongChanNuoi> findAll(String search, Integer donViTinh, Integer soLuongNuoi,
@@ -50,25 +45,6 @@ public class HoatDongChanNuoiServiceImpl implements  HoatDongChanNuoiService{
 			Float sanLuongXuat, String ghiChu, Long loaiVatNuoiId,Long coSoChanNuoiId, String nam, Integer quy,
 			Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findAll(HoatDongChanNuoiSpecifications.quickSearch(search,donViTinh,soLuongNuoi,
-				mucDichNuoi,thoiGianBatDauNuoi,thoiGianXuat,slVatNuoiXuat,sanLuongXuat,ghiChu, loaiVatNuoiId,
-				coSoChanNuoiId), pageable);
+		return repo.findAll(HoatDongChanNuoiSpecifications.quickSearch(search, loaiVatNuoiId, coSoChanNuoiId, nam, quy), pageable);
 	}
-
-	
-	
-	
-	
-
-
-
-	
-
-
-
-	
-
-
-
-
 }
