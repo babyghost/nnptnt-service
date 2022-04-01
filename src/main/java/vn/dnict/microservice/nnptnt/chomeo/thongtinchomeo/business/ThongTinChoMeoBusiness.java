@@ -208,7 +208,7 @@ public class ThongTinChoMeoBusiness {
 					.findByThongTinChoMeoIdAndDaXoa(thongTinChoMeo.getId(), false);
 	
 				thongTinChoMeoData.setListKeHoach2ChoMeo(listKeHoach2ChoMeos);
-								
+				
 			
 		}
 	
@@ -366,7 +366,7 @@ public class ThongTinChoMeoBusiness {
 			throw new EntityNotFoundException(ThongTinChoMeo.class, "id", String.valueOf(id));
 		}
 		ThongTinChoMeo thongTinChoMeo = optional.get();
-		thongTinChoMeo.setDaXoa(false);
+		thongTinChoMeo.setDaXoa(true);
 		thongTinChoMeo = serviceThongTinChoMeoService.save(thongTinChoMeo);
 		return this.convertToThongTinChoMeoData(thongTinChoMeo);
 	}
