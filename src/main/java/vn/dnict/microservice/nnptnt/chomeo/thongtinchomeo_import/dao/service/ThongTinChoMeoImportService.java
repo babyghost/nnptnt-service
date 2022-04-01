@@ -8,11 +8,11 @@ import org.springframework.data.domain.Pageable;
 import vn.dnict.microservice.nnptnt.chomeo.thongtinchomeo_import.dao.model.ThongTinChoMeoImport;
 
 public interface ThongTinChoMeoImportService {
-	public ThongTinChoMeoImport save(ThongTinChoMeoImport entity);
+	public ThongTinChoMeoImport save(ThongTinChoMeoImport thongTinChoMeoImport);
 
 	public void deleteById(Long id);
 
 	public Optional<ThongTinChoMeoImport> findById(Long id);
 
-	public Page<ThongTinChoMeoImport> findAll(String search, Long thongTinChoMeoId, String trangThai, Pageable pageable);
+	public Page<ThongTinChoMeoImport> findAll( Long thongTinChoMeoId, String trangThai, Pageable pageable);
 }

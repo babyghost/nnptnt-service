@@ -14,7 +14,7 @@ import vn.dnict.microservice.nnptnt.chomeo.chuquanly.dao.model.ChuQuanLy;
 
 public class ChuQuanLySpecifications {
 	public static Specification<ChuQuanLy> quickSearch(final String chuHo,final String diaChi,
-			final Integer dienThoai){
+			final String dienThoai){
 		return new Specification<ChuQuanLy>() {
 
 			/**
@@ -33,8 +33,8 @@ public class ChuQuanLySpecifications {
 				if(diaChi != null && !diaChi.isEmpty()) {
 					predicates.add(cb.like(cb.lower(root.<String>get("diaChi")), "%" + diaChi.trim().toLowerCase() + "%"));
 				}
-				if (dienThoai != null) {
-					predicates.add(cb.equal(root.<String>get("dienthoai"), dienThoai));
+				if(dienThoai != null && !dienThoai.isEmpty()) {
+					predicates.add(cb.like(cb.lower(root.<String>get("dienThoai")), "%" + dienThoai.trim().toLowerCase() + "%"));
 				}
 			
 				if (!predicates.isEmpty()) {

@@ -1,6 +1,6 @@
 package vn.dnict.microservice.nnptnt.chomeo.thoigiantiemphong.dao.service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -15,5 +15,5 @@ public interface ThoiGianTiemPhongService {
 
 	public Optional<ThoiGianTiemPhong> findById(Long id);
 
-	public Page<ThoiGianTiemPhong> findAll(Long phuongXaId,Long quanHuyenId,LocalDateTime thoiGianTiemDenNgay, LocalDateTime thoiGianTiemTuNgay,Long keHoachTiemPhongId,String diaDiem ,Pageable pageable);
+	public Page<ThoiGianTiemPhong> findAll(Long phuongXaId,Long quanHuyenId,LocalDate thoiGianTiemDenNgay, LocalDate thoiGianTiemTuNgay,Long keHoachTiemPhongId,String diaDiem ,Pageable pageable);
 }

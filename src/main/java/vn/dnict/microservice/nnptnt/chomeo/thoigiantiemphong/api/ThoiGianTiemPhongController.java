@@ -1,6 +1,6 @@
 package vn.dnict.microservice.nnptnt.chomeo.thoigiantiemphong.api;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.validation.Valid;
 
@@ -48,8 +48,8 @@ public class ThoiGianTiemPhongController {
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
 			@RequestParam(name = "phuongXaId",required = false) Long phuongXaId,
 			@RequestParam(name = "quanHuyenId",required = false) Long quanHuyenId,
-			@RequestParam(name = "thoiGianTiemTuNgay", required= false) LocalDateTime thoiGianTiemTuNgay,
-			@RequestParam(name = "thoiGianTiemDenNgay", required= false) LocalDateTime thoiGianTiemDenNgay,
+			@RequestParam(name = "thoiGianTiemTuNgay", required= false) LocalDate thoiGianTiemTuNgay,
+			@RequestParam(name = "thoiGianTiemDenNgay", required= false) LocalDate thoiGianTiemDenNgay,
 			@RequestParam(name = "keHoachTiemPhongId",required = false) Long keHoachTiemPhongId,
 			@RequestParam(name = "diaDiem",required=false) String diaDiem) {
 		Page<ThoiGianTiemPhong> pageThoiGianTiemPhong = businessThoiGianTiemPhongBusiness.findAll(page, size, sortBy, sortDir, phuongXaId, keHoachTiemPhongId,thoiGianTiemTuNgay,thoiGianTiemDenNgay, keHoachTiemPhongId, diaDiem);

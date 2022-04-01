@@ -2,11 +2,13 @@
 package vn.dnict.microservice.nnptnt.dm.giong.dao.service;
 
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import vn.dnict.microservice.nnptnt.dm.giong.dao.model.DmGiong;
+import vn.dnict.microservice.nnptnt.dm.loaidongvat.dao.model.DmLoaiDongVat;
 
 
 public interface DmGiongService {
@@ -20,6 +22,7 @@ public interface DmGiongService {
 
 	public Page<DmGiong> findAll(String search,Long loaiVatNuoiId, Integer trangThai, Pageable pageable);
 
+	public List<DmGiong> findByTen(String ten);
 
 
 	

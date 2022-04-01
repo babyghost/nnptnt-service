@@ -49,7 +49,7 @@ public class ChuQuanLy {
 	private String nguoiTao;
 	
 	@Column (name = "dienthoai")
-	private Integer dienThoai;
+	private String dienThoai;
 
 	@CreatedDate
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")

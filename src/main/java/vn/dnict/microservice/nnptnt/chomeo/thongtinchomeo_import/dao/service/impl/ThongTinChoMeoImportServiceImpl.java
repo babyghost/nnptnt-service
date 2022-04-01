@@ -39,9 +39,9 @@ public class ThongTinChoMeoImportServiceImpl implements ThongTinChoMeoImportServ
 	}
 
 	@Override
-	public Page<ThongTinChoMeoImport> findAll(String search, Long thongTinChoMeoId, String trangThai, Pageable pageable) {
+	public Page<ThongTinChoMeoImport> findAll( Long thongTinChoMeoId, String trangThai, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findAll(ThongTinChoMeoImportSpecifications.quickSearch(search, thongTinChoMeoId, trangThai), pageable);
+		return repo.findAll(ThongTinChoMeoImportSpecifications.quickSearch( thongTinChoMeoId, trangThai), pageable);
 	}
 
 }

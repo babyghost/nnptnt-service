@@ -13,7 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.chomeo.thongtinchomeo_import.dao.model.ThongTinChoMeoImport;
 
 public class ThongTinChoMeoImportSpecifications {
-	public static Specification<ThongTinChoMeoImport> quickSearch(final String search, final Long thongTinChoMeoId,
+	public static Specification<ThongTinChoMeoImport> quickSearch( final Long thongTinChoMeoId,
 			final String trangThai) {
 		return new Specification<ThongTinChoMeoImport>() {
 
@@ -23,9 +23,12 @@ public class ThongTinChoMeoImportSpecifications {
 			public Predicate toPredicate(Root<ThongTinChoMeoImport> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<>();
-				if (search != null && !search.isEmpty()) {
-					Predicate chuHo = cb.like(cb.lower(root.<String>get("chuHo")), "%" + search.toLowerCase() + "%");
-					predicates.add(cb.or(chuHo));
+//				if (search != null && !search.isEmpty()) {
+//					Predicate chuHo = cb.like(cb.lower(root.<String>get("chuHo")), "%" + search.toLowerCase() + "%");
+//					predicates.add(cb.or(chuHo));
+//				}
+				if (thongTinChoMeoId != null) {
+					predicates.add(cb.equal(root.<String>get("thongTinChoMeoId"), thongTinChoMeoId));
 				}
 				if (trangThai != null) {
 					predicates.add(cb.equal(root.<String>get("trangThai"), trangThai));

@@ -1,9 +1,12 @@
 package vn.dnict.microservice.nnptnt.chomeo.kehoach2chomeo.api;
 
+import java.time.LocalDate;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,12 +38,14 @@ public class KeHoach2ChoMeoController {
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
 			@RequestParam(name = "sortBy", defaultValue = "thongTinChoMeoId", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
-			@RequestParam(name = "search", required = false) String search,
 			@RequestParam(name = "thongTinChoMeoId", required = false) Long thongTinChoMeoId,
 			@RequestParam(name = "keHoachTiemPhongId", required = false) Long keHoachTiemPhongId,
-			@RequestParam(name = "trangThaiTiem",required=false) boolean trangThaiTiem) {
-		Page<KeHoach2ChoMeo> pageKeHoach2ChoMeo = businessKeHoach2ChoMeoBusiness.findAll(page, size, sortBy, sortDir, search, 
-				thongTinChoMeoId, keHoachTiemPhongId, trangThaiTiem);
+			@RequestParam(name = "trangThaiTiem",required=false) boolean trangThaiTiem,
+			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayTiemPhongTuNgay", required = false) LocalDate ngayTiemPhongTuNgay,
+			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayTiemPhongDenNgay", required = false) LocalDate ngayTiemPhongDenNgay)
+	{
+		Page<KeHoach2ChoMeo> pageKeHoach2ChoMeo = businessKeHoach2ChoMeoBusiness.findAll(page, size, sortBy, sortDir, 
+				thongTinChoMeoId, keHoachTiemPhongId,ngayTiemPhongTuNgay, ngayTiemPhongDenNgay, trangThaiTiem);
 		return ResponseEntity.ok(pageKeHoach2ChoMeo);
 	}
 

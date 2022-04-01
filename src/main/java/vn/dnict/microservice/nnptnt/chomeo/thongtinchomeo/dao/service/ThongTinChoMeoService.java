@@ -1,5 +1,7 @@
 package vn.dnict.microservice.nnptnt.chomeo.thongtinchomeo.dao.service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -14,5 +16,15 @@ public interface ThongTinChoMeoService {
 
 	public Optional<ThongTinChoMeo> findById(Long id);
 
-	public Page<ThongTinChoMeo> findAll(String search, Integer trangThai, Pageable pageable);
+	public Page<ThongTinChoMeo> findAll(
+			Long loaiDongVatId, Long giongId, String tenChuHo, String dienThoai, LocalDate tuNgayTiemPhong, LocalDate denNgayTiemPhong,Integer trangThai, Pageable pageable);
+	
+	public List<ThongTinChoMeo> findByChuQuanLyIdAndDaXoa(Long chuQuanLyId, Boolean daXoa);
+	
+	public int setFixedDaXoaForChuQuanLyId(Boolean daXoa, Long chuQuanLyId);
+
+	
+	public Optional<ThongTinChoMeo> findByChuQuanLyId(Long chuQuanLyId);
+	
+	
 }

@@ -41,12 +41,12 @@ public class ThoiGianTiemPhong {
 	private Long keHoachTiemPhongId;
 	
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Column(name = "thoigiantiem_tungay")
 	private LocalDateTime thoiGianTiemTuNgay;
 	
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Column(name = "thoigiantiem_denngay")
 	private LocalDateTime thoiGianTiemDenNgay;
 	

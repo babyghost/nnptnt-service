@@ -42,7 +42,7 @@ public class ThongTinChoMeoImport {
 	@Column(name = "loaidongvat", length = 250)
 	private String loaiDongVat;
 	
-	@Column(name = "tencovat", length = 250)
+	@Column(name = "tenconvat", length = 250)
 	private String tenConVat;
 	
 	@Column(name = "namsinh", length = 4)

@@ -1,5 +1,6 @@
 package vn.dnict.microservice.nnptnt.chomeo.chuquanly.dao.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -14,6 +15,10 @@ public interface ChuQuanLyService {
 
 	public Optional<ChuQuanLy> findById(Long id);
 
-	public Page<ChuQuanLy> findAll(String chuHo, String diaChi, Integer dienThoai, Pageable pageable);
-
+	public Page<ChuQuanLy> findAll(String chuHo, String diaChi, String dienThoai, Pageable pageable);
+	
+	public Optional<ChuQuanLy> findByChuHoAndDiaChi(String chuHo, String diaChi);
+	
+	public List<ChuQuanLy> findByDienThoai(String dienthoai);
+	
 }

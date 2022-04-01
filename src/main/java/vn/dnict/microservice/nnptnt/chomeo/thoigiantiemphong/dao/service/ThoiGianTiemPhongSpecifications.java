@@ -1,7 +1,6 @@
 package vn.dnict.microservice.nnptnt.chomeo.thoigiantiemphong.dao.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +15,7 @@ import vn.dnict.microservice.nnptnt.chomeo.thoigiantiemphong.dao.model.ThoiGianT
 
 public class ThoiGianTiemPhongSpecifications {
 	public static Specification<ThoiGianTiemPhong> quickSearch( final String diaDiem, final Long phuongXaId, final Long quanHuyenId, final Long keHoachTiemPhongId,
-			final LocalDateTime thoiGianTiemTuNgay,final LocalDateTime thoiGianTiemDenNgay) {
+			final LocalDate thoiGianTiemTuNgay,final LocalDate thoiGianTiemDenNgay) {
 		return new Specification<ThoiGianTiemPhong>() {
 
 			private static final long serialVersionUID = -4615834727542993669L;
@@ -27,24 +26,24 @@ public class ThoiGianTiemPhongSpecifications {
 				List<Predicate> predicates = new ArrayList<>();
 				predicates.add(cb.equal(root.<String>get("daXoa"), false));
 				if (phuongXaId != null) {
-					predicates.add(cb.equal(root.<Long>get("phuongXaId"), phuongXaId));
+					predicates.add(cb.equal(root.<String>get("phuongXaId"), phuongXaId));
 				}
 				
 				if (quanHuyenId != null) {
-					predicates.add(cb.equal(root.<Long>get("quanHuyenId"), quanHuyenId));
+					predicates.add(cb.equal(root.<String>get("quanHuyenId"), quanHuyenId));
 				}
 				if (keHoachTiemPhongId !=null ) {
-					predicates.add(cb.equal(root.<Long>get("keHoachTiemPhongId"), keHoachTiemPhongId));
+					predicates.add(cb.equal(root.<String>get("keHoachTiemPhongId"), keHoachTiemPhongId));
 				}
 				if (diaDiem != null && !diaDiem.isEmpty()) {
 					predicates.add(
 					cb.like(cb.lower(root.<String>get("diaDiem")), "%" + diaDiem.toLowerCase().trim() + "%"));
 				}
 				if (thoiGianTiemTuNgay != null) {
-					predicates.add(cb.equal(root.get("thoiGianTiem").as(LocalDate.class), thoiGianTiemTuNgay));
+					predicates.add(cb.lessThanOrEqualTo(root.get("thoiGianTiemTuNgay").as(LocalDate.class),thoiGianTiemTuNgay));
 				}
 				if (thoiGianTiemDenNgay != null) {
-					predicates.add(cb.equal(root.get("thoiGianTiem").as(LocalDate.class), thoiGianTiemDenNgay));
+					predicates.add(cb.greaterThanOrEqualTo(root.get("thoiGianTiemDenNgay").as(LocalDate.class), thoiGianTiemDenNgay));
 				}
 				
 //				if (thoiGianTiemTuNgay != null) {

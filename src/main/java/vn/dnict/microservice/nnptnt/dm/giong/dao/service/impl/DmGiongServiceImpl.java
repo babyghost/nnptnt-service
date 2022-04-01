@@ -2,6 +2,7 @@
 package vn.dnict.microservice.nnptnt.dm.giong.dao.service.impl;
 
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,6 +46,12 @@ public class DmGiongServiceImpl implements DmGiongService{
 	public Page<DmGiong> findAll(String search,Long loaiVatNuoiId, Integer trangThai, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return repo.findAll(DmGiongSpecifications.quickSearch(search,loaiVatNuoiId, trangThai), pageable);
+	}
+
+	@Override
+	public List<DmGiong> findByTen(String ten) {
+		// TODO Auto-generated method stub
+		return repo.findByTen(ten);
 	}
 
 

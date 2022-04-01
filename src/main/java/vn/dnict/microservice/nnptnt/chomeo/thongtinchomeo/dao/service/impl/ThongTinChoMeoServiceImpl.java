@@ -1,5 +1,7 @@
 package vn.dnict.microservice.nnptnt.chomeo.thongtinchomeo.dao.service.impl;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +40,39 @@ public class ThongTinChoMeoServiceImpl implements ThongTinChoMeoService{
 		return repo.findById(id);
 	}
 
+
+
 	@Override
-	public Page<ThongTinChoMeo> findAll(String search, Integer trangThai, Pageable pageable) {
+	public List<ThongTinChoMeo> findByChuQuanLyIdAndDaXoa(Long chuQuanLyId, Boolean daXoa) {
 		// TODO Auto-generated method stub
-		return repo.findAll(ThongTinChoMeoSpecifications.quickSearch(search, trangThai), pageable);
+		return repo.findByChuQuanLyIdAndDaXoa(chuQuanLyId, daXoa);
 	}
+
+	@Override
+	public int setFixedDaXoaForChuQuanLyId(Boolean daXoa, Long chuQuanLyId) {
+		// TODO Auto-generated method stub
+		return repo.setFixedDaXoaForChuQuanLyId(daXoa, chuQuanLyId);
+	}
+
+	@Override
+	public Optional<ThongTinChoMeo> findByChuQuanLyId(Long chuQuanLyId) {
+		// TODO Auto-generated method stub
+		return repo.findByChuQuanLyId(chuQuanLyId);
+	}
+
+	@Override
+	public Page<ThongTinChoMeo> findAll(Long loaiDongVatId, Long giongId, String tenChuHo, String dienThoai,
+			LocalDate tuNgayTiemPhong, LocalDate denNgayTiemPhong, Integer trangThai, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return repo.findAll(ThongTinChoMeoSpecifications.quickSearch(loaiDongVatId, giongId, tenChuHo, dienThoai, tuNgayTiemPhong, denNgayTiemPhong, trangThai),pageable);
+	}
+
+
+
+//	@Override
+//	public Page<ThongTinChoMeo> findAll(String loaiDongVat,String Integer trangThai, Pageable pageable) {
+//		// TODO Auto-generated method stub
+//		return repo.findAll(ThongTinChoMeoSpecifications.quickSearch(search, trangThai), pageable);
+//	}
 
 }

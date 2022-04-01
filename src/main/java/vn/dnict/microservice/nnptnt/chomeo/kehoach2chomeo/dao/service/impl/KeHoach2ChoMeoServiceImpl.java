@@ -1,5 +1,7 @@
 package vn.dnict.microservice.nnptnt.chomeo.kehoach2chomeo.dao.service.impl;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +42,21 @@ public class KeHoach2ChoMeoServiceImpl implements KeHoach2ChoMeoService{
 	}
 
 	@Override
-	public Page<KeHoach2ChoMeo> findAll(String search, Long thongTinChoMeoId, Long keHoachTiemPhongId, boolean trangThaiTiem, Pageable pageable) {
+	public Page<KeHoach2ChoMeo> findAll(Long thongTinChoMeoId, Long keHoachTiemPhongId, LocalDate ngayTiemPhongTuNgay,
+			LocalDate ngayTiemPhongDenNgay, boolean trangThaiTiem, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findAll(KeHoach2ChoMeoSpecifications.quickSearch(search, trangThaiTiem), pageable);
+		return repo.findAll(KeHoach2ChoMeoSpecifications.quickSearch(thongTinChoMeoId, keHoachTiemPhongId, ngayTiemPhongTuNgay, ngayTiemPhongDenNgay, trangThaiTiem),pageable);
 	}
+
+	@Override
+	public List<KeHoach2ChoMeo> findByThongTinChoMeoIdAndDaXoa(Long thongTinChoMeoId, Boolean daXoa) {
+		// TODO Auto-generated method stub
+		return repo.findByThongTinChoMeoIdAndDaXoa(thongTinChoMeoId, daXoa);
+	}
+
+
+
+
 
 
 }

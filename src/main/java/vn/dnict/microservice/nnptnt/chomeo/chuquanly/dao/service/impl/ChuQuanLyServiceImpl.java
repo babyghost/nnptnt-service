@@ -1,5 +1,6 @@
 package vn.dnict.microservice.nnptnt.chomeo.chuquanly.dao.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,21 @@ class ChuQuanLyServiceImpl implements ChuQuanLyService {
 	}
 
 	@Override
-	public Page<ChuQuanLy> findAll(String chuHo, String diaChi, Integer dienThoai, Pageable pageable) {
+	public Page<ChuQuanLy> findAll(String chuHo, String diaChi, String dienThoai, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return repo.findAll(ChuQuanLySpecifications.quickSearch(chuHo, diaChi, dienThoai),pageable);
+	}
+
+	@Override
+	public Optional<ChuQuanLy> findByChuHoAndDiaChi(String chuHo, String diaChi) {
+		// TODO Auto-generated method stub
+		return repo.findByChuHoAndDiaChi(chuHo, diaChi);
+	}
+
+	@Override
+	public List<ChuQuanLy> findByDienThoai(String dienthoai) {
+		// TODO Auto-generated method stub
+		return repo.findByDienThoai(dienthoai);
 	}
 
 }

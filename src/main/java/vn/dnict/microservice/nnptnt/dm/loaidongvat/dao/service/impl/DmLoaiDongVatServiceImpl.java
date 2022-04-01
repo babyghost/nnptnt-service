@@ -1,5 +1,6 @@
 package vn.dnict.microservice.nnptnt.dm.loaidongvat.dao.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,12 @@ public class DmLoaiDongVatServiceImpl implements DmLoaiDongVatService{
 	public Page<DmLoaiDongVat> findAll(String search, Integer trangThai, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return repo.findAll(DmLoaiDongVatSpecifications.quickSearch(search, trangThai), pageable);
+	}
+
+	@Override
+	public List<DmLoaiDongVat> findByTen(String ten) {
+		// TODO Auto-generated method stub
+		return repo.findByTen(ten);
 	}
 
 }

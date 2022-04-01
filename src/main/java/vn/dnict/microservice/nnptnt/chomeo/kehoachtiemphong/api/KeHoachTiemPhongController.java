@@ -48,12 +48,13 @@ public class KeHoachTiemPhongController {
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
 			@RequestParam(name = "search", required = false) String search,
 			@RequestParam(name = "soKeHoach",required = false) String soKeHoach,
+			@RequestParam(name = "tenKeHoach", required = false) String tenKeHoach,
+			@RequestParam(name = "noiDung",required=false) String noiDung,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayBanHanhTuNgay", required = false) LocalDate ngayBanHanhTuNgay,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayBanHanhDenNgay", required = false) LocalDate ngayBanHanhDenNgay,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayDuKienTuNgay", required = false) LocalDate ngayDuKienTuNgay,
-			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayDuKienDenNgay", required = false) LocalDate ngayDuKienDenNgay,
-			@RequestParam(name = "tenKeHoach", required = false) String tenKeHoach,
-			@RequestParam(name = "noiDung",required=false) String noiDung) {
+			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayDuKienDenNgay", required = false) LocalDate ngayDuKienDenNgay)
+			{
 		Page<KeHoachTiemPhong> pageKeHoachTiemPhong = businessKeHoachTiemPhongBusiness.findAll(page, size, sortBy, sortDir, search, noiDung, soKeHoach, tenKeHoach,ngayDuKienDenNgay,ngayDuKienTuNgay, ngayBanHanhTuNgay, ngayBanHanhDenNgay);
 		return ResponseEntity.ok(pageKeHoachTiemPhong);
 	}

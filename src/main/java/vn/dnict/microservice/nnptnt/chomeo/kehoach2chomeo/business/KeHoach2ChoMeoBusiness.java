@@ -1,5 +1,6 @@
 package vn.dnict.microservice.nnptnt.chomeo.kehoach2chomeo.business;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +24,14 @@ public class KeHoach2ChoMeoBusiness {
 	@Autowired
 	KeHoachTiemPhongService serviceKeHoachTiemPhongService;
 	
-	public Page<KeHoach2ChoMeo> findAll(int page, int size, String sortBy, String sortDir, String search, Long thongTinChoMeoId, Long keHoachTiemPhongId, boolean trangThaiTiem) {
+	public Page<KeHoach2ChoMeo> findAll(int page, int size, String sortBy, String sortDir, Long thongTinChoMeoId, Long keHoachTiemPhongId,LocalDate ngayTiemPhongTuNgay, LocalDate ngayTiemPhongDenNgay, boolean trangThaiTiem) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-		Page<KeHoach2ChoMeo> pageKeHoach2ChoMeo = serviceKeHoach2ChoMeoService.findAll(search, thongTinChoMeoId, keHoachTiemPhongId, trangThaiTiem,
+		Page<KeHoach2ChoMeo> pageKeHoach2ChoMeo = serviceKeHoach2ChoMeoService.findAll( thongTinChoMeoId, keHoachTiemPhongId,ngayTiemPhongTuNgay, ngayTiemPhongDenNgay, trangThaiTiem,
 				PageRequest.of(page, size, direction, sortBy));
 		return pageKeHoach2ChoMeo;
 	}

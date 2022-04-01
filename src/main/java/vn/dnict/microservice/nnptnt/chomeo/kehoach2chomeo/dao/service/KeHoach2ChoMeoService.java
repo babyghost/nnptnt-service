@@ -1,5 +1,7 @@
 package vn.dnict.microservice.nnptnt.chomeo.kehoach2chomeo.dao.service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -14,6 +16,7 @@ public interface KeHoach2ChoMeoService {
 
 	public Optional<KeHoach2ChoMeo> findById(Long id);
 
-	public Page<KeHoach2ChoMeo> findAll(String search, Long thongTinChoMeoId, Long keHoachTiemPhongId, boolean trangThaiTiem, Pageable pageable);	
+	public Page<KeHoach2ChoMeo> findAll(Long thongTinChoMeoId, Long keHoachTiemPhongId, LocalDate ngayTiemPhongTuNgay, LocalDate ngayTiemPhongDenNgay, boolean trangThaiTiem, Pageable pageable);	
+	public List<KeHoach2ChoMeo> findByThongTinChoMeoIdAndDaXoa(Long thongTinChoMeoId, Boolean daXoa);
 
 }

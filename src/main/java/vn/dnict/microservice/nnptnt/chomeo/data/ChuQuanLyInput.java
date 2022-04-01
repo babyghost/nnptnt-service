@@ -12,7 +12,7 @@ public class ChuQuanLyInput {
 	
 	private Long quanHuyen_Id;
 	
-	private Integer dienThoai;
+	private String dienThoai;
 	
 	private Boolean daXoa;
 	

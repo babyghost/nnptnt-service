@@ -1,5 +1,6 @@
 package vn.dnict.microservice.nnptnt.dm.loaidongvat.dao.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -17,4 +18,5 @@ public interface DmLoaiDongVatService {
 	
 
 	public Page<DmLoaiDongVat> findAll(String search, Integer trangThai, Pageable pageable);
+	public List<DmLoaiDongVat> findByTen(String ten);
 }
