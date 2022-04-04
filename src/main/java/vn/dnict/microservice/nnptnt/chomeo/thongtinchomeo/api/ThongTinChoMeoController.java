@@ -41,11 +41,11 @@ public class ThongTinChoMeoController {
 	public ResponseEntity<Page<ThongTinChoMeoData>> findAll(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "loaiDongVatId", required = false) String sortBy,
+			@RequestParam(name = "sortBy", defaultValue = "chuQuanLyId", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
 			@RequestParam(name = "loaiDongVatId", required = false) Long loaiDongVatId,
 			@RequestParam(name = "giongId", required = false) Long giongId,
-			@RequestParam(name = "tenchuHo",required = false) String tenChuHo,
+			@RequestParam(name = "tenChuHo",required = false) String tenChuHo,
 			@RequestParam(name = "dienThoai", required = false) String dienThoai,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "tuNgayTiemPhong", required = false) LocalDate tuNgayTiemPhong,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "denNgayTiemPhong", required = false) LocalDate denNgayTiemPhong,
