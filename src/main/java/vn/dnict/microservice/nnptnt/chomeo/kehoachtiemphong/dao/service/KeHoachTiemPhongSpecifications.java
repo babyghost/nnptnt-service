@@ -15,7 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.dao.model.KeHoachTiemPhong;
 
 public class KeHoachTiemPhongSpecifications {
-	public static Specification<KeHoachTiemPhong> quickSearch(final String search, final String soKeHoach,
+	public static Specification<KeHoachTiemPhong> quickSearch(final String soKeHoach,
 			 final LocalDate ngayDuKienTuNgay, final LocalDate ngayDuKienDenNgay,final LocalDate ngayBanHanhTuNgay,final LocalDate ngayBanHanhDenNgay,
 			final String tenKeHoach) {
 		return new Specification<KeHoachTiemPhong>() {
@@ -28,10 +28,10 @@ public class KeHoachTiemPhongSpecifications {
 				List<Predicate> predicates = new ArrayList<>();
 				predicates.add(cb.equal(root.<String>get("daXoa"), false));
 				query.distinct(true);
-				if (search != null && !search.isEmpty()) {
-					Predicate tenkehoach = cb.like(cb.lower(root.<String>get("tenKeHoach")),
-							"%" + search.toLowerCase() + "%");
-					predicates.add(cb.or(tenkehoach));
+				if (tenKeHoach != null && !tenKeHoach.isEmpty()) {
+					predicates
+							.add(cb.like(cb.lower(root.<String>get("tenKeHoach")), "%" + tenKeHoach.toLowerCase() + "%"));
+
 				}
 				if (soKeHoach != null && !soKeHoach.isEmpty()) {
 					predicates

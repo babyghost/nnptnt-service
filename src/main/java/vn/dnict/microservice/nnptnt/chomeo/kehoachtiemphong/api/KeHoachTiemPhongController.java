@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
+import vn.dnict.microservice.nnptnt.chomeo.chuquanly.dao.model.ChuQuanLy;
+import vn.dnict.microservice.nnptnt.chomeo.data.ChuQuanLyData;
+import vn.dnict.microservice.nnptnt.chomeo.data.KeHoachTiemPhongData;
 import vn.dnict.microservice.nnptnt.chomeo.data.KeHoachTiemPhongInput;
 import vn.dnict.microservice.nnptnt.chomeo.dinhkemkehoach.dao.service.FileDinhKemKeHoachService;
 import vn.dnict.microservice.nnptnt.chomeo.kehoach2chomeo.business.KeHoach2ChoMeoBusiness;
@@ -41,12 +45,11 @@ public class KeHoachTiemPhongController {
 	@Autowired
 	FileDinhKemKeHoachService serviceFileDinhKemKeHoachService;
 	@GetMapping(value = { "/", "" })
-	public ResponseEntity<Page<KeHoachTiemPhong>> findAll(
+	public ResponseEntity<Page<KeHoachTiemPhongData>> findAll(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
 			@RequestParam(name = "sortBy", defaultValue = "tenKeHoach", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
-			@RequestParam(name = "search", required = false) String search,
 			@RequestParam(name = "soKeHoach",required = false) String soKeHoach,
 			@RequestParam(name = "tenKeHoach", required = false) String tenKeHoach,
 			@RequestParam(name = "noiDung",required=false) String noiDung,
@@ -55,33 +58,34 @@ public class KeHoachTiemPhongController {
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayDuKienTuNgay", required = false) LocalDate ngayDuKienTuNgay,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayDuKienDenNgay", required = false) LocalDate ngayDuKienDenNgay)
 			{
-		Page<KeHoachTiemPhong> pageKeHoachTiemPhong = businessKeHoachTiemPhongBusiness.findAll(page, size, sortBy, sortDir, search, noiDung, soKeHoach, tenKeHoach,ngayDuKienDenNgay,ngayDuKienTuNgay, ngayBanHanhTuNgay, ngayBanHanhDenNgay);
-		return ResponseEntity.ok(pageKeHoachTiemPhong);
+		Page<KeHoachTiemPhongData> pageKeHoachTiemPhongData = businessKeHoachTiemPhongBusiness.findAll(page, size, sortBy, sortDir,  noiDung, soKeHoach, tenKeHoach,ngayDuKienDenNgay,ngayDuKienTuNgay, ngayBanHanhTuNgay, ngayBanHanhDenNgay);
+		return ResponseEntity.ok(pageKeHoachTiemPhongData);
 	}
 
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<KeHoachTiemPhong> findById(@PathVariable("id") Long id) throws EntityNotFoundException {
-		return ResponseEntity.ok(businessKeHoachTiemPhongBusiness.findById(id));
+	@GetMapping(value = { "/{id}" })
+	public ResponseEntity<KeHoachTiemPhongData> findById(@PathVariable("id") long id) throws EntityNotFoundException {
+		KeHoachTiemPhongData keHoachTiemPhongData = businessKeHoachTiemPhongBusiness.findById(id);
+		return ResponseEntity.ok(keHoachTiemPhongData);
 	}
+
 
 	@PostMapping(value = { "" })
-	public ResponseEntity<KeHoachTiemPhong> create(
-			@Valid @RequestBody KeHoachTiemPhongInput keHoachTiemPhongInput) {
-		KeHoachTiemPhong keHoachTiemPhong = businessKeHoachTiemPhongBusiness.create(keHoachTiemPhongInput);
+	public ResponseEntity<KeHoachTiemPhong> create(@Valid @RequestBody KeHoachTiemPhongData keHoachTiemPhongData) throws MethodArgumentNotValidException {
+		KeHoachTiemPhong keHoachTiemPhong = businessKeHoachTiemPhongBusiness.create(keHoachTiemPhongData);
 		return ResponseEntity.status(HttpStatus.CREATED).body(keHoachTiemPhong);
 	}
 
 	@PutMapping(value = { "/{id}" })
 	public ResponseEntity<KeHoachTiemPhong> update(@PathVariable("id") Long id,
-			@Valid @RequestBody KeHoachTiemPhongInput KeHoachTiemPhongInput) throws EntityNotFoundException {
-		KeHoachTiemPhong keHoachTiemPhong = businessKeHoachTiemPhongBusiness.update(id, KeHoachTiemPhongInput);
+			@Valid @RequestBody KeHoachTiemPhongData keHoachTiemPhongData)
+			throws EntityNotFoundException, MethodArgumentNotValidException {
+		KeHoachTiemPhong keHoachTiemPhong = businessKeHoachTiemPhongBusiness.update(id, keHoachTiemPhongData);
 		return ResponseEntity.ok(keHoachTiemPhong);
 	}
-
 	@DeleteMapping(value = { "/{id}" })
-	public ResponseEntity<KeHoachTiemPhong> delete(@PathVariable("id") Long id)
+	public ResponseEntity<KeHoachTiemPhongData> delete(@PathVariable("id") Long id)
 			throws EntityNotFoundException {
-		KeHoachTiemPhong keHoachTiemPhong = businessKeHoachTiemPhongBusiness.delete(id);
-		return ResponseEntity.ok(keHoachTiemPhong);
+		KeHoachTiemPhongData keHoachTiemPhongData = businessKeHoachTiemPhongBusiness.delete(id);
+		return ResponseEntity.ok(keHoachTiemPhongData);
 	}
 }
