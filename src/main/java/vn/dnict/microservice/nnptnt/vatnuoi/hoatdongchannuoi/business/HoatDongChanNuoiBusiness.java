@@ -66,6 +66,7 @@ public class HoatDongChanNuoiBusiness {
 	private HoatDongChanNuoiOutput convertToHoatDongChanNuoiOutput(HoatDongChanNuoi hoatDongChanNuoi) {
 	
 		HoatDongChanNuoiOutput hoatDongChanNuoiOutput = new HoatDongChanNuoiOutput();
+		hoatDongChanNuoiOutput.setId(hoatDongChanNuoi.getId());
 		hoatDongChanNuoiOutput.setCoSoChanNuoiId(hoatDongChanNuoi.getCoSoChanNuoiId());
 		hoatDongChanNuoiOutput.setNam(hoatDongChanNuoi.getNam());
 		hoatDongChanNuoiOutput.setQuy(hoatDongChanNuoi.getQuy());
@@ -157,9 +158,7 @@ public class HoatDongChanNuoiBusiness {
 		}
 		HoatDongChanNuoi hoatDongChanNuoi = new HoatDongChanNuoi();
 //		hoatDongChanNuoiOutput.xoaDuLieuCu();		
-		hoatDongChanNuoi.setCoSoChanNuoiId(hoatDongChanNuoiOutput.getCoSoChanNuoiId());
-		hoatDongChanNuoi.setNam(hoatDongChanNuoiOutput.getNam());
-		hoatDongChanNuoi.setQuy(hoatDongChanNuoiOutput.getQuy());
+		
 		
 		if(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().size() > 0) {
 			for(int i = 0; i < hoatDongChanNuoiOutput.getListHoatDongChanNuoi().size(); i++) {
@@ -178,6 +177,10 @@ public class HoatDongChanNuoiBusiness {
 				hoatDongChanNuoi.setThoiGianXuat(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
 						.getThoiGianXuat());
 				hoatDongChanNuoi.setGhiChu(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getGhiChu());
+				
+				hoatDongChanNuoi.setCoSoChanNuoiId(hoatDongChanNuoiOutput.getCoSoChanNuoiId());
+				hoatDongChanNuoi.setNam(hoatDongChanNuoiOutput.getNam());
+				hoatDongChanNuoi.setQuy(hoatDongChanNuoiOutput.getQuy());
 			}
 		}
 		hoatDongChanNuoi = serviceHoatDongChanNuoiService.save(hoatDongChanNuoi);

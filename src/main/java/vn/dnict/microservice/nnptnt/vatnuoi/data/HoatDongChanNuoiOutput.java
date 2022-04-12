@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class HoatDongChanNuoiOutput {
+	private Long id;
 	
 	private Long coSoChanNuoiId;
 	
