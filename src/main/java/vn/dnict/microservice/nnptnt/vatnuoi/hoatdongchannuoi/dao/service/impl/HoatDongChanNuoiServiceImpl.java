@@ -1,6 +1,7 @@
 package vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.service.impl;
 
-import java.time.LocalDate;
+import java.time.LocalDate; 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import vn.dnict.microservice.nnptnt.vatnuoi.data.ThongTinHoatDongChanNuoiOutput;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.model.HoatDongChanNuoi;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.service.HoatDongChanNuoiService;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.service.HoatDongChanNuoiSpecifications;
@@ -40,11 +42,16 @@ public class HoatDongChanNuoiServiceImpl implements  HoatDongChanNuoiService{
 	}
 	
 	@Override
-	public Page<HoatDongChanNuoi> findAll(String search, Integer donViTinh, Integer soLuongNuoi,
-			String mucDichNuoi, LocalDate thoiGianBatDauNuoi, LocalDate thoiGianXuat, Integer slVatNuoiXuat,
-			Float sanLuongXuat, String ghiChu, Long loaiVatNuoiId,Long coSoChanNuoiId, String nam, Integer quy,
-			Pageable pageable) {
+	public Page<HoatDongChanNuoi> findAll(String tenCoSo, String tenChuCoSo, String dienThoai, Long quanHuyenId, 
+			Long phuongXaId, String nam, Integer quy, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findAll(HoatDongChanNuoiSpecifications.quickSearch(search, loaiVatNuoiId, coSoChanNuoiId, nam, quy), pageable);
+		return repo.findAll(HoatDongChanNuoiSpecifications.quickSearch(tenCoSo, tenChuCoSo, dienThoai, quanHuyenId, 
+				phuongXaId, nam, quy), pageable);
+	}
+
+	@Override
+	public List<HoatDongChanNuoi> findByCoSoChanNuoiIdAndDaXoa(Long coSoChanNuoiId, Boolean daXoa) {
+		// TODO Auto-generated method stub
+		return repo.findByCoSoChanNuoiIdAndDaXoa(coSoChanNuoiId, daXoa);
 	}
 }

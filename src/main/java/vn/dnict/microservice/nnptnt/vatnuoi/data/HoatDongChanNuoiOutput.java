@@ -1,49 +1,35 @@
 package vn.dnict.microservice.nnptnt.vatnuoi.data;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.validation.Valid;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 
 @Data
 public class HoatDongChanNuoiOutput {
-	private Long id;
 	
-	private Long loaiVatNuoiId;
+	private Long coSoChanNuoiId;
 	
-	private String loaiVatNuoiTen;
+	private String coSoTen;
 	
-	private Integer donViTinh;
+	private String tenChuCoSo;
 	
-	private Integer soLuongNuoi;
-		
-	private String mucDichNuoi;
+	private String dienThoai;
 	
-	private Float sanLuongXuat;
+	private String email;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-	private LocalDate thoiGianBatDauNuoi;
+	private String diaChi;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-	private LocalDate thoiGianXuat;
-
-	private Integer slVatNuoiXuat;
+	private Long quanHuyenId;
 	
-	private String ghiChu;
-
+	private String quanHuyenTen;
+	
+	private Long phuongXaId;
+	
+	private String phuongXaTen;
+	
 	private String nam;
 	
 	private Integer quy;
 	
-	private Long coSoChanNuoiId;
-	
-	private String coSoChanNuoiTen;
-	
-	@Valid
-	private List<CoSoChanNuoiOutput> coSoChanNuoiOutputs = new ArrayList<CoSoChanNuoiOutput>();
+	private List<ThongTinHoatDongChanNuoiOutput> listHoatDongChanNuoi;
 }

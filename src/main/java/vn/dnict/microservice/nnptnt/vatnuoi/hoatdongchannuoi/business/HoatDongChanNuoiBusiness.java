@@ -1,6 +1,8 @@
 package vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.business;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +16,28 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 
 import vn.dnict.microservice.danhmuc.dao.model.DmPhuongXa;
 import vn.dnict.microservice.danhmuc.dao.model.DmQuanHuyen;
+import vn.dnict.microservice.danhmuc.dao.service.DmPhuongXaService;
+import vn.dnict.microservice.danhmuc.dao.service.DmQuanHuyenService;
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
+import vn.dnict.microservice.nnptnt.chomeo.kehoach2chomeo.dao.model.KeHoach2ChoMeo;
 import vn.dnict.microservice.nnptnt.dm.loaivatnuoi.dao.model.DmLoaiVatNuoi;
 import vn.dnict.microservice.nnptnt.dm.loaivatnuoi.dao.service.DmLoaiVatNuoiService;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.model.CoSoChanNuoi;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.service.CoSoChanNuoiService;
 import vn.dnict.microservice.nnptnt.vatnuoi.data.CoSoChanNuoiOutput;
-import vn.dnict.microservice.nnptnt.vatnuoi.data.HoatDongChanNuoiInput;
 import vn.dnict.microservice.nnptnt.vatnuoi.data.HoatDongChanNuoiOutput;
+import vn.dnict.microservice.nnptnt.vatnuoi.data.ThongTinHoatDongChanNuoiOutput;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.model.HoatDongChanNuoi;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.service.HoatDongChanNuoiService;
 
 @Service
 public class HoatDongChanNuoiBusiness {
+	
+	@Autowired
+	DmPhuongXaService serviceDmPhuongXaService;
+	
+	@Autowired
+	DmQuanHuyenService serviceDmQuanHuyenService;
 	
 	@Autowired
 	HoatDongChanNuoiService serviceHoatDongChanNuoiService;
@@ -37,79 +48,97 @@ public class HoatDongChanNuoiBusiness {
 	@Autowired
 	CoSoChanNuoiService serviceCoSoChanNuoiService;
 	
-	public Page<HoatDongChanNuoiOutput> findAll(int page, int size, String sortBy, String sortDir, String search, Integer donViTinh, 
-			Integer soLuongNuoi, String mucDichNuoi, LocalDate thoiGianBatDauNuoi, LocalDate thoiGianXuat, 
-			Integer slVatNuoiXuat, Float sanLuongXuat, String ghiChu, Long loaiVatNuoiId, Long coSoChanNuoiId, String nam, 
-			Integer quy) {
+	public Page<HoatDongChanNuoiOutput> findAll(int page, int size, String sortBy, String sortDir, String tenCoSo, 
+			String tenChuCoSo, String dienThoai, Long quanHuyenId, Long phuongXaId, String nam, Integer quy) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-		final Page<HoatDongChanNuoi> pageHoatDongChanNuoi = serviceHoatDongChanNuoiService.findAll(search, donViTinh, soLuongNuoi,
-				mucDichNuoi, thoiGianBatDauNuoi, thoiGianXuat,slVatNuoiXuat, sanLuongXuat,ghiChu, loaiVatNuoiId,coSoChanNuoiId, 
-				nam, quy, PageRequest.of(page, size, direction, sortBy));
+		final Page<HoatDongChanNuoi> pageHoatDongChanNuoi = serviceHoatDongChanNuoiService.findAll(tenCoSo, tenChuCoSo, 
+				dienThoai, quanHuyenId, phuongXaId, nam, quy, PageRequest.of(page, size, direction, sortBy));
 		final Page<HoatDongChanNuoiOutput> pageHoatDongChanNuoiOutput = pageHoatDongChanNuoi
 				.map(this::convertToHoatDongChanNuoiOutput);
 		return pageHoatDongChanNuoiOutput;
 	}
 	
 	private HoatDongChanNuoiOutput convertToHoatDongChanNuoiOutput(HoatDongChanNuoi hoatDongChanNuoi) {
+	
 		HoatDongChanNuoiOutput hoatDongChanNuoiOutput = new HoatDongChanNuoiOutput();
-		hoatDongChanNuoiOutput.setId(hoatDongChanNuoi.getId());
 		hoatDongChanNuoiOutput.setCoSoChanNuoiId(hoatDongChanNuoi.getCoSoChanNuoiId());
-		hoatDongChanNuoiOutput.setLoaiVatNuoiId(hoatDongChanNuoi.getLoaiVatNuoiId());
-		hoatDongChanNuoiOutput.setDonViTinh(hoatDongChanNuoi.getDonViTinh());
-		hoatDongChanNuoiOutput.setSoLuongNuoi(hoatDongChanNuoi.getSoLuongNuoi());
-		hoatDongChanNuoiOutput.setMucDichNuoi(hoatDongChanNuoi.getMucDichNuoi());
-		hoatDongChanNuoiOutput.setSanLuongXuat(hoatDongChanNuoi.getSanLuongXuat());
-		hoatDongChanNuoiOutput.setThoiGianBatDauNuoi(hoatDongChanNuoi.getThoiGianBatDauNuoi());
-		hoatDongChanNuoiOutput.setThoiGianXuat(hoatDongChanNuoi.getThoiGianXuat());
-		hoatDongChanNuoiOutput.setSlVatNuoiXuat(hoatDongChanNuoi.getSlVatNuoiXuat());
-		hoatDongChanNuoiOutput.setGhiChu(hoatDongChanNuoi.getGhiChu());
 		hoatDongChanNuoiOutput.setNam(hoatDongChanNuoi.getNam());
 		hoatDongChanNuoiOutput.setQuy(hoatDongChanNuoi.getQuy());
-		if(hoatDongChanNuoi.getCoSoChanNuoiId() != null && hoatDongChanNuoi.getCoSoChanNuoiId() > 0) {
-			Optional<CoSoChanNuoi> optional = serviceCoSoChanNuoiService.findById(hoatDongChanNuoi.getCoSoChanNuoiId());
-			if (optional.isPresent()) {
-				hoatDongChanNuoiOutput.setCoSoChanNuoiTen(optional.get().getTenCoSo());
-			}	
-		}
-		if(hoatDongChanNuoi.getLoaiVatNuoiId() != null && hoatDongChanNuoi.getLoaiVatNuoiId() > 0) {
-			Optional<DmLoaiVatNuoi> optional = serviceDmLoaiVatNuoiService.findById(hoatDongChanNuoi.getLoaiVatNuoiId());
-			if (optional.isPresent()) {
-				hoatDongChanNuoiOutput.setLoaiVatNuoiTen(optional.get().getTen());
-			}	
-		}
-		return hoatDongChanNuoiOutput;
-	}
 
-	public CoSoChanNuoi findCoSoChanNuoiByHoatDongChanNuoiId(Long id) throws EntityNotFoundException {
-		Optional<HoatDongChanNuoi> optional = serviceHoatDongChanNuoiService.findById(id);
+		if(hoatDongChanNuoi.getCoSoChanNuoiId() != null && hoatDongChanNuoi.getCoSoChanNuoiId() > 0) {
+			Optional<CoSoChanNuoi> optionalCoSo = serviceCoSoChanNuoiService.findById(hoatDongChanNuoi
+					.getCoSoChanNuoiId());
 		
-		if (!optional.isPresent()) {
-			throw new EntityNotFoundException(HoatDongChanNuoi.class, "id", String.valueOf(id));
+			if (optionalCoSo.isPresent()) {
+				hoatDongChanNuoiOutput.setCoSoTen(optionalCoSo.get().getTenCoSo());
+				hoatDongChanNuoiOutput.setTenChuCoSo(optionalCoSo.get().getTenChuCoSo());
+				hoatDongChanNuoiOutput.setDienThoai(optionalCoSo.get().getDienThoai());
+				hoatDongChanNuoiOutput.setDiaChi(optionalCoSo.get().getDiaChi());
+				hoatDongChanNuoiOutput.setEmail(optionalCoSo.get().getDiaChi());
+				hoatDongChanNuoiOutput.setQuanHuyenId(optionalCoSo.get().getQuanHuyenId());
+				hoatDongChanNuoiOutput.setPhuongXaId(optionalCoSo.get().getPhuongXaId());
+				hoatDongChanNuoiOutput.setListHoatDongChanNuoi(hoatDongChanNuoiOutput.getListHoatDongChanNuoi());
+				
+				if (hoatDongChanNuoiOutput.getQuanHuyenId() != null && hoatDongChanNuoiOutput.getQuanHuyenId() > 0) {
+					Optional<DmQuanHuyen> optionalQuanHuyen = serviceDmQuanHuyenService.findById(hoatDongChanNuoiOutput
+							.getQuanHuyenId());
+					if (optionalQuanHuyen.isPresent()) {
+						hoatDongChanNuoiOutput.setQuanHuyenTen(optionalQuanHuyen.get().getTen());
+					}
+				}
+				if (hoatDongChanNuoiOutput.getPhuongXaId() != null && hoatDongChanNuoiOutput.getPhuongXaId() > 0) {
+					Optional<DmPhuongXa> optionalPhuongXa = serviceDmPhuongXaService.findById(hoatDongChanNuoiOutput
+							.getPhuongXaId());
+					if (optionalPhuongXa.isPresent()) {
+						hoatDongChanNuoiOutput.setPhuongXaTen(optionalPhuongXa.get().getTen());
+					}
+				}
+				
+			}
 		}
-		HoatDongChanNuoi HoatDongChanNuoi = optional.get();
-		Optional<CoSoChanNuoi> optionalCoSoChanNuoi = serviceCoSoChanNuoiService.findById(HoatDongChanNuoi.getCoSoChanNuoiId());
-		if (!optionalCoSoChanNuoi.isPresent()) {
-			throw new EntityNotFoundException(CoSoChanNuoi.class, "id", String.valueOf(id));
-		}
-		return optionalCoSoChanNuoi.get();
-	}
 		
-	public DmLoaiVatNuoi findLoaiVatNuoiByHoatDongChanNuoiId(Long id) throws EntityNotFoundException {
-		Optional<HoatDongChanNuoi> optional = serviceHoatDongChanNuoiService.findById(id);
-		if (!optional.isPresent()) {
-			throw new EntityNotFoundException(HoatDongChanNuoi.class, "id", String.valueOf(id));
+		List<ThongTinHoatDongChanNuoiOutput> listHoatDongChanNuois = new ArrayList<ThongTinHoatDongChanNuoiOutput>();
+		List<HoatDongChanNuoi> listHoatDongs = serviceHoatDongChanNuoiService
+				.findByCoSoChanNuoiIdAndDaXoa(hoatDongChanNuoi.getCoSoChanNuoiId(), false);
+		if(Objects.nonNull(listHoatDongs) &&! listHoatDongs.isEmpty()) {
+			for(HoatDongChanNuoi listChanNuoi : listHoatDongs) {
+				ThongTinHoatDongChanNuoiOutput listHoatDongChanNuoi = new ThongTinHoatDongChanNuoiOutput();
+				listHoatDongChanNuoi.setId(listChanNuoi.getId());
+				listHoatDongChanNuoi.setLoaiVatNuoiId(listChanNuoi.getLoaiVatNuoiId());
+				listHoatDongChanNuoi.setDonViTinh(listChanNuoi.getDonViTinh());
+				listHoatDongChanNuoi.setSoLuongNuoi(listChanNuoi.getSoLuongNuoi());
+				listHoatDongChanNuoi.setMucDichNuoi(listChanNuoi.getMucDichNuoi());
+				listHoatDongChanNuoi.setThoiGianBatDauNuoi(listChanNuoi.getThoiGianBatDauNuoi());
+				listHoatDongChanNuoi.setThoiGianXuat(listChanNuoi.getThoiGianXuat());
+				listHoatDongChanNuoi.setSlVatNuoiXuat(listChanNuoi.getSlVatNuoiXuat());
+				listHoatDongChanNuoi.setSanLuongXuat(listChanNuoi.getSanLuongXuat());
+				listHoatDongChanNuoi.setGhiChu(listChanNuoi.getGhiChu());
+				
+				if (listHoatDongChanNuoi.getLoaiVatNuoiId() != null && listHoatDongChanNuoi.getLoaiVatNuoiId() > 0) {
+					Optional<DmLoaiVatNuoi> optionalLoaiVatNuoi = serviceDmLoaiVatNuoiService
+							.findById(listHoatDongChanNuoi.getLoaiVatNuoiId());
+					if (optionalLoaiVatNuoi.isPresent()) {
+						listHoatDongChanNuoi.setLoaiVatNuoi(optionalLoaiVatNuoi.get().getTen());
+					}
+				}
+				listHoatDongChanNuois.add(listHoatDongChanNuoi);
+			}
 		}
-		HoatDongChanNuoi HoatDongChanNuoi = optional.get();
-		Optional<DmLoaiVatNuoi> optionalLoaiVatNuoi = serviceDmLoaiVatNuoiService.findById(HoatDongChanNuoi.getLoaiVatNuoiId());
-		if (!optionalLoaiVatNuoi.isPresent()) {
-			throw new EntityNotFoundException(DmLoaiVatNuoi.class, "id", String.valueOf(id));
-		}
-		return optionalLoaiVatNuoi.get();
+		
+//		if (hoatDongChanNuoiOutput.getId() != null && hoatDongChanNuoiOutput.getId() > 0) {
+//			List<HoatDongChanNuoi> listHoatDong = serviceHoatDongChanNuoiService.
+//					findByCoSoChanNuoiIdAndDaXoa(hoatDongChanNuoi.getCoSoChanNuoiId(),false);
+//				hoatDongChanNuoiOutput.setListHoatDongChanNuoi(listHoatDong);
+//								
+//			
+//		}
+		hoatDongChanNuoiOutput.setListHoatDongChanNuoi(listHoatDongChanNuois);
+		return hoatDongChanNuoiOutput;
 	}
 	
 	public HoatDongChanNuoiOutput findById(Long id) throws EntityNotFoundException {
@@ -127,19 +156,30 @@ public class HoatDongChanNuoiBusiness {
 			throw new MethodArgumentNotValidException(null, result);
 		}
 		HoatDongChanNuoi hoatDongChanNuoi = new HoatDongChanNuoi();
-		hoatDongChanNuoi.setDaXoa(false);
-		hoatDongChanNuoi.setDonViTinh(hoatDongChanNuoiOutput.getDonViTinh());
-		hoatDongChanNuoi.setLoaiVatNuoiId(hoatDongChanNuoiOutput.getLoaiVatNuoiId());
+//		hoatDongChanNuoiOutput.xoaDuLieuCu();		
 		hoatDongChanNuoi.setCoSoChanNuoiId(hoatDongChanNuoiOutput.getCoSoChanNuoiId());
-		hoatDongChanNuoi.setSlVatNuoiXuat(hoatDongChanNuoiOutput.getSlVatNuoiXuat());
-		hoatDongChanNuoi.setMucDichNuoi(hoatDongChanNuoiOutput.getMucDichNuoi());
-		hoatDongChanNuoi.setSoLuongNuoi(hoatDongChanNuoiOutput.getSoLuongNuoi());
-		hoatDongChanNuoi.setSanLuongXuat(hoatDongChanNuoiOutput.getSanLuongXuat());
-		hoatDongChanNuoi.setThoiGianBatDauNuoi(hoatDongChanNuoiOutput.getThoiGianBatDauNuoi());
-		hoatDongChanNuoi.setThoiGianXuat(hoatDongChanNuoiOutput.getThoiGianXuat());
-		hoatDongChanNuoi.setGhiChu(hoatDongChanNuoiOutput.getGhiChu());
 		hoatDongChanNuoi.setNam(hoatDongChanNuoiOutput.getNam());
 		hoatDongChanNuoi.setQuy(hoatDongChanNuoiOutput.getQuy());
+		
+		if(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().size() > 0) {
+			for(int i = 0; i < hoatDongChanNuoiOutput.getListHoatDongChanNuoi().size(); i++) {
+				hoatDongChanNuoi.setDonViTinh(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getDonViTinh());
+				hoatDongChanNuoi.setLoaiVatNuoiId(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
+						.getLoaiVatNuoiId());
+				hoatDongChanNuoi.setMucDichNuoi(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getMucDichNuoi());
+				hoatDongChanNuoi.setSlVatNuoiXuat(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
+						.getSlVatNuoiXuat());
+				hoatDongChanNuoi.setSoLuongNuoi(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
+						.getSoLuongNuoi());
+				hoatDongChanNuoi.setSanLuongXuat(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
+						.getSanLuongXuat());
+				hoatDongChanNuoi.setThoiGianBatDauNuoi(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
+						.getThoiGianBatDauNuoi());
+				hoatDongChanNuoi.setThoiGianXuat(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
+						.getThoiGianXuat());
+				hoatDongChanNuoi.setGhiChu(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getGhiChu());
+			}
+		}
 		hoatDongChanNuoi = serviceHoatDongChanNuoiService.save(hoatDongChanNuoi);
 		return this.convertToHoatDongChanNuoiOutput(hoatDongChanNuoi);
 	}
@@ -152,18 +192,29 @@ public class HoatDongChanNuoiBusiness {
 			throw new EntityNotFoundException(HoatDongChanNuoi.class, "id", String.valueOf(id));
 		}
 		HoatDongChanNuoi hoatDongChanNuoi = optional.get();
-		hoatDongChanNuoi.setDonViTinh(hoatDongChanNuoiOutput.getDonViTinh());
-		hoatDongChanNuoi.setLoaiVatNuoiId(hoatDongChanNuoiOutput.getLoaiVatNuoiId());
 		hoatDongChanNuoi.setCoSoChanNuoiId(hoatDongChanNuoiOutput.getCoSoChanNuoiId());
-		hoatDongChanNuoi.setMucDichNuoi(hoatDongChanNuoiOutput.getMucDichNuoi());
-		hoatDongChanNuoi.setSlVatNuoiXuat(hoatDongChanNuoiOutput.getSlVatNuoiXuat());
-		hoatDongChanNuoi.setSoLuongNuoi(hoatDongChanNuoiOutput.getSoLuongNuoi());
-		hoatDongChanNuoi.setSanLuongXuat(hoatDongChanNuoiOutput.getSanLuongXuat());
-		hoatDongChanNuoi.setThoiGianBatDauNuoi(hoatDongChanNuoiOutput.getThoiGianBatDauNuoi());
-		hoatDongChanNuoi.setThoiGianXuat(hoatDongChanNuoiOutput.getThoiGianXuat());
-		hoatDongChanNuoi.setGhiChu(hoatDongChanNuoiOutput.getGhiChu());
 		hoatDongChanNuoi.setNam(hoatDongChanNuoiOutput.getNam());
 		hoatDongChanNuoi.setQuy(hoatDongChanNuoiOutput.getQuy());
+		
+		if(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().size() > 0) {
+			for(int i = 0; i < hoatDongChanNuoiOutput.getListHoatDongChanNuoi().size(); i++) {
+				hoatDongChanNuoi.setDonViTinh(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getDonViTinh());
+				hoatDongChanNuoi.setLoaiVatNuoiId(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
+						.getLoaiVatNuoiId());
+				hoatDongChanNuoi.setMucDichNuoi(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getMucDichNuoi());
+				hoatDongChanNuoi.setSlVatNuoiXuat(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
+						.getSlVatNuoiXuat());
+				hoatDongChanNuoi.setSoLuongNuoi(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getSoLuongNuoi());
+				hoatDongChanNuoi.setSanLuongXuat(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
+						.getSanLuongXuat());
+				hoatDongChanNuoi.setThoiGianBatDauNuoi(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
+						.getThoiGianBatDauNuoi());
+				hoatDongChanNuoi.setThoiGianXuat(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
+						.getThoiGianXuat());
+				hoatDongChanNuoi.setGhiChu(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getGhiChu());
+			}
+		}
+		
 		hoatDongChanNuoi = serviceHoatDongChanNuoiService.save(hoatDongChanNuoi);
 		return this.convertToHoatDongChanNuoiOutput(hoatDongChanNuoi);		
 	}

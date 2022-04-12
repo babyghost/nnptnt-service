@@ -1,7 +1,6 @@
 package vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -14,8 +13,8 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.model.HoatDongChanNuoi;
 
 public class HoatDongChanNuoiSpecifications {
-	public static Specification<HoatDongChanNuoi> quickSearch(final String search, final Long loaiVatNuoiId, 
-			final Long coSoChanNuoiId, final String nam, final Integer quy) {
+	public static Specification<HoatDongChanNuoi> quickSearch(final String tenCoSo, final String tenChuCoSo, final String dienThoai,
+			final Long quanHuyenId, final Long phuongXaId, final String nam, final Integer quy) {
 		return new Specification<HoatDongChanNuoi>() {
 
 			private static final long serialVersionUID = -4615834727542993669L;
@@ -24,10 +23,25 @@ public class HoatDongChanNuoiSpecifications {
 			public Predicate toPredicate(Root<HoatDongChanNuoi> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 			List<Predicate> predicates = new ArrayList<>();
 			predicates.add(cb.equal(root.<String>get("daXoa"), false));
-			if (search != null && !search.isEmpty()) {
-				Predicate coSoChanNuoiId  = cb.like(cb.lower(root.<String>get("coSoChanNuoiId")), "%" + search.toLowerCase() + "%");
-				Predicate loaiVatNuoiId  = cb.like(cb.lower(root.<String>get("loaiVatNuoiId")), "%" + search.toLowerCase() + "%");
-				predicates.add(cb.or(loaiVatNuoiId, coSoChanNuoiId));
+			
+			if (tenCoSo != null && !tenCoSo.isEmpty()) {
+				predicates.add(cb.like(cb.lower(root.join("coSoChanNuoi").<String>get("tenCoSo")), "%" + tenCoSo.toLowerCase() + "%"));
+			}
+			
+			if (tenChuCoSo != null && !tenChuCoSo.isEmpty()) {
+				predicates.add(cb.like(cb.lower(root.join("coSoChanNuoi").<String>get("tenChuCoSo")), "%" + tenChuCoSo.toLowerCase() + "%"));
+			}
+			
+			if (dienThoai != null && !dienThoai.isEmpty()) {
+				predicates.add(cb.like(cb.lower(root.join("coSoChanNuoi").<String>get("dienThoai")), "%" + dienThoai.toLowerCase() + "%"));
+			}
+			
+			if (quanHuyenId != null && quanHuyenId > -1) {
+				predicates.add(cb.equal(root.join("coSoChanNuoi").<String>get("quanHuyenId"), quanHuyenId));
+			}
+			
+			if (phuongXaId != null && phuongXaId > -1) {
+				predicates.add(cb.equal(root.join("coSoChanNuoi").<String>get("quanHuyenId"), phuongXaId));
 			}
 			
 			if (nam != null) {
