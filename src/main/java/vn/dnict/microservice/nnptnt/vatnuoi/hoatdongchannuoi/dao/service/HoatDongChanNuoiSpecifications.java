@@ -41,7 +41,7 @@ public class HoatDongChanNuoiSpecifications {
 			}
 			
 			if (phuongXaId != null && phuongXaId > -1) {
-				predicates.add(cb.equal(root.join("coSoChanNuoi").<String>get("quanHuyenId"), phuongXaId));
+				predicates.add(cb.equal(root.join("coSoChanNuoi").<String>get("phuongXaId"), phuongXaId));
 			}
 			
 			if (nam != null) {
