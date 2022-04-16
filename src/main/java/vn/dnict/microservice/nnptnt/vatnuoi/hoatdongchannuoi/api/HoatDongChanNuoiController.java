@@ -72,11 +72,11 @@ public class HoatDongChanNuoiController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(hoatDongChanNuoiOutput);
 	}
 
-	@PutMapping(value = { "/{id}" })
+	@PutMapping(value = { "/{id}/cosochannuoi" })
 	public ResponseEntity<HoatDongChanNuoiOutput> update(@PathVariable("id") Long id,
-			@Valid @RequestBody HoatDongChanNuoiOutput hoatDongChanNuoiOutput, BindingResult result)
+			@Valid @RequestBody HoatDongChanNuoiOutput hoatDongChanNuoiOutput)
 			throws EntityNotFoundException, MethodArgumentNotValidException {
-		hoatDongChanNuoiOutput = businessHoatDongChanNuoiBusiness.update(id, hoatDongChanNuoiOutput, result);
+		businessHoatDongChanNuoiBusiness.update(hoatDongChanNuoiOutput);
 		return ResponseEntity.ok(hoatDongChanNuoiOutput);
 	}
 

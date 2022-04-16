@@ -82,9 +82,6 @@ public class HoatDongChanNuoiBusiness {
 				hoatDongChanNuoiOutput.setDiaChi(optionalCoSo.get().getDiaChi());
 				hoatDongChanNuoiOutput.setEmail(optionalCoSo.get().getEmail());
 				hoatDongChanNuoiOutput.setQuanHuyenId(optionalCoSo.get().getQuanHuyenId());
-				hoatDongChanNuoiOutput.setPhuongXaId(optionalCoSo.get().getPhuongXaId());
-				hoatDongChanNuoiOutput.setListHoatDongChanNuoi(hoatDongChanNuoiOutput.getListHoatDongChanNuoi());
-				
 				if (hoatDongChanNuoiOutput.getQuanHuyenId() != null && hoatDongChanNuoiOutput.getQuanHuyenId() > 0) {
 					Optional<DmQuanHuyen> optionalQuanHuyen = serviceDmQuanHuyenService.findById(hoatDongChanNuoiOutput
 							.getQuanHuyenId());
@@ -92,6 +89,8 @@ public class HoatDongChanNuoiBusiness {
 						hoatDongChanNuoiOutput.setQuanHuyenTen(optionalQuanHuyen.get().getTen());
 					}
 				}
+				
+				hoatDongChanNuoiOutput.setPhuongXaId(optionalCoSo.get().getPhuongXaId());
 				if (hoatDongChanNuoiOutput.getPhuongXaId() != null && hoatDongChanNuoiOutput.getPhuongXaId() > 0) {
 					Optional<DmPhuongXa> optionalPhuongXa = serviceDmPhuongXaService.findById(hoatDongChanNuoiOutput
 							.getPhuongXaId());
@@ -100,6 +99,7 @@ public class HoatDongChanNuoiBusiness {
 					}
 				}
 				
+				hoatDongChanNuoiOutput.setListHoatDongChanNuoi(hoatDongChanNuoiOutput.getListHoatDongChanNuoi());				
 			}
 		}
 		
@@ -111,6 +111,14 @@ public class HoatDongChanNuoiBusiness {
 				ThongTinHoatDongChanNuoiOutput listHoatDongChanNuoi = new ThongTinHoatDongChanNuoiOutput();
 				listHoatDongChanNuoi.setId(listChanNuoi.getId());
 				listHoatDongChanNuoi.setLoaiVatNuoiId(listChanNuoi.getLoaiVatNuoiId());
+				if (listHoatDongChanNuoi.getLoaiVatNuoiId() != null && listHoatDongChanNuoi.getLoaiVatNuoiId() > 0) {
+					Optional<DmLoaiVatNuoi> optionalLoaiVatNuoi = serviceDmLoaiVatNuoiService
+							.findById(listHoatDongChanNuoi.getLoaiVatNuoiId());
+					if (optionalLoaiVatNuoi.isPresent()) {
+						listHoatDongChanNuoi.setLoaiVatNuoi(optionalLoaiVatNuoi.get().getTen());
+					}
+				}
+				
 				listHoatDongChanNuoi.setDonViTinh(listChanNuoi.getDonViTinh());
 				listHoatDongChanNuoi.setSoLuongNuoi(listChanNuoi.getSoLuongNuoi());
 				listHoatDongChanNuoi.setMucDichNuoi(listChanNuoi.getMucDichNuoi());
@@ -120,13 +128,6 @@ public class HoatDongChanNuoiBusiness {
 				listHoatDongChanNuoi.setSanLuongXuat(listChanNuoi.getSanLuongXuat());
 				listHoatDongChanNuoi.setGhiChu(listChanNuoi.getGhiChu());
 				
-				if (listHoatDongChanNuoi.getLoaiVatNuoiId() != null && listHoatDongChanNuoi.getLoaiVatNuoiId() > 0) {
-					Optional<DmLoaiVatNuoi> optionalLoaiVatNuoi = serviceDmLoaiVatNuoiService
-							.findById(listHoatDongChanNuoi.getLoaiVatNuoiId());
-					if (optionalLoaiVatNuoi.isPresent()) {
-						listHoatDongChanNuoi.setLoaiVatNuoi(optionalLoaiVatNuoi.get().getTen());
-					}
-				}
 				listHoatDongChanNuois.add(listHoatDongChanNuoi);
 			}
 		}
@@ -177,41 +178,72 @@ public class HoatDongChanNuoiBusiness {
 		}
 		hoatDongChanNuoi = serviceHoatDongChanNuoiService.save(hoatDongChanNuoi);
 		return this.convertToHoatDongChanNuoiOutput(hoatDongChanNuoi);
-	}
+	}	
 	
-	
-	public HoatDongChanNuoiOutput update(Long id, HoatDongChanNuoiOutput hoatDongChanNuoiOutput, 
-			BindingResult result) throws EntityNotFoundException, MethodArgumentNotValidException{
-		Optional<HoatDongChanNuoi> optional = serviceHoatDongChanNuoiService.findById(id);
-		if (!optional.isPresent()) {
-			throw new EntityNotFoundException(HoatDongChanNuoi.class, "id", String.valueOf(id));
-		}
-		HoatDongChanNuoi hoatDongChanNuoi = optional.get();
-		hoatDongChanNuoi.setCoSoChanNuoiId(hoatDongChanNuoiOutput.getCoSoChanNuoiId());
-		hoatDongChanNuoi.setNam(hoatDongChanNuoiOutput.getNam());
-		hoatDongChanNuoi.setQuy(hoatDongChanNuoiOutput.getQuy());
+	public void update( HoatDongChanNuoiOutput hoatDongChanNuoiOutput) 
+			throws EntityNotFoundException, MethodArgumentNotValidException{
+
 		
-		if(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().size() > 0) {
-			for(int i = 0; i < hoatDongChanNuoiOutput.getListHoatDongChanNuoi().size(); i++) {
-				hoatDongChanNuoi.setDonViTinh(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getDonViTinh());
-				hoatDongChanNuoi.setLoaiVatNuoiId(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
-						.getLoaiVatNuoiId());
-				hoatDongChanNuoi.setMucDichNuoi(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getMucDichNuoi());
-				hoatDongChanNuoi.setSlVatNuoiXuat(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
-						.getSlVatNuoiXuat());
-				hoatDongChanNuoi.setSoLuongNuoi(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getSoLuongNuoi());
-				hoatDongChanNuoi.setSanLuongXuat(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
-						.getSanLuongXuat());
-				hoatDongChanNuoi.setThoiGianBatDauNuoi(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
-						.getThoiGianBatDauNuoi());
-				hoatDongChanNuoi.setThoiGianXuat(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
-						.getThoiGianXuat());
-				hoatDongChanNuoi.setGhiChu(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getGhiChu());
+		List<ThongTinHoatDongChanNuoiOutput> lisHoatDongChanNuois = hoatDongChanNuoiOutput.getListHoatDongChanNuoi();
+		if(Objects.nonNull(lisHoatDongChanNuois) && !lisHoatDongChanNuois.isEmpty()) {
+			for (ThongTinHoatDongChanNuoiOutput listHoatDongChanNuoi : lisHoatDongChanNuois) {
+				HoatDongChanNuoi hoatDong = new HoatDongChanNuoi();
+				if (Objects.nonNull(hoatDong.getId())) {
+					Optional<HoatDongChanNuoi> optinalHoatDong = serviceHoatDongChanNuoiService
+							.findById(listHoatDongChanNuoi.getId());
+					if (optinalHoatDong.isPresent()) {
+						hoatDong = optinalHoatDong.get();
+					}
+				}
+
+				hoatDong.setCoSoChanNuoiId(hoatDongChanNuoiOutput.getCoSoChanNuoiId());
+				hoatDong.setNam(hoatDongChanNuoiOutput.getNam());
+				hoatDong.setQuy(hoatDongChanNuoiOutput.getQuy());
+				
+				hoatDong.setId(listHoatDongChanNuoi.getId());
+				hoatDong.setLoaiVatNuoiId(listHoatDongChanNuoi.getLoaiVatNuoiId());
+				hoatDong.setDonViTinh(listHoatDongChanNuoi.getDonViTinh());
+				hoatDong.setSoLuongNuoi(listHoatDongChanNuoi.getSoLuongNuoi());
+				hoatDong.setMucDichNuoi(listHoatDongChanNuoi.getMucDichNuoi());
+				hoatDong.setThoiGianBatDauNuoi(listHoatDongChanNuoi.getThoiGianBatDauNuoi());
+				hoatDong.setThoiGianXuat(listHoatDongChanNuoi.getThoiGianXuat());
+				hoatDong.setSlVatNuoiXuat(listHoatDongChanNuoi.getSlVatNuoiXuat());
+				hoatDong.setSanLuongXuat(listHoatDongChanNuoi.getSanLuongXuat());
+				hoatDong.setGhiChu(listHoatDongChanNuoi.getGhiChu());
+				
+				hoatDong = serviceHoatDongChanNuoiService.save(hoatDong);
 			}
 		}
 		
-		hoatDongChanNuoi = serviceHoatDongChanNuoiService.save(hoatDongChanNuoi);
-		return this.convertToHoatDongChanNuoiOutput(hoatDongChanNuoi);		
+//		if(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().size() > 0) {
+//			for(int i = 0; i < hoatDongChanNuoiOutput.getListHoatDongChanNuoi().size(); i++) {
+//				Optional<HoatDongChanNuoi> optional = serviceHoatDongChanNuoiService.findById(id);
+//				if (!optional.isPresent()) {
+//					throw new EntityNotFoundException(HoatDongChanNuoi.class, "id", String.valueOf(id));
+//				}
+//				HoatDongChanNuoi hoatDongChanNuoi = optional.get();
+//				hoatDongChanNuoi.setId(hoatDongChanNuoiOutput.getId());
+//				hoatDongChanNuoi.setCoSoChanNuoiId(hoatDongChanNuoiOutput.getCoSoChanNuoiId());
+//				hoatDongChanNuoi.setNam(hoatDongChanNuoiOutput.getNam());
+//				hoatDongChanNuoi.setQuy(hoatDongChanNuoiOutput.getQuy());
+//				
+//				hoatDongChanNuoi.setDonViTinh(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getDonViTinh());
+//				hoatDongChanNuoi.setLoaiVatNuoiId(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
+//						.getLoaiVatNuoiId());
+//				hoatDongChanNuoi.setMucDichNuoi(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getMucDichNuoi());
+//				hoatDongChanNuoi.setSlVatNuoiXuat(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
+//						.getSlVatNuoiXuat());
+//				hoatDongChanNuoi.setSoLuongNuoi(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getSoLuongNuoi());
+//				hoatDongChanNuoi.setSanLuongXuat(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
+//						.getSanLuongXuat());
+//				hoatDongChanNuoi.setThoiGianBatDauNuoi(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
+//						.getThoiGianBatDauNuoi());
+//				hoatDongChanNuoi.setThoiGianXuat(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i)
+//						.getThoiGianXuat());
+//				hoatDongChanNuoi.setGhiChu(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getGhiChu());
+//				hoatDongChanNuoi = serviceHoatDongChanNuoiService.save(hoatDongChanNuoi);
+//			}
+//		}
 	}
 	
 	@DeleteMapping(value = { "/{id}" })
