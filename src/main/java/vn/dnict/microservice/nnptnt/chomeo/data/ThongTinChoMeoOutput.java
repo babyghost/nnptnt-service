@@ -1,34 +1,31 @@
 package vn.dnict.microservice.nnptnt.chomeo.data;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 import vn.dnict.microservice.nnptnt.chomeo.chuquanly.dao.model.ChuQuanLy;
 import vn.dnict.microservice.nnptnt.chomeo.chuquanly.dao.service.ChuQuanLyService;
+import vn.dnict.microservice.nnptnt.chomeo.kehoach2chomeo.dao.model.KeHoach2ChoMeo;
 
 @Data
 public class ThongTinChoMeoOutput {
-
+	private Long id;
 	private Long loaiDongVatId;
-	
-	@NotBlank(message = "Vui lòng nhập tên")
-	private String tenConVat;
-	
-	@NotBlank(message = "Vui lòng nhập tên")
+	private String tenConVat;	
 	private String namSinh;
-	
 	private Long giongId;
-	
-	@NotBlank(message = "Vui lòng nhập tên")
-	private String mauLong;
-	
+	private String giong;
+	private String loaiDongVat;
+	private String mauLong;	
 	private Integer tinhBiet;
+	private Integer trangThai;	
+	private Long chuQuanLyId;
 
-	@NotNull(message = "Vui lòng chọn trạng thái")
-	private Integer trangThai;
+	private List<KeHoach2ChoMeo> listKeHoach2ChoMeo;
 	
-	private  ChuQuanLy chuQuanLy;
-	private String chuHo;
-
+	private LocalDate ngayTiemPhong;
 }

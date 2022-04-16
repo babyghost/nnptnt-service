@@ -65,5 +65,8 @@ public class ThongTinChoMeoImport {
 	
 	@Column(name = "trangthaiimport")
 	private boolean trangThaiImport;
+	
+	@Column(name = "daxoa")
+	private boolean daXoa;
 
 }

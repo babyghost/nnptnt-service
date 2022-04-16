@@ -47,7 +47,7 @@ public class KeHoach2ChoMeoBusiness {
 
 	public KeHoach2ChoMeo create(KeHoach2ChoMeoInput KeHoach2ChoMeoInput) {
 		KeHoach2ChoMeo keHoach2ChoMeo = new KeHoach2ChoMeo();
-		keHoach2ChoMeo.setDaXoa(true);
+		keHoach2ChoMeo.setDaXoa(false);
 		keHoach2ChoMeo.setThongTinChoMeoId(KeHoach2ChoMeoInput.getThongTinChoMeoId());
 		keHoach2ChoMeo.setKeHoachTiemPhongId(KeHoach2ChoMeoInput.getKeHoachTiemPhongId());
 		keHoach2ChoMeo.setNgayTiemPhong(KeHoach2ChoMeoInput.getNgayTiemPhong());
@@ -77,7 +77,7 @@ public class KeHoach2ChoMeoBusiness {
 			throw new EntityNotFoundException(KeHoach2ChoMeo.class, "id", String.valueOf(id));
 		}
 		KeHoach2ChoMeo keHoach2ChoMeo = optional.get();
-		keHoach2ChoMeo.setDaXoa(false);
+		keHoach2ChoMeo.setDaXoa(true);
 		keHoach2ChoMeo = serviceKeHoach2ChoMeoService.save(keHoach2ChoMeo);
 		return keHoach2ChoMeo;
 	}

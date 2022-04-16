@@ -14,5 +14,5 @@ public interface ThongTinChoMeoImportService {
 
 	public Optional<ThongTinChoMeoImport> findById(Long id);
 
-	public Page<ThongTinChoMeoImport> findAll( Long thongTinChoMeoId, String trangThai, Pageable pageable);
+	public Page<ThongTinChoMeoImport> findAll( Long thongTinChoMeoId, String trangThai, String chuHo, String dienThoai, String loaiDongVat, String giong, Pageable pageable);
 }

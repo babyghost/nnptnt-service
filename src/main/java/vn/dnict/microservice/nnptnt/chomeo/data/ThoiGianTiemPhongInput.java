@@ -12,8 +12,10 @@ public class ThoiGianTiemPhongInput {
 	private String diaDiem;
 
 	private Long phuongXaId;
-	
+
 	private Long quanHuyenId;
+	
+	
 	
 	private Long keHoachTiemPhongId;
 

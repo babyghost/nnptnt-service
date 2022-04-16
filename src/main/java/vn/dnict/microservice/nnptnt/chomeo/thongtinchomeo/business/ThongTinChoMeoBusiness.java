@@ -1,10 +1,17 @@
+
 package vn.dnict.microservice.nnptnt.chomeo.thongtinchomeo.business;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import vn.dnict.microservice.core.dao.model.CoreChucNang;
 import vn.dnict.microservice.core.dao.model.CoreNhomChucNang;
@@ -23,16 +31,21 @@ import vn.dnict.microservice.exceptions.EntityNotFoundException;
 import vn.dnict.microservice.nnptnt.chomeo.chuquanly.dao.model.ChuQuanLy;
 import vn.dnict.microservice.nnptnt.chomeo.chuquanly.dao.service.ChuQuanLyService;
 import vn.dnict.microservice.nnptnt.chomeo.data.ChuQuanLyData;
+import vn.dnict.microservice.nnptnt.chomeo.data.KeHoach2ChoMeoInput;
 import vn.dnict.microservice.nnptnt.chomeo.data.ThongTinChoMeoData;
 import vn.dnict.microservice.nnptnt.chomeo.data.ThongTinChoMeoInput;
+import vn.dnict.microservice.nnptnt.chomeo.data.ThongTinChoMeoOutput;
 import vn.dnict.microservice.nnptnt.chomeo.kehoach2chomeo.dao.model.KeHoach2ChoMeo;
 import vn.dnict.microservice.nnptnt.chomeo.kehoach2chomeo.dao.service.KeHoach2ChoMeoService;
+import vn.dnict.microservice.nnptnt.chomeo.thongtinchomeo.business.view.MyExcelViewThongKeChoMeo;
 import vn.dnict.microservice.nnptnt.chomeo.thongtinchomeo.dao.model.ThongTinChoMeo;
 import vn.dnict.microservice.nnptnt.chomeo.thongtinchomeo.dao.service.ThongTinChoMeoService;
 import vn.dnict.microservice.nnptnt.dm.giong.dao.model.DmGiong;
 import vn.dnict.microservice.nnptnt.dm.giong.dao.service.DmGiongService;
 import vn.dnict.microservice.nnptnt.dm.loaidongvat.dao.model.DmLoaiDongVat;
 import vn.dnict.microservice.nnptnt.dm.loaidongvat.dao.service.DmLoaiDongVatService;
+import vn.dnict.microservice.nnptnt.vatnuoi.data.ThongTinHoatDongChanNuoiOutput;
+import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.model.HoatDongChanNuoi;
 
 @Service
 public class ThongTinChoMeoBusiness {
@@ -58,14 +71,14 @@ public class ThongTinChoMeoBusiness {
 	KeHoach2ChoMeoService serviceKeHoach2ChoMeoService;
 
 	public Page<ThongTinChoMeoData> findAll(int page, int size, String sortBy, String sortDir, Long loaiDongVatId, Long giongId, String tenChuHo, String dienThoai,LocalDate tuNgayTiemPhong,LocalDate denNgayTiemPhong,
-			Integer trangThai) {
+			Long quanHuyenId, Long phuongXaId, Long keHoachTiemPhongId, Integer trangThai) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-		final Page<ThongTinChoMeo> pageThongTinChoMeo = serviceThongTinChoMeoService.findAll(loaiDongVatId,giongId, tenChuHo, dienThoai, tuNgayTiemPhong,denNgayTiemPhong, trangThai,
+		final Page<ThongTinChoMeo> pageThongTinChoMeo = serviceThongTinChoMeoService.findAll(loaiDongVatId,giongId, tenChuHo, dienThoai, tuNgayTiemPhong,denNgayTiemPhong, quanHuyenId, phuongXaId, keHoachTiemPhongId, trangThai,
 				PageRequest.of(page, size, direction, sortBy));
 		final Page<ThongTinChoMeoData> pageThongTinChoMeoData = pageThongTinChoMeo
 				.map(this::convertToThongTinChoMeoData);
@@ -80,6 +93,7 @@ public class ThongTinChoMeoBusiness {
 		ThongTinChoMeo thongTinChoMeo = optional.get();
 		return this.convertToThongTinChoMeoData(thongTinChoMeo);
 	}
+	
 	
 //	public ThongTinChoMeoData findByChuQuanLyId(Long ChuQuanLyId)throws EntityNotFoundException  {
 //		Optional<ThongTinChoMeo> optional = serviceThongTinChoMeoService.findByChuQuanLyId(ChuQuanLyId);
@@ -201,12 +215,32 @@ public class ThongTinChoMeoBusiness {
 			if (optional.isPresent()) {	
 				thongTinChoMeoData.setChuQuanLyTen(optional.get().getChuHo());
 				thongTinChoMeoData.setChuQuanLyDiaChi(optional.get().getDiaChi());	
-				thongTinChoMeoData.setDienthoai(optional.get().getDienThoai());		}
+				thongTinChoMeoData.setDienthoai(optional.get().getDienThoai());	
+				thongTinChoMeoData.setQuanHuyenId(optional.get().getQuanHuyen_Id());
+				thongTinChoMeoData.setPhuongXaId(optional.get().getPhuongXa_Id());
+				if(optional.get().getQuanHuyen_Id() != null && optional.get().getQuanHuyen_Id() > 0) {
+					Optional<DmQuanHuyen> optionalQuanHuyen = serviceDmQuanHuyenService.findById(optional.get().getQuanHuyen_Id());
+					if (optionalQuanHuyen.isPresent()) {
+						thongTinChoMeoData.setQuanHuyenTen(optionalQuanHuyen.get().getTen());
+					}	
+				}
+				if(optional.get().getPhuongXa_Id() != null && optional.get().getPhuongXa_Id() > 0) {
+					Optional<DmPhuongXa> optionalPhuongXa = serviceDmPhuongXaService.findById(optional.get().getPhuongXa_Id());
+					if (optionalPhuongXa.isPresent()) {
+						thongTinChoMeoData.setPhuongXaTen(optionalPhuongXa.get().getTen());
+					}	
+				}
+				
+				
+			}
 		}
 		if (thongTinChoMeoData.getId() != null && thongTinChoMeoData.getId() > 0) {
+		
 			List<KeHoach2ChoMeo> listKeHoach2ChoMeos = serviceKeHoach2ChoMeoService
 					.findByThongTinChoMeoIdAndDaXoa(thongTinChoMeo.getId(), false);
-	
+			for (KeHoach2ChoMeo KeHoach2ChoMeo : listKeHoach2ChoMeos) {
+				thongTinChoMeoData.setNgayTiemPhong(KeHoach2ChoMeo.getNgayTiemPhong());
+			}
 				thongTinChoMeoData.setListKeHoach2ChoMeo(listKeHoach2ChoMeos);
 				
 			
@@ -359,7 +393,6 @@ public class ThongTinChoMeoBusiness {
 		return this.convertToThongTinChoMeoData(thongTinChoMeo);
 	}
 
-	@DeleteMapping(value = { "/{id}" })
 	public ThongTinChoMeoData delete(Long id) throws EntityNotFoundException {
 		Optional<ThongTinChoMeo> optional = serviceThongTinChoMeoService.findById(id);
 		if (!optional.isPresent()) {
@@ -370,4 +403,147 @@ public class ThongTinChoMeoBusiness {
 		thongTinChoMeo = serviceThongTinChoMeoService.save(thongTinChoMeo);
 		return this.convertToThongTinChoMeoData(thongTinChoMeo);
 	}
+	
+	public Page<ThongTinChoMeoData> thongKe(int page, int size, String sortBy, String sortDir, Long loaiDongVatId, Long giongId, String tenChuHo, String dienThoai,LocalDate tuNgayTiemPhong,LocalDate denNgayTiemPhong,
+			Long quanHuyenId, Long phuongXaId, Long keHoachTiemPhongId, Integer trangThai) {
+		Direction direction;
+		if (sortDir.equals("ASC")) {
+			direction = Direction.ASC;
+		} else {
+			direction = Direction.DESC;
+		}
+		final Page<ThongTinChoMeo> pageThongTinChoMeo = serviceThongTinChoMeoService.thongKe(loaiDongVatId,giongId, tenChuHo, dienThoai, tuNgayTiemPhong,denNgayTiemPhong, quanHuyenId, phuongXaId, keHoachTiemPhongId, trangThai,
+				PageRequest.of(page, size, direction, sortBy));
+		final Page<ThongTinChoMeoData> pageThongTinChoMeoData = pageThongTinChoMeo
+				.map(this::convertToThongTinChoMeoDataThongKe);
+		return pageThongTinChoMeoData;
+	}
+	
+	private ThongTinChoMeoData convertToThongTinChoMeoDataThongKe(ThongTinChoMeo thongTinChoMeo) {
+		ThongTinChoMeoData thongTinChoMeoData = new ThongTinChoMeoData();
+
+		thongTinChoMeoData.setChuQuanLyId(thongTinChoMeo.getChuQuanLyId());
+		if (thongTinChoMeoData.getChuQuanLyId() != null && thongTinChoMeoData.getChuQuanLyId() > 0) {
+			Optional<ChuQuanLy> optional = serviceChuQuanLyService
+					.findById(thongTinChoMeoData.getChuQuanLyId());
+			if (optional.isPresent()) {	
+				thongTinChoMeoData.setChuQuanLyTen(optional.get().getChuHo());
+				thongTinChoMeoData.setChuQuanLyDiaChi(optional.get().getDiaChi());	
+				thongTinChoMeoData.setDienthoai(optional.get().getDienThoai());	
+				thongTinChoMeoData.setQuanHuyenId(optional.get().getQuanHuyen_Id());
+				thongTinChoMeoData.setPhuongXaId(optional.get().getPhuongXa_Id());
+				if(optional.get().getQuanHuyen_Id() != null && optional.get().getQuanHuyen_Id() > 0) {
+					Optional<DmQuanHuyen> optionalQuanHuyen = serviceDmQuanHuyenService.findById(optional.get().getQuanHuyen_Id());
+					if (optionalQuanHuyen.isPresent()) {
+						thongTinChoMeoData.setQuanHuyenTen(optionalQuanHuyen.get().getTen());
+					}	
+				}
+				if(optional.get().getPhuongXa_Id() != null && optional.get().getPhuongXa_Id() > 0) {
+					Optional<DmPhuongXa> optionalPhuongXa = serviceDmPhuongXaService.findById(optional.get().getPhuongXa_Id());
+					if (optionalPhuongXa.isPresent()) {
+						thongTinChoMeoData.setPhuongXaTen(optionalPhuongXa.get().getTen());
+					}	
+				}
+				
+				
+			}
+		}
+
+		
+		List<ThongTinChoMeoOutput> listThongTinChoMeo = new ArrayList<ThongTinChoMeoOutput>();
+		List<ThongTinChoMeo> listChoMeos = serviceThongTinChoMeoService
+				.findByChuQuanLyIdAndDaXoa(thongTinChoMeo.getChuQuanLyId(), false);
+		if(Objects.nonNull(listChoMeos) &&! listChoMeos.isEmpty()) {
+			for(ThongTinChoMeo listChoMeo : listChoMeos) {
+				ThongTinChoMeoOutput listChoMeoOutput = new ThongTinChoMeoOutput();
+				
+				listChoMeoOutput.setId(listChoMeo.getId());
+				listChoMeoOutput.setGiongId(listChoMeo.getGiongId());
+				listChoMeoOutput.setLoaiDongVatId(listChoMeo.getLoaiDongVatId());
+				listChoMeoOutput.setMauLong(listChoMeo.getMauLong());
+				listChoMeoOutput.setNamSinh(listChoMeo.getNamSinh());
+				listChoMeoOutput.setTenConVat(listChoMeo.getTenConVat());
+				listChoMeoOutput.setTinhBiet(listChoMeo.getTinhBiet());
+				listChoMeoOutput.setTrangThai(listChoMeo.getTrangThai());
+				if (listChoMeoOutput.getGiongId() != null && listChoMeoOutput.getGiongId() > 0) {
+					Optional<DmGiong> optionalGiong = serviceDmGiongService.findById(listChoMeoOutput.getGiongId());
+					if (optionalGiong.isPresent()) {
+						
+						listChoMeoOutput.setGiong(optionalGiong.get().getTen());
+					}
+				}
+
+				if (listChoMeoOutput.getLoaiDongVatId() != null && listChoMeoOutput.getLoaiDongVatId() > 0) {
+					Optional<DmLoaiDongVat> optionalLoaiDongVat = serviceDmLoaiDongVatService
+							.findById(listChoMeoOutput.getLoaiDongVatId());
+					if (optionalLoaiDongVat.isPresent()) {
+						;
+						listChoMeoOutput.setLoaiDongVat(optionalLoaiDongVat.get().getTen());
+						
+					}
+				}
+				if (listChoMeoOutput.getId() != null && listChoMeoOutput.getId() > 0) {
+					
+					List<KeHoach2ChoMeo> listKeHoach2ChoMeos = serviceKeHoach2ChoMeoService
+							.findByThongTinChoMeoIdAndDaXoa(thongTinChoMeo.getId(), false);
+					for (KeHoach2ChoMeo KeHoach2ChoMeo : listKeHoach2ChoMeos) {
+						listChoMeoOutput.setNgayTiemPhong(KeHoach2ChoMeo.getNgayTiemPhong());
+					}
+					listChoMeoOutput.setListKeHoach2ChoMeo(listKeHoach2ChoMeos);
+						
+				}
+				listThongTinChoMeo.add(listChoMeoOutput);
+				
+							}
+		}
+		thongTinChoMeoData.setThongTinChoMeoOutput(listThongTinChoMeo);
+		return thongTinChoMeoData;
+		}
+	
+	public ModelAndView exportExcelThongKeChoMeo(HttpServletRequest request, HttpServletResponse response, int page,
+			int size, String sortBy, String sortDir,Long loaiDongVatId, Long giongId, String tenChuHo, String dienThoai,LocalDate tuNgayTiemPhong,LocalDate denNgayTiemPhong,
+			Long quanHuyenId, Long phuongXaId, Long keHoachTiemPhongId, Integer trangThai) {
+		LocalDate localDate = LocalDate.now();// For reference
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		String formattedString = localDate.format(formatter);
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		Direction direction;
+		if (sortDir.equals("ASC")) {
+			direction = Direction.ASC;
+		} else {
+			direction = Direction.DESC;
+		}
+
+		Page<ThongTinChoMeo> pageThongTinChoMeo = serviceThongTinChoMeoService.thongKe(loaiDongVatId,giongId, tenChuHo, dienThoai, tuNgayTiemPhong,denNgayTiemPhong, quanHuyenId, phuongXaId, keHoachTiemPhongId, trangThai, PageRequest.of(page, size, direction, sortBy));
+		Page<ThongTinChoMeoData> pageThongTinChoMeoData = pageThongTinChoMeo
+				.map(this::convertToThongTinChoMeoDataThongKe);
+
+		List<ThongTinChoMeoData> thongKeThongTinChoMeoDatas = new ArrayList<>(
+				pageThongTinChoMeoData.getContent());
+
+	System.out.println(thongKeThongTinChoMeoDatas+"----------//"+ response);
+
+		// All the remaining employees
+		while (pageThongTinChoMeo.hasNext()) {
+			Page<ThongTinChoMeo> nextPageOfEmployees = serviceThongTinChoMeoService.thongKe(loaiDongVatId,giongId, tenChuHo, dienThoai, tuNgayTiemPhong,denNgayTiemPhong, quanHuyenId, phuongXaId, keHoachTiemPhongId, trangThai,
+					pageThongTinChoMeo.nextPageable());
+			Page<ThongTinChoMeoData> nextPageOfThongTinChoMeoData = nextPageOfEmployees
+					.map(this::convertToThongTinChoMeoDataThongKe);
+			if (Objects.nonNull(nextPageOfThongTinChoMeoData.getContent())) {
+				thongKeThongTinChoMeoDatas.addAll(nextPageOfThongTinChoMeoData.getContent());
+			}
+			// update the page reference to the current page
+			pageThongTinChoMeo = nextPageOfEmployees;
+			System.out.println(pageThongTinChoMeo+"++++++++++++");
+		}
+
+		model.put("thongKeThongTinChoMeoDatas", thongKeThongTinChoMeoDatas);
+		
+		response.setContentType("application/ms-excel");
+		response.setHeader("Content-disposition", "attachment; filename=ThongKe.xls");
+		return new ModelAndView(new MyExcelViewThongKeChoMeo(), model);
+		
+	}
+	
 }

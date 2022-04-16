@@ -43,9 +43,9 @@ public class DmGiongServiceImpl implements DmGiongService{
 	}
 
 	@Override
-	public Page<DmGiong> findAll(String search,Long loaiVatNuoiId, Integer trangThai, Pageable pageable) {
+	public Page<DmGiong> findAll(String search,Long loaiDongVatId, Integer trangThai, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findAll(DmGiongSpecifications.quickSearch(search,loaiVatNuoiId, trangThai), pageable);
+		return repo.findAll(DmGiongSpecifications.quickSearch(search,loaiDongVatId, trangThai), pageable);
 	}
 
 	@Override

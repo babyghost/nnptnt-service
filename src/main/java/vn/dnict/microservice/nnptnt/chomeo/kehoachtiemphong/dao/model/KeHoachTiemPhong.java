@@ -1,6 +1,7 @@
 package vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.dao.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -59,18 +60,18 @@ public class KeHoachTiemPhong {
 	private String nguoiTao;
 
 	@CreatedDate
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
 	@Column(name = "ngaytao")
-	private LocalDate ngayTao;
+	private LocalDateTime ngayTao;
 
 	@LastModifiedBy
 	@Column(name = "nguoicapnhat")
 	private String nguoiCapNhat;
 
 	@LastModifiedDate
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
 	@Column(name = "ngaycapnhat")
-	private LocalDate ngayCapNhat;
+	private LocalDateTime ngayCapNhat;
 
 	@JsonIgnore
 	@Column(name = "daxoa")

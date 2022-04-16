@@ -20,7 +20,7 @@ public interface DmGiongService {
 
 
 
-	public Page<DmGiong> findAll(String search,Long loaiVatNuoiId, Integer trangThai, Pageable pageable);
+	public Page<DmGiong> findAll(String search,Long loaiDongVatId, Integer trangThai, Pageable pageable);
 
 	public List<DmGiong> findByTen(String ten);
 

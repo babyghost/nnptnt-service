@@ -62,10 +62,22 @@ public class ThongTinChoMeoServiceImpl implements ThongTinChoMeoService{
 
 	@Override
 	public Page<ThongTinChoMeo> findAll(Long loaiDongVatId, Long giongId, String tenChuHo, String dienThoai,
-			LocalDate tuNgayTiemPhong, LocalDate denNgayTiemPhong, Integer trangThai, Pageable pageable) {
+			LocalDate tuNgayTiemPhong, LocalDate denNgayTiemPhong, Long quanHuyenId, Long phuongXaId,
+			Long keHoachTiemPhongId, Integer trangThai, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findAll(ThongTinChoMeoSpecifications.quickSearch(loaiDongVatId, giongId, tenChuHo, dienThoai, tuNgayTiemPhong, denNgayTiemPhong, trangThai),pageable);
+		return repo.findAll(ThongTinChoMeoSpecifications.quickSearch(loaiDongVatId, giongId, tenChuHo, dienThoai,
+				tuNgayTiemPhong, denNgayTiemPhong, quanHuyenId, phuongXaId, keHoachTiemPhongId, trangThai),pageable);
 	}
+
+	@Override
+	public Page<ThongTinChoMeo> thongKe(Long loaiDongVatId, Long giongId, String tenChuHo, String dienThoai,
+			LocalDate tuNgayTiemPhong, LocalDate denNgayTiemPhong, Long quanHuyenId, Long phuongXaId,
+			Long keHoachTiemPhongId, Integer trangThai, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return repo.findAll(ThongTinChoMeoSpecifications.baoCaoThongKe(loaiDongVatId, giongId, tenChuHo, dienThoai, tuNgayTiemPhong, denNgayTiemPhong, quanHuyenId, phuongXaId, keHoachTiemPhongId, trangThai), pageable );
+	}
+
+
 
 
 

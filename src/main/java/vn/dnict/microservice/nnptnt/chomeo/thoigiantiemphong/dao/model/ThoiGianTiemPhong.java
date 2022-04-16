@@ -1,5 +1,6 @@
 package vn.dnict.microservice.nnptnt.chomeo.thoigiantiemphong.dao.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -43,12 +44,12 @@ public class ThoiGianTiemPhong {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Column(name = "thoigiantiem_tungay")
-	private LocalDateTime thoiGianTiemTuNgay;
+	private LocalDate thoiGianTiemTuNgay;
 	
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Column(name = "thoigiantiem_denngay")
-	private LocalDateTime thoiGianTiemDenNgay;
+	private LocalDate thoiGianTiemDenNgay;
 	
 	
 	@Column (name = "diadiem", length = 250) 

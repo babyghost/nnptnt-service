@@ -19,4 +19,4 @@ public interface KeHoach2ChoMeoService {
 	public Page<KeHoach2ChoMeo> findAll(Long thongTinChoMeoId, Long keHoachTiemPhongId, LocalDate ngayTiemPhongTuNgay, LocalDate ngayTiemPhongDenNgay, boolean trangThaiTiem, Pageable pageable);	
 	public List<KeHoach2ChoMeo> findByThongTinChoMeoIdAndDaXoa(Long thongTinChoMeoId, Boolean daXoa);
 
-}
+}	

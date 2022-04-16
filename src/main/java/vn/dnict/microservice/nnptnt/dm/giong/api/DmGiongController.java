@@ -36,9 +36,9 @@ public class DmGiongController {
 			@RequestParam(name = "sortBy", defaultValue = "ten", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
 			@RequestParam(name = "search", required = false) String search,
-			@RequestParam(name = "loaiVatNuoiId", required = false) Long loaiVatNuoiId,
+			@RequestParam(name = "loaiDongVatId", required = false) Long loaiDongVatId,
 			@RequestParam(name = "trangThai",required=false) Integer trangThai) {
-		Page<DmGiong> pageGiong = businessDmGiongBusiness.findAll(page, size, sortBy, sortDir, search,loaiVatNuoiId, trangThai);
+		Page<DmGiong> pageGiong = businessDmGiongBusiness.findAll(page, size, sortBy, sortDir, search,loaiDongVatId, trangThai);
 		return ResponseEntity.ok(pageGiong);
 	}
 

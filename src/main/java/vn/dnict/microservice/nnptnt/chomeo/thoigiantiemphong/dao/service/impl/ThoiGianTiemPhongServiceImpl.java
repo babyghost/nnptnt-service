@@ -1,6 +1,7 @@
 package vn.dnict.microservice.nnptnt.chomeo.thoigiantiemphong.dao.service.impl;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,18 @@ public class ThoiGianTiemPhongServiceImpl implements ThoiGianTiemPhongService{
 			LocalDate thoiGianTiemTuNgay, Long keHoachTiemPhongId, String diaDiem, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return repo.findAll(ThoiGianTiemPhongSpecifications.quickSearch(diaDiem, phuongXaId, quanHuyenId, keHoachTiemPhongId, thoiGianTiemTuNgay, thoiGianTiemDenNgay),pageable);
+	}
+
+	@Override
+	public List<ThoiGianTiemPhong> findByKeHoachTiemPhongIdAndDaXoa(Long keHoachTiemPhongId, Boolean daXoa) {
+		// TODO Auto-generated method stub
+		return repo.findByKeHoachTiemPhongIdAndDaXoa(keHoachTiemPhongId, daXoa);
+	}
+
+	@Override
+	public int setFixedDaXoaForKeHoachTiemPhongId(Boolean daXoa, Long keHoachTiemPhongId) {
+		// TODO Auto-generated method stub
+		return repo.setFixedDaXoaForKeHoachTiemPhongId(daXoa, keHoachTiemPhongId);
 	}
 
 

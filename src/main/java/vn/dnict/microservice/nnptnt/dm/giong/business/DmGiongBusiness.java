@@ -27,14 +27,14 @@ public class DmGiongBusiness {
 	@Autowired
 	DmLoaiDongVatService serviceDmLoaiDongVatService;
 	
-	public Page<DmGiong> findAll(int page, int size, String sortBy, String sortDir, String search,Long loaiVatNuoiId,Integer trangThai) {
+	public Page<DmGiong> findAll(int page, int size, String sortBy, String sortDir, String search,Long loaiDongVatId,Integer trangThai) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-		Page<DmGiong> pageDmGiong = serviceGiongService.findAll(search,loaiVatNuoiId, trangThai,
+		Page<DmGiong> pageDmGiong = serviceGiongService.findAll(search,loaiDongVatId, trangThai,
 				PageRequest.of(page, size, direction, sortBy));
 		return pageDmGiong;
 	}

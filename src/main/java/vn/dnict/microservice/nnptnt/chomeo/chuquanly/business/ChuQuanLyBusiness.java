@@ -185,18 +185,23 @@ public class ChuQuanLyBusiness {
 				thongTinChoMeoData.setTinhBiet(thongTinChoMeo.getTinhBiet());
 				thongTinChoMeoData.setTrangThai(thongTinChoMeo.getTrangThai());
 				if (thongTinChoMeoData.getGiongId() != null && thongTinChoMeoData.getGiongId() > 0) {
+					
 					Optional<DmGiong> optionalGiong = serviceDmGiongService.findById(thongTinChoMeoData.getGiongId());
+					
 					if (optionalGiong.isPresent()) {
 						
 						thongTinChoMeoData.setGiong(optionalGiong.get().getTen());
+						
 					}
 				}
 
 				if (thongTinChoMeoData.getLoaiDongVatId() != null && thongTinChoMeoData.getLoaiDongVatId() > 0) {
+					
 					Optional<DmLoaiDongVat> optionalLoaiDongVat = serviceDmLoaiDongVatService
 							.findById(thongTinChoMeoData.getLoaiDongVatId());
+					
 					if (optionalLoaiDongVat.isPresent()) {
-						;
+						
 						thongTinChoMeoData.setLoaiDongVat(optionalLoaiDongVat.get().getTen());
 						
 					}
@@ -229,7 +234,7 @@ public class ChuQuanLyBusiness {
 						thongTinChoMeo = optionalThongTinChoMeo.get();
 					}
 				}
-
+				
 				thongTinChoMeo.setId(thongTinChoMeoData.getId());
 				thongTinChoMeo.setChuQuanLyId(chuQuanLy.getId());
 				thongTinChoMeo.setDaXoa(false);

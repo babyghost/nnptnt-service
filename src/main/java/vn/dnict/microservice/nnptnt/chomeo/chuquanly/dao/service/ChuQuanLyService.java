@@ -17,7 +17,7 @@ public interface ChuQuanLyService {
 
 	public Page<ChuQuanLy> findAll(String chuHo, String diaChi, String dienThoai, Pageable pageable);
 	
-	public Optional<ChuQuanLy> findByChuHoAndDiaChi(String chuHo, String diaChi);
+	public Optional<ChuQuanLy> findByChuHoAndDaXoa(String chuHo, Boolean daXoa);
 	
 	public List<ChuQuanLy> findByDienThoai(String dienthoai);
 	

@@ -17,7 +17,8 @@ public interface ThongTinChoMeoService {
 	public Optional<ThongTinChoMeo> findById(Long id);
 
 	public Page<ThongTinChoMeo> findAll(
-			Long loaiDongVatId, Long giongId, String tenChuHo, String dienThoai, LocalDate tuNgayTiemPhong, LocalDate denNgayTiemPhong,Integer trangThai, Pageable pageable);
+			Long loaiDongVatId, Long giongId, String tenChuHo, String dienThoai,
+			LocalDate tuNgayTiemPhong, LocalDate denNgayTiemPhong,Long quanHuyenId, Long phuongXaId, Long keHoachTiemPhongId, Integer trangThai, Pageable pageable);
 	
 	public List<ThongTinChoMeo> findByChuQuanLyIdAndDaXoa(Long chuQuanLyId, Boolean daXoa);
 	
@@ -26,5 +27,7 @@ public interface ThongTinChoMeoService {
 	
 	public Optional<ThongTinChoMeo> findByChuQuanLyId(Long chuQuanLyId);
 	
-	
+	public Page<ThongTinChoMeo> thongKe(
+			Long loaiDongVatId, Long giongId, String tenChuHo, String dienThoai,
+			LocalDate tuNgayTiemPhong, LocalDate denNgayTiemPhong,Long quanHuyenId, Long phuongXaId, Long keHoachTiemPhongId, Integer trangThai, Pageable pageable);
 }
