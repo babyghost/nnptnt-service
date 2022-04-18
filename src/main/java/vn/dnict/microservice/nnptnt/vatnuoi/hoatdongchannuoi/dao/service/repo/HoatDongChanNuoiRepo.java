@@ -14,13 +14,9 @@ import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.model.HoatDongC
  
 @Repository
 
-	public interface HoatDongChanNuoiRepo extends JpaRepository<HoatDongChanNuoi, Long>,JpaSpecificationExecutor
-	<HoatDongChanNuoi>{
+	public interface HoatDongChanNuoiRepo extends JpaRepository<HoatDongChanNuoi, Long>,JpaSpecificationExecutor<HoatDongChanNuoi>{
+	
 	public Optional<HoatDongChanNuoi> findByLoaiVatNuoiId(Long loaiVatNuoiId);
 
 	public List<HoatDongChanNuoi> findByCoSoChanNuoiIdAndDaXoa(Long coSoChanNuoiId, Boolean daXoa);
-
-	@Modifying(clearAutomatically = true)
-	@Query("update HoatDongChanNuoi u set u.daXoa = ?1 where u.coSoChanNuoiId = ?2")
-	public int setFixedDaXoaForCoSoChanNuoiId(Boolean daXoa, Long coSoChanNuoiId);
 }

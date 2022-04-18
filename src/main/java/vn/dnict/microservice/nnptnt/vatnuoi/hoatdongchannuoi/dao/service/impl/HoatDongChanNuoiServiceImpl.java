@@ -33,7 +33,6 @@ public class HoatDongChanNuoiServiceImpl implements  HoatDongChanNuoiService{
 	public void deleteById(Long id) {
 		// TODO Auto-generated method stub
 		repo.deleteById(id);;
-		
 	}
 	
 	public Optional<HoatDongChanNuoi> findById(Long id) {

@@ -63,7 +63,7 @@ public class HoatDongChanNuoiController {
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<HoatDongChanNuoiOutput> findById(@PathVariable("id") Long id) throws EntityNotFoundException {
 		return ResponseEntity.ok(businessHoatDongChanNuoiBusiness.findById(id));
-	} 
+	}
 	
 	@PostMapping(value = { "" })
 	public ResponseEntity<HoatDongChanNuoiOutput> create(@Valid @RequestBody HoatDongChanNuoiOutput hoatDongChanNuoiOutput, 
