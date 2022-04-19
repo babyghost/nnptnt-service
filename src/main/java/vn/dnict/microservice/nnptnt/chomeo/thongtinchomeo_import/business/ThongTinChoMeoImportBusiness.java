@@ -87,15 +87,25 @@ public class ThongTinChoMeoImportBusiness {
 		result.setDiaChi(object.getDiaChi());
 		result.setDienThoai(object.getDienThoai());
 		result.setQuanHuyen(object.getQuanHuyen());
+		if(!isValidQuanHuyen(object.getQuanHuyen())) {
+			result.setTrangThaiImport(false);;
+		}
 		result.setPhuongXa(object.getPhuongXa());
 		result.setLoaiDongVat(object.getLoaiDongVat());
 		result.setGiong(object.getGiong());
+		if(!isValidGiong(object.getGiong())) {
+			result.setTrangThaiImport(false);;
+		}
+			
 		result.setMauLong(object.getMauLong());
 		result.setTenConVat(object.getTenConVat());
 		result.setNamSinh(object.getNamSinh());
 		result.setTinhBiet(object.getTinhBiet());
 		result.setTrangThai(object.getTrangThai());
+		System.out.println(result.getTrangThaiImport());
 		return result;
+		
+		
 	}
 
 	public ThongTinChoMeoImportData findById(Long id) {
@@ -229,9 +239,9 @@ public class ThongTinChoMeoImportBusiness {
 					}
 
 					if (checkFlat == true) {
-						object.setTrangThaiImport(true);
-					} else {
 						object.setTrangThaiImport(false);
+					} else {
+						object.setTrangThaiImport(true);
 					}
 					object = serviceThongTinChoMeoImportService.save(object);
 					listObjectTemp.add(object);

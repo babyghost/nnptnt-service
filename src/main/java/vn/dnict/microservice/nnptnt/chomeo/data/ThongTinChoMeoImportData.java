@@ -33,5 +33,5 @@ public class ThongTinChoMeoImportData {
 
 	private Long thongTinChoMeoId;
 	
-	private String trangThaiImport;
+	private Boolean trangThaiImport;
 }
