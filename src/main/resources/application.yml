@@ -23,7 +23,7 @@ security:
 core:
   attachment:
     host:
-      download: http://49.156.54.118:8000/stttt/core
+      download: http://localhost:8494/nnptnt/core
     path:
       upload: /opt/uploads
       uploadtemp: /opt/uploads/temp
@@ -39,7 +39,7 @@ spring:
     serialization:
       FAIL_ON_EMPTY_BEANS: false
   datasource:   
-    url: jdbc:postgresql://10.49.55.112:5432/nnptnt_csdl_chuyennganh
+    url: jdbc:postgresql://10.49.41.112:5432/nnptnt_csdl_chuyennganh
 #    url: jdbc:postgresql://10.49.55.112:5432/snv_dichvucong
 #    url: jdbc:postgresql://localhost:5433/snv_dichvucong
     username: postgres
