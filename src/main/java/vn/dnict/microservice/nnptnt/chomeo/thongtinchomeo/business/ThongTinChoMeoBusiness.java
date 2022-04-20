@@ -71,14 +71,14 @@ public class ThongTinChoMeoBusiness {
 	KeHoach2ChoMeoService serviceKeHoach2ChoMeoService;
 
 	public Page<ThongTinChoMeoData> findAll(int page, int size, String sortBy, String sortDir, Long loaiDongVatId, Long giongId, String tenChuHo, String dienThoai,LocalDate tuNgayTiemPhong,LocalDate denNgayTiemPhong,
-			Long quanHuyenId, Long phuongXaId, Long keHoachTiemPhongId, Integer trangThai) {
+			Long quanHuyenId, Long phuongXaId, Long keHoachTiemPhongId, Integer trangThai, Boolean trangThaiTiem) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-		final Page<ThongTinChoMeo> pageThongTinChoMeo = serviceThongTinChoMeoService.findAll(loaiDongVatId,giongId, tenChuHo, dienThoai, tuNgayTiemPhong,denNgayTiemPhong, quanHuyenId, phuongXaId, keHoachTiemPhongId, trangThai,
+		final Page<ThongTinChoMeo> pageThongTinChoMeo = serviceThongTinChoMeoService.findAll(loaiDongVatId,giongId, tenChuHo, dienThoai, tuNgayTiemPhong,denNgayTiemPhong, quanHuyenId, phuongXaId, keHoachTiemPhongId, trangThai,trangThaiTiem,
 				PageRequest.of(page, size, direction, sortBy));
 		final Page<ThongTinChoMeoData> pageThongTinChoMeoData = pageThongTinChoMeo
 				.map(this::convertToThongTinChoMeoData);
@@ -240,7 +240,8 @@ public class ThongTinChoMeoBusiness {
 					.findByThongTinChoMeoIdAndDaXoa(thongTinChoMeo.getId(), false);
 			for (KeHoach2ChoMeo KeHoach2ChoMeo : listKeHoach2ChoMeos) {
 				thongTinChoMeoData.setNgayTiemPhong(KeHoach2ChoMeo.getNgayTiemPhong());
-			}
+				ArrayList<LocalDate> list = new ArrayList<>();
+				list.add(thongTinChoMeoData.getNgayTiemPhong());				thongTinChoMeoData.setNgayTiemPhongList(list);	}
 				thongTinChoMeoData.setListKeHoach2ChoMeo(listKeHoach2ChoMeos);
 				
 			
@@ -421,8 +422,32 @@ public class ThongTinChoMeoBusiness {
 	
 	private ThongTinChoMeoData convertToThongTinChoMeoDataThongKe(ThongTinChoMeo thongTinChoMeo) {
 		ThongTinChoMeoData thongTinChoMeoData = new ThongTinChoMeoData();
-
+		thongTinChoMeoData.setId(thongTinChoMeo.getId());
+		thongTinChoMeoData.setTenConVat(thongTinChoMeo.getTenConVat());
+		thongTinChoMeoData.setNamSinh(thongTinChoMeo.getNamSinh());
+		thongTinChoMeoData.setMauLong(thongTinChoMeo.getMauLong());
+		thongTinChoMeoData.setTinhBiet(thongTinChoMeo.getTinhBiet());
+		thongTinChoMeoData.setTrangThai(thongTinChoMeo.getTrangThai());
+		thongTinChoMeoData.setGiongId(thongTinChoMeo.getGiongId());
+		thongTinChoMeoData.setLoaiDongVatId(thongTinChoMeo.getLoaiDongVatId());
 		thongTinChoMeoData.setChuQuanLyId(thongTinChoMeo.getChuQuanLyId());
+		if (thongTinChoMeoData.getGiongId() != null && thongTinChoMeoData.getGiongId() > 0) {
+			Optional<DmGiong> optional = serviceDmGiongService.findById(thongTinChoMeoData.getGiongId());
+			if (optional.isPresent()) {
+				
+				thongTinChoMeoData.setGiong(optional.get().getTen());
+			}
+		}
+
+		if (thongTinChoMeoData.getLoaiDongVatId() != null && thongTinChoMeoData.getLoaiDongVatId() > 0) {
+			Optional<DmLoaiDongVat> optional = serviceDmLoaiDongVatService
+					.findById(thongTinChoMeoData.getLoaiDongVatId());
+			if (optional.isPresent()) {
+				;
+				thongTinChoMeoData.setLoaiDongVat(optional.get().getTen());
+				
+			}
+		}
 		if (thongTinChoMeoData.getChuQuanLyId() != null && thongTinChoMeoData.getChuQuanLyId() > 0) {
 			Optional<ChuQuanLy> optional = serviceChuQuanLyService
 					.findById(thongTinChoMeoData.getChuQuanLyId());
@@ -448,55 +473,20 @@ public class ThongTinChoMeoBusiness {
 				
 			}
 		}
-
+		if (thongTinChoMeoData.getId() != null && thongTinChoMeoData.getId() > 0) {
 		
-		List<ThongTinChoMeoOutput> listThongTinChoMeo = new ArrayList<ThongTinChoMeoOutput>();
-		List<ThongTinChoMeo> listChoMeos = serviceThongTinChoMeoService
-				.findByChuQuanLyIdAndDaXoa(thongTinChoMeo.getChuQuanLyId(), false);
-		if(Objects.nonNull(listChoMeos) &&! listChoMeos.isEmpty()) {
-			for(ThongTinChoMeo listChoMeo : listChoMeos) {
-				ThongTinChoMeoOutput listChoMeoOutput = new ThongTinChoMeoOutput();
+			List<KeHoach2ChoMeo> listKeHoach2ChoMeos = serviceKeHoach2ChoMeoService
+					.findByThongTinChoMeoIdAndDaXoa(thongTinChoMeo.getId(), false);
+			for (KeHoach2ChoMeo KeHoach2ChoMeo : listKeHoach2ChoMeos) {
+				thongTinChoMeoData.setNgayTiemPhong(KeHoach2ChoMeo.getNgayTiemPhong());
+				ArrayList<LocalDate> list = new ArrayList<>();
+				list.add(thongTinChoMeoData.getNgayTiemPhong());
+				thongTinChoMeoData.setNgayTiemPhongList(list);	}
+				thongTinChoMeoData.setListKeHoach2ChoMeo(listKeHoach2ChoMeos);
 				
-				listChoMeoOutput.setId(listChoMeo.getId());
-				listChoMeoOutput.setGiongId(listChoMeo.getGiongId());
-				listChoMeoOutput.setLoaiDongVatId(listChoMeo.getLoaiDongVatId());
-				listChoMeoOutput.setMauLong(listChoMeo.getMauLong());
-				listChoMeoOutput.setNamSinh(listChoMeo.getNamSinh());
-				listChoMeoOutput.setTenConVat(listChoMeo.getTenConVat());
-				listChoMeoOutput.setTinhBiet(listChoMeo.getTinhBiet());
-				listChoMeoOutput.setTrangThai(listChoMeo.getTrangThai());
-				if (listChoMeoOutput.getGiongId() != null && listChoMeoOutput.getGiongId() > 0) {
-					Optional<DmGiong> optionalGiong = serviceDmGiongService.findById(listChoMeoOutput.getGiongId());
-					if (optionalGiong.isPresent()) {
-						
-						listChoMeoOutput.setGiong(optionalGiong.get().getTen());
-					}
-				}
-
-				if (listChoMeoOutput.getLoaiDongVatId() != null && listChoMeoOutput.getLoaiDongVatId() > 0) {
-					Optional<DmLoaiDongVat> optionalLoaiDongVat = serviceDmLoaiDongVatService
-							.findById(listChoMeoOutput.getLoaiDongVatId());
-					if (optionalLoaiDongVat.isPresent()) {
-						;
-						listChoMeoOutput.setLoaiDongVat(optionalLoaiDongVat.get().getTen());
-						
-					}
-				}
-				if (listChoMeoOutput.getId() != null && listChoMeoOutput.getId() > 0) {
-					
-					List<KeHoach2ChoMeo> listKeHoach2ChoMeos = serviceKeHoach2ChoMeoService
-							.findByThongTinChoMeoIdAndDaXoa(thongTinChoMeo.getId(), false);
-					for (KeHoach2ChoMeo KeHoach2ChoMeo : listKeHoach2ChoMeos) {
-						listChoMeoOutput.setNgayTiemPhong(KeHoach2ChoMeo.getNgayTiemPhong());
-					}
-					listChoMeoOutput.setListKeHoach2ChoMeo(listKeHoach2ChoMeos);
-						
-				}
-				listThongTinChoMeo.add(listChoMeoOutput);
-				
-							}
+			
 		}
-		thongTinChoMeoData.setThongTinChoMeoOutput(listThongTinChoMeo);
+		
 		return thongTinChoMeoData;
 		}
 	
