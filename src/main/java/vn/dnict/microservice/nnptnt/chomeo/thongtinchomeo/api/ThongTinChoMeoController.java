@@ -57,8 +57,9 @@ public class ThongTinChoMeoController {
 			@RequestParam(name = "quanHuyenId", required = false) Long quanHuyenId,
 			@RequestParam(name = "phuongXaId", required = false) Long phuongXaId,
 			@RequestParam(name = "keHoachTiemPhongId", required = false) Long keHoachTiemPhongId,
-			@RequestParam(name = "trangThai", required = false) Integer trangThai) {
-		Page<ThongTinChoMeoData> pageThongTinChoMeoData = businessThongTinChoMeoBusiness.findAll(page, size, sortBy, sortDir, loaiDongVatId,giongId, tenChuHo, dienThoai, tuNgayTiemPhong,denNgayTiemPhong, quanHuyenId, phuongXaId, keHoachTiemPhongId, trangThai
+			@RequestParam(name = "trangThai", required = false) Integer trangThai,
+			@RequestParam(name = "trangThaiTiem", required = false) Boolean trangThaiTiem) {
+		Page<ThongTinChoMeoData> pageThongTinChoMeoData = businessThongTinChoMeoBusiness.findAll(page, size, sortBy, sortDir, loaiDongVatId,giongId, tenChuHo, dienThoai, tuNgayTiemPhong,denNgayTiemPhong, quanHuyenId, phuongXaId, keHoachTiemPhongId, trangThai,trangThaiTiem
 				);
 		return ResponseEntity.ok(pageThongTinChoMeoData);
 	}

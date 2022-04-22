@@ -63,10 +63,10 @@ public class ThongTinChoMeoServiceImpl implements ThongTinChoMeoService{
 	@Override
 	public Page<ThongTinChoMeo> findAll(Long loaiDongVatId, Long giongId, String tenChuHo, String dienThoai,
 			LocalDate tuNgayTiemPhong, LocalDate denNgayTiemPhong, Long quanHuyenId, Long phuongXaId,
-			Long keHoachTiemPhongId, Integer trangThai, Pageable pageable) {
+			Long keHoachTiemPhongId, Integer trangThai, Boolean trangThaiTiem, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return repo.findAll(ThongTinChoMeoSpecifications.quickSearch(loaiDongVatId, giongId, tenChuHo, dienThoai,
-				tuNgayTiemPhong, denNgayTiemPhong, quanHuyenId, phuongXaId, keHoachTiemPhongId, trangThai),pageable);
+				tuNgayTiemPhong, denNgayTiemPhong, quanHuyenId, phuongXaId, keHoachTiemPhongId, trangThai, trangThaiTiem),pageable);
 	}
 
 	@Override
