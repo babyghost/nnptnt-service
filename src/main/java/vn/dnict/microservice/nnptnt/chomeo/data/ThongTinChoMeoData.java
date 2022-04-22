@@ -43,7 +43,7 @@ public class ThongTinChoMeoData {
 	private Long phuongXaId;
 	private String phuongXaTen;
 	private List<KeHoach2ChoMeo> listKeHoach2ChoMeo;
-	
 	private LocalDate ngayTiemPhong;
+	private ArrayList<LocalDate> ngayTiemPhongList;
 	private List<ThongTinChoMeoOutput> thongTinChoMeoOutput;
 }
