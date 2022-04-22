@@ -53,4 +53,10 @@ public class HoatDongChanNuoiServiceImpl implements  HoatDongChanNuoiService{
 		// TODO Auto-generated method stub
 		return repo.findByCoSoChanNuoiIdAndDaXoa(coSoChanNuoiId, daXoa);
 	}
+	@Override
+	public List<HoatDongChanNuoi> findByCoSoChanNuoiIdAndNamAndQuyAndDaXoa(Long coSoChanNuoiId, String nam, Integer quy,
+			Boolean daXoa) {
+		// TODO Auto-generated method stub
+		return repo.findByCoSoChanNuoiIdAndNamAndQuyAndDaXoa(coSoChanNuoiId, nam, quy, daXoa);
+	}
 }

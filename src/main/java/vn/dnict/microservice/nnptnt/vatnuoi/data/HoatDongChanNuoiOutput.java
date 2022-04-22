@@ -28,9 +28,5 @@ public class HoatDongChanNuoiOutput {
 	
 	private String phuongXaTen;
 	
-	private String nam;
-	
-	private Integer quy;
-	
 	private List<ThongTinHoatDongChanNuoiOutput> listHoatDongChanNuoi;
 }

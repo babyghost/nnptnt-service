@@ -1,6 +1,6 @@
 package vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.api;
 
-import java.time.LocalDate;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -15,19 +15,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
-import vn.dnict.microservice.nnptnt.chomeo.data.ChuQuanLyData;
-import vn.dnict.microservice.nnptnt.dm.loaivatnuoi.dao.model.DmLoaiVatNuoi;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.business.CoSoChanNuoiBusiness;
-import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.model.CoSoChanNuoi;
-import vn.dnict.microservice.nnptnt.vatnuoi.data.CoSoChanNuoiOutput;
-import vn.dnict.microservice.nnptnt.vatnuoi.data.HoatDongChanNuoiInput;
 import vn.dnict.microservice.nnptnt.vatnuoi.data.HoatDongChanNuoiOutput;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.business.HoatDongChanNuoiBusiness;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.model.HoatDongChanNuoi;
@@ -65,20 +59,28 @@ public class HoatDongChanNuoiController {
 		return ResponseEntity.ok(businessHoatDongChanNuoiBusiness.findById(id));
 	}
 	
-	@PostMapping(value = { "" })
-	public ResponseEntity<HoatDongChanNuoiOutput> create(@Valid @RequestBody HoatDongChanNuoiOutput hoatDongChanNuoiOutput, 
+	@GetMapping(value = "/{coSoChanNuoiId}/{nam}/{quy}")
+	public ResponseEntity<List<HoatDongChanNuoi>> getHoatDongChanNuoiByCoSoAndNamAndQuy(@PathVariable("coSoChanNuoiId") Long coSoChanNuoiId,
+			@PathVariable("nam") String nam,
+			@PathVariable("quy") Integer quy) throws EntityNotFoundException {
+		List<HoatDongChanNuoi> list = businessHoatDongChanNuoiBusiness.getHoatDongChanNuoiByCoSoAndNamAndQuy(coSoChanNuoiId, nam, quy);
+		return ResponseEntity.ok(list);
+	}
+	
+	@PostMapping(value = { "/save" })
+	public ResponseEntity<List<HoatDongChanNuoi>> save(@Valid @RequestBody HoatDongChanNuoiOutput hoatDongChanNuoiOutput, 
 			BindingResult result) throws MethodArgumentNotValidException {
-		hoatDongChanNuoiOutput = businessHoatDongChanNuoiBusiness.create(hoatDongChanNuoiOutput,  result);
-		return ResponseEntity.status(HttpStatus.CREATED).body(hoatDongChanNuoiOutput);
+		List<HoatDongChanNuoi> list = businessHoatDongChanNuoiBusiness.create(hoatDongChanNuoiOutput,  result);
+		return ResponseEntity.status(HttpStatus.CREATED).body(list);
 	}
-
-	@PutMapping(value = { "/{id}/cosochannuoi" })
-	public ResponseEntity<HoatDongChanNuoiOutput> update(@PathVariable("id") Long id,
-			@Valid @RequestBody HoatDongChanNuoiOutput hoatDongChanNuoiOutput)
-			throws EntityNotFoundException, MethodArgumentNotValidException {
-		businessHoatDongChanNuoiBusiness.update(hoatDongChanNuoiOutput);
-		return ResponseEntity.ok(hoatDongChanNuoiOutput);
-	}
+//
+//	@PutMapping(value = { "/{id}/cosochannuoi" })
+//	public ResponseEntity<HoatDongChanNuoiOutput> update(@PathVariable("id") Long id,
+//			@Valid @RequestBody HoatDongChanNuoiOutput hoatDongChanNuoiOutput)
+//			throws EntityNotFoundException, MethodArgumentNotValidException {
+//		businessHoatDongChanNuoiBusiness.update(hoatDongChanNuoiOutput);
+//		return ResponseEntity.ok(hoatDongChanNuoiOutput);
+//	}
 
 	@DeleteMapping(value = { "/{id}" })
 	public ResponseEntity<HoatDongChanNuoiOutput> delete(@PathVariable("id") Long id) throws EntityNotFoundException {

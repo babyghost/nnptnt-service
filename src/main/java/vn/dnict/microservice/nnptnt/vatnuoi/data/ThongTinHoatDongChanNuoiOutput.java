@@ -10,6 +10,10 @@ import lombok.Data;
 public class ThongTinHoatDongChanNuoiOutput {
 	private Long id; 
 	
+	private String nam;
+	
+	private Integer quy;
+	
 	private Long loaiVatNuoiId;
 	
 	private String loaiVatNuoi;
