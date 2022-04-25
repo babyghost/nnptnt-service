@@ -60,9 +60,8 @@ public class HoatDongChanNuoiController {
 	}
 	
 	@GetMapping(value = "/{coSoChanNuoiId}/{nam}/{quy}")
-	public ResponseEntity<List<HoatDongChanNuoi>> getHoatDongChanNuoiByCoSoAndNamAndQuy(@PathVariable("coSoChanNuoiId") Long coSoChanNuoiId,
-			@PathVariable("nam") String nam,
-			@PathVariable("quy") Integer quy) throws EntityNotFoundException {
+	public ResponseEntity<List<HoatDongChanNuoi>> getHoatDongChanNuoiByCoSoAndNamAndQuy(@PathVariable("coSoChanNuoiId") 
+			Long coSoChanNuoiId, @PathVariable("nam") String nam, @PathVariable("quy") Integer quy) throws EntityNotFoundException {
 		List<HoatDongChanNuoi> list = businessHoatDongChanNuoiBusiness.getHoatDongChanNuoiByCoSoAndNamAndQuy(coSoChanNuoiId, nam, quy);
 		return ResponseEntity.ok(list);
 	}
