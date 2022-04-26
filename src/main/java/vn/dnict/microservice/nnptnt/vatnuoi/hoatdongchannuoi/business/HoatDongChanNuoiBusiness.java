@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,7 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
-import jdk.internal.org.jline.utils.Log;
 import vn.dnict.microservice.danhmuc.dao.model.DmPhuongXa;
 import vn.dnict.microservice.danhmuc.dao.model.DmQuanHuyen;
 import vn.dnict.microservice.danhmuc.dao.service.DmPhuongXaService;
@@ -58,15 +56,12 @@ public class HoatDongChanNuoiBusiness {
 		}
 		final Page<HoatDongChanNuoi> pageHoatDongChanNuoi = serviceHoatDongChanNuoiService.findAll(tenCoSo, tenChuCoSo, 
 				dienThoai, quanHuyenId, phuongXaId, nam, quy, PageRequest.of(page, size, direction, sortBy));
-		System.out.println("pageHoatDongChanNuoi " + pageHoatDongChanNuoi.getContent().size());
 		final Page<HoatDongChanNuoiOutput> pageHoatDongChanNuoiOutput = pageHoatDongChanNuoi
 				.map(this::convertToHoatDongChanNuoiOutput);
-		System.out.println("HoatDongChanNuoiOutput " + pageHoatDongChanNuoiOutput.getContent().size());
 		return pageHoatDongChanNuoiOutput;
 	}
 	
 	private HoatDongChanNuoiOutput convertToHoatDongChanNuoiOutput(HoatDongChanNuoi hoatDongChanNuoi) {
-		System.out.println("hoatDongChanNuoi ... "+hoatDongChanNuoi.getId());
 		HoatDongChanNuoiOutput hoatDongChanNuoiOutput = new HoatDongChanNuoiOutput();
 		hoatDongChanNuoiOutput.setId(hoatDongChanNuoi.getId());
 		hoatDongChanNuoiOutput.setCoSoChanNuoiId(hoatDongChanNuoi.getCoSoChanNuoiId());
@@ -104,7 +99,6 @@ public class HoatDongChanNuoiBusiness {
 		List<ThongTinHoatDongChanNuoiOutput> listHoatDongChanNuois = new ArrayList<ThongTinHoatDongChanNuoiOutput>();
 		List<HoatDongChanNuoi> listHoatDongs = serviceHoatDongChanNuoiService
 				.findByCoSoChanNuoiIdAndDaXoa(hoatDongChanNuoi.getCoSoChanNuoiId(), false);
-		System.out.println("listHoatDongs size" +listHoatDongs.size());
 		if(Objects.nonNull(listHoatDongs) &&! listHoatDongs.isEmpty()) {
 			for(HoatDongChanNuoi listChanNuoi : listHoatDongs) {
 				ThongTinHoatDongChanNuoiOutput thongTinChanNuoi = new ThongTinHoatDongChanNuoiOutput();
