@@ -72,14 +72,6 @@ public class HoatDongChanNuoiController {
 		List<HoatDongChanNuoi> list = businessHoatDongChanNuoiBusiness.create(hoatDongChanNuoiOutput,  result);
 		return ResponseEntity.status(HttpStatus.CREATED).body(list);
 	}
-//
-//	@PutMapping(value = { "/{id}/cosochannuoi" })
-//	public ResponseEntity<HoatDongChanNuoiOutput> update(@PathVariable("id") Long id,
-//			@Valid @RequestBody HoatDongChanNuoiOutput hoatDongChanNuoiOutput)
-//			throws EntityNotFoundException, MethodArgumentNotValidException {
-//		businessHoatDongChanNuoiBusiness.update(hoatDongChanNuoiOutput);
-//		return ResponseEntity.ok(hoatDongChanNuoiOutput);
-//	}
 
 	@DeleteMapping(value = { "/{id}" })
 	public ResponseEntity<HoatDongChanNuoiOutput> delete(@PathVariable("id") Long id) throws EntityNotFoundException {
