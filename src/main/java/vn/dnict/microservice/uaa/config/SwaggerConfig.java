@@ -42,16 +42,26 @@ public class SwaggerConfig {
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.core.api"),
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.danhmuc.api"),
 						
-						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.dm.giong.api"),
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.chomeo.chuquanly.api"),
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.api"),
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.chomeo.thoigiantiemphong.api"),
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.chomeo.kehoach2chomeo.api"),
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.chomeo.thongtinchomeo.api"),
+						
+						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.hopdong.baocaothongke.api"),
+						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.hopdong.thongtinhopdong.api"),
+						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.hopdong.tinhhinhthuchienhopdong.api"),
+
+						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.hopdong.danhmuc.loaihopdong.api"),
+						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.hopdong.danhmuc.phuongthucbaolanhhd.api"),
+						
+						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.dm.giong.api"),
+						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.dm.loaidongvat.api"),
+						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.dm.loaivatnuoi.api"),
+						
+						
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.api"), 
 						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.api"),
-						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.dm.loaivatnuoi.api"),
-						RequestHandlerSelectors.basePackage("vn.dnict.microservice.nnptnt.dm.loaidongvat.api"),
 						// RequestHandlerSelectors.basePackage("vn.dnict.microservice.dvcnoivu.hoso.controller"),
 						// RequestHandlerSelectors.basePackage("vn.dnict.microservice.trungtamso.baocaocongviec.controller"),
 						// RequestHandlerSelectors.basePackage("vn.dnict.microservice.trungtamso.lamthemgio.controller"),

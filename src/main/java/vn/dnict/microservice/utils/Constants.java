@@ -19,6 +19,12 @@ public class Constants {
 	public static final int KCHTGT_DINHKEM_PHANLOAI_HINHANH = 1; // hình ảnh
 	public static final int KCHTGT_DINHKEM_PHANLOAI_VANBAN = 2; // văn bản
 	
+	public static final int KHTC_QLHD_TRANG_THAI_CHUA_THANH_TOAN = 1; // chưa thanh toán
+	public static final int KHTC_QLHD_TRANG_THAI_DANG_THANH_TOAN = 2; // đang thanh toán
+	public static final int KHTC_QLHD_TRANG_THAI_DA_THANH_TOAN = 3; // đã thanh toán
+	
+	public static final int DON_VI_SU_DUNG = 74;
+	
 	//
 	public static final String HOSOCHUADENHANXULY = "HOSOCHUADENHANXULY";
 	public static final String HOSODUNGHAN = "HOSODUNGHAN";
