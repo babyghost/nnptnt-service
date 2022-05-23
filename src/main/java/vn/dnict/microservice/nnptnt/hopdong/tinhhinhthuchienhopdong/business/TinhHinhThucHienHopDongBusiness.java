@@ -48,7 +48,25 @@ public class TinhHinhThucHienHopDongBusiness {
 				tinhHinhThucHienHopDongInput.setHoaDonNgay(tinhHinhThucHienHopDong.getHoaDonNgay());
 				tinhHinhThucHienHopDongInput.setGiaTriConLai(tinhHinhThucHienHopDong.getGiaTriConLai());
 				tinhHinhThucHienHopDongInput.setLyDo(tinhHinhThucHienHopDong.getLyDo());
-
+				
+				if(Objects.nonNull(tinhHinhThucHienHopDong)) {
+					int type = Constants.DINH_KEM_1_FILE;
+					Long fileDinhKemId = null;
+					Long objecId = tinhHinhThucHienHopDong.getHopDongId();
+					String appCode = TinhHinhThucHienHopDong.class.getSimpleName();
+					FileDinhKem fileDinhKem = coreAttachmentBusiness.getAttachments(tinhHinhThucHienHopDong.getThanhToanFileDinhKemId(), appCode, objecId, type);
+					tinhHinhThucHienHopDongInput.setListThanhToanFileDinhKemId(fileDinhKem.getIds());
+					tinhHinhThucHienHopDongInput.setListThanhToanFileDinhKem(fileDinhKem.getFileLists());
+				}
+				if(Objects.nonNull(tinhHinhThucHienHopDong)) {
+					int type = Constants.DINH_KEM_1_FILE;
+					Long fileDinhKemId = null;
+					Long objecId = tinhHinhThucHienHopDong.getHopDongId();
+					String appCode = TinhHinhThucHienHopDong.class.getSimpleName();
+					FileDinhKem fileDinhKem = coreAttachmentBusiness.getAttachments(tinhHinhThucHienHopDong.getHoaDonFileDinhKemId(), appCode, objecId, type);
+					tinhHinhThucHienHopDongInput.setListHoaDonFileDinhKemId(fileDinhKem.getIds());
+					tinhHinhThucHienHopDongInput.setListHoaDonFileDinhKem(fileDinhKem.getFileLists());
+				}
 				listTinhHinhThucHienHopDongInput.add(tinhHinhThucHienHopDongInput);
 			}
 		}
@@ -88,7 +106,25 @@ public class TinhHinhThucHienHopDongBusiness {
 		}
 		tinhHinhThucHienHopDongInput.setGiaTriConLai(giaTriConlai);
 		tinhHinhThucHienHopDongInput.setLyDo(tinhHinhThucHienHopDong.getLyDo());
-
+		
+		if(Objects.nonNull(tinhHinhThucHienHopDong)) {
+			int type = Constants.DINH_KEM_1_FILE;
+			Long fileDinhKemId = null;
+			Long objecId = tinhHinhThucHienHopDong.getId();
+			String appCode = TinhHinhThucHienHopDong.class.getSimpleName();
+			FileDinhKem fileDinhKem = coreAttachmentBusiness.getAttachments(tinhHinhThucHienHopDong.getThanhToanFileDinhKemId(), appCode, objecId, type);
+			tinhHinhThucHienHopDongInput.setListThanhToanFileDinhKemId(fileDinhKem.getIds());
+			tinhHinhThucHienHopDongInput.setListThanhToanFileDinhKem(fileDinhKem.getFileLists());
+		}
+		if(Objects.nonNull(tinhHinhThucHienHopDong)) {
+			int type = Constants.DINH_KEM_1_FILE;
+			Long fileDinhKemId = null;
+			Long objecId = tinhHinhThucHienHopDong.getId();
+			String appCode = TinhHinhThucHienHopDong.class.getSimpleName();
+			FileDinhKem fileDinhKem = coreAttachmentBusiness.getAttachments(tinhHinhThucHienHopDong.getHoaDonFileDinhKemId(), appCode, objecId, type);
+			tinhHinhThucHienHopDongInput.setListHoaDonFileDinhKemId(fileDinhKem.getIds());
+			tinhHinhThucHienHopDongInput.setListHoaDonFileDinhKem(fileDinhKem.getFileLists());
+		}
 		return tinhHinhThucHienHopDongInput;
 	}
 	

@@ -80,9 +80,7 @@ public class ThongTinHopDongController {
 	public ResponseEntity<ThongTinHopDong> update(@PathVariable("id") Long id,
 			@Valid @RequestBody ThongTinHopDongInput thongTinHopDongInput)
 			throws EntityNotFoundException {
-
-		ThongTinHopDong thongTinHopDong = businessThongTinHopDongBusiness.update(id,
-				thongTinHopDongInput);
+		ThongTinHopDong thongTinHopDong = businessThongTinHopDongBusiness.update(id, thongTinHopDongInput);
 		return ResponseEntity.ok(thongTinHopDong);
 	}
 

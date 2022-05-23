@@ -54,7 +54,6 @@ public class ThongTinHopDongBusiness {
 		long count = 0;
 		LocalDate nowDay = LocalDate.now();
 		LocalDate before5day = nowDay.minusDays(5);
-		System.out.println("before5day" + before5day);
 		Long countHopDong = serviceThongTinHopDongService.countByTrangThaiAndThoiGianThDenNgayBetween(
 				Constants.KHTC_QLHD_TRANG_THAI_DANG_THANH_TOAN, before5day, nowDay);
 		if (countHopDong != null) {
@@ -111,12 +110,9 @@ public class ThongTinHopDongBusiness {
 			Long fileDinhKemId = null;
 			Long objectId = thongTinHopDong.getId();
 			String appCode = ThongTinHopDong.class.getSimpleName();
-			System.out.println(thongTinHopDong.getHopDongFileDinhKemId()+"----------------------");
 			FileDinhKem fileDinhKem = coreAttachmentBusiness.getAttachments( thongTinHopDong.getHopDongFileDinhKemId(), appCode, objectId, type);
 			thongTinHopDongInput.setListHopDongFileDinhKemId(fileDinhKem.getIds());
 			thongTinHopDongInput.setListHopDongFileDinhKem(fileDinhKem.getFileLists());
-			
-			System.out.println(objectId + "---+---"+fileDinhKem + appCode + type + fileDinhKemId);
 		}
 		if (Objects.nonNull(thongTinHopDong)) {
 			int type = Constants.DINH_KEM_1_FILE;			
@@ -126,8 +122,6 @@ public class ThongTinHopDongBusiness {
 			FileDinhKem fileDinhKems = coreAttachmentBusiness.getAttachments( thongTinHopDong.getGiayUyQuyenFileDinhKemId(), appCode, objectId, type);
 			thongTinHopDongInput.setListGiayUyQuyenFileDinhKemId(fileDinhKems.getIds());
 			thongTinHopDongInput.setListGiayUyQuyenFileDinhKem(fileDinhKems.getFileLists());
-
-			System.out.println(objectId + "---+---"+fileDinhKems + appCode + type + fileDinhKemId);
 		}
 		if (Objects.nonNull(thongTinHopDong)) {
 			int type = Constants.DINH_KEM_1_FILE;			
@@ -137,8 +131,6 @@ public class ThongTinHopDongBusiness {
 			FileDinhKem fileDinhKemss = coreAttachmentBusiness.getAttachments( thongTinHopDong.getCoCamKetChiFileDinhKemId(), appCode, objectId, type);
 			thongTinHopDongInput.setListCoCamKetChiFileDinhKemId(fileDinhKemss.getIds());
 			thongTinHopDongInput.setListCoCamKetChiFileDinhKem(fileDinhKemss.getFileLists());
-
-			System.out.println(objectId + "---+---"+fileDinhKemss + appCode + type + fileDinhKemId);
 		}
 		return thongTinHopDongInput;
 	}
@@ -493,7 +485,6 @@ public class ThongTinHopDongBusiness {
 			for (Long fileDinhKemId : fileDinhKemIds) {
 				CoreAttachment coreAttachment = coreAttachmentBusiness.dinhKemFile(fileDinhKemId, objectId, type,
 						appCode);
-				System.out.println("===================================================="+ coreAttachment);
 				/* set db nếu có trường lưu và chuyển file từ temp sang thư mục chính */
 				if (coreAttachment.getId() > 0) {
 					thongTinHopDong.setHopDongFileDinhKemId(coreAttachment.getId());

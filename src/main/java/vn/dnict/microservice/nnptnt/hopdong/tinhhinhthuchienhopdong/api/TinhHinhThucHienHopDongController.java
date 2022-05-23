@@ -47,20 +47,6 @@ public class TinhHinhThucHienHopDongController {
 		return ResponseEntity.ok(tinhHinhThucHienHopDongInput);
 	}
 
-//	@GetMapping(value = "/{hopDongId}/tinhhinhthuchien/{tinhHinhThucHienId}/filedinhkem/hoadon")
-//	public ResponseEntity<FileDinhKem> getFileDinhKemHoaDon(@PathVariable("hopDongId") Long hopDongId,
-//			@PathVariable("tinhHinhThucHienId") Long tinhHinhThucHienId) throws EntityNotFoundException {
-//		return ResponseEntity
-//				.ok(businessTinhHinhThucHienHopDongBusiness.getFileDinhKemHoaDon(hopDongId, tinhHinhThucHienId));
-//	}
-//
-//	@GetMapping(value = "/{hopDongId}/tinhhinhthuchien/{tinhHinhThucHienId}/filedinhkem/thanhtoan")
-//	public ResponseEntity<FileDinhKem> getFileDinhKemThanhToan(@PathVariable("hopDongId") Long hopDongId,
-//			@PathVariable("tinhHinhThucHienId") Long tinhHinhThucHienId) throws EntityNotFoundException {
-//		return ResponseEntity
-//				.ok(businessTinhHinhThucHienHopDongBusiness.getFileDinhKemThanhToan(hopDongId, tinhHinhThucHienId));
-//	}
-
 	@PostMapping(value = { "/{hopDongId}/tinhhinhthuchien" })
 	public ResponseEntity<TinhHinhThucHienHopDong> create(@PathVariable("hopDongId") Long hopDongId,
 			@Valid @RequestBody TinhHinhThucHienHopDongInput tinhHinhThucHienHopDongInput)

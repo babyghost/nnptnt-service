@@ -19,7 +19,6 @@ public class TinhHinhThucHienHopDongInput {
 
 	private Long id;
 
-	@NotNull(message = "Dữ liệu hợp đồng không tồn tại")
 	private Long hopDongId;
 
 	@NotNull(message = "Vui lòng nhập đợt thanh toán")
@@ -58,6 +57,4 @@ public class TinhHinhThucHienHopDongInput {
 	@Size(max = 1000, message = "Nhập lý do quá {max} ký tự")
 	private String lyDo;
 
-	private List<Long> fileDinhKemIds = new ArrayList<>();	
-	private FileDinhKem fileDinhKem = new FileDinhKem();
 }
