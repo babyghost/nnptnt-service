@@ -41,10 +41,10 @@ public class CoSoGietMoServiceImpl implements CoSoGietMoService {
 	}
 
 	@Override
-	public Page<CoSoGietMo> findAll(String search, String tenChuCoSo, String dienThoai, String email, Long phuongXaId, 
+	public Page<CoSoGietMo> findAll(String tenCoSo, String tenChuCoSo, String dienThoai, String email, Long phuongXaId, 
 			Long quanHuyenId, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findAll(CoSoGietMoSpecifications.quickSearch(search, tenChuCoSo, dienThoai, email, phuongXaId, 
+		return repo.findAll(CoSoGietMoSpecifications.quickSearch(tenCoSo, tenChuCoSo, dienThoai, email, phuongXaId, 
 				quanHuyenId), pageable);
 	}
 }

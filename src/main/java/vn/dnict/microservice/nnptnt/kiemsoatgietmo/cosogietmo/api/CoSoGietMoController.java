@@ -34,15 +34,15 @@ public class CoSoGietMoController {
 	public ResponseEntity<Page<CoSoGietMoData>> findAll(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "tenCoSo", required = false) String sortBy,
-			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
-			@RequestParam(name = "search", required = false) String search,
+			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
+			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
+			@RequestParam(name = "tenCoSo", required = false) String tenCoSo,
 			@RequestParam(name = "tenChuCoSo", required = false) String tenChuCoSo,
 			@RequestParam(name = "dienThoai", required = false) String dienThoai,
 			@RequestParam(name = "email", required = false) String email,
 			@RequestParam(name = "phuongXaId",required=false) Long phuongXaId,
 			@RequestParam(name = "quanHuyenId",required=false) Long quanHuyenId) {
-		Page<CoSoGietMoData> pageCoSoGietMoData = businessCoSoGietMoBusiness.findAll(page, size, sortBy, sortDir, search, tenChuCoSo,
+		Page<CoSoGietMoData> pageCoSoGietMoData = businessCoSoGietMoBusiness.findAll(page, size, sortBy, sortDir, tenCoSo, tenChuCoSo,
 				dienThoai, email, phuongXaId, quanHuyenId);
 		return ResponseEntity.ok(pageCoSoGietMoData);
 	}

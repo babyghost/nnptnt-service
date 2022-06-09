@@ -31,7 +31,7 @@ public class CoSoGietMoBusiness {
 	@Autowired
 	CoSoGietMoService serviceCoSoGietMoService;
 	
-	public Page<CoSoGietMoData> findAll(int page, int size, String sortBy, String sortDir, String search, String tenChuCoSo, 
+	public Page<CoSoGietMoData> findAll(int page, int size, String sortBy, String sortDir, String tenCoSo, String tenChuCoSo, 
 			String dienThoai, String email, Long phuongXaId, Long quanHuyenId) { 
 		Direction direction;
 		if (sortDir.equals("ASC")) {
@@ -39,7 +39,7 @@ public class CoSoGietMoBusiness {
 		} else {
 			direction = Direction.DESC;
 		}
-		final Page<CoSoGietMo> pageCoSoGietMo = serviceCoSoGietMoService.findAll(search, tenChuCoSo, dienThoai, email, 
+		final Page<CoSoGietMo> pageCoSoGietMo = serviceCoSoGietMoService.findAll(tenCoSo, tenChuCoSo, dienThoai, email, 
 				phuongXaId, quanHuyenId, PageRequest.of(page, size, direction, sortBy));
 		final Page<CoSoGietMoData> pageCoSoGietMoData = pageCoSoGietMo.map(this::convertToCoSoGietMoData);
 		return pageCoSoGietMoData;

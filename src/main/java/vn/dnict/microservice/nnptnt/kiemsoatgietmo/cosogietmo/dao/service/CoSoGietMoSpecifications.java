@@ -13,7 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.cosogietmo.dao.model.CoSoGietMo;
 
 public class CoSoGietMoSpecifications {
-	public static Specification<CoSoGietMo> quickSearch(final String search, final String tenChuCoSo, final String dienThoai,
+	public static Specification<CoSoGietMo> quickSearch(final String tenCoSo, final String tenChuCoSo, final String dienThoai,
 			final String email, final Long phuongXaId, Long quanHuyenId) {
 		return new Specification<CoSoGietMo>() {
 
@@ -24,9 +24,8 @@ public class CoSoGietMoSpecifications {
 
 				List<Predicate> predicates = new ArrayList<>();
 				predicates.add(cb.equal(root.<String>get("daXoa"), false));
-				if (search != null && !search.isEmpty()) {
-					Predicate tencoso = cb.like(cb.lower(root.<String>get("tenCoSo")), "%" + search.toLowerCase() + "%");
-					predicates.add(cb.or(tencoso));
+				if (tenCoSo != null && !tenCoSo.isEmpty()) {
+					predicates.add(cb.like(cb.lower(root.<String>get("tenCoSo")), "%" + tenCoSo.toLowerCase() + "%"));
 				}
 				
 				if (tenChuCoSo != null && !tenChuCoSo.isEmpty()) {

@@ -18,6 +18,6 @@ public interface CoSoGietMoService {
 	
 	public Optional<CoSoGietMo> findByTenCoSo(String tenCoSo);
 
-	public Page<CoSoGietMo> findAll(String search, String tenChuCoSo, String dienThoai, String email, 
+	public Page<CoSoGietMo> findAll(String tenCoSo, String tenChuCoSo, String dienThoai, String email, 
 			Long phuongXaId, Long quanHuyenId, Pageable pageable);
 }
