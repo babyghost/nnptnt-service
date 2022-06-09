@@ -29,7 +29,7 @@ public class CoSoGietMoSpecifications {
 				}
 				
 				if (tenChuCoSo != null && !tenChuCoSo.isEmpty()) {
-					predicates.add(cb.equal(root.<String>get("tenChuCoSo"), tenChuCoSo));
+					predicates.add(cb.like(cb.lower(root.<String>get("tenChuCoSo")), "%" + tenChuCoSo.toLowerCase() + "%"));
 				}
 				
 				if (dienThoai != null && !dienThoai.isEmpty()) {
