@@ -12,16 +12,15 @@ public class DmLoaiNhiemVuData {
 	private Long id;
 
 	@NotBlank(message = "Vui lòng nhập tên")
-	@Size(max = 500, message = "Nhập tên quá {max} ký tự")
+	@Size(max = 100, message = "tên không nhập quá 2500 ký tự")
 	private String ten;
 
-	@Size(max = 50, message = "Nhập mã quá {max} ký tự")
+	@NotBlank(message = "Vui lòng nhập tên")
+	@Size(max = 100, message = "tên không nhập quá 50 ký tự")
 	private String ma;
 
 	@NotNull(message = "Vui lòng chọn trạng thái")
 	private Boolean trangThai;
-
-	private Boolean isDefault;
 
 	private Integer sapXep;
 
