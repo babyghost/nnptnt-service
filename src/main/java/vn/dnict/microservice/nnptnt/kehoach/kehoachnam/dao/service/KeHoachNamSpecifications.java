@@ -34,7 +34,7 @@ public class KeHoachNamSpecifications {
 					predicates.add(cb.equal(root.<String>get("trangThai"), trangThai));
 				}
 				if(soKyHieu != null && soKyHieu.isEmpty()) {
-					predicates.add(cb.like(cb.lower(root.<String>get("soKyHieu")), "%" + tenKeHoach.toLowerCase() + "%"));
+					predicates.add(cb.like(cb.lower(root.<String>get("soKyHieu")), "%" + soKyHieu.toLowerCase() + "%"));
 				}
 				if (ngayBanHanhTuNgay != null) {
 					predicates.add(cb.greaterThanOrEqualTo(root.get("ngayBanHanh").as(LocalDate.class),ngayBanHanhTuNgay));
