@@ -6,7 +6,7 @@ import java.util.Optional;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam2filedinhkem.dao.model.FileDinhKemNhiemVuNam;
 
 public interface FileDinhKemNhiemVuNamService {
-	public FileDinhKemNhiemVuNam save(FileDinhKemNhiemVuNam entity);
+	public FileDinhKemNhiemVuNam save(FileDinhKemNhiemVuNam fileDinhKemNhiemVuNam);
 	
 	public void deleteById(Long id);
 	

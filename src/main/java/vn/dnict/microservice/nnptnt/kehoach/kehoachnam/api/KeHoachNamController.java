@@ -40,7 +40,7 @@ public class KeHoachNamController {
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
 			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
-			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
+			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
 			@RequestParam(name = "tenKeHoach", required = false) String tenKeHoach,
 			@RequestParam(name = "donViChuTriId", required = false) Long donViChuTriId,
 			@RequestParam(name = "nam", required = false) Integer nam,

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import vn.dnict.microservice.nnptnt.kehoach.tiendonhiemvunam.dao.model.TienDoNhiemVuNam;
 import vn.dnict.microservice.nnptnt.kehoach.tiendonhiemvunam.dao.service.TienDoNhiemVuNamService;
@@ -15,6 +16,7 @@ import vn.dnict.microservice.nnptnt.kehoach.tiendonhiemvunam.dao.service.TienDoN
 import vn.dnict.microservice.nnptnt.kehoach.tiendonhiemvunam.dao.service.repo.TienDoNhiemVuNamRepo;
 
 @Service
+@Transactional
 public class TienDoNhiemVuNamServiceImpl implements TienDoNhiemVuNamService {
 	
 	@Autowired

@@ -90,8 +90,6 @@ public class NhiemVuNamBusiness {
 					}
 				}
 				nhiemVuNamData.setKhNam(optionalKeHoachNam.get().getNam());
-				nhiemVuNamData.setKhSoKyHieu(optionalKeHoachNam.get().getSoKyHieu());
-				nhiemVuNamData.setKhNgayBanHanh(optionalKeHoachNam.get().getNgayBanHanh());;
 			}
 		}
 		nhiemVuNamData.setNhiemVuChaId(nhiemVuNam.getNhiemVuChaId());
@@ -125,6 +123,7 @@ public class NhiemVuNamBusiness {
 				tienDoNhiemVuNamDatas.add(tienDoNhiemVuNamData);
 			}
 		}
+		nhiemVuNamData.setTienDoNhiemVuNamDatas(tienDoNhiemVuNamDatas);
 		return nhiemVuNamData;
 	}
 	
@@ -134,7 +133,54 @@ public class NhiemVuNamBusiness {
 			throw new EntityNotFoundException(NhiemVuNam.class, "id", String.valueOf(id));
 		}
 		NhiemVuNam nhiemVuNam = optional.get();
-		return this.convertToNhiemVuNamData(nhiemVuNam);
+		NhiemVuNamData nhiemVuNamData = new NhiemVuNamData();
+		nhiemVuNamData.setId(nhiemVuNam.getId());
+		nhiemVuNamData.setKeHoachNamId(nhiemVuNam.getKeHoachNamId());
+		if(nhiemVuNam.getKeHoachNamId() != null && nhiemVuNam.getKeHoachNamId() > 0) {
+			Optional<KeHoachNam> optKeHoachNam = serviceKeHoachNamService.findById(nhiemVuNam.getKeHoachNamId());
+			if(optKeHoachNam.isPresent()) {
+				nhiemVuNamData.setKeHoachNamTen(optKeHoachNam.get().getTenKeHoach());
+				nhiemVuNamData.setKhDonViChuTriId(optKeHoachNam.get().getDonViChuTriId());
+				if(optKeHoachNam.get().getDonViChuTriId() != null && optKeHoachNam.get().getDonViChuTriId() > 0) {
+					Optional<DmDonVi> optDonVi = serviceDmDonViService.findById(optKeHoachNam.get().getDonViChuTriId());
+					if(optDonVi.isPresent()) {
+						nhiemVuNamData.setKhDonViChuTriTen(optDonVi.get().getTenDonVi());
+					}
+				}
+				nhiemVuNamData.setKhNam(optKeHoachNam.get().getNam());
+			}
+		}
+		nhiemVuNamData.setNhiemVuChaId(nhiemVuNam.getNhiemVuChaId());
+		nhiemVuNamData.setTenNhiemVu(nhiemVuNam.getTenNhiemVu());
+		nhiemVuNamData.setSapXep(nhiemVuNam.getSapXep());
+		nhiemVuNamData.setDonViPhoiHop(nhiemVuNam.getDonViPhoiHop());
+		nhiemVuNamData.setTuNgay(nhiemVuNam.getTuNgay());
+		nhiemVuNamData.setDenNgay(nhiemVuNam.getDenNgay());
+		nhiemVuNamData.setLoaiNhiemVuId(nhiemVuNam.getLoaiNhiemVuId());
+		if(nhiemVuNam.getLoaiNhiemVuId() != null && nhiemVuNam.getLoaiNhiemVuId() > 0) {
+			Optional<DmLoaiNhiemVu> optLoaiNhiemVu = serviceDmLoaiNhiemVuService.findById(nhiemVuNam.getLoaiNhiemVuId());
+			if(optLoaiNhiemVu.isPresent()) {
+				nhiemVuNamData.setLoaiNhiemVuTen(optLoaiNhiemVu.get().getTen());
+				nhiemVuNamData.setLoaiNvMa(optLoaiNhiemVu.get().getMa());
+			}
+		}
+		nhiemVuNamData.setGhiChu(nhiemVuNam.getGhiChu());
+		
+		List<TienDoNhiemVuNamData> tienDoNhiemVuNamDatas = new ArrayList<>();
+		List<TienDoNhiemVuNam> tienDoNhiemVuNams = serviceTienDoNhiemVuNamService.findByNhiemVuNamIdAndDaXoa(nhiemVuNam.getId(), false);
+		if(Objects.nonNull(tienDoNhiemVuNams) && !tienDoNhiemVuNams.isEmpty()) {
+			for(TienDoNhiemVuNam tienDoNhiemVuNam : tienDoNhiemVuNams) {
+				TienDoNhiemVuNamData tienDoNhiemVuNamData = new TienDoNhiemVuNamData();
+				tienDoNhiemVuNamData.setId(tienDoNhiemVuNam.getId());
+				tienDoNhiemVuNamData.setTinhTrang(tienDoNhiemVuNam.getTinhTrang());
+				tienDoNhiemVuNamData.setMucDoHoanThanh(tienDoNhiemVuNam.getMucDoHoanThanh());
+				tienDoNhiemVuNamData.setNgayBaoCao(tienDoNhiemVuNam.getNgayBaoCao());
+				tienDoNhiemVuNamData.setKetQua(tienDoNhiemVuNam.getKetQua());;
+				tienDoNhiemVuNamDatas.add(tienDoNhiemVuNamData);
+			}
+		}
+		nhiemVuNamData.setTienDoNhiemVuNamDatas(tienDoNhiemVuNamDatas);
+		return nhiemVuNamData;
 	}
 	
 	public KeHoachNamData findByKeHoachNamId(Long id) throws EntityNotFoundException {
@@ -187,7 +233,7 @@ public class NhiemVuNamBusiness {
 		return keHoachNamData;
 	}
 	
-	public NhiemVuNamData create(NhiemVuNamData nhiemVuNamData) throws MethodArgumentNotValidException {	
+	public NhiemVuNam create(NhiemVuNamData nhiemVuNamData) throws MethodArgumentNotValidException {	
 		NhiemVuNam nhiemVuNam = new NhiemVuNam();
 		nhiemVuNam.setDaXoa(false);
 		nhiemVuNam.setKeHoachNamId(nhiemVuNamData.getKeHoachNamId());
@@ -201,10 +247,30 @@ public class NhiemVuNamBusiness {
 		nhiemVuNam.setGhiChu(nhiemVuNamData.getGhiChu());
 		nhiemVuNam = serviceNhiemVuNamService.save(nhiemVuNam);
 
-		return this.convertToNhiemVuNamData(nhiemVuNam);		
+		serviceTienDoNhiemVuNamService.setFixedDaXoaForNhiemVuNamId(false, nhiemVuNam.getId());
+		List<TienDoNhiemVuNamData> tienDoNhiemVuNamDatas = nhiemVuNamData.getTienDoNhiemVuNamDatas();
+		if(Objects.nonNull(tienDoNhiemVuNamDatas) && !tienDoNhiemVuNamDatas.isEmpty()) {
+			for(TienDoNhiemVuNamData tienDoNhiemVuNamData : tienDoNhiemVuNamDatas) {
+				TienDoNhiemVuNam tienDoNhiemVuNam = new TienDoNhiemVuNam();
+				if(Objects.nonNull(tienDoNhiemVuNam.getId())) {
+					Optional<TienDoNhiemVuNam> optTienDo = serviceTienDoNhiemVuNamService.findById(tienDoNhiemVuNamData.getId());
+					if(optTienDo.isPresent()) {
+						tienDoNhiemVuNam = optTienDo.get();
+					}
+				}
+				tienDoNhiemVuNam.setId(tienDoNhiemVuNamData.getId());
+				tienDoNhiemVuNam.setNhiemVuNamId(tienDoNhiemVuNamData.getNhiemVuNamId());
+				tienDoNhiemVuNam.setTinhTrang(tienDoNhiemVuNamData.getTinhTrang());
+				tienDoNhiemVuNam.setMucDoHoanThanh(tienDoNhiemVuNamData.getMucDoHoanThanh());
+				tienDoNhiemVuNam.setNgayBaoCao(tienDoNhiemVuNamData.getNgayBaoCao());
+				tienDoNhiemVuNam.setKetQua(tienDoNhiemVuNamData.getKetQua());
+				serviceTienDoNhiemVuNamService.save(tienDoNhiemVuNam);
+			}
+		}		
+		return nhiemVuNam;		
 	}
 	
-	public NhiemVuNamData update(Long id, NhiemVuNamData nhiemVuNamData) throws EntityNotFoundException {
+	public NhiemVuNam update(Long id, NhiemVuNamData nhiemVuNamData) throws EntityNotFoundException {
 		Optional<NhiemVuNam> optional = serviceNhiemVuNamService.findById(id);
 		if(!optional.isPresent()) {
 			throw new EntityNotFoundException(NhiemVuNam.class, "id", String.valueOf(id));
@@ -221,7 +287,27 @@ public class NhiemVuNamBusiness {
 		nhiemVuNam.setGhiChu(nhiemVuNamData.getGhiChu());
 		nhiemVuNam = serviceNhiemVuNamService.save(nhiemVuNam);
 		
-		return this.convertToNhiemVuNamData(nhiemVuNam);
+		serviceTienDoNhiemVuNamService.setFixedDaXoaForNhiemVuNamId(false, nhiemVuNam.getId());
+		List<TienDoNhiemVuNamData> tienDoNhiemVuNamDatas = nhiemVuNamData.getTienDoNhiemVuNamDatas();
+		if(Objects.nonNull(tienDoNhiemVuNamDatas) && !tienDoNhiemVuNamDatas.isEmpty()) {
+			for(TienDoNhiemVuNamData tienDoNhiemVuNamData : tienDoNhiemVuNamDatas) {
+				TienDoNhiemVuNam tienDoNhiemVuNam = new TienDoNhiemVuNam();
+				if(Objects.nonNull(tienDoNhiemVuNam.getId())) {
+					Optional<TienDoNhiemVuNam> optTienDo = serviceTienDoNhiemVuNamService.findById(tienDoNhiemVuNamData.getId());
+					if(optTienDo.isPresent()) {
+						tienDoNhiemVuNam = optTienDo.get();
+					}
+				}
+				tienDoNhiemVuNam.setId(tienDoNhiemVuNamData.getId());
+				tienDoNhiemVuNam.setNhiemVuNamId(tienDoNhiemVuNamData.getNhiemVuNamId());
+				tienDoNhiemVuNam.setTinhTrang(tienDoNhiemVuNamData.getTinhTrang());
+				tienDoNhiemVuNam.setMucDoHoanThanh(tienDoNhiemVuNamData.getMucDoHoanThanh());
+				tienDoNhiemVuNam.setNgayBaoCao(tienDoNhiemVuNamData.getNgayBaoCao());
+				tienDoNhiemVuNam.setKetQua(tienDoNhiemVuNamData.getKetQua());
+				serviceTienDoNhiemVuNamService.save(tienDoNhiemVuNam);
+			}
+		}
+		return nhiemVuNam;
 	}
 	
 	@DeleteMapping(value = { "/{id}" })

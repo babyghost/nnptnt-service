@@ -33,7 +33,7 @@ public class KeHoachNamSpecifications {
 				if(trangThai != null) {
 					predicates.add(cb.equal(root.<String>get("trangThai"), trangThai));
 				}
-				if(soKyHieu != null && soKyHieu.isEmpty()) {
+				if(soKyHieu != null && !soKyHieu.isEmpty()) {
 					predicates.add(cb.like(cb.lower(root.<String>get("soKyHieu")), "%" + soKyHieu.toLowerCase() + "%"));
 				}
 				if (ngayBanHanhTuNgay != null) {

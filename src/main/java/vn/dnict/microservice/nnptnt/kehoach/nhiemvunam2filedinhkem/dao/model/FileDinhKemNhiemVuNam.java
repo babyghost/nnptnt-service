@@ -31,7 +31,7 @@ public class FileDinhKemNhiemVuNam {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "filedinhkem_id")
+	@Column(name = "dinhkemfile_id")
 	private long fileDinhKemId;
 
 	@Column(name = "tiendonvnam_id")

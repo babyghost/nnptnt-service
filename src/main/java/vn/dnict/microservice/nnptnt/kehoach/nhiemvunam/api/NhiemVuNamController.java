@@ -43,7 +43,7 @@ public class NhiemVuNamController {
 	public ResponseEntity<Page<NhiemVuNamData>> findAll(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "tenNhiemVu", required = false) String sortBy,
+			@RequestParam(name = "sortBy", defaultValue = "tuNgay", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
 			@RequestParam(name = "keHoachId",required = false) Long keHoachId,
 			@RequestParam(name = "tenNhiemVu", required = false) String tenNhiemVu,
@@ -67,16 +67,16 @@ public class NhiemVuNamController {
 	}
 
 	@PostMapping(value = { "" })
-	public ResponseEntity<NhiemVuNamData> create(@Valid @RequestBody NhiemVuNamData nhiemVuNamData) throws MethodArgumentNotValidException {
-		nhiemVuNamData = businessNhiemVuNamBusiness.create(nhiemVuNamData);
-		return ResponseEntity.status(HttpStatus.CREATED).body(nhiemVuNamData);
+	public ResponseEntity<NhiemVuNam> create(@Valid @RequestBody NhiemVuNamData nhiemVuNamData) throws MethodArgumentNotValidException {
+		NhiemVuNam nhiemVuNam = businessNhiemVuNamBusiness.create(nhiemVuNamData);
+		return ResponseEntity.status(HttpStatus.CREATED).body(nhiemVuNam);
 	}
 
 	@PutMapping(value = { "/{id}" })
-	public ResponseEntity<NhiemVuNamData> update(@PathVariable("id") Long id, @Valid @RequestBody NhiemVuNamData nhiemVuNamData)
+	public ResponseEntity<NhiemVuNam> update(@PathVariable("id") Long id, @Valid @RequestBody NhiemVuNamData nhiemVuNamData)
 			throws EntityNotFoundException, MethodArgumentNotValidException {
-		nhiemVuNamData = businessNhiemVuNamBusiness.update(id, nhiemVuNamData);
-		return ResponseEntity.ok(nhiemVuNamData);
+		NhiemVuNam nhiemVuNam = businessNhiemVuNamBusiness.update(id, nhiemVuNamData);
+		return ResponseEntity.ok(nhiemVuNam);
 	}
 	
 	@DeleteMapping(value = { "/{id}" })

@@ -5,12 +5,14 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam2filedinhkem.dao.model.FileDinhKemNhiemVuNam;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam2filedinhkem.dao.service.FileDinhKemNhiemVuNamService;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam2filedinhkem.dao.service.repo.FileDinhKemNhiemVuNamRepo;
 
 @Service
+@Transactional
 public class FileDinhKemNhiemVuNamServiceImpl implements FileDinhKemNhiemVuNamService {
 	@Autowired
 	FileDinhKemNhiemVuNamRepo repo;

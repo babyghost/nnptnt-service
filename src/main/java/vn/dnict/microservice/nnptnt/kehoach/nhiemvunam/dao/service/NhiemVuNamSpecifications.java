@@ -29,7 +29,7 @@ public class NhiemVuNamSpecifications {
 					predicates.add(cb.equal(root.<Long>get("keHoachNamId"), keHoachNamId));
 				}
 				if (tenNhiemVu != null && !tenNhiemVu.isEmpty()) {
-					predicates.add(cb.equal(root.<String>get("tenNhiemVu"), tenNhiemVu));
+					predicates.add(cb.like(cb.lower(root.<String>get("tenNhiemVu")), "%" + tenNhiemVu.toLowerCase() + "%"));
 				}
 				if (tuNgay != null) {
 					predicates.add(cb.greaterThanOrEqualTo(root.get("tuNgay").as(LocalDate.class),tuNgay));
