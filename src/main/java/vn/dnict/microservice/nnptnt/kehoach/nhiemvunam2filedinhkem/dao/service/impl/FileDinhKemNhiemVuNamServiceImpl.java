@@ -1,0 +1,60 @@
+package vn.dnict.microservice.nnptnt.kehoach.nhiemvunam2filedinhkem.dao.service.impl;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam2filedinhkem.dao.model.FileDinhKemNhiemVuNam;
+import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam2filedinhkem.dao.service.FileDinhKemNhiemVuNamService;
+import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam2filedinhkem.dao.service.repo.FileDinhKemNhiemVuNamRepo;
+
+@Service
+public class FileDinhKemNhiemVuNamServiceImpl implements FileDinhKemNhiemVuNamService {
+	@Autowired
+	FileDinhKemNhiemVuNamRepo repo;
+
+	@Override
+	public FileDinhKemNhiemVuNam save(FileDinhKemNhiemVuNam fileDinhKemNhiemVuNam) {
+		// TODO Auto-generated method stub
+		return repo.save(fileDinhKemNhiemVuNam);
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		// TODO Auto-generated method stub
+		repo.deleteById(id);
+	}
+
+	@Override
+	public Optional<FileDinhKemNhiemVuNam> findById(Long id) {
+		// TODO Auto-generated method stub
+		return repo.findById(id);
+	}
+
+	@Override
+	public List<FileDinhKemNhiemVuNam> findByFileDinhKemIdAndDaXoa(Long fileDinhKemId, Boolean daXoa) {
+		// TODO Auto-generated method stub
+		return repo.findByFileDinhKemIdAndDaXoa(fileDinhKemId, daXoa);
+	}
+
+	@Override
+	public int setFixedDaXoaForTienDoNhiemVuNamId(Boolean daXoa, Long tienDoNhiemVuNamId) {
+		// TODO Auto-generated method stub
+		return repo.setFixedDaXoaForTienDoNhiemVuNamId(daXoa, tienDoNhiemVuNamId);
+	}
+
+	@Override
+	public Optional<FileDinhKemNhiemVuNam> findByTienDoNhiemVuNamId(Long tienDoNhiemVuNamId) {
+		// TODO Auto-generated method stub
+		return repo.findByTienDoNhiemVuNamId(tienDoNhiemVuNamId);
+	}
+
+	@Override
+	public List<FileDinhKemNhiemVuNam> findByFileDinhKemIdAndTienDoNhiemVuNamId(Long fileDinhKemId, Long tienDoNhiemVuNamId) {
+		// TODO Auto-generated method stub
+		return repo.findByFileDinhKemIdAndTienDoNhiemVuNamId(fileDinhKemId, tienDoNhiemVuNamId);
+	}
+
+}
