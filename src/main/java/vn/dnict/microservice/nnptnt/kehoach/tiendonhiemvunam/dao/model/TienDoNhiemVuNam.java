@@ -11,13 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -25,9 +21,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
+import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.model.NhiemVuNam;
 
 @Entity
 @Table(name = "qlkh_tiendonhiemvunam")
@@ -41,6 +37,10 @@ public class TienDoNhiemVuNam {
 	
 	@Column(name = "nhiemvunam_id")
 	private Long nhiemVuNamId;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "nhiemvunam_id", referencedColumnName = "id", updatable = false, insertable = false)
+	private NhiemVuNam nhiemVuNam;
 	
 	@Column(name = "tinhtrang")
 	private Boolean tinhTrang;

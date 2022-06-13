@@ -16,14 +16,11 @@ public class TienDoNhiemVuNamData {
 	private Long nhiemVuNamId;	
 	private String nhiemVuNamTen;
 	private Long nvNamNhiemVuChaId;	
-	private String nvNamDonViPhoiHop;
-	
+	private String nvNamDonViPhoiHop;	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private LocalDate nvNamTuNgay;
-	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-	private LocalDate nvNamDenNgay;
-	
+	private LocalDate nvNamDenNgay;	
 	private String nvNamGhiChu;
 	
 	private Boolean tinhTrang;

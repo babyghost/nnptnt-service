@@ -15,6 +15,6 @@ public interface KeHoachNamService {
 	
 	public Optional<KeHoachNam> findById(Long id);
 	
-	public Page<KeHoachNam> findAll(Integer nam, String tenKeHoach, Boolean trangThai, String soKyHieu, LocalDate ngayBanHanhTuNgay,
+	public Page<KeHoachNam> findAll(Long donViChuTriId, Integer nam, String tenKeHoach, Boolean trangThai, String soKyHieu, LocalDate ngayBanHanhTuNgay,
 			LocalDate ngayBanHanh, Pageable pageable);
 }

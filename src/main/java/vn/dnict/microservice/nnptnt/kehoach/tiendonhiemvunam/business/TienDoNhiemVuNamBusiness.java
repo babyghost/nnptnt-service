@@ -146,6 +146,7 @@ public class TienDoNhiemVuNamBusiness {
 		nhiemVuNamData.setTuNgay(nhiemVuNam.getTuNgay());
 		nhiemVuNamData.setDenNgay(nhiemVuNam.getDenNgay());
 		nhiemVuNamData.setGhiChu(nhiemVuNam.getGhiChu());
+		nhiemVuNamData.setDanhSo(nhiemVuNam.getDanhSo());
 		
 		return nhiemVuNamData;
 	}

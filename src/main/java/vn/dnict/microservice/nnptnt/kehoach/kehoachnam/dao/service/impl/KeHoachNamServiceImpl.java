@@ -39,10 +39,10 @@ public class KeHoachNamServiceImpl implements KeHoachNamService {
 	}
 
 	
-	public Page<KeHoachNam> findAll(Integer nam, String tenKeHoach, Boolean trangThai, String soKyHieu, LocalDate ngayBanHanhTuNgay,
+	public Page<KeHoachNam> findAll(Long donViChuTriId, Integer nam, String tenKeHoach, Boolean trangThai, String soKyHieu, LocalDate ngayBanHanhTuNgay,
 			LocalDate ngayBanHanhDenNgay, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findAll(KeHoachNamSpecifications.quickSearch(nam, tenKeHoach, trangThai, soKyHieu, ngayBanHanhTuNgay,
+		return repo.findAll(KeHoachNamSpecifications.quickSearch(donViChuTriId, nam, tenKeHoach, trangThai, soKyHieu, ngayBanHanhTuNgay,
 				ngayBanHanhDenNgay),pageable);
 	}
 }

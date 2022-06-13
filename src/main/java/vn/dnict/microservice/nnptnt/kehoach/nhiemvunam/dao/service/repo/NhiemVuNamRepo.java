@@ -16,8 +16,6 @@ public interface NhiemVuNamRepo extends JpaRepository<NhiemVuNam, Long>, JpaSpec
 	
 	public List<NhiemVuNam> findByKeHoachNamIdAndDaXoa(Long keHoachNamId, Boolean daXoa);
 	
-//	public List<NhiemVuNam> findByNhiemVuChaIdAndDaXoa(Long nhiemVuChaId, Boolean daXoa);
-	
 	@Query(name = "SELECT u FROM NhiemVuNam u WHERE u.keHoachNamId = ?1 AND u.nhiemVuChaId IS NULL AND u.daXoa = ?2 ORDER BY u.sapXep DESC", nativeQuery = true)
 	public List<NhiemVuNam> getByKeHoachNamIdAndNhiemVuChaIdIsNullAndDaXoa(Long keHoachNamId, Boolean daXoa);
 	
@@ -27,6 +25,6 @@ public interface NhiemVuNamRepo extends JpaRepository<NhiemVuNam, Long>, JpaSpec
 	@Modifying(clearAutomatically = true)
 	@Query("update NhiemVuNam u set u.daXoa = ?1 where u.keHoachNamId = ?2")
 	public int setFixedDaXoaForKeHoachNamId(Boolean daXoa, Long keHoachNamId);
-	
+		
 	public Optional<NhiemVuNam> findByKeHoachNamId(Long keHoachNamId);
 }

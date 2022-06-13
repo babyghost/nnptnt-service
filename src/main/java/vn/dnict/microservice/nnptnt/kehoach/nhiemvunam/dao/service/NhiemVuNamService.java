@@ -18,8 +18,6 @@ public interface NhiemVuNamService {
 	
 	public List<NhiemVuNam> findByKeHoachNamIdAndDaXoa(Long keHoachNamId, Boolean daXoa);
 	
-//	public List<NhiemVuNam> findByNhiemVuChaIdAndDaXoa(Long nhiemVuChaId, Boolean daXoa);
-	
 	public List<NhiemVuNam> getByKeHoachNamIdAndNhiemVuChaIdIsNullAndDaXoa(Long keHoachNamId, Boolean daXoa);
 	
 	public List<NhiemVuNam> getByKeHoachNamIdAndNhiemVuChaIdAndDaXoa(Long keHoachNamId, Long nhiemVuCha, Boolean daXoa);
@@ -28,5 +26,8 @@ public interface NhiemVuNamService {
 	
 	public Optional<NhiemVuNam> findByKeHoachNamId(Long keHoachNamId);
 	
-	public Page<NhiemVuNam> findAll(Long keHoachNamId, String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay, Pageable pageable);
+	public Page<NhiemVuNam> findAll(Long donViChuTriId, Long keHoachNamId, Integer nam, Boolean tinhTrang, String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay, Pageable pageable);
+	
+	public Page<NhiemVuNam> tongHopKeHoachNam(Long donViChuTriId, Long keHoachNamId, Integer nam, Boolean tinhTrang, String tenNhiemVu, LocalDate tuNgay,
+			LocalDate denNgay, Pageable pageable);
 }

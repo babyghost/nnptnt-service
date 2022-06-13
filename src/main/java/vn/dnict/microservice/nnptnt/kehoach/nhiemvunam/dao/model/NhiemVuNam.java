@@ -7,17 +7,14 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -25,10 +22,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 import vn.dnict.microservice.nnptnt.kehoach.kehoachnam.dao.model.KeHoachNam;
+import vn.dnict.microservice.nnptnt.kehoach.tiendonhiemvunam.dao.model.TienDoNhiemVuNam;
 
 @Entity
 @Table(name = "qlkh_nhiemvunam")
@@ -42,6 +39,14 @@ public class NhiemVuNam {
 	
 	@Column(name = "kehoach_id")
 	private Long keHoachNamId;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "kehoach_id", referencedColumnName = "id", updatable = false, insertable = false)
+	private KeHoachNam keHoachNam;
+	
+	@JsonIgnore
+	@OneToOne(mappedBy = "nhiemVuNam", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private TienDoNhiemVuNam tienDoNhiemVuNam;
 
 	@Column(name = "tennhiemvu", length = 500)
 	private String tenNhiemVu;
@@ -86,5 +91,8 @@ public class NhiemVuNam {
 	
 	@JsonIgnore
 	@Column(name = "daxoa")
-	private boolean daXoa;
+	private Boolean daXoa;
+	
+	@Column(name = "danhso")
+	private Integer danhSo;
 }

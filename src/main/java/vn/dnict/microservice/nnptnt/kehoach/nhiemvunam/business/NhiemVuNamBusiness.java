@@ -11,31 +11,25 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
-import vn.dnict.microservice.core.business.CoreAttachmentBusiness;
-import vn.dnict.microservice.core.dao.model.CoreAttachment;
-import vn.dnict.microservice.core.data.FileDinhKem;
 import vn.dnict.microservice.danhmuc.dao.model.DmDonVi;
 import vn.dnict.microservice.danhmuc.dao.service.DmDonViService;
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
-import vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.dao.model.KeHoachTiemPhong;
 import vn.dnict.microservice.nnptnt.dm.loainhiemvu.dao.model.DmLoaiNhiemVu;
 import vn.dnict.microservice.nnptnt.dm.loainhiemvu.dao.service.DmLoaiNhiemVuService;
 import vn.dnict.microservice.nnptnt.kehoach.data.KeHoachNamData;
 import vn.dnict.microservice.nnptnt.kehoach.data.NhiemVuNamData;
+import vn.dnict.microservice.nnptnt.kehoach.data.ThongKeKeHoachNamData;
 import vn.dnict.microservice.nnptnt.kehoach.data.TienDoNhiemVuNamData;
 import vn.dnict.microservice.nnptnt.kehoach.kehoachnam.dao.model.KeHoachNam;
 import vn.dnict.microservice.nnptnt.kehoach.kehoachnam.dao.service.KeHoachNamService;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.model.NhiemVuNam;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.service.NhiemVuNamService;
-import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam2filedinhkem.dao.model.FileDinhKemNhiemVuNam;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam2filedinhkem.dao.service.FileDinhKemNhiemVuNamService;
 import vn.dnict.microservice.nnptnt.kehoach.tiendonhiemvunam.dao.model.TienDoNhiemVuNam;
 import vn.dnict.microservice.nnptnt.kehoach.tiendonhiemvunam.dao.service.TienDoNhiemVuNamService;
-import vn.dnict.microservice.utils.Constants;
 
 @Service
 public class NhiemVuNamBusiness {
@@ -52,24 +46,21 @@ public class NhiemVuNamBusiness {
 	DmDonViService serviceDmDonViService;
 	
 	@Autowired
-	private CoreAttachmentBusiness coreAttachmentBusiness;
-	
-	@Autowired
 	TienDoNhiemVuNamService serviceTienDoNhiemVuNamService;
 	
 	@Autowired
 	FileDinhKemNhiemVuNamService serviceFileDinhKemNhiemVuNamService;
 	
-	public Page<NhiemVuNamData> findAll(int page, int size, String sortBy, String sortDir, Long keHoachId, String tenNhiemVu,
-			LocalDate tuNgay, LocalDate denNgay) {
+	public Page<NhiemVuNamData> findAll(int page, int size, String sortBy, String sortDir, Long donViChuTriId, Long keHoachNamId,
+			Integer nam, Boolean tinhTrang, String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-		final Page<NhiemVuNam> pageNhiemVuNam = serviceNhiemVuNamService.findAll(keHoachId, tenNhiemVu, tuNgay, denNgay,
-				PageRequest.of(page, size, direction, sortBy));
+		final Page<NhiemVuNam> pageNhiemVuNam = serviceNhiemVuNamService.findAll(donViChuTriId, keHoachNamId, nam, tinhTrang, 
+				tenNhiemVu, tuNgay, denNgay, PageRequest.of(page, size, direction, sortBy));
 		final Page<NhiemVuNamData> pageNhiemVuNamData = pageNhiemVuNam.map(this::convertToNhiemVuNamData);
 		return pageNhiemVuNamData;
 	}
@@ -80,16 +71,19 @@ public class NhiemVuNamBusiness {
 		nhiemVuNamData.setKeHoachNamId(nhiemVuNam.getKeHoachNamId());
 		if(nhiemVuNam.getKeHoachNamId() != null && nhiemVuNam.getKeHoachNamId() > 0) {
 			Optional<KeHoachNam> optionalKeHoachNam = serviceKeHoachNamService.findById(nhiemVuNam.getKeHoachNamId());
-			if(!optionalKeHoachNam.isPresent()) {
+			if(optionalKeHoachNam.isPresent()) {
 				nhiemVuNamData.setKeHoachNamTen(optionalKeHoachNam.get().getTenKeHoach());
 				nhiemVuNamData.setKhDonViChuTriId(optionalKeHoachNam.get().getDonViChuTriId());
 				if(optionalKeHoachNam.get().getDonViChuTriId() != null && optionalKeHoachNam.get().getDonViChuTriId() > 0) {
 					Optional<DmDonVi> optionalDmDonVi = serviceDmDonViService.findById(optionalKeHoachNam.get().getDonViChuTriId());
 					if(optionalDmDonVi.isPresent()) {
 						nhiemVuNamData.setKhDonViChuTriTen(optionalDmDonVi.get().getTenDonVi());
+						nhiemVuNamData.setKhDonViChuTriId(optionalDmDonVi.get().getId());
 					}
 				}
 				nhiemVuNamData.setKhNam(optionalKeHoachNam.get().getNam());
+				nhiemVuNamData.setKhSoKyHieu(optionalKeHoachNam.get().getSoKyHieu());
+				nhiemVuNamData.setKhNgayBanHanh(optionalKeHoachNam.get().getNgayBanHanh());
 			}
 		}
 		nhiemVuNamData.setNhiemVuChaId(nhiemVuNam.getNhiemVuChaId());
@@ -107,6 +101,7 @@ public class NhiemVuNamBusiness {
 			}
 		}
 		nhiemVuNamData.setGhiChu(nhiemVuNam.getGhiChu());
+		nhiemVuNamData.setDanhSo(nhiemVuNam.getDanhSo());
 		
 		List<TienDoNhiemVuNamData> tienDoNhiemVuNamDatas = new ArrayList<>();
 		List<TienDoNhiemVuNam> tienDoNhiemVuNams = serviceTienDoNhiemVuNamService
@@ -115,6 +110,16 @@ public class NhiemVuNamBusiness {
 			for (TienDoNhiemVuNam tienDoNhiemVuNam : tienDoNhiemVuNams) {
 				TienDoNhiemVuNamData tienDoNhiemVuNamData = new TienDoNhiemVuNamData();
 				tienDoNhiemVuNamData.setId(tienDoNhiemVuNam.getId());
+				tienDoNhiemVuNamData.setNhiemVuNamId(tienDoNhiemVuNam.getNhiemVuNamId());
+				if(tienDoNhiemVuNam.getNhiemVuNamId() != null && tienDoNhiemVuNam.getNhiemVuNamId() > 0) {
+					Optional<NhiemVuNam> optNhiemVu = serviceNhiemVuNamService.findById(tienDoNhiemVuNam.getNhiemVuNamId());
+					if(optNhiemVu.isPresent()) {
+						tienDoNhiemVuNamData.setNhiemVuNamTen(optNhiemVu.get().getTenNhiemVu());
+						tienDoNhiemVuNamData.setNvNamNhiemVuChaId(optNhiemVu.get().getNhiemVuChaId());
+						tienDoNhiemVuNamData.setNvNamDonViPhoiHop(optNhiemVu.get().getDonViPhoiHop());
+						tienDoNhiemVuNamData.setNvNamGhiChu(optNhiemVu.get().getGhiChu());
+					}
+				}
 				tienDoNhiemVuNamData.setTinhTrang(tienDoNhiemVuNam.getTinhTrang());
 				tienDoNhiemVuNamData.setMucDoHoanThanh(tienDoNhiemVuNam.getMucDoHoanThanh());
 				tienDoNhiemVuNamData.setNgayBaoCao(tienDoNhiemVuNam.getNgayBaoCao());
@@ -125,6 +130,64 @@ public class NhiemVuNamBusiness {
 		}
 		nhiemVuNamData.setTienDoNhiemVuNamDatas(tienDoNhiemVuNamDatas);
 		return nhiemVuNamData;
+	}
+	
+	public Page<ThongKeKeHoachNamData> thongKeKeHoachNam(int page, int size, String sortBy, String sortDir, Long donViChuTriId,
+			Long keHoachNamId, Integer nam, Boolean tinhTrang,  String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay) {
+		Direction direction;
+		if (sortDir.equals("ASC")) {
+			direction = Direction.ASC;
+		} else {
+			direction = Direction.DESC;
+		}
+		final Page<NhiemVuNam> pageNhiemVuNam = serviceNhiemVuNamService.findAll(donViChuTriId, keHoachNamId, nam, tinhTrang,
+				tenNhiemVu, tuNgay, denNgay, PageRequest.of(page, size, direction, sortBy));
+		final Page<ThongKeKeHoachNamData> pageThongKeKeHoach = pageNhiemVuNam.map(this::convertToThongKeKeHoachNamData);
+		return pageThongKeKeHoach;
+	}
+	
+	private ThongKeKeHoachNamData convertToThongKeKeHoachNamData(NhiemVuNam nhiemVuNam) {
+		ThongKeKeHoachNamData thongKeKeHoachData = new ThongKeKeHoachNamData();
+		thongKeKeHoachData.setKeHoachNamId(nhiemVuNam.getKeHoachNamId());
+		if(nhiemVuNam.getKeHoachNamId() != null && nhiemVuNam.getKeHoachNamId() > 0) {
+			Optional<KeHoachNam> optionalKeHoachNam = serviceKeHoachNamService.findById(nhiemVuNam.getKeHoachNamId());
+			if(optionalKeHoachNam.isPresent()) {
+				thongKeKeHoachData.setKeHoachNamTen(optionalKeHoachNam.get().getTenKeHoach());
+				thongKeKeHoachData.setKhDonViChuTriId(optionalKeHoachNam.get().getDonViChuTriId());
+				if(optionalKeHoachNam.get().getDonViChuTriId() != null && optionalKeHoachNam.get().getDonViChuTriId() > 0) {
+					Optional<DmDonVi> optionalDmDonVi = serviceDmDonViService.findById(optionalKeHoachNam.get().getDonViChuTriId());
+					if(optionalDmDonVi.isPresent()) {
+						thongKeKeHoachData.setKhDonViChuTriTen(optionalDmDonVi.get().getTenDonVi());
+					}
+				}
+				thongKeKeHoachData.setKhNam(optionalKeHoachNam.get().getNam());
+				thongKeKeHoachData.setKhSoKyHieu(optionalKeHoachNam.get().getSoKyHieu());
+				thongKeKeHoachData.setKhNgayBanHanh(optionalKeHoachNam.get().getNgayBanHanh());
+			}
+		}
+		thongKeKeHoachData.setNhiemVuChaId(nhiemVuNam.getNhiemVuChaId());
+		thongKeKeHoachData.setTenNhiemVu(nhiemVuNam.getTenNhiemVu());
+		thongKeKeHoachData.setSapXep(nhiemVuNam.getSapXep());
+		thongKeKeHoachData.setDonViPhoiHop(nhiemVuNam.getDonViPhoiHop());
+		thongKeKeHoachData.setTuNgay(nhiemVuNam.getTuNgay());
+		thongKeKeHoachData.setDenNgay(nhiemVuNam.getDenNgay());
+		thongKeKeHoachData.setLoaiNhiemVuId(nhiemVuNam.getLoaiNhiemVuId());
+		if(nhiemVuNam.getLoaiNhiemVuId() != null && nhiemVuNam.getLoaiNhiemVuId() > 0) {
+			Optional<DmLoaiNhiemVu> optLoaiNhiemVu = serviceDmLoaiNhiemVuService.findById(nhiemVuNam.getLoaiNhiemVuId());
+			if(optLoaiNhiemVu.isPresent()) {
+				thongKeKeHoachData.setLoaiNhiemVuTen(optLoaiNhiemVu.get().getTen());
+				thongKeKeHoachData.setLoaiNvMa(optLoaiNhiemVu.get().getMa());
+			}
+		}
+		thongKeKeHoachData.setGhiChu(nhiemVuNam.getGhiChu());
+		Optional<TienDoNhiemVuNam> optTienDo = serviceTienDoNhiemVuNamService.findByNhiemVuNamId(nhiemVuNam.getId());
+		if(optTienDo.isPresent()) {
+			thongKeKeHoachData.setTinhTrang(optTienDo.get().getTinhTrang());
+			thongKeKeHoachData.setMucDoHoanThanh(optTienDo.get().getMucDoHoanThanh());
+			thongKeKeHoachData.setKetQua(optTienDo.get().getKetQua());
+		}
+
+		return thongKeKeHoachData;
 	}
 	
 	public NhiemVuNamData findById(Long id) throws EntityNotFoundException {
@@ -172,6 +235,16 @@ public class NhiemVuNamBusiness {
 			for(TienDoNhiemVuNam tienDoNhiemVuNam : tienDoNhiemVuNams) {
 				TienDoNhiemVuNamData tienDoNhiemVuNamData = new TienDoNhiemVuNamData();
 				tienDoNhiemVuNamData.setId(tienDoNhiemVuNam.getId());
+				tienDoNhiemVuNamData.setNhiemVuNamId(tienDoNhiemVuNam.getNhiemVuNamId());
+				if(tienDoNhiemVuNam.getNhiemVuNamId() != null && tienDoNhiemVuNam.getNhiemVuNamId() > 0) {
+					Optional<NhiemVuNam> optNhiemVu = serviceNhiemVuNamService.findById(tienDoNhiemVuNam.getNhiemVuNamId());
+					if(optNhiemVu.isPresent()) {
+						tienDoNhiemVuNamData.setNhiemVuNamTen(optNhiemVu.get().getTenNhiemVu());
+						tienDoNhiemVuNamData.setNvNamNhiemVuChaId(optNhiemVu.get().getNhiemVuChaId());
+						tienDoNhiemVuNamData.setNvNamDonViPhoiHop(optNhiemVu.get().getDonViPhoiHop());
+						tienDoNhiemVuNamData.setNvNamGhiChu(optNhiemVu.get().getGhiChu());
+					}
+				}
 				tienDoNhiemVuNamData.setTinhTrang(tienDoNhiemVuNam.getTinhTrang());
 				tienDoNhiemVuNamData.setMucDoHoanThanh(tienDoNhiemVuNam.getMucDoHoanThanh());
 				tienDoNhiemVuNamData.setNgayBaoCao(tienDoNhiemVuNam.getNgayBaoCao());
@@ -225,6 +298,7 @@ public class NhiemVuNamBusiness {
 					}
 				}
 				nhiemVuNamData.setGhiChu(nhiemVuNam.getGhiChu());
+				nhiemVuNamData.setDanhSo(nhiemVuNam.getDanhSo());
 				
 				nhiemVuNamDatas.add(nhiemVuNamData);
 			}
@@ -245,6 +319,7 @@ public class NhiemVuNamBusiness {
 		nhiemVuNam.setDenNgay(nhiemVuNamData.getDenNgay());
 		nhiemVuNam.setLoaiNhiemVuId(nhiemVuNamData.getLoaiNhiemVuId());
 		nhiemVuNam.setGhiChu(nhiemVuNamData.getGhiChu());
+		nhiemVuNam.setDanhSo(nhiemVuNamData.getDanhSo());
 		nhiemVuNam = serviceNhiemVuNamService.save(nhiemVuNam);
 
 		serviceTienDoNhiemVuNamService.setFixedDaXoaForNhiemVuNamId(false, nhiemVuNam.getId());
@@ -285,6 +360,7 @@ public class NhiemVuNamBusiness {
 		nhiemVuNam.setDenNgay(nhiemVuNamData.getDenNgay());
 		nhiemVuNam.setLoaiNhiemVuId(nhiemVuNamData.getLoaiNhiemVuId());
 		nhiemVuNam.setGhiChu(nhiemVuNamData.getGhiChu());
+		nhiemVuNam.setDanhSo(nhiemVuNamData.getDanhSo());
 		nhiemVuNam = serviceNhiemVuNamService.save(nhiemVuNam);
 		
 		serviceTienDoNhiemVuNamService.setFixedDaXoaForNhiemVuNamId(false, nhiemVuNam.getId());

@@ -14,7 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.kehoach.kehoachnam.dao.model.KeHoachNam;
 
 public class KeHoachNamSpecifications {
-	public static Specification<KeHoachNam> quickSearch(final Integer nam, final String tenKeHoach, final Boolean trangThai,
+	public static Specification<KeHoachNam> quickSearch(final Long donViChuTriId, final Integer nam, final String tenKeHoach, final Boolean trangThai,
 			final String soKyHieu, final LocalDate ngayBanHanhTuNgay, final LocalDate ngayBanHanhDenNgay) {
 		return new Specification<KeHoachNam> () {
 			private static final long serialVersionUID = -5902884843433373982L;
@@ -24,6 +24,10 @@ public class KeHoachNamSpecifications {
 				List<Predicate> predicates = new ArrayList<>();
 				predicates.add(cb.equal(root.<String>get("daXoa"), false));
 				query.distinct(true);
+				
+				if(donViChuTriId != null) {
+					predicates.add(cb.equal(root.<Long>get("donViChuTriId"), donViChuTriId));
+				}
 				if(nam != null) {
 					predicates.add(cb.equal(root.<Integer>get("nam"), nam));
 				}

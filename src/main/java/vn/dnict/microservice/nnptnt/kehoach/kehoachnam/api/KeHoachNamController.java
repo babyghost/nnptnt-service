@@ -48,7 +48,7 @@ public class KeHoachNamController {
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayBanHanhTuNgay", required = false) LocalDate ngayBanHanhTuNgay,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayBanHanhDenNgay", required = false) LocalDate ngayBanHanhDenNgay,
 			@RequestParam(name = "trangThai", required = false) Boolean trangThai) {
-		Page<KeHoachNamData> pageKeHoachNamData = businessKeHoachNamBusiness.findAll(page, size, sortBy, sortDir, nam, tenKeHoach,
+		Page<KeHoachNamData> pageKeHoachNamData = businessKeHoachNamBusiness.findAll(page, size, sortBy, sortDir, donViChuTriId, nam, tenKeHoach,
 				trangThai, soKyHieu, ngayBanHanhTuNgay, ngayBanHanhDenNgay);
 		return ResponseEntity.ok(pageKeHoachNamData);
 	}

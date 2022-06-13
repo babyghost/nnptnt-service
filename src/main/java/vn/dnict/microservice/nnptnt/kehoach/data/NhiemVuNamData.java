@@ -17,6 +17,9 @@ public class NhiemVuNamData {
 	private Long khDonViChuTriId;
 	private String khDonViChuTriTen;
 	private Integer khNam;
+	private String khSoKyHieu;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	private LocalDate khNgayBanHanh;
 	
 	private String tenNhiemVu;
 
@@ -37,6 +40,8 @@ public class NhiemVuNamData {
 	private String loaiNvMa;
 
 	private String ghiChu;
+	
+	private Integer danhSo;
 	
 	private List<NhiemVuNamData> children = new ArrayList<NhiemVuNamData>();
 	
