@@ -27,7 +27,7 @@ public class BaoCaoThongKeServiceImpl implements BaoCaoThongKeService {
 
 	@SuppressWarnings("unchecked")
 	public Page<BaoCaoThongKe> getBaoCaoThongKe(String tenHopDong, Long loaiHopDongId, String dvthTen,
-			String cnthTen, LocalDate tuThanhToanNgay, LocalDate denThanhToanNgay, Boolean trangThai,
+			String cnthTen, LocalDate tuThanhToanNgay, LocalDate denThanhToanNgay, Integer trangThai,
 			Pageable pageable) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		String queryString = "SELECT * FROM quanlyhopdong";

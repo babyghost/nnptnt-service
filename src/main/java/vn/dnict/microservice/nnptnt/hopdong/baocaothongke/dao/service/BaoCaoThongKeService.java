@@ -9,6 +9,6 @@ import vn.dnict.microservice.nnptnt.hopdong.baocaothongke.dao.model.BaoCaoThongK
 
 public interface BaoCaoThongKeService {
 	public Page<BaoCaoThongKe> getBaoCaoThongKe(String tenHopDong, Long loaiHopDongId, String dvthTen,
-			String cnthTen, LocalDate tuThanhToanNgay, LocalDate denThanhToanNgay, Boolean trangThai,
+			String cnthTen, LocalDate tuThanhToanNgay, LocalDate denThanhToanNgay, Integer trangThai,
 			Pageable pageable);
 }
