@@ -1,10 +1,16 @@
 package vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.business;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +19,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import vn.dnict.microservice.danhmuc.dao.model.DmDonVi;
 import vn.dnict.microservice.danhmuc.dao.service.DmDonViService;
@@ -25,6 +32,7 @@ import vn.dnict.microservice.nnptnt.kehoach.data.ThongKeKeHoachNamData;
 import vn.dnict.microservice.nnptnt.kehoach.data.TienDoNhiemVuNamData;
 import vn.dnict.microservice.nnptnt.kehoach.kehoachnam.dao.model.KeHoachNam;
 import vn.dnict.microservice.nnptnt.kehoach.kehoachnam.dao.service.KeHoachNamService;
+import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.business.view.MyExcelViewThongKeKeHoachNam;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.model.NhiemVuNam;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.service.NhiemVuNamService;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam2filedinhkem.dao.service.FileDinhKemNhiemVuNamService;
@@ -118,6 +126,8 @@ public class NhiemVuNamBusiness {
 						tienDoNhiemVuNamData.setNvNamNhiemVuChaId(optNhiemVu.get().getNhiemVuChaId());
 						tienDoNhiemVuNamData.setNvNamDonViPhoiHop(optNhiemVu.get().getDonViPhoiHop());
 						tienDoNhiemVuNamData.setNvNamGhiChu(optNhiemVu.get().getGhiChu());
+						tienDoNhiemVuNamData.setNvNamTuNgay(optNhiemVu.get().getTuNgay());
+						tienDoNhiemVuNamData.setNvNamDenNgay(optNhiemVu.get().getDenNgay());
 					}
 				}
 				tienDoNhiemVuNamData.setTinhTrang(tienDoNhiemVuNam.getTinhTrang());
@@ -180,6 +190,7 @@ public class NhiemVuNamBusiness {
 			}
 		}
 		thongKeKeHoachData.setGhiChu(nhiemVuNam.getGhiChu());
+		thongKeKeHoachData.setDanhSo(nhiemVuNam.getDanhSo());
 		Optional<TienDoNhiemVuNam> optTienDo = serviceTienDoNhiemVuNamService.findByNhiemVuNamId(nhiemVuNam.getId());
 		if(optTienDo.isPresent()) {
 			thongKeKeHoachData.setTinhTrang(optTienDo.get().getTinhTrang());
@@ -188,6 +199,43 @@ public class NhiemVuNamBusiness {
 		}
 
 		return thongKeKeHoachData;
+	}
+	
+	public ModelAndView exportExcelThongKeKeHoachNam(HttpServletRequest request, HttpServletResponse response, int page, int size,
+			String sortBy, String sortDir, Long donViChuTriId, Long keHoachNamId, Integer nam, Boolean tinhTrang, String tenNhiemVu,
+			LocalDate tuNgay, LocalDate denNgay) {
+		
+		LocalDate localDate = LocalDate.now();// For reference
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		String formattedString = localDate.format(formatter);
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		Direction direction;
+		if (sortDir.equals("ASC")) {
+			direction = Direction.ASC;
+		} else {
+			direction = Direction.DESC;
+		}
+		
+		Page<NhiemVuNam> pageNhiemVuNam = serviceNhiemVuNamService.tongHopKeHoachNam(donViChuTriId, keHoachNamId, nam, tinhTrang,
+				tenNhiemVu, tuNgay, denNgay, PageRequest.of(page, size, direction, sortBy));
+		Page<ThongKeKeHoachNamData> pageThongKeKeHoachData = pageNhiemVuNam.map(this::convertToThongKeKeHoachNamData);
+		
+		List<ThongKeKeHoachNamData> thongKeKeHoachDatas = new ArrayList<>(pageThongKeKeHoachData.getContent());
+		
+		while(pageNhiemVuNam.hasNext()) {
+			Page<NhiemVuNam> nextPageOfEmployees = serviceNhiemVuNamService.tongHopKeHoachNam(donViChuTriId, keHoachNamId, nam,
+					tinhTrang, tenNhiemVu, tuNgay, denNgay, pageNhiemVuNam.nextPageable());
+			Page<ThongKeKeHoachNamData> nextPageOfThongKeKeHoachNamData = nextPageOfEmployees.map(this::convertToThongKeKeHoachNamData);
+			if(Objects.nonNull(nextPageOfThongKeKeHoachNamData.getContent())) {
+				thongKeKeHoachDatas.addAll(nextPageOfThongKeKeHoachNamData.getContent());
+			}
+			pageNhiemVuNam = nextPageOfEmployees;
+		}
+		model.put("thongKeKeHoachDatas", thongKeKeHoachDatas);
+		response.setContentType("application/ms-excel");
+		response.setHeader("Content-disposition", "attachment; filename=ThongKeKeHoachNam.xls");
+		return new ModelAndView(new MyExcelViewThongKeKeHoachNam(), model);
 	}
 	
 	public NhiemVuNamData findById(Long id) throws EntityNotFoundException {
@@ -243,6 +291,8 @@ public class NhiemVuNamBusiness {
 						tienDoNhiemVuNamData.setNvNamNhiemVuChaId(optNhiemVu.get().getNhiemVuChaId());
 						tienDoNhiemVuNamData.setNvNamDonViPhoiHop(optNhiemVu.get().getDonViPhoiHop());
 						tienDoNhiemVuNamData.setNvNamGhiChu(optNhiemVu.get().getGhiChu());
+						tienDoNhiemVuNamData.setNvNamTuNgay(optNhiemVu.get().getTuNgay());
+						tienDoNhiemVuNamData.setNvNamDenNgay(optNhiemVu.get().getDenNgay());
 					}
 				}
 				tienDoNhiemVuNamData.setTinhTrang(tienDoNhiemVuNam.getTinhTrang());

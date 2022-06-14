@@ -2,6 +2,8 @@ package vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.api;
 
 import java.time.LocalDate;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
 import vn.dnict.microservice.nnptnt.kehoach.data.KeHoachNamData;
@@ -74,6 +77,23 @@ public class NhiemVuNamController {
 		Page<ThongKeKeHoachNamData> pageThongKeKeHoachNam = businessNhiemVuNamBusiness.thongKeKeHoachNam(page, size, sortBy, sortDir,
 				donViChuTriId, keHoachId, nam, tinhTrang, tenNhiemVu, tuNgay, denNgay);
 		return ResponseEntity.ok(pageThongKeKeHoachNam);
+	}
+	
+	@GetMapping(value = { "/thongKeKeHoachNam/export" })
+	public ModelAndView thongKeKeHoachNam(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
+			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
+			@RequestParam(name = "sortBy", defaultValue = "tuNgay", required = false) String sortBy,
+			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
+			@RequestParam(name = "donViChuTriId",required = false) Long donViChuTriId,
+			@RequestParam(name = "keHoachId",required = false) Long keHoachId,
+			@RequestParam(name = "nam",required = false) Integer nam,
+			@RequestParam(name = "tinhTrang",required = false) Boolean tinhTrang,
+			@RequestParam(name = "tenNhiemVu", required = false) String tenNhiemVu,
+			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "tuNgay", required = false) LocalDate tuNgay,
+			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "denNgay", required = false) LocalDate denNgay) {
+		return businessNhiemVuNamBusiness.exportExcelThongKeKeHoachNam(request, response, page, size, sortBy, sortDir, donViChuTriId,
+				keHoachId, nam, tinhTrang, tenNhiemVu, tuNgay, denNgay);
 	}
 
 	@GetMapping(value = { "/{id}" })

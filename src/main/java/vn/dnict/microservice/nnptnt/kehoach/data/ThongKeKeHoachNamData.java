@@ -40,7 +40,9 @@ public class ThongKeKeHoachNamData {
 
 	private String ghiChu;
 	
-	private Boolean tinhTrang;
+	private Integer danhSo;
+	
+	private boolean tinhTrang;
 	
 	private Integer mucDoHoanThanh;
 	
