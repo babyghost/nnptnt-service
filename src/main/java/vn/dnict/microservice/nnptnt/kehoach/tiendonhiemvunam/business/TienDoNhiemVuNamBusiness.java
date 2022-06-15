@@ -111,7 +111,7 @@ public class TienDoNhiemVuNamBusiness {
 
 		if (Objects.nonNull(tienDoNhiemVuNam)) {
 			int type = Constants.DINH_KEM_1_FILE;
-			Optional<FileDinhKemNhiemVuNam> fileDinhKemNhiemVuNam = serviceFileDinhKemNhiemVuNamService.findByTienDoNhiemVuNamId(tienDoNhiemVuNam.getNhiemVuNamId());
+			Optional<FileDinhKemNhiemVuNam> fileDinhKemNhiemVuNam = serviceFileDinhKemNhiemVuNamService.findByTienDoNhiemVuNamId(tienDoNhiemVuNam.getId());
 			System.out.println(fileDinhKemNhiemVuNam+"1111111111111111112"+tienDoNhiemVuNam.getId());
 			Long fileDinhKemId = null;
 			Long objectId = tienDoNhiemVuNam.getId();
