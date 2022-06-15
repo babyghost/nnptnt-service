@@ -60,7 +60,7 @@ public class NhiemVuNamBusiness {
 	FileDinhKemNhiemVuNamService serviceFileDinhKemNhiemVuNamService;
 	
 	public Page<NhiemVuNamData> findAll(int page, int size, String sortBy, String sortDir, Long donViChuTriId, Long keHoachNamId,
-			Integer nam, Boolean tinhTrang, String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay) {
+			Integer nam, Integer tinhTrang, String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
@@ -143,7 +143,7 @@ public class NhiemVuNamBusiness {
 	}
 	
 	public Page<ThongKeKeHoachNamData> thongKeKeHoachNam(int page, int size, String sortBy, String sortDir, Long donViChuTriId,
-			Long keHoachNamId, Integer nam, Boolean tinhTrang,  String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay) {
+			Long keHoachNamId, Integer nam, Integer tinhTrang,  String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
@@ -202,7 +202,7 @@ public class NhiemVuNamBusiness {
 	}
 	
 	public ModelAndView exportExcelThongKeKeHoachNam(HttpServletRequest request, HttpServletResponse response, int page, int size,
-			String sortBy, String sortDir, Long donViChuTriId, Long keHoachNamId, Integer nam, Boolean tinhTrang, String tenNhiemVu,
+			String sortBy, String sortDir, Long donViChuTriId, Long keHoachNamId, Integer nam, Integer tinhTrang, String tenNhiemVu,
 			LocalDate tuNgay, LocalDate denNgay) {
 		
 		LocalDate localDate = LocalDate.now();// For reference

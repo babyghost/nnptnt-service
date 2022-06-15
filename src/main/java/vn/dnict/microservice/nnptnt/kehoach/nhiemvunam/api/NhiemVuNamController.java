@@ -51,7 +51,7 @@ public class NhiemVuNamController {
 			@RequestParam(name = "donViChuTriId",required = false) Long donViChuTriId,
 			@RequestParam(name = "keHoachNamId",required = false) Long keHoachNamId,
 			@RequestParam(name = "nam",required = false) Integer nam,
-			@RequestParam(name = "tinhTrang",required = false) Boolean tinhTrang,
+			@RequestParam(name = "tinhTrang",required = false) Integer tinhTrang,
 			@RequestParam(name = "tenNhiemVu", required = false) String tenNhiemVu,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "tuNgay", required = false) LocalDate tuNgay,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "denNgay", required = false) LocalDate denNgay) {
@@ -70,7 +70,7 @@ public class NhiemVuNamController {
 			@RequestParam(name = "donViChuTriId",required = false) Long donViChuTriId,
 			@RequestParam(name = "keHoachId",required = false) Long keHoachId,
 			@RequestParam(name = "nam",required = false) Integer nam,
-			@RequestParam(name = "tinhTrang",required = false) Boolean tinhTrang,
+			@RequestParam(name = "tinhTrang",required = false) Integer tinhTrang,
 			@RequestParam(name = "tenNhiemVu", required = false) String tenNhiemVu,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "tuNgay", required = false) LocalDate tuNgay,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "denNgay", required = false) LocalDate denNgay) {
@@ -88,7 +88,7 @@ public class NhiemVuNamController {
 			@RequestParam(name = "donViChuTriId",required = false) Long donViChuTriId,
 			@RequestParam(name = "keHoachId",required = false) Long keHoachId,
 			@RequestParam(name = "nam",required = false) Integer nam,
-			@RequestParam(name = "tinhTrang",required = false) Boolean tinhTrang,
+			@RequestParam(name = "tinhTrang",required = false) Integer tinhTrang,
 			@RequestParam(name = "tenNhiemVu", required = false) String tenNhiemVu,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "tuNgay", required = false) LocalDate tuNgay,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "denNgay", required = false) LocalDate denNgay) {

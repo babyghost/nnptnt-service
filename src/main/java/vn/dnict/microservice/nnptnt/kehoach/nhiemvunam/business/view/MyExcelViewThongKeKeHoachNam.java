@@ -422,13 +422,13 @@ public class MyExcelViewThongKeKeHoachNam extends AbstractXlsView {
 				cell2.setCellValue(thongKeKeHoachData.getGhiChu());
 				currentColumn++;
 				String tinhTrangTen="";
-				if(thongKeKeHoachData.isTinhTrang()==true) {
-					tinhTrangTen="Đã Hoàn Thành" ;
-				}else if(thongKeKeHoachData.isTinhTrang()==false) {
-					tinhTrangTen="Đang Thực Hiện";
+				if(thongKeKeHoachData.getTinhTrang()==1) {
+					tinhTrangTen="Đang Thực Hiện" ;
+				}else if(thongKeKeHoachData.getTinhTrang()==2) {
+					tinhTrangTen="Đã Hoàn Thành";
 					
 				}else {
-					tinhTrangTen="Chưa Thực Hiện";
+					tinhTrangTen="Ngưng Thực Hiện";
 				}
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellCenter);

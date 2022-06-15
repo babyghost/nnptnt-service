@@ -14,7 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.model.NhiemVuNam;
 
 public class NhiemVuNamSpecifications {
-	public static Specification<NhiemVuNam> quickSearch( final Long donViChuTriId,final Long keHoachNamId, final Integer nam, final Boolean tinhTrang,
+	public static Specification<NhiemVuNam> quickSearch( final Long donViChuTriId,final Long keHoachNamId, final Integer nam, final Integer tinhTrang,
 			final String tenNhiemVu, final LocalDate tuNgay, final LocalDate denNgay) {
 		return new Specification<NhiemVuNam>() {
 			private static final long serialVersionUID = -5902884843433373982L;
@@ -56,7 +56,7 @@ public class NhiemVuNamSpecifications {
 		};
 	}
 	
-	public static Specification<NhiemVuNam> tongHopKeHoachNam( final Long donViChuTriId, final Long keHoachNamId, final Integer nam, final Boolean tinhTrang,
+	public static Specification<NhiemVuNam> tongHopKeHoachNam( final Long donViChuTriId, final Long keHoachNamId, final Integer nam, final Integer tinhTrang,
 			final String tenNhiemVu, final LocalDate tuNgay, final LocalDate denNgay) {
 		return new Specification<NhiemVuNam>() {
 			private static final long serialVersionUID = -5902884843433373982L;

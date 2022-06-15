@@ -42,7 +42,7 @@ public class ThongKeKeHoachNamData {
 	
 	private Integer danhSo;
 	
-	private boolean tinhTrang;
+	private Integer tinhTrang;
 	
 	private Integer mucDoHoanThanh;
 	

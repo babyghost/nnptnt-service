@@ -48,7 +48,7 @@ public class TienDoNhiemVuNamBusiness {
 	@Autowired
 	FileDinhKemNhiemVuNamService serviceFileDinhKemNhiemVuNamService;
 	
-	public Page<TienDoNhiemVuNamData> findAll(int page, int size, String sortBy, String sortDir, LocalDate ngayBaoCao, Boolean tinhTrang,
+	public Page<TienDoNhiemVuNamData> findAll(int page, int size, String sortBy, String sortDir, LocalDate ngayBaoCao, Integer tinhTrang,
 			Integer mucDonHoanThanh) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {

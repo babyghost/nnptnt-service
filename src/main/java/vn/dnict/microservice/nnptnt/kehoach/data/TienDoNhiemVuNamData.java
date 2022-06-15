@@ -23,7 +23,7 @@ public class TienDoNhiemVuNamData {
 	private LocalDate nvNamDenNgay;	
 	private String nvNamGhiChu;
 	
-	private Boolean tinhTrang;
+	private Integer tinhTrang;
 	
 	private Integer mucDoHoanThanh;
 	

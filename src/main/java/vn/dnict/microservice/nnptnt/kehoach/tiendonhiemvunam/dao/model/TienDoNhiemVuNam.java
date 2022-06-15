@@ -43,7 +43,7 @@ public class TienDoNhiemVuNam {
 	private NhiemVuNam nhiemVuNam;
 	
 	@Column(name = "tinhtrang")
-	private Boolean tinhTrang;
+	private Integer tinhTrang;
 	
 	@Column(name = "mucdohoanthanh")
 	private Integer mucDoHoanThanh;

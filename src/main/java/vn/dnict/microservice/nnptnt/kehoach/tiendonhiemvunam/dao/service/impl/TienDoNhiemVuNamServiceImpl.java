@@ -41,7 +41,7 @@ public class TienDoNhiemVuNamServiceImpl implements TienDoNhiemVuNamService {
 	}
 
 	@Override
-	public Page<TienDoNhiemVuNam> findAll(LocalDate ngayBaoCao, Boolean tinhTrang, Integer mucDoHoanThanh, Pageable pageable) {
+	public Page<TienDoNhiemVuNam> findAll(LocalDate ngayBaoCao, Integer tinhTrang, Integer mucDoHoanThanh, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return repo.findAll(TienDoNhiemVuNamSpecifications.quickSearch(ngayBaoCao, tinhTrang, mucDoHoanThanh), pageable);
 	}

@@ -49,7 +49,7 @@ public class TienDoNhiemVuNamController {
 			@RequestParam(name = "sortBy", defaultValue = "tinhTrang", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
 			@DateTimeFormat(pattern = "dd/MM/yyyy") @RequestParam(name = "ngayBaoCao",required = false) LocalDate ngayBaoCao,
-			@RequestParam(name = "tinhTrang", required = false) Boolean tinhTrang,
+			@RequestParam(name = "tinhTrang", required = false) Integer tinhTrang,
 			@RequestParam(name = "mucDoHoanThanh",required=false) Integer mucDoHoanThanh)
 			{
 		Page<TienDoNhiemVuNamData> pageTienDoNhiemVuNamData = businessTienDoNhiemVuNamBusiness.findAll(page, size, sortBy, sortDir, 

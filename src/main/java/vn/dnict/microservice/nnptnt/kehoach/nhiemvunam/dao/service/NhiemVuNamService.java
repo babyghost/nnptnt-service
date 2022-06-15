@@ -26,8 +26,8 @@ public interface NhiemVuNamService {
 	
 	public Optional<NhiemVuNam> findByKeHoachNamId(Long keHoachNamId);
 	
-	public Page<NhiemVuNam> findAll(Long donViChuTriId, Long keHoachNamId, Integer nam, Boolean tinhTrang, String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay, Pageable pageable);
+	public Page<NhiemVuNam> findAll(Long donViChuTriId, Long keHoachNamId, Integer nam, Integer tinhTrang, String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay, Pageable pageable);
 	
-	public Page<NhiemVuNam> tongHopKeHoachNam(Long donViChuTriId, Long keHoachNamId, Integer nam, Boolean tinhTrang, String tenNhiemVu, LocalDate tuNgay,
+	public Page<NhiemVuNam> tongHopKeHoachNam(Long donViChuTriId, Long keHoachNamId, Integer nam, Integer tinhTrang, String tenNhiemVu, LocalDate tuNgay,
 			LocalDate denNgay, Pageable pageable);
 }

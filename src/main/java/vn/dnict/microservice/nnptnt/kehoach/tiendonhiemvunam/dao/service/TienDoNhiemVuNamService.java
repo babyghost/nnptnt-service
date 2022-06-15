@@ -22,5 +22,5 @@ public interface TienDoNhiemVuNamService {
 	
 	public int setFixedDaXoaForNhiemVuNamId(Boolean daXoa, Long nhiemVuNamId);
 	
-	public Page<TienDoNhiemVuNam> findAll(LocalDate ngayBaoCao, Boolean tinhTrang, Integer mucDoHoanThanh, Pageable pageable);
+	public Page<TienDoNhiemVuNam> findAll(LocalDate ngayBaoCao, Integer tinhTrang, Integer mucDoHoanThanh, Pageable pageable);
 }

@@ -40,7 +40,7 @@ public class NhiemVuNamServiceImpl implements NhiemVuNamService{
 	}
 
 	@Override
-	public Page<NhiemVuNam> findAll(Long donViChuTriId, Long keHoachNamId, Integer nam, Boolean tinhTrang, String tenNhiemVu,
+	public Page<NhiemVuNam> findAll(Long donViChuTriId, Long keHoachNamId, Integer nam, Integer tinhTrang, String tenNhiemVu,
 			LocalDate tuNgay, LocalDate denNgay, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return repo.findAll(NhiemVuNamSpecifications.quickSearch(donViChuTriId, keHoachNamId, nam, tinhTrang, tenNhiemVu, tuNgay,
@@ -48,7 +48,7 @@ public class NhiemVuNamServiceImpl implements NhiemVuNamService{
 	}
 	
 	@Override
-	public Page<NhiemVuNam> tongHopKeHoachNam( Long donViChuTriId, Long keHoachNamId, Integer nam, Boolean tinhTrang, String tenNhiemVu,
+	public Page<NhiemVuNam> tongHopKeHoachNam( Long donViChuTriId, Long keHoachNamId, Integer nam, Integer tinhTrang, String tenNhiemVu,
 			LocalDate tuNgay, LocalDate denNgay, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return repo.findAll(NhiemVuNamSpecifications.tongHopKeHoachNam(donViChuTriId, keHoachNamId, nam, tinhTrang, tenNhiemVu, tuNgay,
