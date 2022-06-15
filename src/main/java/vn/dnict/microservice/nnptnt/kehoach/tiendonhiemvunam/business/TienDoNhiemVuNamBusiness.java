@@ -111,14 +111,14 @@ public class TienDoNhiemVuNamBusiness {
 
 		if (Objects.nonNull(tienDoNhiemVuNam)) {
 			int type = Constants.DINH_KEM_1_FILE;
-			Optional<FileDinhKemNhiemVuNam> fileDinhKemNhiemVuNam = serviceFileDinhKemNhiemVuNamService.findByTienDoNhiemVuNamId(tienDoNhiemVuNam.getId());
+			Optional<FileDinhKemNhiemVuNam> fileDinhKemNhiemVuNam = serviceFileDinhKemNhiemVuNamService.findByTienDoNhiemVuNamId(tienDoNhiemVuNam.getNhiemVuNamId());
+			System.out.println(fileDinhKemNhiemVuNam+"1111111111111111112"+tienDoNhiemVuNam.getId());
 			Long fileDinhKemId = null;
 			Long objectId = tienDoNhiemVuNam.getId();
 			String appCode = TienDoNhiemVuNam.class.getSimpleName();
 			FileDinhKem fileDinhKem = coreAttachmentBusiness.getAttachments( fileDinhKemNhiemVuNam.get().getFileDinhKemId(), appCode, objectId, type);
 			tienDoNhiemVuNamData.setFileDinhKem(fileDinhKem);
 			tienDoNhiemVuNamData.setFileDinhKemIds(fileDinhKem.getIds());
-			System.out.println(fileDinhKemNhiemVuNam.get().getFileDinhKemId() + appCode + objectId + type + "++++++++++");
 		}
 	
 		return tienDoNhiemVuNamData;
