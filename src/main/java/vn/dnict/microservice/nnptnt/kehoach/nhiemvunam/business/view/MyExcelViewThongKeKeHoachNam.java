@@ -421,23 +421,26 @@ public class MyExcelViewThongKeKeHoachNam extends AbstractXlsView {
 				cell2.setCellStyle(styleCellCenter);
 				cell2.setCellValue(thongKeKeHoachData.getGhiChu());
 				currentColumn++;
-				String tinhTrangTen="";
-				if(thongKeKeHoachData.getTinhTrang()==1) {
-					tinhTrangTen="Đang Thực Hiện" ;
-				}else if(thongKeKeHoachData.getTinhTrang()==2) {
-					tinhTrangTen="Đã Hoàn Thành";
-					
-				}else {
-					tinhTrangTen="Ngưng Thực Hiện";
-				}
+//				String tinhTrangTen="";
+//				if(thongKeKeHoachData.getTinhTrang()==1) {
+//					tinhTrangTen="Đang Thực Hiện" ;
+//				}else if(thongKeKeHoachData.getTinhTrang()==2) {
+//					tinhTrangTen="Đã Hoàn Thành";
+//					
+//				}else if(thongKeKeHoachData.getTinhTrang() ==null) {
+//					tinhTrangTen="Ngưng Thực Hiện";
+//				}else {
+//					tinhTrangTen="Looix rpo dp";
+//				}
+//				System.out.println(thongKeKeHoachData.getTinhTrang()+"------");
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellCenter);
-				cell2.setCellValue(tinhTrangTen);
+			//	cell2.setCellValue(tinhTrangTen);
 				currentColumn++;
 
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellCenter);
-				cell2.setCellValue(thongKeKeHoachData.getMucDoHoanThanh());
+				//cell2.setCellValue(thongKeKeHoachData.getMucDoHoanThanh());
 				currentColumn++;
 				
 				cell2 = headerRow.createCell(currentColumn);
