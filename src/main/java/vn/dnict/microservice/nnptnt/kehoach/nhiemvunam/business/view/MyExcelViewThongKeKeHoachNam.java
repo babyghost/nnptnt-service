@@ -421,26 +421,35 @@ public class MyExcelViewThongKeKeHoachNam extends AbstractXlsView {
 				cell2.setCellStyle(styleCellCenter);
 				cell2.setCellValue(thongKeKeHoachData.getGhiChu());
 				currentColumn++;
-//				String tinhTrangTen="";
-//				if(thongKeKeHoachData.getTinhTrang()==1) {
-//					tinhTrangTen="Đang Thực Hiện" ;
-//				}else if(thongKeKeHoachData.getTinhTrang()==2) {
-//					tinhTrangTen="Đã Hoàn Thành";
-//					
-//				}else if(thongKeKeHoachData.getTinhTrang() ==null) {
-//					tinhTrangTen="Ngưng Thực Hiện";
-//				}else {
-//					tinhTrangTen="Looix rpo dp";
-//				}
-//				System.out.println(thongKeKeHoachData.getTinhTrang()+"------");
+				String tinhTrangTen="";
+				if(thongKeKeHoachData.getTinhTrang() !=null) {
+					if(thongKeKeHoachData.getTinhTrang() == 1) {
+						
+						tinhTrangTen="Đang thực hiện";
+					}else {
+						tinhTrangTen="Đã hoàn thành";
+					}
+
+				}else {
+					tinhTrangTen="Chưa Thực Hiện";
+				}
+	//			System.out.println("+++++++++"+(thongKeKeHoachData.getTinhTrang().toString() !=null ? (thongKeKeHoachData.getTinhTrang().toString() == "1" ? "Đang thực hiện": "Đã Hoàn thành" ): "chưa thực hiện")+"**********" );
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellCenter);
-			//	cell2.setCellValue(tinhTrangTen);
+				cell2.setCellValue(tinhTrangTen);
 				currentColumn++;
 
+				Integer mucDoHoanThanh=0;
+				if(thongKeKeHoachData.getMucDoHoanThanh() != null) {
+					mucDoHoanThanh = thongKeKeHoachData.getMucDoHoanThanh();
+
+				}else {
+					mucDoHoanThanh = 0;
+				}
+				
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellCenter);
-				//cell2.setCellValue(thongKeKeHoachData.getMucDoHoanThanh());
+				cell2.setCellValue(mucDoHoanThanh+"%");
 				currentColumn++;
 				
 				cell2 = headerRow.createCell(currentColumn);
