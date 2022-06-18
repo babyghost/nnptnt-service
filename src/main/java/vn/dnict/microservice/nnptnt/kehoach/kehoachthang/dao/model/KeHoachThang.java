@@ -13,7 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedBy;
@@ -25,7 +24,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang.dao.model.NhiemVuThang;
@@ -51,10 +49,6 @@ public class KeHoachThang {
 	@JsonIgnore
 	@OneToMany(mappedBy = "keHoachThangId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<NhiemVuThang> nhiemVuThang;
-	
-//	@JsonIgnore
-//	@OneToOne(mappedBy = "keHoachThang", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//	private NhiemVuThang nhiemVuThang;
 	
 	@Column(name = "nguoitao")
 	@CreatedBy

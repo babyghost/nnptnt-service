@@ -58,10 +58,6 @@ public class NhiemVuThang {
 	@Where(clause = "daxoa = false")
 	private KeHoachThang keHoachThang;
 	
-//	@OneToOne(cascade = CascadeType.ALL)
-//	@JoinColumn(name = "kehoachthang_id", referencedColumnName = "id", updatable = false, insertable = false)
-//	private KeHoachThang keHoachThang;
-	
 	@Column(name = "canbothuchien_id")
 	private Long canBoThucHienId;
 	

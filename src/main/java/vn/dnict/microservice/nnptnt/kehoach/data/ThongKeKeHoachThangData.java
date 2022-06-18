@@ -7,27 +7,30 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
-import vn.dnict.microservice.core.data.FileDinhKem;
+import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang.dao.model.NhiemVuThang;
 
 @Data
-public class NhiemVuThangData {
-	private Long id;
+public class ThongKeKeHoachThangData {
+
+	private Long keHoachThangId;
+	
+	private Long donViChuTriId;
+	private String doViChuTriTen;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	private LocalDate thang;
 	
 	private String tenNhiemVu;
 	
-	private Long keHoachThangId;
-	private Long keHoachDonViChuTriId;
-	private String keHoachDonViChuTriTen;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-	private LocalDate keHoachthang;
+	private Integer tinhTrang;
 	
 	private Long canBoThucHienId;
 	private String canBoThucHienTen;
 	
-	private String donViPhoiHop;
-	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private LocalDate thoiGian;
+	
+	private String donViPhoiHop;
 	
 	private String ghiChu;
 	
@@ -35,16 +38,9 @@ public class NhiemVuThangData {
 	
 	private Long nhiemVuThangTruocId;
 	
-	private Integer tinhTrang;
-	
 	private Long tienDoNhiemVuId;
 	private Integer tienDoMucDoHoanThanh;
 	private String tienDoKetQua;
-	private String tienDoTenNguoiCapNhat;
 	
-	private List<Long> fileDinhKemIds = new ArrayList<>();	
-	private FileDinhKem fileDinhKem = new FileDinhKem();
-	
-	private List<Long> canBoThucHienIds = new ArrayList<Long>();
-	
+	private List<ThongKeKeHoachThangData> thongKeThangDatas = new ArrayList<ThongKeKeHoachThangData>();
 }

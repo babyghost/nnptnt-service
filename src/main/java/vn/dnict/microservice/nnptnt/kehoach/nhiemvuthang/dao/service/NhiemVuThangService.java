@@ -16,10 +16,15 @@ public interface NhiemVuThangService {
 	
 	public Optional<NhiemVuThang> findById(Long id);
 	
+	public Optional<NhiemVuThang> findByKeHoachThangId(Long keHoachThangId);
+	
 	public Page<NhiemVuThang> findAll(Long donViChuTriId, List<LocalDate > thangs, String tenNhiemVu, Long canBoThucHienId,
 			LocalDate thoiHanTuNgay, LocalDate thoiHanDenNgay, Integer tinhTrang, Pageable pageable);
 	
 	public List<NhiemVuThang> findByKeHoachThangIdAndDaXoa(Long keHoachThangId, Boolean daXoa);
 	
 	public int setFixedDaXoaForKeHoachThangId(Boolean daXoa, Long keHoachThangId);
+	
+	public Page<NhiemVuThang> tongHopKeHoachThang(Long donViChuTriId, List<LocalDate > thangs, String tenNhiemVu, Integer tinhTrang,
+			Long canBoThucHienId, LocalDate thoiHanTuNgay, LocalDate thoiHanDenNgay, Pageable pageable);
 }

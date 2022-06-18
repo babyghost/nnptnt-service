@@ -57,4 +57,50 @@ public class NhiemVuThangSpecifications {
 			}
 		};
 	}
+	
+	public static Specification<NhiemVuThang> tongHopKeHoachThang(final Long donViChuTriId, final List<LocalDate > thangs,
+			final String tenNhiemVu,final Integer tinhTrang, final Long canBoThucHienId, final LocalDate thoiHanTuNgay,
+			LocalDate thoiHanDenNgay) {
+		return new Specification<NhiemVuThang>() {
+			private static final long serialVersionUID = -5902884843433373982L;
+			
+			@Override
+			public Predicate toPredicate(Root<NhiemVuThang> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+
+				List<Predicate> predicates = new ArrayList<>();
+				predicates.add(cb.equal(root.<String>get("daXoa"), false));
+				query.distinct(true);
+				
+				if(donViChuTriId != null) {
+					predicates.add(cb.equal(root.<Long>get("donViChuTriId"), donViChuTriId));
+				}
+				if (thangs != null && !thangs.isEmpty()) {
+					Expression<List<LocalDate>> valuethang = cb.literal(thangs);
+					Expression<String> expression = root.join("keHoachThang").get("thang");
+					Predicate inList = expression.in(valuethang);
+					predicates.add(inList);
+				}
+				if(tenNhiemVu !=null && !tenNhiemVu.isEmpty()) {
+					predicates.add(cb.like(cb.lower(root.join("nhiemVuThang").<String>get("tenNhiemVu")), "%" + tenNhiemVu.toLowerCase() + "%"));
+				}
+				if(tinhTrang != null) {
+					predicates.add(cb.equal(root.join("nhiemVuThang").<Integer>get("tinhTrang"), tinhTrang));
+				}
+				if(canBoThucHienId != null) {
+					predicates.add(cb.equal(root.join("nhiemVuThang").<Long>get("canBoThucHienId"), canBoThucHienId));
+				}
+				if (thoiHanTuNgay != null) {
+					predicates.add(cb.greaterThanOrEqualTo(root.join("nhiemVuThang").get("thoiGian").as(LocalDate.class),thoiHanTuNgay));
+				}
+				if (thoiHanDenNgay != null) {
+					predicates.add(cb.lessThanOrEqualTo(root.join("nhiemVuThang").get("thoiGian").as(LocalDate.class),thoiHanDenNgay));
+				}
+				if (!predicates.isEmpty()) {
+					return cb.and(predicates.toArray(new Predicate[]{}));
+				}
+				return null;
+			}
+		};
+		
+	}
 }

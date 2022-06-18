@@ -60,4 +60,19 @@ public class NhiemVuThangServiceImpl implements NhiemVuThangService{
 		return repo.setFixedDaXoaForKeHoachThangId(daXoa, keHoachThangId);
 	}
 
+	@Override
+	public Optional<NhiemVuThang> findByKeHoachThangId(Long keHoachThangId) {
+		// TODO Auto-generated method stub
+		return repo.findByKeHoachThangId(keHoachThangId);
+	}
+
+	@Override
+	public Page<NhiemVuThang> tongHopKeHoachThang(Long donViChuTriId, List<LocalDate> thangs, String tenNhiemVu,
+			Integer tinhTrang, Long canBoThucHienId, LocalDate thoiHanTuNgay, LocalDate thoiHanDenNgay,
+			Pageable pageable) {
+		// TODO Auto-generated method stub
+		return repo.findAll(NhiemVuThangSpecifications.tongHopKeHoachThang(donViChuTriId, thangs, tenNhiemVu, tinhTrang,
+				canBoThucHienId, thoiHanTuNgay, thoiHanDenNgay), pageable);
+	}
+
 }

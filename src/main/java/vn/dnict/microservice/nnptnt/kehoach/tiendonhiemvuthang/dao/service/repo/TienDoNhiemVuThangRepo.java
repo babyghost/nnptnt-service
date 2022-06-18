@@ -8,5 +8,5 @@ import vn.dnict.microservice.nnptnt.kehoach.tiendonhiemvuthang.dao.model.TienDoN
 
 @Repository
 public interface TienDoNhiemVuThangRepo extends JpaRepository<TienDoNhiemVuThang, Long>, JpaSpecificationExecutor<TienDoNhiemVuThang>{
-	
+
 }
