@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
@@ -22,6 +21,7 @@ import vn.dnict.microservice.danhmuc.dao.service.DmQuanHuyenService;
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
 import vn.dnict.microservice.nnptnt.dm.loaivatnuoi.dao.model.DmLoaiVatNuoi;
 import vn.dnict.microservice.nnptnt.dm.loaivatnuoi.dao.service.DmLoaiVatNuoiService;
+import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.model.NhiemVuNam;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.cosogietmo.dao.model.CoSoGietMo;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.cosogietmo.dao.service.CoSoGietMoService;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.danhmuc.loaigiayto.dao.model.DmLoaiGiayTo;
@@ -79,26 +79,26 @@ public class ThongTinGietMoBusiness {
 		if(thongTinGietMo.getCoSoGietMoId() != null && thongTinGietMo.getCoSoGietMoId() > 0) {
 			Optional<CoSoGietMo> optCoSo = serviceCoSoGietMoService.findById(thongTinGietMo.getCoSoGietMoId());
 			if(optCoSo.isPresent()) {
-				thongTinGietMoData.setCoSoGietMoTen(optCoSo.get().getTenCoSo());
-				thongTinGietMoData.setCoSoTenChuCoSo(optCoSo.get().getTenChuCoSo());
-				thongTinGietMoData.setCoSoDiaChi(optCoSo.get().getDiaChi());
-				thongTinGietMoData.setCoSoDienThoai(optCoSo.get().getDienThoai());
-				thongTinGietMoData.setCoSoEmail(optCoSo.get().getEmail());
-				thongTinGietMoData.setCoSoQuanHuyenId(optCoSo.get().getQuanHuyenId());
+				thongTinGietMoData.setCoSoTen(optCoSo.get().getTenCoSo());
+				thongTinGietMoData.setTenChuCoSo(optCoSo.get().getTenChuCoSo());
+				thongTinGietMoData.setDiaChi(optCoSo.get().getDiaChi());
+				thongTinGietMoData.setDienThoai(optCoSo.get().getDienThoai());
+				thongTinGietMoData.setEmail(optCoSo.get().getEmail());
+				thongTinGietMoData.setQuanHuyenId(optCoSo.get().getQuanHuyenId());
 				if(optCoSo.get().getQuanHuyenId() != null && optCoSo.get().getQuanHuyenId() > 0) {
 					Optional<DmQuanHuyen> optQuanHuyen = serviceDmQuanHuyenService.findById(optCoSo.get().getQuanHuyenId());
 					if(optQuanHuyen.isPresent()) {
-						thongTinGietMoData.setCoSoQuanHuyenTen(optQuanHuyen.get().getTen());
+						thongTinGietMoData.setQuanHuyenTen(optQuanHuyen.get().getTen());
 					}
 				}
-				thongTinGietMoData.setCoSoPhuongXaId(optCoSo.get().getPhuongXaId());
+				thongTinGietMoData.setPhuongXaId(optCoSo.get().getPhuongXaId());
 				if(optCoSo.get().getPhuongXaId() != null && optCoSo.get().getPhuongXaId() > 0) {
 					Optional<DmPhuongXa> optPhuongXa = serviceDmPhuongXaService.findById(optCoSo.get().getPhuongXaId());
 					if(optPhuongXa.isPresent()) {
-						thongTinGietMoData.setCoSoPhuongXaTen(optPhuongXa.get().getTen());
+						thongTinGietMoData.setPhuongXaTen(optPhuongXa.get().getTen());
 					}
 				}
-				thongTinGietMoData.setCoSoGiayKinhDoanh(optCoSo.get().getGiayKinhDoanh());
+				thongTinGietMoData.setGiayKinhDoanh(optCoSo.get().getGiayKinhDoanh());
 			}
 		}
 		
@@ -158,63 +158,85 @@ public class ThongTinGietMoBusiness {
 		return this.convertToThongTinGietMoData(thongTinGietMo);
 	}
 	
-	public List<ThongTinGietMo> getThongTinGietMoByCoSoAndNgayThangAndChuHangAndLoaiGiayToAndSoGiayTo(Long coSoGietMoId, LocalDate ngayThang,
-			String chuHang, Long loaiGiayToId, String soGiayTo) throws EntityNotFoundException {
-		List<ThongTinGietMo> list = serviceThongTinGietMoService
-				.findByCoSoGietMoIdAndNgayThangAndChuHangAndLoaiGiayToIdAndSoGiayToAndDaXoa(coSoGietMoId, ngayThang, chuHang, loaiGiayToId,
-						soGiayTo, false);
-		return list;
-	}
-	
-	public List<ThongTinGietMo> create(ThongTinGietMoData thongTinGietMoData, BindingResult result) throws MethodArgumentNotValidException {
-		if (result.hasErrors()) {
-			throw new MethodArgumentNotValidException(null, result);
-		}
-		List<ThongTinGietMo> list = new ArrayList<ThongTinGietMo>();
-		if(thongTinGietMoData.getListThongTinGietMo().size() > 0) {
-			for(int i = 0; i < thongTinGietMoData.getListThongTinGietMo().size(); i++) {
-				ThongTinGietMo thongTinGietMo = new ThongTinGietMo();
-				if(thongTinGietMoData.getListThongTinGietMo().get(i).getId() != null &&
-						thongTinGietMoData.getListThongTinGietMo().get(i).getId() > 0) {
-					Optional<ThongTinGietMo> optTtGm = serviceThongTinGietMoService
-							.findById(thongTinGietMoData.getListThongTinGietMo().get(i).getId());
-					if(optTtGm.isPresent()) {
-						thongTinGietMo = optTtGm.get();
-					}
-				}
-				thongTinGietMo.setNgayThang(thongTinGietMoData.getListThongTinGietMo().get(i).getNgayThang());
-				thongTinGietMo.setChuHang(thongTinGietMoData.getListThongTinGietMo().get(i).getChuHang());
-				thongTinGietMo.setSoGiayTo(thongTinGietMoData.getListThongTinGietMo().get(i).getSoGiayTo());
-				thongTinGietMo.setLoaiGiayToId(thongTinGietMoData.getListThongTinGietMo().get(i).getLoaiGiayToId());
-				thongTinGietMo.setCapNgay(thongTinGietMoData.getListThongTinGietMo().get(i).getCapNgay());
-				thongTinGietMo.setCoSoGietMoId(thongTinGietMoData.getCoSoGietMoId());
-				thongTinGietMo = serviceThongTinGietMoService.save(thongTinGietMo);
+	public ThongTinGietMo create(ThongTinGietMoData thongTinGietMoData) throws MethodArgumentNotValidException {
+		ThongTinGietMo thongTinGietMo = new ThongTinGietMo();
+		thongTinGietMo.setDaXoa(false);
+		thongTinGietMo.setCoSoGietMoId(thongTinGietMoData.getCoSoGietMoId());
+		thongTinGietMo = serviceThongTinGietMoService.save(thongTinGietMo);
+		
+		serviceThongTinGietMoService.setFixedDaXoaForCoSoGietMoId(false, thongTinGietMo.getCoSoGietMoId());
+		List<ThongTinSoLuongGietMoData> listThongTinGietMos = thongTinGietMoData.getListThongTinGietMo();
+		if(Objects.nonNull(listThongTinGietMos) && !listThongTinGietMos.isEmpty()) {
+			for(ThongTinSoLuongGietMoData thongTinSoLuongData : listThongTinGietMos) {
+				ThongTinGietMo thongTinGietMoDv = new ThongTinGietMo();
+				thongTinGietMoDv.setId(thongTinSoLuongData.getId());
+				thongTinGietMoDv.setNgayThang(thongTinSoLuongData.getNgayThang());
+				thongTinGietMoDv.setChuHang(thongTinSoLuongData.getChuHang());
+				thongTinGietMoDv.setLoaiGiayToId(thongTinSoLuongData.getLoaiGiayToId());
+				thongTinGietMoDv.setSoGiayTo(thongTinSoLuongData.getSoGiayTo());
+				thongTinGietMoDv.setCapNgay(thongTinSoLuongData.getCapNgay());
+				serviceThongTinGietMoService.save(thongTinGietMoDv);
 				
 				serviceSoLuongGietMoService.setFixedDaXoaAndThongTinGietMoId(false, thongTinGietMo.getId());
-				List<SoLuongGietMoData> listSoLuongGietMos = thongTinGietMoData.getListThongTinGietMo().get(i).getListSoLuongGietMo();
-				if(Objects.nonNull(listSoLuongGietMos) && !listSoLuongGietMos.isEmpty()) {
-					for(SoLuongGietMoData soLuongGietMoData : listSoLuongGietMos) {
-						SoLuongGietMo soLuongGietMo = new SoLuongGietMo();
-						if(Objects.nonNull(soLuongGietMo.getId())) {
-							Optional<SoLuongGietMo> optSoLuong = serviceSoLuongGietMoService.findById(soLuongGietMo.getId());
-							if(optSoLuong.isPresent()) {
-								soLuongGietMo = optSoLuong.get();
-							}
-						}
-						soLuongGietMo.setId(soLuongGietMoData.getId());
-						soLuongGietMo.setThongTinGietMoId(soLuongGietMoData.getThongTinGietMoId());
-						soLuongGietMo.setNguonGoc(soLuongGietMoData.getNguonGoc());
-						soLuongGietMo.setLoaiVatNuoiId(soLuongGietMoData.getLoaiVatNuoiId());
-						soLuongGietMo.setSoLuongGietMo(soLuongGietMoData.getSoLuongGietMo());
-						soLuongGietMo.setGhiChu(soLuongGietMoData.getGhiChu());
-						serviceSoLuongGietMoService.save(soLuongGietMo);
+				List<SoLuongGietMoData> listSoLuongGietMos = thongTinSoLuongData.getListSoLuongGietMo();
+				if(Objects.nonNull(listThongTinGietMos) && !listSoLuongGietMos.isEmpty()) {
+					for(SoLuongGietMoData soLuongData : listSoLuongGietMos) {
+						SoLuongGietMo soLuong = new SoLuongGietMo();
+						soLuong.setId(soLuongData.getId());
+						soLuong.setNguonGoc(soLuongData.getNguonGoc());
+						soLuong.setLoaiVatNuoiId(soLuongData.getLoaiVatNuoiId());
+						soLuong.setSoLuongGietMo(soLuongData.getSoLuongGietMo());
+						soLuong.setGhiChu(soLuongData.getGhiChu());
+						soLuong.setThongTinGietMoId(soLuongData.getThongTinGietMoId());
+						serviceSoLuongGietMoService.save(soLuong);
 					}
-				}
-				list.add(thongTinGietMo);
+				};
 			}
 		}
-		return list;
+		return thongTinGietMo;
 	}
+	
+	public ThongTinGietMo update(Long id, ThongTinGietMoData thongTinGietMoData) throws EntityNotFoundException {
+		Optional<ThongTinGietMo> optional = serviceThongTinGietMoService.findById(id);
+		if(!optional.isPresent()) {
+			throw new EntityNotFoundException(NhiemVuNam.class, "id", String.valueOf(id));
+		}
+		ThongTinGietMo thongTinGietMo = optional.get();
+		thongTinGietMo.setCoSoGietMoId(thongTinGietMoData.getCoSoGietMoId());
+		thongTinGietMo = serviceThongTinGietMoService.save(thongTinGietMo);
+		
+		serviceThongTinGietMoService.setFixedDaXoaForCoSoGietMoId(false, thongTinGietMo.getCoSoGietMoId());
+		List<ThongTinSoLuongGietMoData> listThongTinGietMos = thongTinGietMoData.getListThongTinGietMo();
+		if(Objects.nonNull(listThongTinGietMos) && !listThongTinGietMos.isEmpty()) {
+			for(ThongTinSoLuongGietMoData thongTinSoLuongData : listThongTinGietMos) {
+				ThongTinGietMo thongTinGietMoDv = new ThongTinGietMo();
+				thongTinGietMoDv.setId(thongTinSoLuongData.getId());
+				thongTinGietMoDv.setNgayThang(thongTinSoLuongData.getNgayThang());
+				thongTinGietMoDv.setChuHang(thongTinSoLuongData.getChuHang());
+				thongTinGietMoDv.setLoaiGiayToId(thongTinSoLuongData.getLoaiGiayToId());
+				thongTinGietMoDv.setSoGiayTo(thongTinSoLuongData.getSoGiayTo());
+				thongTinGietMoDv.setCapNgay(thongTinSoLuongData.getCapNgay());
+				serviceThongTinGietMoService.save(thongTinGietMoDv);
+				
+				serviceSoLuongGietMoService.setFixedDaXoaAndThongTinGietMoId(false, thongTinGietMo.getId());
+				List<SoLuongGietMoData> listSoLuongGietMos = thongTinSoLuongData.getListSoLuongGietMo();
+				if(Objects.nonNull(listThongTinGietMos) && !listSoLuongGietMos.isEmpty()) {
+					for(SoLuongGietMoData soLuongData : listSoLuongGietMos) {
+						SoLuongGietMo soLuong = new SoLuongGietMo();
+						soLuong.setId(soLuongData.getId());
+						soLuong.setNguonGoc(soLuongData.getNguonGoc());
+						soLuong.setLoaiVatNuoiId(soLuongData.getLoaiVatNuoiId());
+						soLuong.setSoLuongGietMo(soLuongData.getSoLuongGietMo());
+						soLuong.setGhiChu(soLuongData.getGhiChu());
+						soLuong.setThongTinGietMoId(soLuongData.getThongTinGietMoId());
+						serviceSoLuongGietMoService.save(soLuong);
+					}
+				}
+			}
+		}
+		return thongTinGietMo;
+	}
+
 	
 	@DeleteMapping(value = { "/{id}" })
 	public ThongTinGietMoData delete(Long id) throws EntityNotFoundException {

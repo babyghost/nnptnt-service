@@ -21,8 +21,5 @@ public interface ThongTinGietMoService {
 	
 	public List<ThongTinGietMo> findByCoSoGietMoIdAndDaXoa(Long coSoGietMoId, Boolean daXoa);
 	
-	public List<ThongTinGietMo> findByCoSoGietMoIdAndNgayThangAndChuHangAndLoaiGiayToIdAndSoGiayToAndDaXoa(Long coSoGietMoId,
-			LocalDate ngayThang, String chuHang, Long loaiGiayToId, String soGiayTo, Boolean daXoa);
-	
 	public int setFixedDaXoaForCoSoGietMoId(Boolean daXoa, Long coSoGietMoId);
 }

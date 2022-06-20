@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,6 +50,13 @@ public class DmLoaiGiayToController {
 	public ResponseEntity<DmLoaiGiayTo> create(@Valid @RequestBody DmLoaiGiayToData dmLoaiGiayToData) {
 		DmLoaiGiayTo loaiGiayTo = businessDmLoaiGiayToBusiness.create(dmLoaiGiayToData);
 		return ResponseEntity.status(HttpStatus.CREATED).body(loaiGiayTo);
+	}
+	
+	@PutMapping(value = { "/{id}" })
+	public ResponseEntity<DmLoaiGiayTo> update(@PathVariable("id") Long id, @Valid @RequestBody DmLoaiGiayToData
+			loaiGiayToData) throws EntityNotFoundException {
+		DmLoaiGiayTo loaiGiayTo = businessDmLoaiGiayToBusiness.update(id, loaiGiayToData);
+		return ResponseEntity.ok(loaiGiayTo);
 	}
 	
 	@DeleteMapping(value = { "/{id}" })

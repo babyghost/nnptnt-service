@@ -56,14 +56,6 @@ public class ThongTinGietMoServiceImpl implements ThongTinGietMoService {
 	}
 
 	@Override
-	public List<ThongTinGietMo> findByCoSoGietMoIdAndNgayThangAndChuHangAndLoaiGiayToIdAndSoGiayToAndDaXoa(
-			Long coSoGietMoId, LocalDate ngayThang, String chuHang, Long loaiGiayToId, String soGiayTo, Boolean daXoa) {
-		// TODO Auto-generated method stub
-		return repo.findByCoSoGietMoIdAndNgayThangAndChuHangAndLoaiGiayToIdAndSoGiayToAndDaXoa(coSoGietMoId, ngayThang, chuHang,
-				loaiGiayToId, soGiayTo, daXoa);
-	}
-
-	@Override
 	public int setFixedDaXoaForCoSoGietMoId(Boolean daXoa, Long coSoGietMoId) {
 		// TODO Auto-generated method stub
 		return repo.setFixedDaXoaForCoSoGietMoId(daXoa, coSoGietMoId);

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,22 +58,18 @@ public class ThongTinGietMoController {
 		return ResponseEntity.ok(businessThongTinGietMoBusiness.findById(id));
 	}
 	
-	@GetMapping(value = "/{coSoGietMoId}/{ngayThang}/{chuHang}/{loaiGiayToId}/{soGiayTo}")
-	public ResponseEntity<List<ThongTinGietMo>> getThongTinGietMoByCoSoAndNgayThangAndChuHangAndLoaiGiayToAndSoGiayTo(
-			@PathVariable("coSoGietMoId") Long coSoGietMoId, @PathVariable("ngayThang") LocalDate ngayThang, @PathVariable("chuHang")
-			String chuHang, @PathVariable("loaiGiayToId") Long loaiGiayToId, @PathVariable("soGiayTo") String soGiayTo) 
-					throws EntityNotFoundException {
-		List<ThongTinGietMo> list = businessThongTinGietMoBusiness
-				.getThongTinGietMoByCoSoAndNgayThangAndChuHangAndLoaiGiayToAndSoGiayTo(coSoGietMoId, ngayThang, chuHang, loaiGiayToId,
-						soGiayTo);
-		return ResponseEntity.ok(list);
+	@PostMapping(value = { "" })
+	public ResponseEntity<ThongTinGietMo> create(@Valid @RequestBody ThongTinGietMoData thongTinGietMoData)
+			throws MethodArgumentNotValidException {
+		ThongTinGietMo thongTinGietMo = businessThongTinGietMoBusiness.create(thongTinGietMoData);
+		return ResponseEntity.status(HttpStatus.CREATED).body(thongTinGietMo);
 	}
 	
-	@PostMapping(value = { "/save" })
-	public ResponseEntity<List<ThongTinGietMo>> save(@Valid @RequestBody ThongTinGietMoData thongTinGietMoData, BindingResult result)
-			throws MethodArgumentNotValidException {
-		List<ThongTinGietMo> list = businessThongTinGietMoBusiness.create(thongTinGietMoData, result);
-		return ResponseEntity.status(HttpStatus.CREATED).body(list);
+	@PutMapping(value = { "/{id}" })
+	public ResponseEntity<ThongTinGietMo> update(@PathVariable("id") Long id, @Valid @RequestBody ThongTinGietMoData thongTinGietMoData)
+			throws EntityNotFoundException, MethodArgumentNotValidException {
+		ThongTinGietMo thongTinGietMo = businessThongTinGietMoBusiness.update(id, thongTinGietMoData);
+		return ResponseEntity.ok(thongTinGietMo);
 	}
 	
 	@DeleteMapping(value = { "/{id}" })

@@ -1,6 +1,5 @@
 package vn.dnict.microservice.nnptnt.kiemsoatgietmo.thongtingietmo.dao.service.repo;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,9 +13,6 @@ import vn.dnict.microservice.nnptnt.kiemsoatgietmo.thongtingietmo.dao.model.Thon
 @Repository
 public interface ThongTinGietMoRepo extends JpaRepository<ThongTinGietMo, Long>, JpaSpecificationExecutor<ThongTinGietMo> {
 	public List<ThongTinGietMo> findByCoSoGietMoIdAndDaXoa(Long coSoGietMoId, Boolean daXoa);
-	
-	public List<ThongTinGietMo> findByCoSoGietMoIdAndNgayThangAndChuHangAndLoaiGiayToIdAndSoGiayToAndDaXoa(Long coSoGietMoId,
-			LocalDate ngayThang, String chuHang, Long loaiGiayToId, String soGiayTo, Boolean daXoa);
 	
 	@Modifying(clearAutomatically = true)
 	@Query("update ThongTinGietMo u set u.daXoa = ?1 where u.coSoGietMoId = ?2")
