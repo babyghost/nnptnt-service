@@ -22,9 +22,12 @@ import vn.dnict.microservice.danhmuc.dao.service.DmCanBoService;
 import vn.dnict.microservice.danhmuc.dao.service.DmDonViService;
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
 import vn.dnict.microservice.nnptnt.kehoach.data.KeHoachThangData;
+import vn.dnict.microservice.nnptnt.kehoach.data.NhiemVuNamData;
 import vn.dnict.microservice.nnptnt.kehoach.data.NhiemVuThangData;
+import vn.dnict.microservice.nnptnt.kehoach.kehoachnam.dao.model.KeHoachNam;
 import vn.dnict.microservice.nnptnt.kehoach.kehoachthang.dao.model.KeHoachThang;
 import vn.dnict.microservice.nnptnt.kehoach.kehoachthang.dao.service.KeHoachThangService;
+import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.model.NhiemVuNam;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang.dao.model.NhiemVuThang;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang.dao.service.NhiemVuThangService;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang2filedinhkem.dao.model.FileDinhKemNhiemVuThang;
@@ -236,30 +239,10 @@ public class KeHoachThangBusiness {
 		keHoachThang.setThang(keHoachThangData.getThang());
 		keHoachThang = serviceKeHoachThangService.save(keHoachThang);
 		
-		serviceNhiemVuThangService.setFixedDaXoaForKeHoachThangId(false, keHoachThang.getId());
+		serviceNhiemVuThangService.setFixedDaXoaForKeHoachThangId(false, keHoachThang.getId());		
 		List<NhiemVuThangData> nhiemVuThangDatas = keHoachThangData.getNhiemVuThangDatas();
 		if(Objects.nonNull(nhiemVuThangDatas) && !nhiemVuThangDatas.isEmpty()) {
-			for(NhiemVuThangData nhiemVuThangData : nhiemVuThangDatas) {
-				NhiemVuThang nhiemVuThang = new NhiemVuThang();
-				if(Objects.nonNull(nhiemVuThang.getId())) {
-					Optional<NhiemVuThang> optNhiemVuThang = serviceNhiemVuThangService.findById(nhiemVuThangData.getId());
-					if(optNhiemVuThang.isPresent()) {
-						nhiemVuThang = optNhiemVuThang.get();
-					}
-				}
-				nhiemVuThang.setId(nhiemVuThangData.getId());
-				nhiemVuThang.setTenNhiemVu(nhiemVuThangData.getTenNhiemVu());
-				nhiemVuThang.setKeHoachThangId(nhiemVuThangData.getKeHoachThangId());
-				nhiemVuThang.setCanBoThucHienId(nhiemVuThangData.getCanBoThucHienId());
-				nhiemVuThang.setDonViPhoiHop(nhiemVuThangData.getDonViPhoiHop());
-				nhiemVuThang.setThoiGian(nhiemVuThangData.getThoiGian());
-				nhiemVuThang.setGhiChu(nhiemVuThangData.getGhiChu());
-				nhiemVuThang.setIsNhiemVuThangTruoc(nhiemVuThangData.getIsNhiemVuThangTruoc());
-				nhiemVuThang.setNhiemVuThangTruocId(nhiemVuThangData.getNhiemVuThangTruocId());
-				nhiemVuThang.setTinhTrang(nhiemVuThangData.getTinhTrang());
-				nhiemVuThang.setTienDoNhiemVuId(nhiemVuThangData.getTienDoNhiemVuId());
-				serviceNhiemVuThangService.save(nhiemVuThang);
-			}
+			saveNhiemVuThangDatas(nhiemVuThangDatas, keHoachThang, null);
 		}
 
 		return keHoachThang;
@@ -275,32 +258,43 @@ public class KeHoachThangBusiness {
 		keHoachThang.setThang(keHoachThangData.getThang());
 		keHoachThang = serviceKeHoachThangService.save(keHoachThang);
 		
-		serviceNhiemVuThangService.setFixedDaXoaForKeHoachThangId(false, keHoachThang.getId());
+		serviceNhiemVuThangService.setFixedDaXoaForKeHoachThangId(false, keHoachThang.getId());		
 		List<NhiemVuThangData> nhiemVuThangDatas = keHoachThangData.getNhiemVuThangDatas();
 		if(Objects.nonNull(nhiemVuThangDatas) && !nhiemVuThangDatas.isEmpty()) {
-			for(NhiemVuThangData nhiemVuThangData : nhiemVuThangDatas) {
-				NhiemVuThang nhiemVuThang = new NhiemVuThang();
-				if(Objects.nonNull(nhiemVuThang.getId())) {
-					Optional<NhiemVuThang> optNhiemVuThang = serviceNhiemVuThangService.findById(nhiemVuThangData.getId());
-					if(optNhiemVuThang.isPresent()) {
-						nhiemVuThang = optNhiemVuThang.get();
-					}
-				}
-				nhiemVuThang.setId(nhiemVuThangData.getId());
-				nhiemVuThang.setTenNhiemVu(nhiemVuThangData.getTenNhiemVu());
-				nhiemVuThang.setKeHoachThangId(nhiemVuThangData.getKeHoachThangId());
-				nhiemVuThang.setCanBoThucHienId(nhiemVuThangData.getCanBoThucHienId());
-				nhiemVuThang.setDonViPhoiHop(nhiemVuThangData.getDonViPhoiHop());
-				nhiemVuThang.setThoiGian(nhiemVuThangData.getThoiGian());
-				nhiemVuThang.setGhiChu(nhiemVuThangData.getGhiChu());
-				nhiemVuThang.setIsNhiemVuThangTruoc(nhiemVuThangData.getIsNhiemVuThangTruoc());
-				nhiemVuThang.setNhiemVuThangTruocId(nhiemVuThangData.getNhiemVuThangTruocId());
-				nhiemVuThang.setTinhTrang(nhiemVuThangData.getTinhTrang());
-				nhiemVuThang.setTienDoNhiemVuId(nhiemVuThangData.getTienDoNhiemVuId());
-				serviceNhiemVuThangService.save(nhiemVuThang);
-			}
+			saveNhiemVuThangDatas(nhiemVuThangDatas, keHoachThang, null);
 		}
 		return keHoachThang;
+	}
+	
+	private void saveNhiemVuThangDatas(List<NhiemVuThangData> nhiemVuThangDatas, KeHoachThang keHoachThang, Long nhiemVuThangTruocId) {
+		int sapXep = 0;
+		for(NhiemVuThangData nhiemVuThangData : nhiemVuThangDatas) {
+			sapXep++;
+			NhiemVuThang nhiemVuThang = new NhiemVuThang();
+			if(Objects.nonNull(nhiemVuThangData.getId())) {
+				Optional<NhiemVuThang> optNhiemVuThang = serviceNhiemVuThangService.findById(nhiemVuThangData.getId());
+				if(optNhiemVuThang.isPresent()) {
+					nhiemVuThang = optNhiemVuThang.get();
+				}
+			}
+			nhiemVuThang.setDaXoa(false);
+			nhiemVuThang.setTenNhiemVu(nhiemVuThangData.getTenNhiemVu());
+			nhiemVuThang.setKeHoachThangId(nhiemVuThangData.getKeHoachThangId());
+			nhiemVuThang.setCanBoThucHienId(nhiemVuThangData.getCanBoThucHienId());
+			nhiemVuThang.setDonViPhoiHop(nhiemVuThangData.getDonViPhoiHop());
+			nhiemVuThang.setThoiGian(nhiemVuThangData.getThoiGian());
+			nhiemVuThang.setGhiChu(nhiemVuThangData.getGhiChu());
+			nhiemVuThang.setIsNhiemVuThangTruoc(nhiemVuThangData.getIsNhiemVuThangTruoc());
+			nhiemVuThang.setNhiemVuThangTruocId(nhiemVuThangData.getNhiemVuThangTruocId());
+			nhiemVuThang.setTinhTrang(nhiemVuThangData.getTinhTrang());
+			nhiemVuThang.setTienDoNhiemVuId(nhiemVuThangData.getTienDoNhiemVuId());
+			nhiemVuThang = serviceNhiemVuThangService.save(nhiemVuThang);
+			
+			List<NhiemVuThangData> children = nhiemVuThangData.getChildren();
+			if(Objects.nonNull(children) && !children.isEmpty()) {
+				saveNhiemVuThangDatas(children, keHoachThang, nhiemVuThang.getId());
+			}
+		}
 	}
 	
 	@GetMapping(value = { "/{id}" })

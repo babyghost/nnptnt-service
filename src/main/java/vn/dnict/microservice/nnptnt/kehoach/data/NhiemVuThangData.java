@@ -47,4 +47,6 @@ public class NhiemVuThangData {
 	
 	private List<Long> canBoThucHienIds = new ArrayList<Long>();
 	
+	private List<NhiemVuThangData> children = new ArrayList<NhiemVuThangData>();
+	
 }
