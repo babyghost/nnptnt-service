@@ -39,7 +39,7 @@ public class ThongTinGietMoController {
 	public ResponseEntity<Page<ThongTinGietMoData>> findAll(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "coSoGietMoId", required = false) String sortBy,
+			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
 			@RequestParam(name = "tenCoSo", required = false) List<String> tenCoSos,
 			@RequestParam(name = "tenChuCoSo", required = false) String tenChuCoSo,
@@ -48,8 +48,8 @@ public class ThongTinGietMoController {
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "gietMoDenNgay", required = false) LocalDate gietMoDenNgay,
 			@RequestParam(name = "quanHuyenId", required = false) Long quanHuyenId,
 			@RequestParam(name = "phuongXaId", required = false) Long phuongXaId) {
-		Page<ThongTinGietMoData> pageThongTinData = businessThongTinGietMoBusiness.findAll(page, size, sortBy, sortDir, tenCoSos, tenChuCoSo,
-				dienThoai, gietMoTuNgay, gietMoDenNgay, quanHuyenId, phuongXaId);
+		Page<ThongTinGietMoData> pageThongTinData = businessThongTinGietMoBusiness.findAll(page, size, sortBy, sortDir, tenCoSos,
+				tenChuCoSo, dienThoai, gietMoTuNgay, gietMoDenNgay, quanHuyenId, phuongXaId);
 		return ResponseEntity.ok(pageThongTinData);
 	}
 	

@@ -25,9 +25,9 @@ public class ThongTinGietMoSpecifications {
 				List<Predicate> predicates = new ArrayList<>();
 				predicates.add(cb.equal(root.<String>get("daXoa"), false));
 				if (tenCoSos != null && !tenCoSos.isEmpty()) {
-					Expression<List<String>> valuethang = cb.literal(tenCoSos);
+					Expression<List<String>> valuecoSoGietMoId = cb.literal(tenCoSos);
 					Expression<String> expression = root.join("coSoGietMo").get("tenCoSo");
-					Predicate inList = expression.in(valuethang);
+					Predicate inList = expression.in(valuecoSoGietMoId);
 					predicates.add(inList);
 				}
 				

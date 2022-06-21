@@ -58,8 +58,9 @@ public class ThongTinGietMoBusiness {
 	@Autowired
 	SoLuongGietMoService serviceSoLuongGietMoService;
 	
-	public Page<ThongTinGietMoData> findAll(int page, int size, String sortBy, String sortDir, List<String> tenCoSos, String tenChuCoSo,
-			String dienThoai, LocalDate gietMoTuNgay, LocalDate gietMoDenNgay, Long quanHuyenId, Long phuongXaId) {
+	public Page<ThongTinGietMoData> findAll(int page, int size, String sortBy, String sortDir, List<String> tenCoSos,
+			String tenChuCoSo, String dienThoai, LocalDate gietMoTuNgay, LocalDate gietMoDenNgay, Long quanHuyenId,
+			Long phuongXaId) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
@@ -101,51 +102,40 @@ public class ThongTinGietMoBusiness {
 				thongTinGietMoData.setGiayKinhDoanh(optCoSo.get().getGiayKinhDoanh());
 			}
 		}
-		
-		List<ThongTinSoLuongGietMoData> listThongTinGietMos = new ArrayList<ThongTinSoLuongGietMoData>();
-		List<ThongTinGietMo> listThongTins = serviceThongTinGietMoService.findByCoSoGietMoIdAndDaXoa(thongTinGietMo.getCoSoGietMoId(), false);
-		if(Objects.nonNull(listThongTins) && !listThongTins.isEmpty()) {
-			for(ThongTinGietMo listThongTin : listThongTins) {
-				ThongTinSoLuongGietMoData thongTinSoLuongData = new ThongTinSoLuongGietMoData();
-				thongTinSoLuongData.setId(listThongTin.getId());
-				thongTinSoLuongData.setNgayThang(listThongTin.getNgayThang());
-				thongTinSoLuongData.setChuHang(listThongTin.getChuHang());
-				thongTinSoLuongData.setSoGiayTo(listThongTin.getSoGiayTo());
-				thongTinSoLuongData.setLoaiGiayToId(listThongTin.getLoaiGiayToId());
-				if(listThongTin.getLoaiGiayToId() != null && listThongTin.getLoaiGiayToId() > 0) {
-					Optional<DmLoaiGiayTo> optGiayTo = serviceDmLoaiGiayToService.findById(listThongTin.getLoaiGiayToId());
-					if(optGiayTo.isPresent()) {
-						thongTinSoLuongData.setLoaiGiayToTen(optGiayTo.get().getTen());
-					}
-				}
-				thongTinSoLuongData.setCapNgay(listThongTin.getCapNgay());
-				
-				List<SoLuongGietMoData> listSoLuongGietMos = new ArrayList<SoLuongGietMoData>();
-				List<SoLuongGietMo> listGietMos = serviceSoLuongGietMoService.findByThongTinGietMoIdAndDaXoa(thongTinGietMo.getId(), false);
-				if(Objects.nonNull(listGietMos) && !listGietMos.isEmpty()) {
-					for(SoLuongGietMo soLuong : listGietMos) {
-						SoLuongGietMoData soLuongData = new SoLuongGietMoData();
-						soLuongData.setId(soLuong.getId());
-						soLuongData.setThongTinGietMoId(soLuong.getThongTinGietMoId());
-						soLuongData.setNguonGoc(soLuong.getNguonGoc());
-						soLuongData.setLoaiVatNuoiId(soLuong.getLoaiVatNuoiId());
-						if(soLuong.getLoaiVatNuoiId() != null && soLuong.getLoaiVatNuoiId() > 0) {
-							Optional<DmLoaiVatNuoi> optVatNuoi = serviceDmLoaiVatNuoiService.findById(soLuong.getLoaiVatNuoiId());
-							if(optVatNuoi.isPresent()) {
-								soLuongData.setLoaiVatNuoiTen(optVatNuoi.get().getTen());
-							}
-						}
-						soLuongData.setSoLuongGietMo(soLuong.getSoLuongGietMo());
-						soLuongData.setGhiChu(soLuong.getGhiChu());
-						
-						listSoLuongGietMos.add(soLuongData);
-					}
-				}
-				thongTinSoLuongData.setListSoLuongGietMo(listSoLuongGietMos);
-				listThongTinGietMos.add(thongTinSoLuongData);
-			}			
+		thongTinGietMoData.setNgayThang(thongTinGietMo.getNgayThang());
+		thongTinGietMoData.setChuHang(thongTinGietMo.getChuHang());
+		thongTinGietMoData.setLoaiGiayToId(thongTinGietMo.getLoaiGiayToId());
+		if(thongTinGietMo.getLoaiGiayToId() != null && thongTinGietMo.getLoaiGiayToId() > 0) {
+			Optional<DmLoaiGiayTo> optGiayTo = serviceDmLoaiGiayToService.findById(thongTinGietMo.getLoaiGiayToId());
+			if(optGiayTo.isPresent()) {
+				thongTinGietMoData.setLoaiGiayToTen(optGiayTo.get().getTen());
+			}
 		}
-		thongTinGietMoData.setListThongTinGietMo(listThongTinGietMos);
+		thongTinGietMoData.setSoGiayTo(thongTinGietMo.getSoGiayTo());
+		thongTinGietMoData.setCapNgay(thongTinGietMo.getCapNgay());
+		
+		List<SoLuongGietMoData> listSoLuongGietMos = new ArrayList<SoLuongGietMoData>();
+		List<SoLuongGietMo> listGietMos = serviceSoLuongGietMoService.findByThongTinGietMoIdAndDaXoa(thongTinGietMo.getId(), false);
+		if(Objects.nonNull(listGietMos) && !listGietMos.isEmpty()) {
+			for(SoLuongGietMo soLuong : listGietMos) {
+				SoLuongGietMoData soLuongData = new SoLuongGietMoData();
+				soLuongData.setId(soLuong.getId());
+				soLuongData.setThongTinGietMoId(soLuong.getThongTinGietMoId());
+				soLuongData.setNguonGoc(soLuong.getNguonGoc());
+				soLuongData.setLoaiVatNuoiId(soLuong.getLoaiVatNuoiId());
+				if(soLuong.getLoaiVatNuoiId() != null && soLuong.getLoaiVatNuoiId() > 0) {
+					Optional<DmLoaiVatNuoi> optVatNuoi = serviceDmLoaiVatNuoiService.findById(soLuong.getLoaiVatNuoiId());
+					if(optVatNuoi.isPresent()) {
+						soLuongData.setLoaiVatNuoiTen(optVatNuoi.get().getTen());
+					}
+				}
+				soLuongData.setSoLuongGietMo(soLuong.getSoLuongGietMo());
+				soLuongData.setGhiChu(soLuong.getGhiChu());
+				
+				listSoLuongGietMos.add(soLuongData);
+			}
+		}
+		thongTinGietMoData.setListSoLuongGietMo(listSoLuongGietMos);
 		return thongTinGietMoData;
 	}
 	
@@ -162,35 +152,25 @@ public class ThongTinGietMoBusiness {
 		ThongTinGietMo thongTinGietMo = new ThongTinGietMo();
 		thongTinGietMo.setDaXoa(false);
 		thongTinGietMo.setCoSoGietMoId(thongTinGietMoData.getCoSoGietMoId());
+		thongTinGietMo.setNgayThang(thongTinGietMoData.getNgayThang());
+		thongTinGietMo.setChuHang(thongTinGietMoData.getChuHang());
+		thongTinGietMo.setLoaiGiayToId(thongTinGietMoData.getLoaiGiayToId());
+		thongTinGietMo.setSoGiayTo(thongTinGietMoData.getSoGiayTo());
+		thongTinGietMo.setCapNgay(thongTinGietMoData.getCapNgay());;
 		thongTinGietMo = serviceThongTinGietMoService.save(thongTinGietMo);
-		
-		serviceThongTinGietMoService.setFixedDaXoaForCoSoGietMoId(false, thongTinGietMo.getCoSoGietMoId());
-		List<ThongTinSoLuongGietMoData> listThongTinGietMos = thongTinGietMoData.getListThongTinGietMo();
-		if(Objects.nonNull(listThongTinGietMos) && !listThongTinGietMos.isEmpty()) {
-			for(ThongTinSoLuongGietMoData thongTinSoLuongData : listThongTinGietMos) {
-				ThongTinGietMo thongTinGietMoDv = new ThongTinGietMo();
-				thongTinGietMoDv.setId(thongTinSoLuongData.getId());
-				thongTinGietMoDv.setNgayThang(thongTinSoLuongData.getNgayThang());
-				thongTinGietMoDv.setChuHang(thongTinSoLuongData.getChuHang());
-				thongTinGietMoDv.setLoaiGiayToId(thongTinSoLuongData.getLoaiGiayToId());
-				thongTinGietMoDv.setSoGiayTo(thongTinSoLuongData.getSoGiayTo());
-				thongTinGietMoDv.setCapNgay(thongTinSoLuongData.getCapNgay());
-				serviceThongTinGietMoService.save(thongTinGietMoDv);
 				
-				serviceSoLuongGietMoService.setFixedDaXoaAndThongTinGietMoId(false, thongTinGietMo.getId());
-				List<SoLuongGietMoData> listSoLuongGietMos = thongTinSoLuongData.getListSoLuongGietMo();
-				if(Objects.nonNull(listThongTinGietMos) && !listSoLuongGietMos.isEmpty()) {
-					for(SoLuongGietMoData soLuongData : listSoLuongGietMos) {
-						SoLuongGietMo soLuong = new SoLuongGietMo();
-						soLuong.setId(soLuongData.getId());
-						soLuong.setNguonGoc(soLuongData.getNguonGoc());
-						soLuong.setLoaiVatNuoiId(soLuongData.getLoaiVatNuoiId());
-						soLuong.setSoLuongGietMo(soLuongData.getSoLuongGietMo());
-						soLuong.setGhiChu(soLuongData.getGhiChu());
-						soLuong.setThongTinGietMoId(soLuongData.getThongTinGietMoId());
-						serviceSoLuongGietMoService.save(soLuong);
-					}
-				};
+		serviceSoLuongGietMoService.setFixedDaXoaAndThongTinGietMoId(false, thongTinGietMo.getId());
+		List<SoLuongGietMoData> listSoLuongGietMos = thongTinGietMoData.getListSoLuongGietMo();
+		if(Objects.nonNull(listSoLuongGietMos) && !listSoLuongGietMos.isEmpty()) {
+			for(SoLuongGietMoData soLuongData : listSoLuongGietMos) {
+				SoLuongGietMo soLuong = new SoLuongGietMo();
+				soLuong.setId(soLuongData.getId());
+				soLuong.setNguonGoc(soLuongData.getNguonGoc());
+				soLuong.setLoaiVatNuoiId(soLuongData.getLoaiVatNuoiId());
+				soLuong.setSoLuongGietMo(soLuongData.getSoLuongGietMo());
+				soLuong.setGhiChu(soLuongData.getGhiChu());
+				soLuong.setThongTinGietMoId(thongTinGietMo.getId());
+				serviceSoLuongGietMoService.save(soLuong);
 			}
 		}
 		return thongTinGietMo;
@@ -200,38 +180,29 @@ public class ThongTinGietMoBusiness {
 		Optional<ThongTinGietMo> optional = serviceThongTinGietMoService.findById(id);
 		if(!optional.isPresent()) {
 			throw new EntityNotFoundException(NhiemVuNam.class, "id", String.valueOf(id));
+			
 		}
 		ThongTinGietMo thongTinGietMo = optional.get();
 		thongTinGietMo.setCoSoGietMoId(thongTinGietMoData.getCoSoGietMoId());
+		thongTinGietMo.setNgayThang(thongTinGietMoData.getNgayThang());
+		thongTinGietMo.setChuHang(thongTinGietMoData.getChuHang());
+		thongTinGietMo.setLoaiGiayToId(thongTinGietMoData.getLoaiGiayToId());
+		thongTinGietMo.setSoGiayTo(thongTinGietMoData.getSoGiayTo());
+		thongTinGietMo.setCapNgay(thongTinGietMoData.getCapNgay());
 		thongTinGietMo = serviceThongTinGietMoService.save(thongTinGietMo);
-		
-		serviceThongTinGietMoService.setFixedDaXoaForCoSoGietMoId(false, thongTinGietMo.getCoSoGietMoId());
-		List<ThongTinSoLuongGietMoData> listThongTinGietMos = thongTinGietMoData.getListThongTinGietMo();
-		if(Objects.nonNull(listThongTinGietMos) && !listThongTinGietMos.isEmpty()) {
-			for(ThongTinSoLuongGietMoData thongTinSoLuongData : listThongTinGietMos) {
-				ThongTinGietMo thongTinGietMoDv = new ThongTinGietMo();
-				thongTinGietMoDv.setId(thongTinSoLuongData.getId());
-				thongTinGietMoDv.setNgayThang(thongTinSoLuongData.getNgayThang());
-				thongTinGietMoDv.setChuHang(thongTinSoLuongData.getChuHang());
-				thongTinGietMoDv.setLoaiGiayToId(thongTinSoLuongData.getLoaiGiayToId());
-				thongTinGietMoDv.setSoGiayTo(thongTinSoLuongData.getSoGiayTo());
-				thongTinGietMoDv.setCapNgay(thongTinSoLuongData.getCapNgay());
-				serviceThongTinGietMoService.save(thongTinGietMoDv);
-				
-				serviceSoLuongGietMoService.setFixedDaXoaAndThongTinGietMoId(false, thongTinGietMo.getId());
-				List<SoLuongGietMoData> listSoLuongGietMos = thongTinSoLuongData.getListSoLuongGietMo();
-				if(Objects.nonNull(listThongTinGietMos) && !listSoLuongGietMos.isEmpty()) {
-					for(SoLuongGietMoData soLuongData : listSoLuongGietMos) {
-						SoLuongGietMo soLuong = new SoLuongGietMo();
-						soLuong.setId(soLuongData.getId());
-						soLuong.setNguonGoc(soLuongData.getNguonGoc());
-						soLuong.setLoaiVatNuoiId(soLuongData.getLoaiVatNuoiId());
-						soLuong.setSoLuongGietMo(soLuongData.getSoLuongGietMo());
-						soLuong.setGhiChu(soLuongData.getGhiChu());
-						soLuong.setThongTinGietMoId(soLuongData.getThongTinGietMoId());
-						serviceSoLuongGietMoService.save(soLuong);
-					}
-				}
+		System.out.println(optional + "+++++++++" + thongTinGietMo.getNgayThang());
+		serviceSoLuongGietMoService.setFixedDaXoaAndThongTinGietMoId(false, thongTinGietMo.getId());
+		List<SoLuongGietMoData> listSoLuongGietMos = thongTinGietMoData.getListSoLuongGietMo();
+		if(Objects.nonNull(listSoLuongGietMos) && !listSoLuongGietMos.isEmpty()) {
+			for(SoLuongGietMoData soLuongData : listSoLuongGietMos) {
+				SoLuongGietMo soLuong = new SoLuongGietMo();
+				soLuong.setId(soLuongData.getId());
+				soLuong.setNguonGoc(soLuongData.getNguonGoc());
+				soLuong.setLoaiVatNuoiId(soLuongData.getLoaiVatNuoiId());
+				soLuong.setSoLuongGietMo(soLuongData.getSoLuongGietMo());
+				soLuong.setGhiChu(soLuongData.getGhiChu());
+				soLuong.setThongTinGietMoId(thongTinGietMo.getId());
+				serviceSoLuongGietMoService.save(soLuong);
 			}
 		}
 		return thongTinGietMo;
