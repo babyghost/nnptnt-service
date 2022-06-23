@@ -42,8 +42,8 @@ public class ThongTinGietMoServiceImpl implements ThongTinGietMoService {
 	}
 
 	@Override
-	public Page<ThongTinGietMo> findAll(List<String> tenCoSos, String tenChuCoSo, String dienThoai,
-			LocalDate gietMoTuNgay, LocalDate gietMoDenNgay, Long quanHuyenId, Long phuongXaId, Pageable pageable) {
+	public Page<ThongTinGietMo> findAll(List<String> tenCoSos, String tenChuCoSo, String dienThoai, LocalDate gietMoTuNgay,
+			LocalDate gietMoDenNgay, Long quanHuyenId, Long phuongXaId, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return repo.findAll(ThongTinGietMoSpecifications.quickSearch(tenCoSos, tenChuCoSo, dienThoai, gietMoTuNgay, gietMoDenNgay,
 				quanHuyenId, phuongXaId), pageable);
@@ -59,6 +59,14 @@ public class ThongTinGietMoServiceImpl implements ThongTinGietMoService {
 	public int setFixedDaXoaForCoSoGietMoId(Boolean daXoa, Long coSoGietMoId) {
 		// TODO Auto-generated method stub
 		return repo.setFixedDaXoaForCoSoGietMoId(daXoa, coSoGietMoId);
+	}
+
+	@Override
+	public Page<ThongTinGietMo> tongHopSoLuongNgay(List<String> tenCoSos, List<Long> loaiVatNuoiIds,
+			LocalDate gietMoTuNgay, LocalDate gietMoDenNgay, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return repo.findAll(ThongTinGietMoSpecifications.tongHopSoLuongNgay(tenCoSos, loaiVatNuoiIds, gietMoTuNgay, gietMoDenNgay),
+				pageable);
 	}
 
 }

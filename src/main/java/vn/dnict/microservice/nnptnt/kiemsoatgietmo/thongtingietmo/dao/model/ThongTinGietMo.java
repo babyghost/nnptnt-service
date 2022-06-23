@@ -2,16 +2,19 @@ package vn.dnict.microservice.nnptnt.kiemsoatgietmo.thongtingietmo.dao.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NotFound;
@@ -24,10 +27,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.cosogietmo.dao.model.CoSoGietMo;
+import vn.dnict.microservice.nnptnt.kiemsoatgietmo.soluonggietmo.dao.model.SoLuongGietMo;
 
 @Entity
 @Table(name = "qlgietmo_thongtingietmo")
@@ -61,6 +66,10 @@ public class ThongTinGietMo {
 	@JoinColumn(name = "cosogietmo_id", insertable=false, updatable=false)	
 	@Where(clause = "daxoa = false")
 	private CoSoGietMo coSoGietMo;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "thongTinGietMoId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<SoLuongGietMo> soLuongGietMo;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Column(name = "capngay")

@@ -22,4 +22,7 @@ public interface ThongTinGietMoService {
 	public List<ThongTinGietMo> findByCoSoGietMoIdAndDaXoa(Long coSoGietMoId, Boolean daXoa);
 	
 	public int setFixedDaXoaForCoSoGietMoId(Boolean daXoa, Long coSoGietMoId);
+	
+	public Page<ThongTinGietMo> tongHopSoLuongNgay(List<String> tenCoSos, List<Long> loaiVatNuoiIds, LocalDate gietMoTuNgay,
+			LocalDate gietMoDenNgay, Pageable pageable);
 }

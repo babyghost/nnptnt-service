@@ -1,10 +1,16 @@
 package vn.dnict.microservice.nnptnt.kiemsoatgietmo.thongtingietmo.business;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +19,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import vn.dnict.microservice.danhmuc.dao.model.DmPhuongXa;
 import vn.dnict.microservice.danhmuc.dao.model.DmQuanHuyen;
@@ -27,10 +34,12 @@ import vn.dnict.microservice.nnptnt.kiemsoatgietmo.cosogietmo.dao.service.CoSoGi
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.danhmuc.loaigiayto.dao.model.DmLoaiGiayTo;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.danhmuc.loaigiayto.dao.service.DmLoaiGiayToService;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.data.SoLuongGietMoData;
+import vn.dnict.microservice.nnptnt.kiemsoatgietmo.data.ThongKeSoLuongData;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.data.ThongTinGietMoData;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.data.ThongTinSoLuongGietMoData;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.soluonggietmo.dao.model.SoLuongGietMo;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.soluonggietmo.dao.service.SoLuongGietMoService;
+import vn.dnict.microservice.nnptnt.kiemsoatgietmo.thongtingietmo.business.view.MyExcelViewTongHopSoLuongNgay;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.thongtingietmo.dao.model.ThongTinGietMo;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.thongtingietmo.dao.service.ThongTinGietMoService;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.model.HoatDongChanNuoi;
@@ -137,6 +146,84 @@ public class ThongTinGietMoBusiness {
 		}
 		thongTinGietMoData.setListSoLuongGietMo(listSoLuongGietMos);
 		return thongTinGietMoData;
+	}
+	
+	public Page<ThongKeSoLuongData> tongHopSoLuongNgay(int page, int size, String sortBy, String sortDir, List<String> tenCoSos,
+			List<Long> loaiVatNuoiId, LocalDate gietMoTuNgay, LocalDate gietMoDenNgay) {
+		Direction direction;
+		if (sortDir.equals("ASC")) {
+			direction = Direction.ASC;
+		} else {
+			direction = Direction.DESC;
+		}
+		Page<ThongTinGietMo> pageThongTin = serviceThongTinGietMoService.tongHopSoLuongNgay(tenCoSos, loaiVatNuoiId, gietMoTuNgay,
+				gietMoDenNgay, PageRequest.of(page, size, direction, sortBy));
+		final Page<ThongKeSoLuongData> pageThongKeNgay = pageThongTin.map(this::convertToThongKeSoLuongNgayData);
+		return pageThongKeNgay;
+	}
+	
+	public ThongKeSoLuongData convertToThongKeSoLuongNgayData(ThongTinGietMo thongTinGietMo) {
+		ThongKeSoLuongData thongKeNgayData = new ThongKeSoLuongData();
+		thongKeNgayData.setCoSoGietMoId(thongTinGietMo.getCoSoGietMoId());
+		if(thongTinGietMo.getCoSoGietMoId() != null && thongTinGietMo.getCoSoGietMoId() > 0) {
+			Optional<CoSoGietMo> optCoSo = serviceCoSoGietMoService.findById(thongTinGietMo.getCoSoGietMoId());
+			if(optCoSo.isPresent()) {
+				thongKeNgayData.setCoSoTen(optCoSo.get().getTenCoSo());
+			}
+		}
+		thongKeNgayData.setNgayThang(thongTinGietMo.getNgayThang());
+		
+		List<SoLuongGietMo> listSoLuongs = serviceSoLuongGietMoService.findByThongTinGietMoIdAndDaXoa(thongTinGietMo.getId(), false);
+		if(Objects.nonNull(listSoLuongs) && !listSoLuongs.isEmpty()) {
+			for(SoLuongGietMo soLuongGietMo : listSoLuongs) {
+				thongKeNgayData.setLoaiVatNuoiId(soLuongGietMo.getLoaiVatNuoiId());
+				if(soLuongGietMo.getLoaiVatNuoiId() != null && soLuongGietMo.getLoaiVatNuoiId() > 0) {
+					Optional<DmLoaiVatNuoi> optVatNuoi = serviceDmLoaiVatNuoiService.findById(soLuongGietMo.getLoaiVatNuoiId());
+					if(optVatNuoi.isPresent()) {
+						thongKeNgayData.setLoaiVatNuoiTen(optVatNuoi.get().getTen());
+					}
+				}
+				thongKeNgayData.setSoLuongGietMo(soLuongGietMo.getSoLuongGietMo());
+			}
+		}
+		return thongKeNgayData;
+	}
+	
+	public ModelAndView exportExcelTongHopSoLuongNgay(HttpServletRequest request, HttpServletResponse response, int page, int size,
+			String sortBy, String sortDir, List<String> tenCoSos, List<Long> loaiVatNuoiId, LocalDate gietMoTuNgay,
+			LocalDate gietMoDenNgay) {
+		
+		LocalDate localDate = LocalDate.now();// For reference
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		String formattedString = localDate.format(formatter);
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		Direction direction;
+		if (sortDir.equals("ASC")) {
+			direction = Direction.ASC;
+		} else {
+			direction = Direction.DESC;
+		}
+		
+		Page<ThongTinGietMo> pageThongTin = serviceThongTinGietMoService.tongHopSoLuongNgay(tenCoSos, loaiVatNuoiId, gietMoTuNgay,
+				gietMoDenNgay, PageRequest.of(page, size, direction, sortBy));
+		Page<ThongKeSoLuongData> pageThongKeNgay = pageThongTin.map(this::convertToThongKeSoLuongNgayData);
+		
+		List<ThongKeSoLuongData> thongKeSoLuongDatas = new ArrayList<>(pageThongKeNgay.getContent());
+		
+		while(pageThongKeNgay.hasNext()) {
+			Page<ThongTinGietMo> nextPageOfEmployees = serviceThongTinGietMoService.tongHopSoLuongNgay(tenCoSos, loaiVatNuoiId,
+					gietMoTuNgay, gietMoDenNgay, PageRequest.of(page, size, direction, sortBy));
+			Page<ThongKeSoLuongData> nextPageOfThongKeSoLuongNgayData = nextPageOfEmployees.map(this::convertToThongKeSoLuongNgayData);
+			if(Objects.nonNull(nextPageOfThongKeSoLuongNgayData.getContent())) {
+				thongKeSoLuongDatas.addAll(nextPageOfThongKeSoLuongNgayData.getContent());
+			}
+			pageThongTin = nextPageOfEmployees;
+		}
+		model.put("thongKeSoLuongDatas", thongKeSoLuongDatas);
+		response.setContentType("application/ms-excel");
+		response.setHeader("Content-disposition", "attachment; filename=ThongKeSoLuongGietMoNgay.xls");
+		return new ModelAndView(new MyExcelViewTongHopSoLuongNgay(), model);
 	}
 	
 	public ThongTinGietMoData findById(Long id) throws EntityNotFoundException {

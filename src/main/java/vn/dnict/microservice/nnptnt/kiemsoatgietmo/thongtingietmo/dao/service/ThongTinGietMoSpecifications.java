@@ -62,4 +62,43 @@ public class ThongTinGietMoSpecifications {
 			
 		};
 	}
+	
+	public static Specification<ThongTinGietMo> tongHopSoLuongNgay(final List<String> tenCoSos, final List<Long> loaiVatNuoiIds,
+			final LocalDate gietMoTuNgay, LocalDate gietMoDenNgay) {
+		return new Specification<ThongTinGietMo>() {
+			private static final long serialVersionUID = -4615834727542993669L;
+
+			@Override
+			public Predicate toPredicate(Root<ThongTinGietMo> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				List<Predicate> predicates = new ArrayList<>();
+				predicates.add(cb.equal(root.<String>get("daXoa"), false));
+				if (tenCoSos != null && !tenCoSos.isEmpty()) {
+					Expression<List<String>> valuecoSoGietMoId = cb.literal(tenCoSos);
+					Expression<String> expression = root.join("coSoGietMo").get("tenCoSo");
+					Predicate inList = expression.in(valuecoSoGietMoId);
+					predicates.add(inList);
+				}
+				
+				if (loaiVatNuoiIds != null) {
+					Expression<List<Long>> valueloaiVatNuoiId = cb.literal(loaiVatNuoiIds);
+					Expression<String> expression = root.join("soLuongGietMo").get("loaiVatNuoiId");
+					Predicate inList = expression.in(valueloaiVatNuoiId);
+					predicates.add(inList);
+				}
+				
+				if (gietMoTuNgay != null) {
+					predicates.add(cb.greaterThanOrEqualTo(root.get("ngayThang").as(LocalDate.class),gietMoTuNgay));
+				}
+				if (gietMoDenNgay != null) {
+					predicates.add(cb.lessThanOrEqualTo(root.get("ngayThang").as(LocalDate.class),gietMoDenNgay));
+				}
+				
+				if (!predicates.isEmpty()) {
+					return cb.and(predicates.toArray(new Predicate[] {}));
+				}
+				return null;
+			}
+			
+		};
+	}
 }

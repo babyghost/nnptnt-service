@@ -54,7 +54,7 @@ public class NhiemVuThangController {
 		return ResponseEntity.ok(pageNhiemVuThangData);
 	}
 	
-	@GetMapping(value = { "/thongKeKeHoachNam" })
+	@GetMapping(value = { "/thongKeKeHoachThang" })
 	public ResponseEntity<Page<ThongKeKeHoachThangData>> thongKeKeHoachThang(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
@@ -72,7 +72,7 @@ public class NhiemVuThangController {
 		return ResponseEntity.ok(pageThongKeKeHoachThang);
 	}
 	
-	@GetMapping(value = { "/thongKeKeHoachNam/export" })
+	@GetMapping(value = { "/thongKeKeHoachThang/export" })
 	public ModelAndView thongKeKeHoachThang(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
