@@ -143,7 +143,7 @@ public class TienDoNhiemVuThangBusiness {
 		tienDoNhiemVuThang.setKetQua(tienDoNhiemVuThangData.getKetQua());
 		tienDoNhiemVuThang = serviceTienDoNhiemVuThangService.save(tienDoNhiemVuThang);
 		
-		serviceFileDinhKemNhiemVuThangService.setFixedDaXoaForTienDoNhiemVuThangId(false, tienDoNhiemVuThang.getId());
+		serviceFileDinhKemNhiemVuThangService.setFixedDaXoaForTienDoNhiemVuThangId(true, tienDoNhiemVuThang.getId());
 		List<Long> fileDinhKemIds = tienDoNhiemVuThangData.getFileDinhKemIds();
 		int type = Constants.DINH_KEM_1_FILE;
 		long objectId = tienDoNhiemVuThang.getId();

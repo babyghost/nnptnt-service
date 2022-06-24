@@ -433,7 +433,7 @@ public class NhiemVuNamBusiness {
 		nhiemVuNam.setDanhSo(nhiemVuNamData.getDanhSo());
 		nhiemVuNam = serviceNhiemVuNamService.save(nhiemVuNam);
 		
-		serviceTienDoNhiemVuNamService.setFixedDaXoaForNhiemVuNamId(false, nhiemVuNam.getId());
+		serviceTienDoNhiemVuNamService.setFixedDaXoaForNhiemVuNamId(true, nhiemVuNam.getId());
 		List<TienDoNhiemVuNamData> tienDoNhiemVuNamDatas = nhiemVuNamData.getTienDoNhiemVuNamDatas();
 		if(Objects.nonNull(tienDoNhiemVuNamDatas) && !tienDoNhiemVuNamDatas.isEmpty()) {
 			for(TienDoNhiemVuNamData tienDoNhiemVuNamData : tienDoNhiemVuNamDatas) {

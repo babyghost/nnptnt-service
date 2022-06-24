@@ -217,7 +217,7 @@ public class KeHoachNamBusiness {
 		keHoachNam.setTrangThai(keHoachNamData.getTrangThai());
 		keHoachNam = serviceKeHoachNamService.save(keHoachNam);
 		
-		serviceNhiemVuNamService.setFixedDaXoaForKeHoachNamId(false, keHoachNam.getId());		
+		serviceNhiemVuNamService.setFixedDaXoaForKeHoachNamId(true, keHoachNam.getId());		
 		List<NhiemVuNamData> nhiemVuNamDatas = keHoachNamData.getNhiemVuNamDatas();
 		if(Objects.nonNull(nhiemVuNamDatas) && !nhiemVuNamDatas.isEmpty()) {
 			saveNhiemVuNamDatas(nhiemVuNamDatas, keHoachNam, null);

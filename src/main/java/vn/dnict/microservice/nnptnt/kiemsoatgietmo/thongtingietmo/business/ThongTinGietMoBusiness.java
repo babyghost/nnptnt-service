@@ -190,7 +190,7 @@ public class ThongTinGietMoBusiness {
 	}
 	
 	public ModelAndView exportExcelTongHopSoLuongNgay(HttpServletRequest request, HttpServletResponse response, int page, int size,
-			String sortBy, String sortDir, List<String> tenCoSos, List<Long> loaiVatNuoiId, LocalDate gietMoTuNgay,
+			String sortBy, String sortDir, List<String> tenCoSos, List<Long> loaiVatNuoiIds, LocalDate gietMoTuNgay,
 			LocalDate gietMoDenNgay) {
 		
 		LocalDate localDate = LocalDate.now();// For reference
@@ -205,14 +205,14 @@ public class ThongTinGietMoBusiness {
 			direction = Direction.DESC;
 		}
 		
-		Page<ThongTinGietMo> pageThongTin = serviceThongTinGietMoService.tongHopSoLuongNgay(tenCoSos, loaiVatNuoiId, gietMoTuNgay,
+		Page<ThongTinGietMo> pageThongTin = serviceThongTinGietMoService.tongHopSoLuongNgay(tenCoSos, loaiVatNuoiIds, gietMoTuNgay,
 				gietMoDenNgay, PageRequest.of(page, size, direction, sortBy));
 		Page<ThongKeSoLuongData> pageThongKeNgay = pageThongTin.map(this::convertToThongKeSoLuongNgayData);
 		
 		List<ThongKeSoLuongData> thongKeSoLuongDatas = new ArrayList<>(pageThongKeNgay.getContent());
 		
 		while(pageThongKeNgay.hasNext()) {
-			Page<ThongTinGietMo> nextPageOfEmployees = serviceThongTinGietMoService.tongHopSoLuongNgay(tenCoSos, loaiVatNuoiId,
+			Page<ThongTinGietMo> nextPageOfEmployees = serviceThongTinGietMoService.tongHopSoLuongNgay(tenCoSos, loaiVatNuoiIds,
 					gietMoTuNgay, gietMoDenNgay, PageRequest.of(page, size, direction, sortBy));
 			Page<ThongKeSoLuongData> nextPageOfThongKeSoLuongNgayData = nextPageOfEmployees.map(this::convertToThongKeSoLuongNgayData);
 			if(Objects.nonNull(nextPageOfThongKeSoLuongNgayData.getContent())) {
@@ -278,7 +278,8 @@ public class ThongTinGietMoBusiness {
 		thongTinGietMo.setCapNgay(thongTinGietMoData.getCapNgay());
 		thongTinGietMo = serviceThongTinGietMoService.save(thongTinGietMo);
 		System.out.println(optional + "+++++++++" + thongTinGietMo.getNgayThang());
-		serviceSoLuongGietMoService.setFixedDaXoaAndThongTinGietMoId(false, thongTinGietMo.getId());
+		
+		serviceSoLuongGietMoService.setFixedDaXoaAndThongTinGietMoId(true, thongTinGietMo.getId());
 		List<SoLuongGietMoData> listSoLuongGietMos = thongTinGietMoData.getListSoLuongGietMo();
 		if(Objects.nonNull(listSoLuongGietMos) && !listSoLuongGietMos.isEmpty()) {
 			for(SoLuongGietMoData soLuongData : listSoLuongGietMos) {
