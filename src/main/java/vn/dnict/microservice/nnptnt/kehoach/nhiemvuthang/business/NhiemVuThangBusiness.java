@@ -309,7 +309,7 @@ public class NhiemVuThangBusiness {
 		nhiemVuThang.setTienDoNhiemVuId(nhiemVuThangData.getTienDoNhiemVuId());
 		nhiemVuThang = serviceNhiemVuThangService.save(nhiemVuThang);
 		
-		serviceNhiemVuThangLogService.setFixedDaXoaForNhiemVuThangId(false, nhiemVuThang.getId());
+		serviceNhiemVuThangLogService.setFixedDaXoaForNhiemVuThangId(true, nhiemVuThang.getId());
 		List<Long> canBoThucHienIds = nhiemVuThangData.getCanBoThucHienIds();
 		for(Long canBoThucHienId : canBoThucHienIds) {
 			NhiemVuThangLog nhiemVuThangLog = new NhiemVuThangLog();

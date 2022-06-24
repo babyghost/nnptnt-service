@@ -258,7 +258,7 @@ public class KeHoachThangBusiness {
 		keHoachThang.setThang(keHoachThangData.getThang());
 		keHoachThang = serviceKeHoachThangService.save(keHoachThang);
 		
-		serviceNhiemVuThangService.setFixedDaXoaForKeHoachThangId(false, keHoachThang.getId());		
+		serviceNhiemVuThangService.setFixedDaXoaForKeHoachThangId(true, keHoachThang.getId());		
 		List<NhiemVuThangData> nhiemVuThangDatas = keHoachThangData.getNhiemVuThangDatas();
 		if(Objects.nonNull(nhiemVuThangDatas) && !nhiemVuThangDatas.isEmpty()) {
 			saveNhiemVuThangDatas(nhiemVuThangDatas, keHoachThang, null);
@@ -279,13 +279,13 @@ public class KeHoachThangBusiness {
 			}
 			nhiemVuThang.setDaXoa(false);
 			nhiemVuThang.setTenNhiemVu(nhiemVuThangData.getTenNhiemVu());
-			nhiemVuThang.setKeHoachThangId(nhiemVuThangData.getKeHoachThangId());
+			nhiemVuThang.setKeHoachThangId(keHoachThang.getId());
 			nhiemVuThang.setCanBoThucHienId(nhiemVuThangData.getCanBoThucHienId());
 			nhiemVuThang.setDonViPhoiHop(nhiemVuThangData.getDonViPhoiHop());
 			nhiemVuThang.setThoiGian(nhiemVuThangData.getThoiGian());
 			nhiemVuThang.setGhiChu(nhiemVuThangData.getGhiChu());
 			nhiemVuThang.setIsNhiemVuThangTruoc(nhiemVuThangData.getIsNhiemVuThangTruoc());
-			nhiemVuThang.setNhiemVuThangTruocId(nhiemVuThangData.getNhiemVuThangTruocId());
+			nhiemVuThang.setNhiemVuThangTruocId(nhiemVuThangTruocId);
 			nhiemVuThang.setTinhTrang(nhiemVuThangData.getTinhTrang());
 			nhiemVuThang.setTienDoNhiemVuId(nhiemVuThangData.getTienDoNhiemVuId());
 			nhiemVuThang = serviceNhiemVuThangService.save(nhiemVuThang);

@@ -1,18 +1,27 @@
 package vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.business;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import vn.dnict.microservice.danhmuc.dao.model.DmPhuongXa;
 import vn.dnict.microservice.danhmuc.dao.model.DmQuanHuyen;
@@ -23,12 +32,17 @@ import vn.dnict.microservice.nnptnt.dm.loaivatnuoi.dao.model.DmLoaiVatNuoi;
 import vn.dnict.microservice.nnptnt.dm.loaivatnuoi.dao.service.DmLoaiVatNuoiService;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.model.CoSoChanNuoi;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.service.CoSoChanNuoiService;
+import vn.dnict.microservice.nnptnt.vatnuoi.data.BaoCaoHoatDongChanNuoiData;
 import vn.dnict.microservice.nnptnt.vatnuoi.data.HoatDongChanNuoiOutput;
+import vn.dnict.microservice.nnptnt.vatnuoi.data.ThongKeSoLuongChanNuoiData;
 import vn.dnict.microservice.nnptnt.vatnuoi.data.ThongTinHoatDongChanNuoiOutput;
+import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.business.view.MyExcelViewThongKeHoatDong;
+import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.business.view.MyExcelViewThongKeSoLuong;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.model.HoatDongChanNuoi;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.service.HoatDongChanNuoiService;
 
 @Service
+
 public class HoatDongChanNuoiBusiness {
 	
 	@Autowired
@@ -58,6 +72,7 @@ public class HoatDongChanNuoiBusiness {
 				dienThoai, quanHuyenId, phuongXaId, nam, quy, PageRequest.of(page, size, direction, sortBy));
 		final Page<HoatDongChanNuoiOutput> pageHoatDongChanNuoiOutput = pageHoatDongChanNuoi
 				.map(this::convertToHoatDongChanNuoiOutput);
+		
 		return pageHoatDongChanNuoiOutput;
 	}
 	
@@ -139,13 +154,13 @@ public class HoatDongChanNuoiBusiness {
 		HoatDongChanNuoi hoatDongChanNuoi = optional.get();
 		return this.convertToHoatDongChanNuoiOutput(hoatDongChanNuoi);
 	}
+	
 	public List<HoatDongChanNuoi> getHoatDongChanNuoiByCoSoAndNamAndQuy(Long coSoChanNuoiId, String nam, Integer quy) 
 			throws EntityNotFoundException {
 		List<HoatDongChanNuoi> list = serviceHoatDongChanNuoiService.findByCoSoChanNuoiIdAndNamAndQuyAndDaXoa(coSoChanNuoiId, 
 				nam, quy, false);
 		return list;
 	}
-	
 	
 	public List<HoatDongChanNuoi> create(HoatDongChanNuoiOutput hoatDongChanNuoiOutput,
 			BindingResult result) throws MethodArgumentNotValidException {
@@ -183,7 +198,6 @@ public class HoatDongChanNuoiBusiness {
 				hoatDongChanNuoi.setNam(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getNam());
 				hoatDongChanNuoi.setQuy(hoatDongChanNuoiOutput.getListHoatDongChanNuoi().get(i).getQuy());
 				hoatDongChanNuoi.setCoSoChanNuoiId(hoatDongChanNuoiOutput.getCoSoChanNuoiId());
-				
 				hoatDongChanNuoi = serviceHoatDongChanNuoiService.save(hoatDongChanNuoi);
 				list.add(hoatDongChanNuoi);
 			}
@@ -203,5 +217,262 @@ public class HoatDongChanNuoiBusiness {
 		return this.convertToHoatDongChanNuoiOutput(hoatDongChanNuoi);	
 	}
 	
+//	----------------------------------------Baocaothongkesoluongvatnuoi----------------------------------------------
+	
+	public Page<Object> thongKeSoLuongDemo(int page, int size, String sortBy,  String sortDir, String nam, List< Integer> quy, List< Long> loaiVatNuoiIds,Integer soLuongNuoi, Integer slVatNuoiXuat,Float sanLuongXuat) {
+		Direction direction;
+		if (sortDir.equals("ASC")) {
+			direction = Direction.ASC;
+		} else {
+			direction = Direction.DESC;
+		}
+		final Page<Object> pageHoatDongChanNuoi = serviceHoatDongChanNuoiService.thongKeSoVatNuoiDemo(nam, loaiVatNuoiIds, quy, 
+				PageRequest.of(page, size, direction, sortBy));
+
+	//Page<Object> thongKeSoVatNuoi = serviceHoatDongChanNuoiService.thongKeSoVatNuoi("2022", 2L , 2, PageRequest.of(page, size, direction, sortBy));
+	//log.info("thongke {} ",thongKeSoVatNuoi.getContent().get(0));
+	
+		return pageHoatDongChanNuoi;
+	}
+	
+	public Page<ThongKeSoLuongChanNuoiData> thongKeSoLuong(int page, int size, String sortBy,  String sortDir, String nam, List< Integer> quy, List< Long> loaiVatNuoiIds,Integer soLuongNuoi, Integer slVatNuoiXuat,Float sanLuongXuat) {
+		Direction direction;
+		if (sortDir.equals("ASC")) {
+			direction = Direction.ASC;
+		} else {
+			direction = Direction.DESC;
+		}
+		final Page<HoatDongChanNuoi> pageHoatDongChanNuoi = serviceHoatDongChanNuoiService.thongKeSoLuong(nam, quy, loaiVatNuoiIds, 
+				PageRequest.of(page, size, direction, sortBy));
+		final Page<ThongKeSoLuongChanNuoiData> ThongKeSoLuongChanNuoiData = pageHoatDongChanNuoi
+				.map(this::convertToThongKeSoLuongChanNuoiDataThongKe);
+		
+		List<ThongKeSoLuongChanNuoiData> thongKeSoLuongChanNuoiDatass = new ArrayList<>(
+				ThongKeSoLuongChanNuoiData.getContent());
+	//Page<Object> thongKeSoVatNuoi = serviceHoatDongChanNuoiService.thongKeSoVatNuoi("2022", 2L , 2, PageRequest.of(page, size, direction, sortBy));
+	//log.info("thongke {} ",thongKeSoVatNuoi.getContent().get(0));
+		 List<ThongKeSoLuongChanNuoiData> thongKeSoLuongChanNuoiDatas = new ArrayList<>();
+
+		for (ThongKeSoLuongChanNuoiData element : thongKeSoLuongChanNuoiDatass) {
+           // Check if element not exist in list, perform add element to list
+           if (!thongKeSoLuongChanNuoiDatas.contains(element)) {
+           	thongKeSoLuongChanNuoiDatas.add(element);
+           }
+       }
+		Page<ThongKeSoLuongChanNuoiData> thongKeSoLuongChanNuoiDataImpl = new PageImpl<>(thongKeSoLuongChanNuoiDatas);
+		return thongKeSoLuongChanNuoiDataImpl;
+	}
+	
+	private ThongKeSoLuongChanNuoiData convertToThongKeSoLuongChanNuoiDataThongKe(HoatDongChanNuoi hoatDongChanNuoi) {
+		
+		ThongKeSoLuongChanNuoiData thongKeSoLuongChanNuoiData = new ThongKeSoLuongChanNuoiData();			
+		thongKeSoLuongChanNuoiData.setLoaiVatNuoiId(hoatDongChanNuoi.getLoaiVatNuoiId());		
+		List<Long> loaiVatNuoiIds = new ArrayList<>();
+		loaiVatNuoiIds.add(hoatDongChanNuoi.getLoaiVatNuoiId());
+		List<Integer> quys = new ArrayList<>();
+		quys.add(hoatDongChanNuoi.getQuy());
+		List<Object[]> hDCN = serviceHoatDongChanNuoiService.thongKeSoVatNuoi(hoatDongChanNuoi.getNam(), loaiVatNuoiIds, quys);
+		 List<Object[]> filter = new ArrayList<Object[]>();
+		for (Object[] element : hDCN) {
+	            // Check if element not exist in list, perform add element to list
+	            if (!filter.contains(element)) {
+	            	filter.add(element);
+	            }
+	        }
+		
+		System.out.println(hoatDongChanNuoi.getCoSoChanNuoiId()+"99999");
+		for (Object[] Datas : filter) {
+		thongKeSoLuongChanNuoiData.setNam(String.valueOf(Datas[0]));	
+		thongKeSoLuongChanNuoiData.setQuy(Integer.valueOf(Datas[1].toString()));
+		thongKeSoLuongChanNuoiData.setLoaiVatNuoiId(Long.valueOf(Datas[2].toString()));
+		thongKeSoLuongChanNuoiData.setTongSoLuongVatNuoi(String.valueOf(Datas[3]));
+		thongKeSoLuongChanNuoiData.setTongSlVatNuoiXuat(String.valueOf(Datas[4]));
+		thongKeSoLuongChanNuoiData.setTongSanLuongXuat(String.valueOf(Datas[5]));
+		
+		}
+		
+		if (thongKeSoLuongChanNuoiData.getLoaiVatNuoiId() != null && thongKeSoLuongChanNuoiData.getLoaiVatNuoiId()>0) {
+			Optional<DmLoaiVatNuoi> optionalLoaiVatNuoi = serviceDmLoaiVatNuoiService.findById(thongKeSoLuongChanNuoiData.getLoaiVatNuoiId());
+			if (optionalLoaiVatNuoi.isPresent()) {
+				;
+				thongKeSoLuongChanNuoiData.setLoaiVatNuoiTen(optionalLoaiVatNuoi.get().getTen());
+				
+			}
+		}
+		
+	
+	 
+		
+		return thongKeSoLuongChanNuoiData;
+	}
+//	
+	public ModelAndView exportExcelThongKeSoLuong(HttpServletRequest request, HttpServletResponse response, int page,
+			int size, String sortBy, String sortDir,String nam, List< Integer> quy, List< Long> loaiVatNuoiIds) {
+		LocalDate localDate = LocalDate.now();// For reference
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		String formattedString = localDate.format(formatter);
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		Direction direction;
+		if (sortDir.equals("ASC")) {
+			direction = Direction.ASC;
+		} else {
+			direction = Direction.DESC;
+		}
+
+		Page<HoatDongChanNuoi> pageHoatDongChanNuoi = serviceHoatDongChanNuoiService.thongKeSoLuong(nam, quy, loaiVatNuoiIds,
+				PageRequest.of(page, size, direction, sortBy));
+		Page<ThongKeSoLuongChanNuoiData> pageThongKeSoLuongChanNuoiData = pageHoatDongChanNuoi
+				.map(this::convertToThongKeSoLuongChanNuoiDataThongKe);
+
+		List<ThongKeSoLuongChanNuoiData> thongKeSoLuongChanNuoiDatass = new ArrayList<>(
+				pageThongKeSoLuongChanNuoiData.getContent());
+
+	System.out.println(thongKeSoLuongChanNuoiDatass+"----------//"+ response+ pageHoatDongChanNuoi);
+
+		// All the remaining employees
+		while (pageHoatDongChanNuoi.hasNext()) {
+			Page<HoatDongChanNuoi> nextPageOfEmployees = serviceHoatDongChanNuoiService.thongKeSoLuong(nam, quy, loaiVatNuoiIds, 
+					pageHoatDongChanNuoi.nextPageable());
+			Page<ThongKeSoLuongChanNuoiData> nextPageOfThongKeSoLuongChanNuoiData = nextPageOfEmployees
+					.map(this::convertToThongKeSoLuongChanNuoiDataThongKe);
+			if (Objects.nonNull(nextPageOfThongKeSoLuongChanNuoiData.getContent())) {
+				thongKeSoLuongChanNuoiDatass.addAll(nextPageOfThongKeSoLuongChanNuoiData.getContent());
+			}
+			// update the page reference to the current page
+			pageHoatDongChanNuoi = nextPageOfEmployees;
+			
+		}
+		 List<ThongKeSoLuongChanNuoiData> thongKeSoLuongChanNuoiDatas = new ArrayList<>();
+
+		for (ThongKeSoLuongChanNuoiData element : thongKeSoLuongChanNuoiDatass) {
+            // Check if element not exist in list, perform add element to list
+            if (!thongKeSoLuongChanNuoiDatas.contains(element)) {
+            	thongKeSoLuongChanNuoiDatas.add(element);
+            }
+        }
+
+		model.put("thongKeSoLuongChanNuoiDatas", thongKeSoLuongChanNuoiDatas);
+		
+		response.setContentType("application/ms-excel");
+		response.setHeader("Content-disposition", "attachment; filename=" + formattedString + "ThongKe.xls");
+		return new ModelAndView(new MyExcelViewThongKeSoLuong(), model);
+		
+	}
+	
+//------------------------------------------Thống Kê Hoạt Động -------------------------------------------------
+		
+	public Page<BaoCaoHoatDongChanNuoiData> thongKeHoatDong(int page, int size, String sortBy, String sortDir, String tenCoSo, 
+			String tenChuCoSo, List<Long> loaiVatNuoiIds, Long quanHuyenId, Long phuongXaId, String nam, List< Integer> quys) {
+		Direction direction;
+		if (sortDir.equals("ASC")) {
+			direction = Direction.ASC;
+		} else {
+			direction = Direction.DESC;
+		}
+		final Page<HoatDongChanNuoi> pageHoatDongChanNuoi = serviceHoatDongChanNuoiService.thongKeHoatDong(tenCoSo, tenChuCoSo, loaiVatNuoiIds, quanHuyenId, phuongXaId, nam, quys , PageRequest.of(page, size, direction, sortBy));
+		final Page<BaoCaoHoatDongChanNuoiData> pageBaoCaoHoatDongChanNuoiData = pageHoatDongChanNuoi
+				.map(this::convertToBaoCaoHoatDongChanNuoi);
+		return pageBaoCaoHoatDongChanNuoiData;
+	}	
+	
+	private BaoCaoHoatDongChanNuoiData  convertToBaoCaoHoatDongChanNuoi (HoatDongChanNuoi hoatDongChanNuoi) {
+		
+	BaoCaoHoatDongChanNuoiData baoCaoHoatDongChanNuoiData = new BaoCaoHoatDongChanNuoiData();
+	baoCaoHoatDongChanNuoiData.setId(hoatDongChanNuoi.getId());
+	baoCaoHoatDongChanNuoiData.setNam(hoatDongChanNuoi.getNam());
+	baoCaoHoatDongChanNuoiData.setQuy(hoatDongChanNuoi.getQuy());
+	baoCaoHoatDongChanNuoiData.setSoLuongNuoi(hoatDongChanNuoi.getSoLuongNuoi());
+	baoCaoHoatDongChanNuoiData.setSlVatNuoiXuat(hoatDongChanNuoi.getSlVatNuoiXuat());
+	baoCaoHoatDongChanNuoiData.setSanLuongXuat(hoatDongChanNuoi.getSanLuongXuat());
+	
+	if (hoatDongChanNuoi.getLoaiVatNuoiId() != null && hoatDongChanNuoi.getLoaiVatNuoiId() > 0) {
+		Optional<DmLoaiVatNuoi> optionalLoaiVatNuoi = serviceDmLoaiVatNuoiService
+				.findById(hoatDongChanNuoi.getLoaiVatNuoiId());
+		if (optionalLoaiVatNuoi.isPresent()) {
+			baoCaoHoatDongChanNuoiData.setLoaiVatNuoi(optionalLoaiVatNuoi.get().getTen());
+			baoCaoHoatDongChanNuoiData.setLoaiVatNuoiId(optionalLoaiVatNuoi.get().getId());
+		}
+	}	
+	
+	
+	if(hoatDongChanNuoi.getCoSoChanNuoiId() != null && hoatDongChanNuoi.getCoSoChanNuoiId() > 0) {
+		Optional<CoSoChanNuoi> optionalCoSo = serviceCoSoChanNuoiService.findById(hoatDongChanNuoi
+				.getCoSoChanNuoiId());
+	
+		if (optionalCoSo.isPresent()) {
+			baoCaoHoatDongChanNuoiData.setTenCoSo(optionalCoSo.get().getTenCoSo());
+			baoCaoHoatDongChanNuoiData.setTenChuCoSo(optionalCoSo.get().getTenChuCoSo());
+			baoCaoHoatDongChanNuoiData.setDiaChi(optionalCoSo.get().getDiaChi());
+			baoCaoHoatDongChanNuoiData.setQuanHuyenId(optionalCoSo.get().getQuanHuyenId());
+			if (baoCaoHoatDongChanNuoiData.getQuanHuyenId() != null && baoCaoHoatDongChanNuoiData.getQuanHuyenId() > 0) {
+				Optional<DmQuanHuyen> optionalQuanHuyen = serviceDmQuanHuyenService.findById(baoCaoHoatDongChanNuoiData
+						.getQuanHuyenId());
+				if (optionalQuanHuyen.isPresent()) {
+					baoCaoHoatDongChanNuoiData.setQuanHuyenTen(optionalQuanHuyen.get().getTen());
+				}
+			}
+			
+			baoCaoHoatDongChanNuoiData.setPhuongXaId(optionalCoSo.get().getPhuongXaId());
+			if (baoCaoHoatDongChanNuoiData.getPhuongXaId() != null && baoCaoHoatDongChanNuoiData.getPhuongXaId() > 0) {
+				Optional<DmPhuongXa> optionalPhuongXa = serviceDmPhuongXaService.findById(baoCaoHoatDongChanNuoiData
+						.getPhuongXaId());
+				if (optionalPhuongXa.isPresent()) {
+					baoCaoHoatDongChanNuoiData.setPhuongXaTen(optionalPhuongXa.get().getTen());
+				}
+			}				
+		}
+	}
+	
+	
+	
+		return baoCaoHoatDongChanNuoiData;
+	
+	}
+
+	public ModelAndView exportExcelThongKeHoatDong(HttpServletRequest request, HttpServletResponse response,int page, int size, String sortBy, String sortDir, String tenCoSo, 
+		String tenChuCoSo, List<Long> loaiVatNuoiIds, Long quanHuyenId, Long phuongXaId, String nam, List< Integer> quys) {
+	LocalDate localDate = LocalDate.now();// For reference
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+	String formattedString = localDate.format(formatter);
+	Map<String, Object> model = new HashMap<String, Object>();
+
+	Direction direction;
+	if (sortDir.equals("ASC")) {
+		direction = Direction.ASC;
+	} else {
+		direction = Direction.DESC;
+	}
+
+	Page<HoatDongChanNuoi> pageHoatDongChanNuoi = serviceHoatDongChanNuoiService.thongKeHoatDong(tenCoSo, tenChuCoSo, loaiVatNuoiIds, quanHuyenId, phuongXaId, nam, quys, 
+			PageRequest.of(page, size, direction, sortBy));
+	Page<BaoCaoHoatDongChanNuoiData> pageBaoCaoHoatDongChanNuoiData = pageHoatDongChanNuoi
+			.map(this::convertToBaoCaoHoatDongChanNuoi);
+
+	List<BaoCaoHoatDongChanNuoiData> baoCaoHoatDongChanNuoiDatas = new ArrayList<>(
+			pageBaoCaoHoatDongChanNuoiData.getContent());
+
+
+
+	// All the remaining employees
+	while (pageHoatDongChanNuoi.hasNext()) {
+		Page<HoatDongChanNuoi> nextPageOfEmployees = serviceHoatDongChanNuoiService.thongKeHoatDong(tenCoSo, tenChuCoSo, loaiVatNuoiIds, quanHuyenId, phuongXaId, nam, quys,
+				pageHoatDongChanNuoi.nextPageable());
+		Page<BaoCaoHoatDongChanNuoiData> nextPageOfBaoCaoHoatDongChanNuoiData = nextPageOfEmployees
+				.map(this::convertToBaoCaoHoatDongChanNuoi);
+		if (Objects.nonNull(nextPageOfBaoCaoHoatDongChanNuoiData.getContent())) {
+			baoCaoHoatDongChanNuoiDatas.addAll(nextPageOfBaoCaoHoatDongChanNuoiData.getContent());
+		}
+		// update the page reference to the current page
+		pageHoatDongChanNuoi = nextPageOfEmployees;	
+	}
+
+	model.put("baoCaoHoatDongChanNuoiDatas", baoCaoHoatDongChanNuoiDatas);
+	
+	response.setContentType("application/ms-excel");
+	response.setHeader("Content-disposition", "attachment; filename=" + formattedString + "ThongKe.xls");
+	return new ModelAndView(new MyExcelViewThongKeHoatDong(), model);
+	
+}
 }
 	

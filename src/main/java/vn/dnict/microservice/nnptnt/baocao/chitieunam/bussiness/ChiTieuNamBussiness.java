@@ -124,6 +124,7 @@ public class ChiTieuNamBussiness {
 			throw new EntityNotFoundException(ChiTieuNam.class, "id", String.valueOf(id));
 		}
 		ChiTieuNam chiTieuNam = optional.get();
+		System.out.println(chiTieuNam+"-------------------------------");
 		return this.convertToChiTieuNamDataAndChiTieuData(chiTieuNam);
 	}
 
@@ -163,7 +164,7 @@ public class ChiTieuNamBussiness {
 			
 			chiTieuNam = serviceChiTieuNamService.save(chiTieuNam);
 			
-			serviceChiTieuService.setFixedDaXoaForChiTieuNamId(false, chiTieuNam.getId());
+			serviceChiTieuService.setFixedDaXoaForChiTieuNamId(true, chiTieuNam.getId());
 			List<ChiTieuData> chiTieuDatas = chiTieuNamData.getChiTieuDatas();
 			if (Objects.nonNull(chiTieuDatas) && !chiTieuDatas.isEmpty()) {
 				saveChiTieuDatas(chiTieuDatas, chiTieuNam, null);
