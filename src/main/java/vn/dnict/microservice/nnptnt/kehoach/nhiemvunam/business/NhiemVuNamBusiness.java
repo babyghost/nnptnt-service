@@ -21,6 +21,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import vn.dnict.microservice.core.business.CoreAttachmentBusiness;
+import vn.dnict.microservice.core.data.FileDinhKem;
 import vn.dnict.microservice.danhmuc.dao.model.DmDonVi;
 import vn.dnict.microservice.danhmuc.dao.service.DmDonViService;
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
@@ -35,9 +37,11 @@ import vn.dnict.microservice.nnptnt.kehoach.kehoachnam.dao.service.KeHoachNamSer
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.business.view.MyExcelViewThongKeKeHoachNam;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.model.NhiemVuNam;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.service.NhiemVuNamService;
+import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam2filedinhkem.dao.model.FileDinhKemNhiemVuNam;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam2filedinhkem.dao.service.FileDinhKemNhiemVuNamService;
 import vn.dnict.microservice.nnptnt.kehoach.tiendonhiemvunam.dao.model.TienDoNhiemVuNam;
 import vn.dnict.microservice.nnptnt.kehoach.tiendonhiemvunam.dao.service.TienDoNhiemVuNamService;
+import vn.dnict.microservice.utils.Constants;
 
 @Service
 public class NhiemVuNamBusiness {
@@ -58,6 +62,9 @@ public class NhiemVuNamBusiness {
 	
 	@Autowired
 	FileDinhKemNhiemVuNamService serviceFileDinhKemNhiemVuNamService;
+	
+	@Autowired
+	CoreAttachmentBusiness coreAttachmentBusiness;
 	
 	public Page<NhiemVuNamData> findAll(int page, int size, String sortBy, String sortDir, Long donViChuTriId, Long keHoachNamId,
 			Integer nam, Integer tinhTrang, String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay) {
@@ -298,7 +305,20 @@ public class NhiemVuNamBusiness {
 				tienDoNhiemVuNamData.setTinhTrang(tienDoNhiemVuNam.getTinhTrang());
 				tienDoNhiemVuNamData.setMucDoHoanThanh(tienDoNhiemVuNam.getMucDoHoanThanh());
 				tienDoNhiemVuNamData.setNgayBaoCao(tienDoNhiemVuNam.getNgayBaoCao());
-				tienDoNhiemVuNamData.setKetQua(tienDoNhiemVuNam.getKetQua());;
+				tienDoNhiemVuNamData.setKetQua(tienDoNhiemVuNam.getKetQua());
+				
+				if (Objects.nonNull(tienDoNhiemVuNam)) {
+					int type = Constants.DINH_KEM_1_FILE;
+					Optional<FileDinhKemNhiemVuNam> fileDinhKemNhiemVuNam = serviceFileDinhKemNhiemVuNamService.findByTienDoNhiemVuNamId(tienDoNhiemVuNam.getId());
+					System.out.println(fileDinhKemNhiemVuNam+"1111111111111111112"+tienDoNhiemVuNam.getId());
+					Long fileDinhKemId = null;
+					Long objectId = tienDoNhiemVuNam.getId();
+					String appCode = TienDoNhiemVuNam.class.getSimpleName();
+					FileDinhKem fileDinhKem = coreAttachmentBusiness.getAttachments( fileDinhKemNhiemVuNam.get().getFileDinhKemId(), appCode, objectId, type);
+					tienDoNhiemVuNamData.setFileDinhKem(fileDinhKem);
+					tienDoNhiemVuNamData.setFileDinhKemIds(fileDinhKem.getIds());
+				}
+				
 				tienDoNhiemVuNamDatas.add(tienDoNhiemVuNamData);
 			}
 		}
