@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import vn.dnict.microservice.core.business.CoreAttachmentBusiness;
+import vn.dnict.microservice.core.dao.model.CoreAttachment;
 import vn.dnict.microservice.core.data.FileDinhKem;
 import vn.dnict.microservice.danhmuc.dao.model.DmDonVi;
 import vn.dnict.microservice.danhmuc.dao.service.DmDonViService;
@@ -66,405 +68,278 @@ public class NhiemVuNamBusiness {
 	@Autowired
 	CoreAttachmentBusiness coreAttachmentBusiness;
 	
-	public Page<NhiemVuNamData> findAll(int page, int size, String sortBy, String sortDir, Long donViChuTriId, Long keHoachNamId,
-			Integer nam, Integer tinhTrang, String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay) {
+	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+	private Map<Integer, String> mapTrangThai = new HashMap<Integer, String>() {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -3483264819808030205L;
+
+		{
+			put(Constants.QLKH_TINHTRANG_CHUATHUCHIEN, "Chưa thực hiện");
+			put(Constants.QLKH_TINHTRANG_DANGTHUCHIEN, "Đang thực hiện");
+			put(Constants.QLKH_TINHTRANG_DAHOANTHANH, "Đã hoàn thành");
+			put(Constants.QLKH_TINHTRANG_NGUNGTHUCHIEN, "Ngừng thực hiện");
+		}
+	};
+
+	public Page<NhiemVuNamData> findAll(int page, int size, String sortBy, String sortDir, Long donViChuTriId, Integer tinhTrang,
+			Integer nam, Long keHoachId, LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-		final Page<NhiemVuNam> pageNhiemVuNam = serviceNhiemVuNamService.findAll(donViChuTriId, keHoachNamId, nam, tinhTrang, 
-				tenNhiemVu, tuNgay, denNgay, PageRequest.of(page, size, direction, sortBy));
-		final Page<NhiemVuNamData> pageNhiemVuNamData = pageNhiemVuNam.map(this::convertToNhiemVuNamData);
+		final Page<NhiemVuNam> pageNhiemVuNam = serviceNhiemVuNamService.findAll(donViChuTriId, tinhTrang, nam, keHoachId,
+				tuNgay, denNgay, tenNhiemVu, PageRequest.of(page, size, direction, sortBy));
+		final Page<NhiemVuNamData> pageNhiemVuNamData = pageNhiemVuNam
+				.map(this::convertToNhiemVuNamData);
 		return pageNhiemVuNamData;
 	}
-	
+
+	public String getThongKeSoLuong(Long donViChuTriId, Integer nam, Long keHoachId, List<Integer> tinhTrangs, LocalDate tuNgay,
+			LocalDate denNgay, String tenNhiemVu) {
+
+		List<NhiemVuNam> nhiemVuNams = serviceNhiemVuNamService.getThongKeSoLuong(donViChuTriId, nam, keHoachId, tinhTrangs,
+				tuNgay, denNgay, tenNhiemVu);
+
+		String thongKe = "Tổng số: " + nhiemVuNams.size();
+
+		if (Objects.nonNull(tinhTrangs) && !tinhTrangs.isEmpty()) {
+			for (Integer tinhTrang : tinhTrangs) {
+				if (Objects.nonNull(tinhTrang)) {
+					if (tinhTrang.equals(Constants.QLKH_TINHTRANG_CHUATHUCHIEN)) {
+						thongKe += "; " + mapTrangThai.get(tinhTrang) + ": " + (nhiemVuNams.stream()
+								.filter(t -> Objects.isNull(t.getTienDoNhiemVuNams())).count()
+								+ nhiemVuNams.stream().filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams()))
+										.filter(t -> t.getTienDoNhiemVuNams().size() == 0).count()
+								+ nhiemVuNams.stream().filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams()))
+										.filter(t -> t.getTienDoNhiemVuNams().size() > 0)
+										.filter(t -> Objects
+												.nonNull(t.getTienDoNhiemVuNams().get(0).getTinhTrang()))
+										.filter(t -> t.getTienDoNhiemVuNams().get(0).getTinhTrang()
+												.equals(tinhTrang))
+										.count());
+					} else {
+						thongKe += "; " + mapTrangThai.get(tinhTrang) + ": " + nhiemVuNams.stream()
+								.filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams()))
+								.filter(t -> t.getTienDoNhiemVuNams().size() > 0)
+								.filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams().get(0).getTinhTrang()))
+								.filter(t -> t.getTienDoNhiemVuNams().get(0).getTinhTrang().equals(tinhTrang))
+								.count();
+					}
+				}
+			}
+		} else {
+			for (Map.Entry<Integer, String> entry : mapTrangThai.entrySet()) {
+				if (entry.getKey().equals(Constants.QLKH_TINHTRANG_CHUATHUCHIEN)) {
+					thongKe += "; " + entry.getValue() + ": " + (nhiemVuNams.stream()
+							.filter(t -> Objects.isNull(t.getTienDoNhiemVuNams())).count()
+							+ nhiemVuNams.stream().filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams()))
+									.filter(t -> t.getTienDoNhiemVuNams().size() == 0).count()
+							+ nhiemVuNams.stream().filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams()))
+									.filter(t -> t.getTienDoNhiemVuNams().size() > 0)
+									.filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams().get(0).getTinhTrang()))
+									.filter(t -> t.getTienDoNhiemVuNams().get(0).getTinhTrang()
+											.equals(entry.getKey()))
+									.count());
+				} else {
+					thongKe += "; " + entry.getValue() + ": " + nhiemVuNams.stream()
+							.filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams()))
+							.filter(t -> t.getTienDoNhiemVuNams().size() > 0)
+							.filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams().get(0).getTinhTrang()))
+							.filter(t -> t.getTienDoNhiemVuNams().get(0).getTinhTrang().equals(entry.getKey()))
+							.count();
+				}
+			}
+		}
+
+		return thongKe;
+	}
+
 	private NhiemVuNamData convertToNhiemVuNamData(NhiemVuNam nhiemVuNam) {
 		NhiemVuNamData nhiemVuNamData = new NhiemVuNamData();
 		nhiemVuNamData.setId(nhiemVuNam.getId());
-		nhiemVuNamData.setKeHoachNamId(nhiemVuNam.getKeHoachNamId());
-		if(nhiemVuNam.getKeHoachNamId() != null && nhiemVuNam.getKeHoachNamId() > 0) {
-			Optional<KeHoachNam> optionalKeHoachNam = serviceKeHoachNamService.findById(nhiemVuNam.getKeHoachNamId());
-			if(optionalKeHoachNam.isPresent()) {
-				nhiemVuNamData.setKeHoachNamTen(optionalKeHoachNam.get().getTenKeHoach());
-				nhiemVuNamData.setKhDonViChuTriId(optionalKeHoachNam.get().getDonViChuTriId());
-				if(optionalKeHoachNam.get().getDonViChuTriId() != null && optionalKeHoachNam.get().getDonViChuTriId() > 0) {
-					Optional<DmDonVi> optionalDmDonVi = serviceDmDonViService.findById(optionalKeHoachNam.get().getDonViChuTriId());
-					if(optionalDmDonVi.isPresent()) {
-						nhiemVuNamData.setKhDonViChuTriTen(optionalDmDonVi.get().getTenDonVi());
-						nhiemVuNamData.setKhDonViChuTriId(optionalDmDonVi.get().getId());
-					}
-				}
-				nhiemVuNamData.setKhNam(optionalKeHoachNam.get().getNam());
-				nhiemVuNamData.setKhSoKyHieu(optionalKeHoachNam.get().getSoKyHieu());
-				nhiemVuNamData.setKhNgayBanHanh(optionalKeHoachNam.get().getNgayBanHanh());
+		nhiemVuNamData.setKeHoachId(nhiemVuNam.getKeHoachId());
+		if (Objects.nonNull(nhiemVuNam.getLoaiNhiemVuId())) {
+			Optional<DmLoaiNhiemVu> optionalDmLoaiNhiemVu = serviceDmLoaiNhiemVuService
+					.findById(nhiemVuNam.getLoaiNhiemVuId());
+			if (optionalDmLoaiNhiemVu.isPresent()) {
+				nhiemVuNamData.setLoaiNhiemVuId(optionalDmLoaiNhiemVu.get().getId());
+				nhiemVuNamData.setLoaiNhiemVuTen(optionalDmLoaiNhiemVu.get().getTen());
 			}
 		}
-		nhiemVuNamData.setNhiemVuChaId(nhiemVuNam.getNhiemVuChaId());
 		nhiemVuNamData.setTenNhiemVu(nhiemVuNam.getTenNhiemVu());
-		nhiemVuNamData.setSapXep(nhiemVuNam.getSapXep());
+		nhiemVuNamData.setNhiemVuChaId(null);
 		nhiemVuNamData.setDonViPhoiHop(nhiemVuNam.getDonViPhoiHop());
+		nhiemVuNamData.setGhiChu(nhiemVuNam.getGhiChu());
 		nhiemVuNamData.setTuNgay(nhiemVuNam.getTuNgay());
 		nhiemVuNamData.setDenNgay(nhiemVuNam.getDenNgay());
-		nhiemVuNamData.setLoaiNhiemVuId(nhiemVuNam.getLoaiNhiemVuId());
-		if(nhiemVuNam.getLoaiNhiemVuId() != null && nhiemVuNam.getLoaiNhiemVuId() > 0) {
-			Optional<DmLoaiNhiemVu> optLoaiNhiemVu = serviceDmLoaiNhiemVuService.findById(nhiemVuNam.getLoaiNhiemVuId());
-			if(optLoaiNhiemVu.isPresent()) {
-				nhiemVuNamData.setLoaiNhiemVuTen(optLoaiNhiemVu.get().getTen());
-				nhiemVuNamData.setLoaiNvMa(optLoaiNhiemVu.get().getMa());
-			}
+		String thoiGianThucHien = "";
+		if (Objects.nonNull(nhiemVuNam.getTuNgay())) {
+			thoiGianThucHien = formatter.format(nhiemVuNam.getTuNgay());
 		}
-		nhiemVuNamData.setGhiChu(nhiemVuNam.getGhiChu());
-		nhiemVuNamData.setDanhSo(nhiemVuNam.getDanhSo());
-		
-		List<TienDoNhiemVuNamData> tienDoNhiemVuNamDatas = new ArrayList<>();
+		if (Objects.nonNull(nhiemVuNam.getDenNgay())) {
+			if (Objects.nonNull(thoiGianThucHien) && !thoiGianThucHien.isEmpty()) {
+				thoiGianThucHien += " - ";
+			}
+			thoiGianThucHien += formatter.format(nhiemVuNam.getDenNgay());
+		}
+		nhiemVuNamData.setThoiGianThucHien(thoiGianThucHien);
+
+		// tiến độ
 		List<TienDoNhiemVuNam> tienDoNhiemVuNams = serviceTienDoNhiemVuNamService
 				.findByNhiemVuNamIdAndDaXoa(nhiemVuNam.getId(), false);
-		if(Objects.nonNull(tienDoNhiemVuNams) && !tienDoNhiemVuNams.isEmpty()) {
+		List<TienDoNhiemVuNamData> tienDoNhiemVuNamDatas = new ArrayList<TienDoNhiemVuNamData>();
+		if (Objects.nonNull(tienDoNhiemVuNams) && !tienDoNhiemVuNams.isEmpty()) {
 			for (TienDoNhiemVuNam tienDoNhiemVuNam : tienDoNhiemVuNams) {
 				TienDoNhiemVuNamData tienDoNhiemVuNamData = new TienDoNhiemVuNamData();
 				tienDoNhiemVuNamData.setId(tienDoNhiemVuNam.getId());
-				tienDoNhiemVuNamData.setNhiemVuNamId(tienDoNhiemVuNam.getNhiemVuNamId());
-				if(tienDoNhiemVuNam.getNhiemVuNamId() != null && tienDoNhiemVuNam.getNhiemVuNamId() > 0) {
-					Optional<NhiemVuNam> optNhiemVu = serviceNhiemVuNamService.findById(tienDoNhiemVuNam.getNhiemVuNamId());
-					if(optNhiemVu.isPresent()) {
-						tienDoNhiemVuNamData.setNhiemVuNamTen(optNhiemVu.get().getTenNhiemVu());
-						tienDoNhiemVuNamData.setNvNamNhiemVuChaId(optNhiemVu.get().getNhiemVuChaId());
-						tienDoNhiemVuNamData.setNvNamDonViPhoiHop(optNhiemVu.get().getDonViPhoiHop());
-						tienDoNhiemVuNamData.setNvNamGhiChu(optNhiemVu.get().getGhiChu());
-						tienDoNhiemVuNamData.setNvNamTuNgay(optNhiemVu.get().getTuNgay());
-						tienDoNhiemVuNamData.setNvNamDenNgay(optNhiemVu.get().getDenNgay());
-					}
-				}
-				tienDoNhiemVuNamData.setTinhTrang(tienDoNhiemVuNam.getTinhTrang());
+				tienDoNhiemVuNamData.setKetQua(tienDoNhiemVuNam.getKetQua());
 				tienDoNhiemVuNamData.setMucDoHoanThanh(tienDoNhiemVuNam.getMucDoHoanThanh());
 				tienDoNhiemVuNamData.setNgayBaoCao(tienDoNhiemVuNam.getNgayBaoCao());
-				tienDoNhiemVuNamData.setKetQua(tienDoNhiemVuNam.getKetQua());
-				
+				tienDoNhiemVuNamData.setNhiemVuNamId(tienDoNhiemVuNam.getNhiemVuNamId());
+				tienDoNhiemVuNamData.setTinhTrang(tienDoNhiemVuNam.getTinhTrang());
+
+				// xử lý đính kèm
+				List<FileDinhKemNhiemVuNam> fileDinhKemNhiemVuNams = serviceFileDinhKemNhiemVuNamService
+						.findByTienDoNvNamIdAndDaXoa(tienDoNhiemVuNam.getId(), false);
+				List<Long> fileDinhKemIds = new ArrayList<Long>();
+				if (Objects.nonNull(fileDinhKemNhiemVuNams) && !fileDinhKemNhiemVuNams.isEmpty()) {
+					for (FileDinhKemNhiemVuNam fileDinhKemNhiemVuNam : fileDinhKemNhiemVuNams) {
+						if (Objects.nonNull(fileDinhKemNhiemVuNam.getFileDinhKemId())) {
+							fileDinhKemIds.add(fileDinhKemNhiemVuNam.getFileDinhKemId());
+						}
+					}
+				}
+				int type = Constants.DINH_KEM_NHIEU_FILE;
+				Optional<FileDinhKemNhiemVuNam> fileDinhKemNhiemVuNam = serviceFileDinhKemNhiemVuNamService
+						.findByTienDoNvNamId(tienDoNhiemVuNam.getId());
+				Long fileDinhKemId = null;
+				Long objectId = tienDoNhiemVuNam.getId();
+				String appCode = TienDoNhiemVuNam.class.getSimpleName();
+				FileDinhKem fileDinhKem = coreAttachmentBusiness
+						.getAttachments( fileDinhKemNhiemVuNam.get().getFileDinhKemId(), appCode, objectId, type);
+				tienDoNhiemVuNamData.setFileDinhKem(fileDinhKem);
+				tienDoNhiemVuNamData.setFileDinhKemIds(fileDinhKem.getIds());
+
 				tienDoNhiemVuNamDatas.add(tienDoNhiemVuNamData);
 			}
 		}
 		nhiemVuNamData.setTienDoNhiemVuNamDatas(tienDoNhiemVuNamDatas);
+		if (Objects.nonNull(tienDoNhiemVuNamDatas) && !tienDoNhiemVuNamDatas.isEmpty()) {
+			nhiemVuNamData.setTienDoNhiemVuNamData(tienDoNhiemVuNamDatas.get(0));
+		}
+
 		return nhiemVuNamData;
 	}
-	
-	public Page<ThongKeKeHoachNamData> thongKeKeHoachNam(int page, int size, String sortBy, String sortDir, Long donViChuTriId,
-			Long keHoachNamId, Integer nam, Integer tinhTrang,  String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay) {
-		Direction direction;
-		if (sortDir.equals("ASC")) {
-			direction = Direction.ASC;
-		} else {
-			direction = Direction.DESC;
-		}
-		final Page<NhiemVuNam> pageNhiemVuNam = serviceNhiemVuNamService.findAll(donViChuTriId, keHoachNamId, nam, tinhTrang,
-				tenNhiemVu, tuNgay, denNgay, PageRequest.of(page, size, direction, sortBy));
-		final Page<ThongKeKeHoachNamData> pageThongKeKeHoach = pageNhiemVuNam.map(this::convertToThongKeKeHoachNamData);
-		return pageThongKeKeHoach;
-	}
-	
-	private ThongKeKeHoachNamData convertToThongKeKeHoachNamData(NhiemVuNam nhiemVuNam) {
-		ThongKeKeHoachNamData thongKeKeHoachData = new ThongKeKeHoachNamData();
-		thongKeKeHoachData.setKeHoachNamId(nhiemVuNam.getKeHoachNamId());
-		if(nhiemVuNam.getKeHoachNamId() != null && nhiemVuNam.getKeHoachNamId() > 0) {
-			Optional<KeHoachNam> optionalKeHoachNam = serviceKeHoachNamService.findById(nhiemVuNam.getKeHoachNamId());
-			if(optionalKeHoachNam.isPresent()) {
-				thongKeKeHoachData.setKeHoachNamTen(optionalKeHoachNam.get().getTenKeHoach());
-				thongKeKeHoachData.setKhDonViChuTriId(optionalKeHoachNam.get().getDonViChuTriId());
-				if(optionalKeHoachNam.get().getDonViChuTriId() != null && optionalKeHoachNam.get().getDonViChuTriId() > 0) {
-					Optional<DmDonVi> optionalDmDonVi = serviceDmDonViService.findById(optionalKeHoachNam.get().getDonViChuTriId());
-					if(optionalDmDonVi.isPresent()) {
-						thongKeKeHoachData.setKhDonViChuTriTen(optionalDmDonVi.get().getTenDonVi());
-					}
-				}
-				thongKeKeHoachData.setKhNam(optionalKeHoachNam.get().getNam());
-				thongKeKeHoachData.setKhSoKyHieu(optionalKeHoachNam.get().getSoKyHieu());
-				thongKeKeHoachData.setKhNgayBanHanh(optionalKeHoachNam.get().getNgayBanHanh());
-			}
-		}
-		thongKeKeHoachData.setNhiemVuChaId(nhiemVuNam.getNhiemVuChaId());
-		thongKeKeHoachData.setTenNhiemVu(nhiemVuNam.getTenNhiemVu());
-		thongKeKeHoachData.setSapXep(nhiemVuNam.getSapXep());
-		thongKeKeHoachData.setDonViPhoiHop(nhiemVuNam.getDonViPhoiHop());
-		thongKeKeHoachData.setTuNgay(nhiemVuNam.getTuNgay());
-		thongKeKeHoachData.setDenNgay(nhiemVuNam.getDenNgay());
-		thongKeKeHoachData.setLoaiNhiemVuId(nhiemVuNam.getLoaiNhiemVuId());
-		if(nhiemVuNam.getLoaiNhiemVuId() != null && nhiemVuNam.getLoaiNhiemVuId() > 0) {
-			Optional<DmLoaiNhiemVu> optLoaiNhiemVu = serviceDmLoaiNhiemVuService.findById(nhiemVuNam.getLoaiNhiemVuId());
-			if(optLoaiNhiemVu.isPresent()) {
-				thongKeKeHoachData.setLoaiNhiemVuTen(optLoaiNhiemVu.get().getTen());
-				thongKeKeHoachData.setLoaiNvMa(optLoaiNhiemVu.get().getMa());
-			}
-		}
-		thongKeKeHoachData.setGhiChu(nhiemVuNam.getGhiChu());
-		thongKeKeHoachData.setDanhSo(nhiemVuNam.getDanhSo());
-		Optional<TienDoNhiemVuNam> optTienDo = serviceTienDoNhiemVuNamService.findByNhiemVuNamId(nhiemVuNam.getId());
-		if(optTienDo.isPresent()) {
-			thongKeKeHoachData.setTinhTrang(optTienDo.get().getTinhTrang());
-			thongKeKeHoachData.setMucDoHoanThanh(optTienDo.get().getMucDoHoanThanh());
-			thongKeKeHoachData.setKetQua(optTienDo.get().getKetQua());
-		}
 
-		return thongKeKeHoachData;
-	}
-	
-	public ModelAndView exportExcelThongKeKeHoachNam(HttpServletRequest request, HttpServletResponse response, int page, int size,
-			String sortBy, String sortDir, Long donViChuTriId, Long keHoachNamId, Integer nam, Integer tinhTrang, String tenNhiemVu,
-			LocalDate tuNgay, LocalDate denNgay) {
-		
-		LocalDate localDate = LocalDate.now();// For reference
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-		String formattedString = localDate.format(formatter);
-		Map<String, Object> model = new HashMap<String, Object>();
-
-		Direction direction;
-		if (sortDir.equals("ASC")) {
-			direction = Direction.ASC;
-		} else {
-			direction = Direction.DESC;
-		}
-		
-		Page<NhiemVuNam> pageNhiemVuNam = serviceNhiemVuNamService.tongHopKeHoachNam(donViChuTriId, keHoachNamId, nam, tinhTrang,
-				tenNhiemVu, tuNgay, denNgay, PageRequest.of(page, size, direction, sortBy));
-		Page<ThongKeKeHoachNamData> pageThongKeKeHoachData = pageNhiemVuNam.map(this::convertToThongKeKeHoachNamData);
-		
-		List<ThongKeKeHoachNamData> thongKeKeHoachDatas = new ArrayList<>(pageThongKeKeHoachData.getContent());
-		
-		while(pageNhiemVuNam.hasNext()) {
-			Page<NhiemVuNam> nextPageOfEmployees = serviceNhiemVuNamService.tongHopKeHoachNam(donViChuTriId, keHoachNamId, nam,
-					tinhTrang, tenNhiemVu, tuNgay, denNgay, pageNhiemVuNam.nextPageable());
-			Page<ThongKeKeHoachNamData> nextPageOfThongKeKeHoachNamData = nextPageOfEmployees.map(this::convertToThongKeKeHoachNamData);
-			if(Objects.nonNull(nextPageOfThongKeKeHoachNamData.getContent())) {
-				thongKeKeHoachDatas.addAll(nextPageOfThongKeKeHoachNamData.getContent());
-			}
-			pageNhiemVuNam = nextPageOfEmployees;
-		}
-		model.put("thongKeKeHoachDatas", thongKeKeHoachDatas);
-		response.setContentType("application/ms-excel");
-		response.setHeader("Content-disposition", "attachment; filename=ThongKeKeHoachNam.xls");
-		return new ModelAndView(new MyExcelViewThongKeKeHoachNam(), model);
-	}
-	
 	public NhiemVuNamData findById(Long id) throws EntityNotFoundException {
 		Optional<NhiemVuNam> optional = serviceNhiemVuNamService.findById(id);
 		if (!optional.isPresent()) {
 			throw new EntityNotFoundException(NhiemVuNam.class, "id", String.valueOf(id));
 		}
 		NhiemVuNam nhiemVuNam = optional.get();
-		NhiemVuNamData nhiemVuNamData = new NhiemVuNamData();
-		nhiemVuNamData.setId(nhiemVuNam.getId());
-		nhiemVuNamData.setKeHoachNamId(nhiemVuNam.getKeHoachNamId());
-		if(nhiemVuNam.getKeHoachNamId() != null && nhiemVuNam.getKeHoachNamId() > 0) {
-			Optional<KeHoachNam> optKeHoachNam = serviceKeHoachNamService.findById(nhiemVuNam.getKeHoachNamId());
-			if(optKeHoachNam.isPresent()) {
-				nhiemVuNamData.setKeHoachNamTen(optKeHoachNam.get().getTenKeHoach());
-				nhiemVuNamData.setKhDonViChuTriId(optKeHoachNam.get().getDonViChuTriId());
-				if(optKeHoachNam.get().getDonViChuTriId() != null && optKeHoachNam.get().getDonViChuTriId() > 0) {
-					Optional<DmDonVi> optDonVi = serviceDmDonViService.findById(optKeHoachNam.get().getDonViChuTriId());
-					if(optDonVi.isPresent()) {
-						nhiemVuNamData.setKhDonViChuTriTen(optDonVi.get().getTenDonVi());
-					}
-				}
-				nhiemVuNamData.setKhNam(optKeHoachNam.get().getNam());
-			}
-		}
-		nhiemVuNamData.setNhiemVuChaId(nhiemVuNam.getNhiemVuChaId());
-		nhiemVuNamData.setTenNhiemVu(nhiemVuNam.getTenNhiemVu());
-		nhiemVuNamData.setSapXep(nhiemVuNam.getSapXep());
-		nhiemVuNamData.setDonViPhoiHop(nhiemVuNam.getDonViPhoiHop());
-		nhiemVuNamData.setTuNgay(nhiemVuNam.getTuNgay());
-		nhiemVuNamData.setDenNgay(nhiemVuNam.getDenNgay());
-		nhiemVuNamData.setLoaiNhiemVuId(nhiemVuNam.getLoaiNhiemVuId());
-		if(nhiemVuNam.getLoaiNhiemVuId() != null && nhiemVuNam.getLoaiNhiemVuId() > 0) {
-			Optional<DmLoaiNhiemVu> optLoaiNhiemVu = serviceDmLoaiNhiemVuService.findById(nhiemVuNam.getLoaiNhiemVuId());
-			if(optLoaiNhiemVu.isPresent()) {
-				nhiemVuNamData.setLoaiNhiemVuTen(optLoaiNhiemVu.get().getTen());
-				nhiemVuNamData.setLoaiNvMa(optLoaiNhiemVu.get().getMa());
-			}
-		}
-		nhiemVuNamData.setGhiChu(nhiemVuNam.getGhiChu());
-		
-		List<TienDoNhiemVuNamData> tienDoNhiemVuNamDatas = new ArrayList<>();
-		List<TienDoNhiemVuNam> tienDoNhiemVuNams = serviceTienDoNhiemVuNamService.findByNhiemVuNamIdAndDaXoa(nhiemVuNam.getId(), false);
-		if(Objects.nonNull(tienDoNhiemVuNams) && !tienDoNhiemVuNams.isEmpty()) {
-			for(TienDoNhiemVuNam tienDoNhiemVuNam : tienDoNhiemVuNams) {
-				TienDoNhiemVuNamData tienDoNhiemVuNamData = new TienDoNhiemVuNamData();
-				tienDoNhiemVuNamData.setId(tienDoNhiemVuNam.getId());
-				tienDoNhiemVuNamData.setNhiemVuNamId(tienDoNhiemVuNam.getNhiemVuNamId());
-				if(tienDoNhiemVuNam.getNhiemVuNamId() != null && tienDoNhiemVuNam.getNhiemVuNamId() > 0) {
-					Optional<NhiemVuNam> optNhiemVu = serviceNhiemVuNamService.findById(tienDoNhiemVuNam.getNhiemVuNamId());
-					if(optNhiemVu.isPresent()) {
-						tienDoNhiemVuNamData.setNhiemVuNamTen(optNhiemVu.get().getTenNhiemVu());
-						tienDoNhiemVuNamData.setNvNamNhiemVuChaId(optNhiemVu.get().getNhiemVuChaId());
-						tienDoNhiemVuNamData.setNvNamDonViPhoiHop(optNhiemVu.get().getDonViPhoiHop());
-						tienDoNhiemVuNamData.setNvNamGhiChu(optNhiemVu.get().getGhiChu());
-						tienDoNhiemVuNamData.setNvNamTuNgay(optNhiemVu.get().getTuNgay());
-						tienDoNhiemVuNamData.setNvNamDenNgay(optNhiemVu.get().getDenNgay());
-					}
-				}
-				tienDoNhiemVuNamData.setTinhTrang(tienDoNhiemVuNam.getTinhTrang());
-				tienDoNhiemVuNamData.setMucDoHoanThanh(tienDoNhiemVuNam.getMucDoHoanThanh());
-				tienDoNhiemVuNamData.setNgayBaoCao(tienDoNhiemVuNam.getNgayBaoCao());
-				tienDoNhiemVuNamData.setKetQua(tienDoNhiemVuNam.getKetQua());
-				
-				if (Objects.nonNull(tienDoNhiemVuNam)) {
-					int type = Constants.DINH_KEM_1_FILE;
-					Optional<FileDinhKemNhiemVuNam> fileDinhKemNhiemVuNam = serviceFileDinhKemNhiemVuNamService.findByTienDoNhiemVuNamId(tienDoNhiemVuNam.getId());
-					System.out.println(fileDinhKemNhiemVuNam+"1111111111111111112"+tienDoNhiemVuNam.getId());
-					Long fileDinhKemId = null;
-					Long objectId = tienDoNhiemVuNam.getId();
-					String appCode = TienDoNhiemVuNam.class.getSimpleName();
-					FileDinhKem fileDinhKem = coreAttachmentBusiness.getAttachments( fileDinhKemNhiemVuNam.get().getFileDinhKemId(), appCode, objectId, type);
-					tienDoNhiemVuNamData.setFileDinhKem(fileDinhKem);
-					tienDoNhiemVuNamData.setFileDinhKemIds(fileDinhKem.getIds());
-				}
-				
-				tienDoNhiemVuNamDatas.add(tienDoNhiemVuNamData);
-			}
-		}
-		nhiemVuNamData.setTienDoNhiemVuNamDatas(tienDoNhiemVuNamDatas);
-		return nhiemVuNamData;
+		return this.convertToNhiemVuNamData(nhiemVuNam);
 	}
-	
-	public KeHoachNamData findByKeHoachNamId(Long id) throws EntityNotFoundException {
-		Optional<KeHoachNam> optionalKeHoachNam = serviceKeHoachNamService.findById(id);
-		if(!optionalKeHoachNam.isPresent()) {
-			throw new EntityNotFoundException(KeHoachNam.class, "id", String.valueOf(id));
-		}
-		KeHoachNam keHoachNam = optionalKeHoachNam.get();
-		KeHoachNamData keHoachNamData = new KeHoachNamData();
-		keHoachNamData.setId(keHoachNam.getId());
-		keHoachNamData.setTenKeHoach(keHoachNam.getTenKeHoach());
-		keHoachNamData.setDonViChuTriId(keHoachNam.getDonViChuTriId());
-		if(keHoachNam.getDonViChuTriId() != null && keHoachNam.getDonViChuTriId() > 0) {
-			Optional<DmDonVi> optDonVi = serviceDmDonViService.findById(keHoachNam.getDonViChuTriId());
-			if(!optDonVi.isPresent()) {
-				keHoachNamData.setDonViChuTriTen(optDonVi.get().getTenDonVi());
-			}
-		}
-		keHoachNamData.setNam(keHoachNam.getNam());
-		keHoachNamData.setSoKyHieu(keHoachNam.getSoKyHieu());
-		keHoachNamData.setNgayBanHanh(keHoachNam.getNgayBanHanh());
-		keHoachNamData.setTrangThai(keHoachNam.getTrangThai());
-		
-		List<NhiemVuNamData> nhiemVuNamDatas = new ArrayList<>();
-		List<NhiemVuNam> nhiemVuNams = serviceNhiemVuNamService.findByKeHoachNamIdAndDaXoa(keHoachNam.getId(), false);
-		if(Objects.nonNull(nhiemVuNams) && !nhiemVuNams.isEmpty()) {
-			for(NhiemVuNam nhiemVuNam : nhiemVuNams) {
-				NhiemVuNamData nhiemVuNamData = new NhiemVuNamData();
-				nhiemVuNamData.setId(nhiemVuNam.getId());
-				nhiemVuNamData.setNhiemVuChaId(nhiemVuNam.getNhiemVuChaId());
-				nhiemVuNamData.setTenNhiemVu(nhiemVuNam.getTenNhiemVu());
-				nhiemVuNamData.setSapXep(nhiemVuNam.getSapXep());
-				nhiemVuNamData.setDonViPhoiHop(nhiemVuNam.getDonViPhoiHop());
-				nhiemVuNamData.setTuNgay(nhiemVuNam.getTuNgay());
-				nhiemVuNamData.setDenNgay(nhiemVuNam.getDenNgay());
-				nhiemVuNamData.setLoaiNhiemVuId(nhiemVuNam.getLoaiNhiemVuId());
-				if(nhiemVuNam.getLoaiNhiemVuId() != null && nhiemVuNam.getLoaiNhiemVuId() > 0) {
-					Optional<DmLoaiNhiemVu> optLoaiNhiemVu = serviceDmLoaiNhiemVuService.findById(nhiemVuNam.getLoaiNhiemVuId());
-					if(optLoaiNhiemVu.isPresent()) {
-						nhiemVuNamData.setLoaiNhiemVuTen(optLoaiNhiemVu.get().getTen());
-						nhiemVuNamData.setLoaiNvMa(optLoaiNhiemVu.get().getMa());
-					}
-				}
-				nhiemVuNamData.setGhiChu(nhiemVuNam.getGhiChu());
-				nhiemVuNamData.setDanhSo(nhiemVuNam.getDanhSo());
-				
-				nhiemVuNamDatas.add(nhiemVuNamData);
-			}
-		}
-		keHoachNamData.setNhiemVuNamDatas(nhiemVuNamDatas);
-		return keHoachNamData;
-	}
-	
-	public NhiemVuNam create(NhiemVuNamData nhiemVuNamData) throws MethodArgumentNotValidException {	
-		NhiemVuNam nhiemVuNam = new NhiemVuNam();
-		nhiemVuNam.setDaXoa(false);
-		nhiemVuNam.setKeHoachNamId(nhiemVuNamData.getKeHoachNamId());
-		nhiemVuNam.setNhiemVuChaId(nhiemVuNamData.getNhiemVuChaId());
-		nhiemVuNam.setTenNhiemVu(nhiemVuNamData.getTenNhiemVu());
-		nhiemVuNam.setSapXep(nhiemVuNamData.getSapXep());
-		nhiemVuNam.setDonViPhoiHop(nhiemVuNamData.getDonViPhoiHop());
-		nhiemVuNam.setTuNgay(nhiemVuNamData.getTuNgay());
-		nhiemVuNam.setDenNgay(nhiemVuNamData.getDenNgay());
-		nhiemVuNam.setLoaiNhiemVuId(nhiemVuNamData.getLoaiNhiemVuId());
-		nhiemVuNam.setGhiChu(nhiemVuNamData.getGhiChu());
-		nhiemVuNam.setDanhSo(nhiemVuNamData.getDanhSo());
-		nhiemVuNam = serviceNhiemVuNamService.save(nhiemVuNam);
 
-		serviceTienDoNhiemVuNamService.setFixedDaXoaForNhiemVuNamId(false, nhiemVuNam.getId());
-		List<TienDoNhiemVuNamData> tienDoNhiemVuNamDatas = nhiemVuNamData.getTienDoNhiemVuNamDatas();
-		if(Objects.nonNull(tienDoNhiemVuNamDatas) && !tienDoNhiemVuNamDatas.isEmpty()) {
-			for(TienDoNhiemVuNamData tienDoNhiemVuNamData : tienDoNhiemVuNamDatas) {
-				TienDoNhiemVuNam tienDoNhiemVuNam = new TienDoNhiemVuNam();
-				if(Objects.nonNull(tienDoNhiemVuNam.getId())) {
-					Optional<TienDoNhiemVuNam> optTienDo = serviceTienDoNhiemVuNamService.findById(tienDoNhiemVuNamData.getId());
-					if(optTienDo.isPresent()) {
-						tienDoNhiemVuNam = optTienDo.get();
-					}
-				}
-				tienDoNhiemVuNam.setId(tienDoNhiemVuNamData.getId());
-				tienDoNhiemVuNam.setNhiemVuNamId(tienDoNhiemVuNamData.getNhiemVuNamId());
-				tienDoNhiemVuNam.setTinhTrang(tienDoNhiemVuNamData.getTinhTrang());
-				tienDoNhiemVuNam.setMucDoHoanThanh(tienDoNhiemVuNamData.getMucDoHoanThanh());
-				tienDoNhiemVuNam.setNgayBaoCao(tienDoNhiemVuNamData.getNgayBaoCao());
-				tienDoNhiemVuNam.setKetQua(tienDoNhiemVuNamData.getKetQua());
-				serviceTienDoNhiemVuNamService.save(tienDoNhiemVuNam);
+	public NhiemVuNamData saveTienDo(Long nhiemVuId, NhiemVuNamData nhiemVuNamData)
+			throws EntityNotFoundException {
+		Optional<NhiemVuNam> optional = serviceNhiemVuNamService.findById(nhiemVuId);
+		if (!optional.isPresent()) {
+			throw new EntityNotFoundException(NhiemVuNam.class, "id", String.valueOf(nhiemVuId));
+		}
+		NhiemVuNam nhiemVuNam = optional.get();
+		TienDoNhiemVuNamData tienDoNhiemVuNamData = nhiemVuNamData.getTienDoNhiemVuNamData();
+
+		TienDoNhiemVuNam tienDoNhiemVuNam = new TienDoNhiemVuNam();
+		if (Objects.nonNull(tienDoNhiemVuNamData.getId())) {
+			Optional<TienDoNhiemVuNam> optionalTienDoNhiemVuNam = serviceTienDoNhiemVuNamService
+					.findById(tienDoNhiemVuNamData.getId());
+			if (optionalTienDoNhiemVuNam.isPresent()) {
+				tienDoNhiemVuNam = optionalTienDoNhiemVuNam.get();
 			}
-		}		
-		return nhiemVuNam;		
+		}
+		tienDoNhiemVuNam.setDaXoa(false);
+		tienDoNhiemVuNam.setKetQua(tienDoNhiemVuNamData.getKetQua());
+		tienDoNhiemVuNam.setMucDoHoanThanh(tienDoNhiemVuNamData.getMucDoHoanThanh());
+		tienDoNhiemVuNam.setNgayBaoCao(tienDoNhiemVuNamData.getNgayBaoCao());
+		tienDoNhiemVuNam.setNhiemVuNamId(nhiemVuId);
+		tienDoNhiemVuNam.setTinhTrang(tienDoNhiemVuNamData.getTinhTrang());
+		tienDoNhiemVuNam = serviceTienDoNhiemVuNamService.save(tienDoNhiemVuNam);
+
+		// đính kèm
+		serviceFileDinhKemNhiemVuNamService.setFixedDaXoaForTienDoNvNamId(false, tienDoNhiemVuNam.getId());
+		/* Begin đính kèm file *******************************************************/
+
+		/*
+		 * Khởi tạo biến **************************************************************
+		 * - fileDinhKemIds: danh sách id file đã đính kèm ****************************
+		 * - type: loại đính kèm (DINH_KEM_1_FILE || DINH_KEM_NHIEU_FILE) *************
+		 * - objectId: id đối tượng đính kèm ******************************************
+		 * - appCode: tên model của đối tượng đính kèm*********************************
+		 */
+		List<Long> fileDinhKemIds = tienDoNhiemVuNamData.getFileDinhKemIds();
+		int type = Constants.DINH_KEM_NHIEU_FILE;
+		long objectId = tienDoNhiemVuNam.getId();
+		String appCode = TienDoNhiemVuNam.class.getSimpleName();
+		/* Xóa mềm đính kèm cũ nếu có trước khi set file đính kèm nếu đính kèm nhiều */
+		if (type == Constants.DINH_KEM_NHIEU_FILE) {
+			coreAttachmentBusiness.setFixDaXoaByObjectIdAndAppCodeAndType(objectId, appCode, type);
+		}
+		if (Objects.nonNull(fileDinhKemIds) && !fileDinhKemIds.isEmpty()) {
+			for (Long fileDinhKemId : fileDinhKemIds) {
+				CoreAttachment coreAttachment = coreAttachmentBusiness.dinhKemFile(fileDinhKemId, objectId, type,
+						appCode);
+
+				/* set db nếu có trường lưu và chuyển file từ temp sang thư mục chính */
+				if (coreAttachment.getId() > 0) {
+					FileDinhKemNhiemVuNam fileDinhKemNhiemVuNam = new FileDinhKemNhiemVuNam();
+					List<FileDinhKemNhiemVuNam> fileDinhKemNhiemVuNams = serviceFileDinhKemNhiemVuNamService
+							.findByTienDoNvNamIdAndFileDinhKemId(tienDoNhiemVuNam.getId(), fileDinhKemId);
+					if (Objects.nonNull(fileDinhKemNhiemVuNams) && !fileDinhKemNhiemVuNams.isEmpty()) {
+						fileDinhKemNhiemVuNam = fileDinhKemNhiemVuNams.get(0);
+					}
+					fileDinhKemNhiemVuNam.setDaXoa(false);
+					fileDinhKemNhiemVuNam.setTienDoNvNamId(tienDoNhiemVuNam.getId());
+					fileDinhKemNhiemVuNam.setFileDinhKemId(coreAttachment.getId());
+					fileDinhKemNhiemVuNam = serviceFileDinhKemNhiemVuNamService.save(fileDinhKemNhiemVuNam);
+
+					coreAttachmentBusiness.saveAndMove(coreAttachment);
+				}
+
+				/* thoát nếu đính kèm 1 file */
+				if (type == Constants.DINH_KEM_1_FILE) {
+					break;
+				}
+			}
+		}
+		/* End đính kèm file **********************************************************/
+
+		return this.convertToNhiemVuNamData(nhiemVuNam);
 	}
-	
-	public NhiemVuNam update(Long id, NhiemVuNamData nhiemVuNamData) throws EntityNotFoundException {
+
+	public NhiemVuNamData delete(Long id) throws EntityNotFoundException {
 		Optional<NhiemVuNam> optional = serviceNhiemVuNamService.findById(id);
-		if(!optional.isPresent()) {
+		if (!optional.isPresent()) {
 			throw new EntityNotFoundException(NhiemVuNam.class, "id", String.valueOf(id));
 		}
 		NhiemVuNam nhiemVuNam = optional.get();
-		nhiemVuNam.setKeHoachNamId(nhiemVuNamData.getKeHoachNamId());
-		nhiemVuNam.setNhiemVuChaId(nhiemVuNamData.getNhiemVuChaId());
-		nhiemVuNam.setTenNhiemVu(nhiemVuNamData.getTenNhiemVu());
-		nhiemVuNam.setSapXep(nhiemVuNamData.getSapXep());
-		nhiemVuNam.setDonViPhoiHop(nhiemVuNamData.getDonViPhoiHop());
-		nhiemVuNam.setTuNgay(nhiemVuNamData.getTuNgay());
-		nhiemVuNam.setDenNgay(nhiemVuNamData.getDenNgay());
-		nhiemVuNam.setLoaiNhiemVuId(nhiemVuNamData.getLoaiNhiemVuId());
-		nhiemVuNam.setGhiChu(nhiemVuNamData.getGhiChu());
-		nhiemVuNam.setDanhSo(nhiemVuNamData.getDanhSo());
-		nhiemVuNam = serviceNhiemVuNamService.save(nhiemVuNam);
-		
-		serviceTienDoNhiemVuNamService.setFixedDaXoaForNhiemVuNamId(true, nhiemVuNam.getId());
-		List<TienDoNhiemVuNamData> tienDoNhiemVuNamDatas = nhiemVuNamData.getTienDoNhiemVuNamDatas();
-		if(Objects.nonNull(tienDoNhiemVuNamDatas) && !tienDoNhiemVuNamDatas.isEmpty()) {
-			for(TienDoNhiemVuNamData tienDoNhiemVuNamData : tienDoNhiemVuNamDatas) {
-				TienDoNhiemVuNam tienDoNhiemVuNam = new TienDoNhiemVuNam();
-				if(Objects.nonNull(tienDoNhiemVuNam.getId())) {
-					Optional<TienDoNhiemVuNam> optTienDo = serviceTienDoNhiemVuNamService.findById(tienDoNhiemVuNamData.getId());
-					if(optTienDo.isPresent()) {
-						tienDoNhiemVuNam = optTienDo.get();
-					}
-				}
-				tienDoNhiemVuNam.setId(tienDoNhiemVuNamData.getId());
-				tienDoNhiemVuNam.setNhiemVuNamId(tienDoNhiemVuNamData.getNhiemVuNamId());
-				tienDoNhiemVuNam.setTinhTrang(tienDoNhiemVuNamData.getTinhTrang());
-				tienDoNhiemVuNam.setMucDoHoanThanh(tienDoNhiemVuNamData.getMucDoHoanThanh());
-				tienDoNhiemVuNam.setNgayBaoCao(tienDoNhiemVuNamData.getNgayBaoCao());
-				tienDoNhiemVuNam.setKetQua(tienDoNhiemVuNamData.getKetQua());
-				serviceTienDoNhiemVuNamService.save(tienDoNhiemVuNam);
-			}
-		}
-		return nhiemVuNam;
-	}
-	
-	@DeleteMapping(value = { "/{id}" })
-	public NhiemVuNamData delete(Long id) throws EntityNotFoundException {
-		Optional<NhiemVuNam> optionalNhiemVuNam = serviceNhiemVuNamService.findById(id);
-		if (!optionalNhiemVuNam.isPresent()) {
-			throw new EntityNotFoundException(NhiemVuNamData.class, "id", String.valueOf(id));
-		}
-		NhiemVuNam nhiemVuNam = optionalNhiemVuNam.get();
 		nhiemVuNam.setDaXoa(true);
 		nhiemVuNam = serviceNhiemVuNamService.save(nhiemVuNam);
 		return this.convertToNhiemVuNamData(nhiemVuNam);
+	}
+
+	public void deleteTienDo(Long tienDoId) throws EntityNotFoundException {
+		Optional<TienDoNhiemVuNam> optional = serviceTienDoNhiemVuNamService.findById(tienDoId);
+		if (!optional.isPresent()) {
+			throw new EntityNotFoundException(TienDoNhiemVuNam.class, "id", String.valueOf(tienDoId));
+		}
+		TienDoNhiemVuNam tienDoNhiemVuNam = optional.get();
+		tienDoNhiemVuNam.setDaXoa(true);
+		tienDoNhiemVuNam = serviceTienDoNhiemVuNamService.save(tienDoNhiemVuNam);
 	}
 }

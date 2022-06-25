@@ -10,11 +10,13 @@ import vn.dnict.microservice.nnptnt.kehoach.kehoachnam.dao.model.KeHoachNam;
 
 public interface KeHoachNamService {
 	public KeHoachNam save(KeHoachNam keHoachNam);
-	
+
 	public void deleteById(Long id);
-	
+
+	public boolean existsById(Long id);
+
 	public Optional<KeHoachNam> findById(Long id);
-	
-	public Page<KeHoachNam> findAll(Long donViChuTriId, Integer nam, String tenKeHoach, Boolean trangThai, String soKyHieu, LocalDate ngayBanHanhTuNgay,
-			LocalDate ngayBanHanh, Pageable pageable);
+
+	public Page<KeHoachNam> findAll(Long donViChuTriId, Integer nam, String tenKeHoach, String soKyHieu, Boolean trangThai,
+			LocalDate tuNgayBanHanh, LocalDate denNgayBanHanh, Pageable pageable);
 }

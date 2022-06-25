@@ -11,6 +11,10 @@ public class Constants {
 	public static final int DINH_KEM_1_FILE = 0; // đính kèm 1 file
     public static final int DINH_KEM_NHIEU_FILE = 1; // đính kèm nhiều file
     
+    public static final int QLKH_TINHTRANG_CHUATHUCHIEN = 0;
+    public static final int QLKH_TINHTRANG_DANGTHUCHIEN = 1;
+    public static final int QLKH_TINHTRANG_DAHOANTHANH = 2;
+    public static final int QLKH_TINHTRANG_NGUNGTHUCHIEN = 3;
     
 	public static final int KCHTGT_DUONGBO_TINHTRANGDUONG_TRANGTHAI_CHUAXULY = 1;
 	public static final int KCHTGT_DUONGBO_TINHTRANGDUONG_TRANGTHAI_DANGXULY = 2;

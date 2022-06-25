@@ -11,8 +11,10 @@ import vn.dnict.microservice.nnptnt.dm.loainhiemvu.dao.model.DmLoaiNhiemVu;
 @Repository
 public interface DmLoaiNhiemVuRepo extends JpaRepository<DmLoaiNhiemVu, Long>, JpaSpecificationExecutor<DmLoaiNhiemVu> {
 
-	List<DmLoaiNhiemVu> findByMaIgnoreCaseAndDaXoa(String ma, boolean daXoa);
+	public List<DmLoaiNhiemVu> findByMaIgnoreCaseAndDaXoa(String ma, Boolean daXoa);
 
-	List<DmLoaiNhiemVu> findByIdAndMaIgnoreCaseAndDaXoa(long id, String ma, boolean daXoa);
+	public List<DmLoaiNhiemVu> findByIdAndMaIgnoreCaseAndDaXoa(long id, String ma, Boolean daXoa);
+
+	public List<DmLoaiNhiemVu> findByTrangThaiAndDaXoaOrderBySapXepAsc(Boolean trangThai, Boolean daXoa);
 
 }

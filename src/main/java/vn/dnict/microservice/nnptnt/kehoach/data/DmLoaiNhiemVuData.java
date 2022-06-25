@@ -1,7 +1,10 @@
 package vn.dnict.microservice.nnptnt.kehoach.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.Data;
@@ -19,9 +22,11 @@ public class DmLoaiNhiemVuData {
 	@Size(max = 100, message = "tên không nhập quá 50 ký tự")
 	private String ma;
 
-	@NotNull(message = "Vui lòng chọn trạng thái")
 	private Boolean trangThai;
 
 	private Integer sapXep;
+	
+	@Valid
+	private List<NhiemVuNamData> children = new ArrayList<NhiemVuNamData>();
 
 }

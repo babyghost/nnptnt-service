@@ -19,30 +19,36 @@ import vn.dnict.microservice.nnptnt.kehoach.kehoachnam.dao.service.repo.KeHoachN
 public class KeHoachNamServiceImpl implements KeHoachNamService {
 	@Autowired
 	KeHoachNamRepo repo;
+
 	@Override
-	public KeHoachNam save(KeHoachNam entity) {
+	public KeHoachNam save(KeHoachNam keHoachNam) {
 		// TODO Auto-generated method stub
-		return repo.save(entity);
+		return repo.save(keHoachNam);
 	}
 
-	
+	@Override
 	public void deleteById(Long id) {
 		// TODO Auto-generated method stub
-		repo.deleteById(id);;
-		
+		repo.deleteById(id);
 	}
 
-	
+	@Override
+	public boolean existsById(Long id) {
+		// TODO Auto-generated method stub
+		return repo.existsById(id);
+	}
+
+	@Override
 	public Optional<KeHoachNam> findById(Long id) {
 		// TODO Auto-generated method stub
 		return repo.findById(id);
 	}
 
-	
-	public Page<KeHoachNam> findAll(Long donViChuTriId, Integer nam, String tenKeHoach, Boolean trangThai, String soKyHieu, LocalDate ngayBanHanhTuNgay,
-			LocalDate ngayBanHanhDenNgay, Pageable pageable) {
+	@Override
+	public Page<KeHoachNam> findAll(Long donViChuTriId, Integer nam, String tenKeHoach, String soKyHieu,
+			Boolean trangThai, LocalDate tuNgayBanHanh, LocalDate denNgayBanHanh, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findAll(KeHoachNamSpecifications.quickSearch(donViChuTriId, nam, tenKeHoach, trangThai, soKyHieu, ngayBanHanhTuNgay,
-				ngayBanHanhDenNgay),pageable);
+		return repo.findAll(KeHoachNamSpecifications.quichSearch(donViChuTriId, nam, tenKeHoach, soKyHieu, trangThai, tuNgayBanHanh,
+				denNgayBanHanh), pageable);
 	}
 }

@@ -8,6 +8,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedBy;
@@ -27,16 +28,20 @@ import lombok.Data;
 @Data
 public class FileDinhKemNhiemVuNam {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "ID", unique = true, nullable = false)
+	@GeneratedValue(generator = "qlkh_nhiemvunam2filebaocao_seq", strategy = GenerationType.AUTO)
+	@SequenceGenerator(name = "qlkh_nhiemvunam2filebaocao_seq", sequenceName = "qlkh_nhiemvunam2filebaocao_id_seq", allocationSize = 1)
 	private Long id;
 
-	@Column(name = "dinhkemfile_id")
-	private long fileDinhKemId;
+	@Column(name = "dinhkemfile_id", nullable = false)
+	private Long fileDinhKemId;
 
-	@Column(name = "tiendonvnam_id")
-	private long tienDoNhiemVuNamId;
+	@Column(name = "tiendonam_id", nullable = false)
+	private Long tienDoNvNamId;
 
+	@JsonIgnore
+	@Column(name = "daxoa")
+	private Boolean daXoa;
 
 	@CreatedBy
 	@Column(name = "nguoitao")
@@ -55,8 +60,4 @@ public class FileDinhKemNhiemVuNam {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
 	@Column(name = "ngaycapnhat")
 	private LocalDateTime ngayCapNhat;
-
-	@JsonIgnore
-	@Column(name = "daxoa")
-	private boolean daXoa;
 }

@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedBy;
@@ -32,48 +33,49 @@ import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.model.NhiemVuNam;
 @Data
 public class KeHoachNam {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", unique = true, nullable = false)
+	@GeneratedValue(generator = "qlkh_kehoachnam_seq", strategy = GenerationType.AUTO)
+	@SequenceGenerator(name = "qlkh_kehoachnam_seq", sequenceName = "qlkh_kehoachnam_id_seq", allocationSize = 1)
 	private Long id;
-	
+
 	@Column(name = "tenkehoach", length = 500, nullable = false)
 	private String tenKeHoach;
-	
-	@Column(name = "donvichutri_id")
+
+	@Column(name = "donvichutri_id", nullable = false)
 	private Long donViChuTriId;
-	
-	@Column(name = "nam")
+
+	@Column(name = "nam", nullable = false)
 	private Integer nam;
-	
-	@Column(name = "sokyhieu", length = 100)
+
+	@Column(name = "sokyhieu", length = 100, nullable = false)
 	private String soKyHieu;
-	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-	@Column(name = "ngaybanhanh")
-	private LocalDate ngayBanHanh;
-	
-	@Column(name = "trangthai")
+
+	@Column(name = "trangthai", nullable = false)
 	private Boolean trangThai;
-	
-	@Column(name = "nguoitao")
-	@CreatedBy
-	private String nguoiTao;
-	
-	@Column(name = "ngaytao")
+
+	@Column(name = "ngaybanhanh", nullable = false)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	private LocalDate ngayBanHanh;
+
+	@JsonIgnore
+	@Column(name = "daxoa")
+	private Boolean daXoa;
+
+	@Column(name = "ngaytao", nullable = false)
 	@CreatedDate
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
 	private LocalDateTime ngayTao;
-	
-	@Column(name = "nguoicapnhat")
+
+	@Column(name = "nguoitao", nullable = false)
+	@LastModifiedBy
+	private String nguoiTao;
+
+	@Column(name = "nguoicapnhat", nullable = false)
 	@LastModifiedBy
 	private String nguoiCapNhat;
-	
-	@Column(name = "ngaycapnhat")
+
+	@Column(name = "ngaycapnhat", nullable = false)
 	@LastModifiedDate
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
 	private LocalDateTime ngayCapNhat;
-	
-	@JsonIgnore
-	@Column(name = "daxoa")
-	private boolean daXoa;
 }

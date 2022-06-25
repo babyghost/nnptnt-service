@@ -8,6 +8,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedBy;
@@ -27,21 +28,26 @@ import lombok.Data;
 @Data
 public class DmLoaiNhiemVu {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", unique = true, nullable = false)
+	@GeneratedValue(generator = "qlkh_dmloainhiemvu_seq", strategy = GenerationType.AUTO)
+	@SequenceGenerator(name = "qlkh_dmloainhiemvu_seq", sequenceName = "qlkh_dmloainhiemvu_id_seq", allocationSize = 1)
 	private Long id;
-	
+
 	@Column(name = "ten", length = 250, nullable = false)
 	private String ten;
-	
-	@Column(name = "ma", length = 50, nullable = false)
+
+	@Column(name = "ma", length = 20)
 	private String ma;
-	
+
 	@Column(name = "sapxep")
 	private Integer sapXep;
-	
+
 	@Column(name = "trangthai")
 	private Boolean trangThai;
+
+	@JsonIgnore
+	@Column(name = "daxoa")
+	private Boolean daXoa;
 	
 	@Column(name = "nguoitao")
 	@CreatedBy
@@ -60,8 +66,4 @@ public class DmLoaiNhiemVu {
 	@LastModifiedDate
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
 	private LocalDateTime ngayCapNhat;
-	
-	@JsonIgnore
-	@Column(name = "daxoa")
-	private boolean daXoa;
 }

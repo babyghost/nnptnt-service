@@ -21,6 +21,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.web.servlet.view.document.AbstractXlsView;
 
 import vn.dnict.microservice.nnptnt.kehoach.data.ThongKeKeHoachNamData;
+import vn.dnict.microservice.nnptnt.kiemsoatgietmo.cosogietmo.dao.model.CoSoGietMo;
+import vn.dnict.microservice.nnptnt.kiemsoatgietmo.data.CoSoGietMoData;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.data.ThongKeSoLuongData;
 
 public class MyExcelViewTongHopSoLuongNgay extends AbstractXlsView {
@@ -265,6 +267,7 @@ public class MyExcelViewTongHopSoLuongNgay extends AbstractXlsView {
 				0, // first column (0-based)
 				5 // last column (0-based)
 		));
+		List<CoSoGietMo> listCoSo = (List<CoSoGietMo>) model.get("listCoSo");
 		List<ThongKeSoLuongData> thongKeSoLuongDatas = (List<ThongKeSoLuongData>) model
 				.get("thongKeSoLuongDatas");
 
@@ -280,10 +283,14 @@ public class MyExcelViewTongHopSoLuongNgay extends AbstractXlsView {
 		cell2.setCellValue("Ngày");
 		currentColumn++;
 
-		cell2 = headerRow.createCell(currentColumn);
-		cell2.setCellStyle(styleHeaderB);
-		cell2.setCellValue(thongKeSoLuongDatas.get(0).getCoSoTen());
-		currentColumn++;
+		if(listCoSo != null && !listCoSo.isEmpty()) {
+			for(CoSoGietMo coSo : listCoSo) {
+				cell2 = headerRow.createCell(currentColumn);
+				cell2.setCellStyle(styleHeaderB);
+				cell2.setCellValue(coSo.getTenCoSo());
+				currentColumn++;				
+			}
+		}
 
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);
@@ -306,8 +313,8 @@ public class MyExcelViewTongHopSoLuongNgay extends AbstractXlsView {
 
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);
-		cell2.setCellValue("Tổng từng loại");
-		sheet.addMergedRegion(new CellRangeAddress(currentRow - 1, currentRow, currentColumn, currentColumn));
+		cell2.setCellValue(thongKeSoLuongDatas.get(0).getLoaiVatNuoiTen());
+		currentColumn++;
 	
 		if (Objects.nonNull(thongKeSoLuongDatas) && !thongKeSoLuongDatas.isEmpty()) {
 

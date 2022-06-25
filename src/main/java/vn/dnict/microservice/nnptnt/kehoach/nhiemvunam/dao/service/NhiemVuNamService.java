@@ -10,24 +10,29 @@ import org.springframework.data.domain.Pageable;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.model.NhiemVuNam;
 
 public interface NhiemVuNamService {
-	public NhiemVuNam save(NhiemVuNam entity);
-	
+	public NhiemVuNam save(NhiemVuNam nhiemVuNam);
+
 	public void deleteById(Long id);
-	
+
 	public Optional<NhiemVuNam> findById(Long id);
-	
-	public List<NhiemVuNam> findByKeHoachNamIdAndDaXoa(Long keHoachNamId, Boolean daXoa);
-	
-	public List<NhiemVuNam> getByKeHoachNamIdAndNhiemVuChaIdIsNullAndDaXoa(Long keHoachNamId, Boolean daXoa);
-	
-	public List<NhiemVuNam> getByKeHoachNamIdAndNhiemVuChaIdAndDaXoa(Long keHoachNamId, Long nhiemVuCha, Boolean daXoa);
-	
-	public int setFixedDaXoaForKeHoachNamId(Boolean daXoa, Long keHoachNamId);
-	
-	public Optional<NhiemVuNam> findByKeHoachNamId(Long keHoachNamId);
-	
-	public Page<NhiemVuNam> findAll(Long donViChuTriId, Long keHoachNamId, Integer nam, Integer tinhTrang, String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay, Pageable pageable);
-	
-	public Page<NhiemVuNam> tongHopKeHoachNam(Long donViChuTriId, Long keHoachNamId, Integer nam, Integer tinhTrang, String tenNhiemVu, LocalDate tuNgay,
-			LocalDate denNgay, Pageable pageable);
+
+	public List<NhiemVuNam> findByKeHoachIdAndDaXoa(Long keHoachId, Boolean daXoa);
+
+	public int setFixedDaXoaForKeHoachId(Boolean daXoa, Long keHoachId);
+
+	public List<NhiemVuNam> findByKeHoachIdAndNhiemVuChaIdIsNullAndDaXoa(Long keHoachId, Boolean daXoa);
+
+	public List<NhiemVuNam> findByKeHoachIdAndNhiemVuChaIdAndDaXoa(Long keHoachId, Long nhiemVuChaId, Boolean daXoa);
+
+	public List<NhiemVuNam> findByKeHoachIdAndLoaiNhiemVuIdAndNhiemVuChaIdIsNullAndDaXoa(Long keHoachId, Long loaiNhiemVuId,
+			Boolean daXoa);
+
+	public List<NhiemVuNam> findByKeHoachIdAndLoaiNhiemVuIdAndNhiemVuChaIdAndDaXoa(Long keHoachId, Long loaiNhiemVuId,
+			Long nhiemVuChaId, Boolean daXoa);
+
+	public Page<NhiemVuNam> findAll(Long donViChuTriId, Integer tinhTrang, Integer nam, Long keHoachId, LocalDate tuNgay,
+			LocalDate denNgay, String tenNhiemVu, Pageable pageable);
+
+	public List<NhiemVuNam> getThongKeSoLuong(Long donViChuTriId, Integer nam, Long keHoachId, List<Integer> tinhTrangs,
+			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu);
 }

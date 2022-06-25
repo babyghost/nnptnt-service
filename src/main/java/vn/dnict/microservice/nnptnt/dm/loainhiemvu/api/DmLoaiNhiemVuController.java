@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,40 +32,43 @@ public class DmLoaiNhiemVuController {
 	DmLoaiNhiemVuBusiness businessDmLoaiNhiemVuBusiness;
 	
 	@GetMapping(value = { "/", "" })
-	public ResponseEntity<Page<DmLoaiNhiemVu>> findAll(
+	public ResponseEntity<Page<DmLoaiNhiemVuData>> findAll(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "sapXep", required = false) String sortBy,
+			@RequestParam(name = "sortBy", defaultValue = "ten", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
-			@RequestParam(name = "search", required = false) String search,
-			@RequestParam(name = "trangThai",required=false) Boolean trangThai) {
-		Page<DmLoaiNhiemVu> pageDmLoaiNhiemVu = businessDmLoaiNhiemVuBusiness.findAll(page, size, sortBy, sortDir, search, trangThai);
-		return ResponseEntity.ok(pageDmLoaiNhiemVu);
+			@RequestParam(name = "trangThai", required = false) Boolean trangThai,
+			@RequestParam(name = "search", required = false) String search) {
+
+		Page<DmLoaiNhiemVuData> pageDmLoaiNhiemVuData = businessDmLoaiNhiemVuBusiness.findAll(page, size, sortBy,
+				sortDir, search, trangThai);
+		return ResponseEntity.ok(pageDmLoaiNhiemVuData);
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<DmLoaiNhiemVu> findById(@PathVariable("id") Long id) throws EntityNotFoundException {
-		return ResponseEntity.ok(businessDmLoaiNhiemVuBusiness.findById(id));
+	public ResponseEntity<DmLoaiNhiemVuData> findById(@PathVariable("id") Long id) throws EntityNotFoundException {
+		DmLoaiNhiemVuData dmLoaiNhiemVu = businessDmLoaiNhiemVuBusiness.findById(id);
+		return ResponseEntity.ok(dmLoaiNhiemVu);
 	}
 
 	@PostMapping(value = { "" })
-	public ResponseEntity<DmLoaiNhiemVu> create(
-			@Valid @RequestBody DmLoaiNhiemVuData dmLoaiNhiemVuData) {
-		DmLoaiNhiemVu dmLoaiNhiemVu = businessDmLoaiNhiemVuBusiness.create(dmLoaiNhiemVuData);
-		return ResponseEntity.status(HttpStatus.CREATED).body(dmLoaiNhiemVu);
+	public ResponseEntity<DmLoaiNhiemVuData> create(@Valid @RequestBody DmLoaiNhiemVuData dmLoaiNhiemVuData,
+			BindingResult result) throws EntityNotFoundException, MethodArgumentNotValidException {
+		dmLoaiNhiemVuData = businessDmLoaiNhiemVuBusiness.create(dmLoaiNhiemVuData, result);
+		return ResponseEntity.status(HttpStatus.CREATED).body(dmLoaiNhiemVuData);
 	}
 
 	@PutMapping(value = { "/{id}" })
-	public ResponseEntity<DmLoaiNhiemVu> update(@PathVariable("id") Long id,
-			@Valid @RequestBody DmLoaiNhiemVuData dmLoaiNhiemVuData) throws EntityNotFoundException {
-		DmLoaiNhiemVu dmLoaiNhiemVu = businessDmLoaiNhiemVuBusiness.update(id, dmLoaiNhiemVuData);
-		return ResponseEntity.ok(dmLoaiNhiemVu);
+	public ResponseEntity<DmLoaiNhiemVuData> update(@PathVariable("id") Long id,
+			@Valid @RequestBody DmLoaiNhiemVuData dmLoaiNhiemVuData, BindingResult result)
+			throws EntityNotFoundException, MethodArgumentNotValidException {
+		dmLoaiNhiemVuData = businessDmLoaiNhiemVuBusiness.update(id, dmLoaiNhiemVuData, result);
+		return ResponseEntity.ok(dmLoaiNhiemVuData);
 	}
 
 	@DeleteMapping(value = { "/{id}" })
-	public ResponseEntity<DmLoaiNhiemVu> delete(@PathVariable("id") Long id)
-			throws EntityNotFoundException {
-		DmLoaiNhiemVu dmLoaiNhiemVu = businessDmLoaiNhiemVuBusiness.delete(id);
-		return ResponseEntity.ok(dmLoaiNhiemVu);
+	public ResponseEntity<DmLoaiNhiemVuData> delete(@PathVariable("id") Long id) throws EntityNotFoundException {
+		DmLoaiNhiemVuData dmLoaiNhiemVuData = businessDmLoaiNhiemVuBusiness.delete(id);
+		return ResponseEntity.ok(dmLoaiNhiemVuData);
 	}
 }

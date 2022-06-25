@@ -15,11 +15,11 @@ import vn.dnict.microservice.nnptnt.dm.loainhiemvu.dao.model.DmLoaiNhiemVu;
 public class DmLoaiNhiemVuSpecifications {
 	public static Specification<DmLoaiNhiemVu> quichSearch(final String search, final Boolean trangThai) {
 		return new Specification<DmLoaiNhiemVu>() {
-			
+
 			/**
-			 *
+			 * 
 			 */
-			private static final long serialVersionUID = -5902884843433373982L;
+			private static final long serialVersionUID = -1382401102355892596L;
 
 			@Override
 			public Predicate toPredicate(Root<DmLoaiNhiemVu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -31,15 +31,12 @@ public class DmLoaiNhiemVuSpecifications {
 					Predicate ma = cb.like(cb.lower(root.<String>get("ma")), "%" + search.toLowerCase().trim() + "%");
 					predicates.add(cb.or(ten, ma));
 				}
-				
 				if (trangThai != null) {
 					predicates.add(cb.equal(root.<String>get("trangThai"), trangThai));
 				}
-				
 				if (!predicates.isEmpty()) {
-					return cb.and(predicates.toArray(new Predicate[]{}));
+					return cb.and(predicates.toArray(new Predicate[] {}));
 				}
-				
 				return null;
 			}
 

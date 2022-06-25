@@ -9,17 +9,19 @@ import org.springframework.data.domain.Pageable;
 import vn.dnict.microservice.nnptnt.dm.loainhiemvu.dao.model.DmLoaiNhiemVu;
 
 public interface DmLoaiNhiemVuService {
-	DmLoaiNhiemVu save(DmLoaiNhiemVu dmLoaiNhiemVu);
+	public DmLoaiNhiemVu save(DmLoaiNhiemVu dmLoaiNhiemVu);
 
-	void deleteById(Long id);
+	public void deleteById(Long id);
 
-	boolean existsById(Long id);
+	public boolean existsById(Long id);
 
-	Optional<DmLoaiNhiemVu> findById(Long id);
+	public Optional<DmLoaiNhiemVu> findById(Long id);
 
-	Page<DmLoaiNhiemVu> findAll(String search, Boolean trangThai, Pageable pageable);
+	public Page<DmLoaiNhiemVu> findAll(String search, Boolean trangThai, Pageable pageable);
 
-	List<DmLoaiNhiemVu> findByMaIgnoreCaseAndDaXoa(String ma, boolean daXoa);
+	public List<DmLoaiNhiemVu> findByMaIgnoreCaseAndDaXoa(String ma, Boolean daXoa);
 
-	List<DmLoaiNhiemVu> findByIdAndMaIgnoreCaseAndDaXoa(long id, String ma, boolean daXoa);
+	public List<DmLoaiNhiemVu> findByIdAndMaIgnoreCaseAndDaXoa(long id, String ma, Boolean daXoa);
+	
+	public List<DmLoaiNhiemVu> findByTrangThaiAndDaXoaOrderBySapXepAsc(Boolean trangThai, Boolean daXoa);
 }

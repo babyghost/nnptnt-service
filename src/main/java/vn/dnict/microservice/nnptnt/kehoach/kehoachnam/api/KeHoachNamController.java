@@ -41,35 +41,41 @@ public class KeHoachNamController {
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
 			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
-			@RequestParam(name = "tenKeHoach", required = false) String tenKeHoach,
-			@RequestParam(name = "donViChuTriId", required = false) Long donViChuTriId,
+			@RequestParam(name = "trangThai", required = false) Boolean trangThai,
 			@RequestParam(name = "nam", required = false) Integer nam,
+			@RequestParam(name = "donViChuTriId", required = false) Long donViChuTriId,
+			@RequestParam(name = "tenKeHoach", required = false) String tenKeHoach,
 			@RequestParam(name = "soKyHieu", required = false) String soKyHieu,
-			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayBanHanhTuNgay", required = false) LocalDate ngayBanHanhTuNgay,
-			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayBanHanhDenNgay", required = false) LocalDate ngayBanHanhDenNgay,
-			@RequestParam(name = "trangThai", required = false) Boolean trangThai) {
-		Page<KeHoachNamData> pageKeHoachNamData = businessKeHoachNamBusiness.findAll(page, size, sortBy, sortDir, donViChuTriId, nam, tenKeHoach,
-				trangThai, soKyHieu, ngayBanHanhTuNgay, ngayBanHanhDenNgay);
+			@DateTimeFormat(pattern = "dd/MM/yyyy") @RequestParam(name = "tuNgayBanHanh", required = false) LocalDate tuNgayBanHanh,
+			@DateTimeFormat(pattern = "dd/MM/yyyy") @RequestParam(name = "denNgayBanHanh", required = false) LocalDate denNgayBanHanh) {
+
+		Page<KeHoachNamData> pageKeHoachNamData = businessKeHoachNamBusiness.findAll(page, size, sortBy, sortDir,
+				donViChuTriId, nam, tenKeHoach, soKyHieu, trangThai, tuNgayBanHanh, denNgayBanHanh);
 		return ResponseEntity.ok(pageKeHoachNamData);
 	}
-	
-	@GetMapping(value = { "/{id}" })
+
+	@GetMapping(value = "/{id}")
 	public ResponseEntity<KeHoachNamData> findById(@PathVariable("id") Long id) throws EntityNotFoundException {
-		KeHoachNamData keHoachNamData = businessKeHoachNamBusiness.findById(id);
-		return ResponseEntity.ok(keHoachNamData);
+		KeHoachNamData keHoachNam = businessKeHoachNamBusiness.findById(id);
+		return ResponseEntity.ok(keHoachNam);
 	}
-	
+
+	@GetMapping(value = "/initdata")
+	public ResponseEntity<KeHoachNamData> getKeHoachNamDaTa() {
+		KeHoachNamData keHoachNam = businessKeHoachNamBusiness.getKeHoachNamDaTa();
+		return ResponseEntity.ok(keHoachNam);
+	}
+
 	@PostMapping(value = { "" })
 	public ResponseEntity<KeHoachNamData> create(@Valid @RequestBody KeHoachNamData keHoachNamData)
-			throws MethodArgumentNotValidException {
+			throws EntityNotFoundException {
 		keHoachNamData = businessKeHoachNamBusiness.create(keHoachNamData);
 		return ResponseEntity.status(HttpStatus.CREATED).body(keHoachNamData);
 	}
 
 	@PutMapping(value = { "/{id}" })
 	public ResponseEntity<KeHoachNamData> update(@PathVariable("id") Long id,
-			@Valid @RequestBody KeHoachNamData keHoachNamData)
-			throws EntityNotFoundException, MethodArgumentNotValidException {
+			@Valid @RequestBody KeHoachNamData keHoachNamData) throws EntityNotFoundException {
 		keHoachNamData = businessKeHoachNamBusiness.update(id, keHoachNamData);
 		return ResponseEntity.ok(keHoachNamData);
 	}
