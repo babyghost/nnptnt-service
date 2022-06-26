@@ -8,6 +8,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedBy;
@@ -26,18 +27,23 @@ import lombok.Data;
 @Data
 public class TienDoNhiemVuThang {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", unique = true, nullable = false)
+	@GeneratedValue(generator = "qlkh_tiendonhiemvuthang_seq", strategy = GenerationType.AUTO)
+	@SequenceGenerator(name = "qlkh_tiendonhiemvuthang_seq", sequenceName = "qlkh_tiendonhiemvuthang_id_seq", allocationSize = 1)
 	private Long id;
-	
-	@Column(name = "mucdohoanthanh")
+
+	@Column(name = "mucdohoanthanh", nullable = false)
 	private Integer mucDoHoanThanh;
-	
+
 	@Column(name = "ketqua", length = 4000)
 	private String ketQua;
-	
+
 	@Column(name = "tennguoicapnhat", length = 150)
 	private String tenNguoiCapNhat;
+
+	@JsonIgnore
+	@Column(name = "daxoa")
+	private Boolean daXoa;
 	
 	@CreatedBy
 	@Column(name = "nguoitao", length = 250)
@@ -55,8 +61,4 @@ public class TienDoNhiemVuThang {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
 	@Column(name = "ngaycapnhat")
 	private LocalDateTime ngayCapNhat;
-	
-	@JsonIgnore
-	@Column(name = "daxoa")
-	private boolean daXoa;
 }

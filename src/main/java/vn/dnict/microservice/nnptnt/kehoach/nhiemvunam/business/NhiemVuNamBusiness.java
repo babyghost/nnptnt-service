@@ -8,35 +8,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import vn.dnict.microservice.core.business.CoreAttachmentBusiness;
 import vn.dnict.microservice.core.dao.model.CoreAttachment;
 import vn.dnict.microservice.core.data.FileDinhKem;
-import vn.dnict.microservice.danhmuc.dao.model.DmDonVi;
 import vn.dnict.microservice.danhmuc.dao.service.DmDonViService;
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
 import vn.dnict.microservice.nnptnt.dm.loainhiemvu.dao.model.DmLoaiNhiemVu;
 import vn.dnict.microservice.nnptnt.dm.loainhiemvu.dao.service.DmLoaiNhiemVuService;
-import vn.dnict.microservice.nnptnt.kehoach.data.KeHoachNamData;
 import vn.dnict.microservice.nnptnt.kehoach.data.NhiemVuNamData;
-import vn.dnict.microservice.nnptnt.kehoach.data.ThongKeKeHoachNamData;
 import vn.dnict.microservice.nnptnt.kehoach.data.TienDoNhiemVuNamData;
-import vn.dnict.microservice.nnptnt.kehoach.kehoachnam.dao.model.KeHoachNam;
 import vn.dnict.microservice.nnptnt.kehoach.kehoachnam.dao.service.KeHoachNamService;
-import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.business.view.MyExcelViewThongKeKeHoachNam;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.model.NhiemVuNam;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.service.NhiemVuNamService;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam2filedinhkem.dao.model.FileDinhKemNhiemVuNam;

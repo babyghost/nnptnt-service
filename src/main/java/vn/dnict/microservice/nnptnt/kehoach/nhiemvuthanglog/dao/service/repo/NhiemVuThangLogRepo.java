@@ -12,14 +12,6 @@ import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthanglog.dao.model.NhiemVuTha
 
 public interface NhiemVuThangLogRepo extends JpaRepository<NhiemVuThangLog, Long>, JpaSpecificationExecutor<NhiemVuThangLog> {
 
-	public List<NhiemVuThangLog> findByNhiemVuThangIdAndDaXoa(Long nhiemVuThangId, Boolean daXoa);
-	
-	@Modifying
-	@Query("update NhiemVuThangLog u set u.daXoa = ?1 where u.nhiemVuThangId = ?2")
-	public int setFixedDaXoaForNhiemVuThangId(Boolean daXoa, Long nhiemVuThangId);
-	
-	public Optional<NhiemVuThangLog> findByNhiemVuThangId(Long nhiemVuThangId);
-	
-	public List<NhiemVuThangLog> findByNhiemVuThangIdAndCanBoThucHienIdAndDaXoa(Long nhiemVuThangId, Long canBoThucHienId,
-			Boolean daXoa);
+	@Query("SELECT u FROM NhiemVuThangLog u WHERE u.nhiemVuThangId = ?1")
+	public List<NhiemVuThangLog> findByNhiemVuThangId(Long nhiemVuThangId);
 }

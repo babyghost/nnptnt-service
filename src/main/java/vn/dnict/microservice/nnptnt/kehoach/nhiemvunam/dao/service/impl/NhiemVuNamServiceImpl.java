@@ -78,18 +78,18 @@ public class NhiemVuNamServiceImpl implements NhiemVuNamService{
 	}
 
 	@Override
-	public List<NhiemVuNam> getThongKeSoLuong(Long donViChuTriId, Integer nam, Long keHoachId, List<Integer> tinhTrangs,
-			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu) {
-		// TODO Auto-generated method stub
-		return repo.findAll(NhiemVuNamSpecifications.thongke(donViChuTriId, nam, keHoachId, tinhTrangs, tuNgay, denNgay,
-				tenNhiemVu));
-	}
-
-	@Override
 	public Page<NhiemVuNam> findAll(Long donViChuTriId, Integer tinhTrang, Integer nam, Long keHoachId,
 			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return repo.findAll(NhiemVuNamSpecifications.quichSearch(donViChuTriId, tinhTrang, nam, keHoachId, tuNgay, denNgay,
+				tenNhiemVu), pageable);
+	}
+
+	@Override
+	public Page<NhiemVuNam> getThongKeSoLuong(Long donViChuTriId, Integer nam, Long keHoachId, List<Integer> tinhTrangs,
+			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return repo.findAll(NhiemVuNamSpecifications.thongke(donViChuTriId, nam, keHoachId, tinhTrangs, tuNgay, denNgay,
 				tenNhiemVu), pageable);
 	}
 

@@ -10,21 +10,19 @@ import org.springframework.data.domain.Pageable;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang.dao.model.NhiemVuThang;
 
 public interface NhiemVuThangService {
-	public NhiemVuThang save(NhiemVuThang entity);
-	
+	public NhiemVuThang save(NhiemVuThang nhiemVuThang);
+
 	public void deleteById(Long id);
-	
+
 	public Optional<NhiemVuThang> findById(Long id);
-	
-	public Optional<NhiemVuThang> findByKeHoachThangId(Long keHoachThangId);
-	
-	public Page<NhiemVuThang> findAll(Long donViChuTriId, List<LocalDate > thangs, String tenNhiemVu, Long canBoThucHienId,
-			LocalDate thoiHanTuNgay, LocalDate thoiHanDenNgay, Integer tinhTrang, Pageable pageable);
-	
+
 	public List<NhiemVuThang> findByKeHoachThangIdAndDaXoa(Long keHoachThangId, Boolean daXoa);
-	
+
 	public int setFixedDaXoaForKeHoachThangId(Boolean daXoa, Long keHoachThangId);
-	
-	public Page<NhiemVuThang> tongHopKeHoachThang(Long donViChuTriId, List<LocalDate > thangs, String tenNhiemVu, Integer tinhTrang,
-			Long canBoThucHienId, LocalDate thoiHanTuNgay, LocalDate thoiHanDenNgay, Pageable pageable);
+
+	public Page<NhiemVuThang> findAll(Long donViChuTriId, List<LocalDate> thangs, Integer tinhTrang, String tenNhiemVu, LocalDate tuNgay,
+			LocalDate denNgay, Pageable pageable);
+
+	public Page<NhiemVuThang> getThongKeSoLuong(Long donViChuTriId, List<LocalDate> thangs, String tenNhiemVu, Integer tinhTrang,
+			Long canBoThucHienId, LocalDate tuNgay, LocalDate denNgay, Pageable pageable);
 }

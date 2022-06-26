@@ -1,6 +1,7 @@
 package vn.dnict.microservice.nnptnt.kehoach.kehoachthang.dao.service.impl;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +41,23 @@ public class KeHoachThangServiceImpl implements KeHoachThangService {
 	}
 
 	@Override
-	public Page<KeHoachThang> findAll(Long donViChuTriId, LocalDate thang, String tenNhiemVu, Long canBoThucHienId,
-			LocalDate thoiHanTuNgay, LocalDate thoiHanDenNgay, Integer tinhTrang, Pageable pageable) {
+	public boolean existsById(Long id) {
 		// TODO Auto-generated method stub
-		return repo.findAll(KeHoachThangSpecifications.quickSearch(donViChuTriId, thang, tenNhiemVu, canBoThucHienId, 
-				thoiHanTuNgay, thoiHanDenNgay, tinhTrang), pageable);
+		return repo.existsById(id);
+	}
+
+	@Override
+	public Page<KeHoachThang> findAll(Long donViChuTriId, Integer thang, String tenNhiemVu, String canBoThucHienTen,
+			LocalDate tuThoiHan, LocalDate denThoiHan, Integer tinhTrang, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return repo.findAll(KeHoachThangSpecifications.quichSearch(donViChuTriId, thang, tenNhiemVu, canBoThucHienTen, tuThoiHan, denThoiHan,
+				tinhTrang), pageable);
+	}
+
+	@Override
+	public List<KeHoachThang> findByDonViChuTriIdAndThangAndDaXoa(Long donViChuTriId, LocalDate thang, Boolean daXoa) {
+		// TODO Auto-generated method stub
+		return repo.findByDonViChuTriIdAndThangAndDaXoa(donViChuTriId, thang, daXoa);
 	}
 
 }

@@ -13,13 +13,14 @@ import lombok.Data;
 @Data
 public class KeHoachThangData {
 	private Long id;
-	
+
 	private Long donViChuTriId;
-	private String doViChuTriTen;
-	
+
+	private String donViChuTriTen;
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private LocalDate thang;
-	
+
 	@Valid
-	private List<NhiemVuThangData> nhiemVuThangDatas = new ArrayList<>();
+	private List<NhiemVuTongHopThangData> nhiemVuTongHopThangDatas = new ArrayList<NhiemVuTongHopThangData>();
 }

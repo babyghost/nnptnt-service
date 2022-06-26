@@ -6,12 +6,14 @@ import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import vn.dnict.microservice.nnptnt.dm.loainhiemvu.dao.model.DmLoaiNhiemVu;
 import vn.dnict.microservice.nnptnt.dm.loainhiemvu.dao.service.DmLoaiNhiemVuService;
 import vn.dnict.microservice.nnptnt.kehoach.data.DmLoaiNhiemVuData;
 
+@Component
 public class DmLoaiNhiemVuValidator {
 	@Autowired
 	protected MessageSource messageSource;

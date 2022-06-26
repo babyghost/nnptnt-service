@@ -15,52 +15,64 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang.dao.model.NhiemVuThang;
 
 public class NhiemVuThangSpecifications {
-	public static Specification<NhiemVuThang> quickSearch(final Long donViChuTriId, final List<LocalDate> thangs, final String tenNhiemVu,
-			final Long canBoThucHienId, final LocalDate thoiHanTuNgay, final LocalDate thoiHanDenNgay, final Integer tinhTrang) {
+	public static Specification<NhiemVuThang> quichSearch(final Long donViChuTriId, final List<LocalDate> thangs, final Integer tinhTrang,
+			final String tenNhiemVu, final LocalDate tuNgay, final LocalDate denNgay) {
 		return new Specification<NhiemVuThang>() {
-			private static final long serialVersionUID = -5902884843433373982L;
-			
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 6206569043101389148L;
+
 			@Override
 			public Predicate toPredicate(Root<NhiemVuThang> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+
 				List<Predicate> predicates = new ArrayList<>();
 				predicates.add(cb.equal(root.<String>get("daXoa"), false));
-				query.distinct(true);
 				
-				if(donViChuTriId != null) {
+				if(donViChuTriId != null && donViChuTriId > -1) {
 					predicates.add(cb.equal(root.join("keHoachThang").<Long>get("donViChuTriId"), donViChuTriId));
 				}
 				if (thangs != null && !thangs.isEmpty()) {
-					Expression<List<LocalDate>> valuethang = cb.literal(thangs);
-					Expression<String> expression = root.join("keHoachThang").get("thang");
-					Predicate inList = expression.in(valuethang);
-					predicates.add(inList);
-				}
-				if(tenNhiemVu !=null && !tenNhiemVu.isEmpty()) {
-					predicates.add(cb.like(cb.lower(root.<String>get("tenNhiemVu")), "%" + tenNhiemVu.toLowerCase() + "%"));
-				}
-				if(canBoThucHienId != null) {
-					predicates.add(cb.equal(root.<Long>get("canBoThucHienId"), canBoThucHienId));
-				}
-				if (thoiHanTuNgay != null) {
-					predicates.add(cb.greaterThanOrEqualTo(root.get("thoiGian").as(LocalDate.class),thoiHanTuNgay));
-				}
-				if (thoiHanDenNgay != null) {
-					predicates.add(cb.lessThanOrEqualTo(root.get("thoiGian").as(LocalDate.class),thoiHanDenNgay));
+					List<Integer> years = new ArrayList<Integer>();
+					List<Integer> monThs = new ArrayList<Integer>();
+					for (LocalDate localDate : thangs) {
+						years.add(localDate.getYear());
+						monThs.add(localDate.getMonthValue());
+					}
+					Expression<List<Integer>> valueMonths = cb.literal(monThs);
+					Expression<List<Integer>> valueYears = cb.literal(years);
+					Expression<Integer> year = cb.function("YEAR", Integer.class, root.get("thang"));
+					Expression<Integer> month = cb.function("MONTH", Integer.class, root.get("thang"));
+					Predicate inYear = year.in(valueYears);
+					Predicate inMonth = month.in(valueMonths);
+					predicates.add(cb.and(inYear, inMonth));
 				}
 				if(tinhTrang != null) {
 					predicates.add(cb.equal(root.<Integer>get("tinhTrang"), tinhTrang));
 				}
+				if (tenNhiemVu != null && !tenNhiemVu.isEmpty()) {
+					predicates.add(cb.like(cb.lower(root.<String>get("tenNhiemVu")), "%" + tenNhiemVu.toLowerCase().trim() + "%"));
+				}
+				if (tuNgay != null) {
+					predicates.add(cb.greaterThanOrEqualTo(root.get("thoiGian").as(LocalDate.class), tuNgay));
+				}
+				if (denNgay != null) {
+					predicates.add(cb.lessThanOrEqualTo(root.get("thoiGian").as(LocalDate.class), denNgay));
+				}
+
 				if (!predicates.isEmpty()) {
-					return cb.and(predicates.toArray(new Predicate[]{}));
+					return cb.and(predicates.toArray(new Predicate[] {}));
 				}
 				return null;
 			}
+
 		};
 	}
 	
-	public static Specification<NhiemVuThang> tongHopKeHoachThang(final Long donViChuTriId, final List<LocalDate > thangs,
-			final String tenNhiemVu,final Integer tinhTrang, final Long canBoThucHienId, final LocalDate thoiHanTuNgay,
-			LocalDate thoiHanDenNgay) {
+	public static Specification<NhiemVuThang> thongKeThang(final Long donViChuTriId, final List<LocalDate > thangs,
+			final String tenNhiemVu,final Integer tinhTrang, final Long canBoThucHienId, final LocalDate tuNgay,
+			LocalDate denNgay) {
 		return new Specification<NhiemVuThang>() {
 			private static final long serialVersionUID = -5902884843433373982L;
 			
@@ -71,29 +83,38 @@ public class NhiemVuThangSpecifications {
 				predicates.add(cb.equal(root.<String>get("daXoa"), false));
 				query.distinct(true);
 				
-				if(donViChuTriId != null) {
-					predicates.add(cb.equal(root.<Long>get("donViChuTriId"), donViChuTriId));
+				if (donViChuTriId != null && donViChuTriId > -1) {
+					predicates.add(cb.equal(root.get("keHoachThang").get("donViChuTriId"), donViChuTriId));
 				}
 				if (thangs != null && !thangs.isEmpty()) {
-					Expression<List<LocalDate>> valuethang = cb.literal(thangs);
-					Expression<String> expression = root.join("keHoachThang").get("thang");
-					Predicate inList = expression.in(valuethang);
-					predicates.add(inList);
+					List<Integer> years = new ArrayList<Integer>();
+					List<Integer> monThs = new ArrayList<Integer>();
+					for (LocalDate localDate : thangs) {
+						years.add(localDate.getYear());
+						monThs.add(localDate.getMonthValue());
+					}
+					Expression<List<Integer>> valueMonths = cb.literal(monThs);
+					Expression<List<Integer>> valueYears = cb.literal(years);
+					Expression<Integer> year = cb.function("YEAR", Integer.class, root.get("thang"));
+					Expression<Integer> month = cb.function("MONTH", Integer.class, root.get("thang"));
+					Predicate inYear = year.in(valueYears);
+					Predicate inMonth = month.in(valueMonths);
+					predicates.add(cb.and(inYear, inMonth));
 				}
-				if(tenNhiemVu !=null && !tenNhiemVu.isEmpty()) {
-					predicates.add(cb.like(cb.lower(root.join("nhiemVuThang").<String>get("tenNhiemVu")), "%" + tenNhiemVu.toLowerCase() + "%"));
+				if (tenNhiemVu != null && !tenNhiemVu.isEmpty()) {
+					predicates.add(cb.like(cb.lower(root.<String>get("tenNhiemVu")), "%" + tenNhiemVu.toLowerCase().trim() + "%"));
 				}
 				if(tinhTrang != null) {
-					predicates.add(cb.equal(root.join("nhiemVuThang").<Integer>get("tinhTrang"), tinhTrang));
+					predicates.add(cb.equal(root.<Integer>get("tinhTrang"), tinhTrang));
 				}
 				if(canBoThucHienId != null) {
-					predicates.add(cb.equal(root.join("nhiemVuThang").<Long>get("canBoThucHienId"), canBoThucHienId));
+					predicates.add(cb.equal(root.<Long>get("canBoThucHienId"), canBoThucHienId));
 				}
-				if (thoiHanTuNgay != null) {
-					predicates.add(cb.greaterThanOrEqualTo(root.join("nhiemVuThang").get("thoiGian").as(LocalDate.class),thoiHanTuNgay));
+				if (tuNgay != null) {
+					predicates.add(cb.greaterThanOrEqualTo(root.get("thoiGian").as(LocalDate.class), tuNgay));
 				}
-				if (thoiHanDenNgay != null) {
-					predicates.add(cb.lessThanOrEqualTo(root.join("nhiemVuThang").get("thoiGian").as(LocalDate.class),thoiHanDenNgay));
+				if (denNgay != null) {
+					predicates.add(cb.lessThanOrEqualTo(root.get("thoiGian").as(LocalDate.class), denNgay));
 				}
 				if (!predicates.isEmpty()) {
 					return cb.and(predicates.toArray(new Predicate[]{}));

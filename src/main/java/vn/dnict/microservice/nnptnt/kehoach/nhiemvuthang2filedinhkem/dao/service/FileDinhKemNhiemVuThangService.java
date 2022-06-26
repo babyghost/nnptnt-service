@@ -7,16 +7,15 @@ import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang2filedinhkem.dao.model.F
 
 public interface FileDinhKemNhiemVuThangService {
 	public FileDinhKemNhiemVuThang save(FileDinhKemNhiemVuThang fileDinhKemNhiemVuThang);
-	
+
 	public void deleteById(Long id);
-	
+
 	public Optional<FileDinhKemNhiemVuThang> findById(Long id);
-	
-	public List<FileDinhKemNhiemVuThang> findByFileDinhKemIdAndDaXoa(Long fileDinhKemId, Boolean daXoa);
-	
-	public int setFixedDaXoaForTienDoNhiemVuThangId(Boolean daXoa, Long tienDoNhiemVuThangId);
-	
-	public Optional<FileDinhKemNhiemVuThang> findByTienDoNhiemVuThangId(Long tienDoNhiemVuThangId);
-	
-	public List<FileDinhKemNhiemVuThang> findByFileDinhKemIdAndTienDoNhiemVuThangId(Long fileDinhKemId, Long tienDoNhiemVuThangId);
+
+	public List<FileDinhKemNhiemVuThang> findByTienDoNvThangIdAndDaXoa(Long tienDoNvThangId, Boolean daXoa);
+
+	public int setFixedDaXoaForTienDoNvThangId(Boolean daXoa, Long tienDoNvThangId);
+
+	public List<FileDinhKemNhiemVuThang> findByTienDoNvThangIdAndFileDinhKemId(Long tienDoNvThangId,
+			Long fileDinhKemId);
 }

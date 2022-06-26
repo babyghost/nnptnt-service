@@ -1,7 +1,6 @@
 package vn.dnict.microservice.nnptnt.kehoach.tiendonhiemvunam.dao.service.repo;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -14,10 +13,9 @@ import vn.dnict.microservice.nnptnt.kehoach.tiendonhiemvunam.dao.model.TienDoNhi
 @Repository
 public interface TienDoNhiemVuNamRepo extends JpaRepository<TienDoNhiemVuNam, Long>,JpaSpecificationExecutor<TienDoNhiemVuNam> {
 	
+	@Query("SELECT u FROM TienDoNhiemVuNam u WHERE u.nhiemVuNamId = ?1 AND u.daXoa = ?2 ORDER BY u.ngayBaoCao DESC")
 	public List<TienDoNhiemVuNam> findByNhiemVuNamIdAndDaXoa(Long nhiemVuNamId, Boolean daXoa);
-	
-	public Optional<TienDoNhiemVuNam> findByNhiemVuNamId(Long nhiemVuNamId);
-	
+
 	@Modifying(clearAutomatically = true)
 	@Query("update TienDoNhiemVuNam u set u.daXoa = ?1 where u.nhiemVuNamId = ?2")
 	public int setFixedDaXoaForNhiemVuNamId(Boolean daXoa, Long nhiemVuNamId);

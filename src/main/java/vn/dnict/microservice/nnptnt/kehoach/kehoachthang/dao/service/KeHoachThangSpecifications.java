@@ -14,44 +14,49 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.kehoach.kehoachthang.dao.model.KeHoachThang;
 
 public class KeHoachThangSpecifications {
-	public static Specification<KeHoachThang> quickSearch(final Long donViChuTriId, final LocalDate thang,
-			final String tenNhiemVu, final Long canBoThucHienId, final LocalDate thoiHanTuNgay, LocalDate thoiHanDenNgay,
+	public static Specification<KeHoachThang> quichSearch(final Long donViChuTriId, final Integer thang,
+			final String tenNhiemVu, final String canBoThucHienTen, final LocalDate tuThoiHan, final LocalDate denThoiHan,
 			final Integer tinhTrang) {
 		return new Specification<KeHoachThang>() {
-			private static final long serialVersionUID = -5902884843433373982L;
-			
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 8414845006438913353L;
+
 			@Override
 			public Predicate toPredicate(Root<KeHoachThang> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+
 				List<Predicate> predicates = new ArrayList<>();
 				predicates.add(cb.equal(root.<String>get("daXoa"), false));
-				query.distinct(true);
-				
-				if(donViChuTriId != null) {
-					predicates.add(cb.equal(root.<Long>get("donViChuTriId"), donViChuTriId));
+
+				if (donViChuTriId != null && donViChuTriId > -1) {
+					predicates.add(cb.equal(root.<String>get("donViChuTriId"), donViChuTriId));
 				}
-				if (thang != null) {
-					predicates.add(cb.lessThanOrEqualTo(root.get("thang").as(LocalDate.class), thang));
+				if (thang != null && thang > -1) {
+					predicates.add(cb.equal(root.<String>get("thang"), thang));
 				}
-				if(tenNhiemVu !=null && !tenNhiemVu.isEmpty()) {
-					predicates.add(cb.like(cb.lower(root.join("nhiemVuThang").<String>get("tenNhiemVu")), "%" + tenNhiemVu.toLowerCase() + "%"));
+				if (tenNhiemVu != null && !tenNhiemVu.isEmpty()) {
+					predicates.add(cb.like(cb.lower(root.<String>get("tenNhiemVu")), "%" + tenNhiemVu.toLowerCase().trim() + "%"));
 				}
-				if(canBoThucHienId != null) {
-					predicates.add(cb.equal(root.join("nhiemVuThang").<Long>get("canBoThucHienId"), canBoThucHienId));
+				if (canBoThucHienTen != null && !canBoThucHienTen.isEmpty()) {
+					predicates.add(cb.like(cb.lower(root.<String>get("canBoThucHienTen")), "%" + canBoThucHienTen.toLowerCase().trim() + "%"));
 				}
-				if (thoiHanTuNgay != null) {
-					predicates.add(cb.greaterThanOrEqualTo(root.join("nhiemVuThang").get("thoiGian").as(LocalDate.class),thoiHanTuNgay));
+				if (tuThoiHan != null) {
+					predicates.add(cb.greaterThanOrEqualTo(root.get("thoiGian").as(LocalDate.class), tuThoiHan));
 				}
-				if (thoiHanDenNgay != null) {
-					predicates.add(cb.lessThanOrEqualTo(root.join("nhiemVuThang").get("thoiGian").as(LocalDate.class),thoiHanDenNgay));
+				if (denThoiHan != null) {
+					predicates.add(cb.lessThanOrEqualTo(root.get("thoiGian").as(LocalDate.class), denThoiHan));
 				}
-				if(tinhTrang != null) {
-					predicates.add(cb.equal(root.join("nhiemVuThang").<Integer>get("tinhTrang"), tinhTrang));
+				if (tinhTrang != null && tinhTrang > -1) {
+					predicates.add(cb.equal(root.<String>get("tinhTrang"), tinhTrang));
 				}
 				if (!predicates.isEmpty()) {
-					return cb.and(predicates.toArray(new Predicate[]{}));
+					return cb.and(predicates.toArray(new Predicate[] {}));
 				}
 				return null;
 			}
+
 		};
 	}
 }

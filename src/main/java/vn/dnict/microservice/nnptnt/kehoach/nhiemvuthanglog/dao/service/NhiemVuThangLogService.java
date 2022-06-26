@@ -7,17 +7,10 @@ import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthanglog.dao.model.NhiemVuTha
 
 public interface NhiemVuThangLogService {
 	public NhiemVuThangLog save(NhiemVuThangLog nhiemVuThangLog);
-	
+
 	public void deleteById(Long id);
-	
+
 	public Optional<NhiemVuThangLog> findById(Long id);
-	
-	public List<NhiemVuThangLog> findByNhiemVuThangIdAndDaXoa(Long nhiemVuThangId, Boolean daXoa);
-	
-	public int setFixedDaXoaForNhiemVuThangId(Boolean daXoa, Long nhiemVuThangId);
-	
-	public Optional<NhiemVuThangLog> findByNhiemVuThangId(Long nhiemVuThangId);
-	
-	public List<NhiemVuThangLog> findByNhiemVuThangIdAndCanBoThucHienIdAndDaXoa(Long nhiemVuThangId, Long canBoThucHienId,
-			Boolean daXoa);
+
+	public List<NhiemVuThangLog> findByNhiemVuThangId(Long nhiemVuThangId);
 }

@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedBy;
@@ -31,28 +32,30 @@ import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.model.NhiemVuNam;
 @Data
 public class TienDoNhiemVuNam {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", unique = true, nullable = false)
+	@GeneratedValue(generator = "qlkh_tiendonhiemvunam_seq", strategy = GenerationType.AUTO)
+	@SequenceGenerator(name = "qlkh_tiendonhiemvunam_seq", sequenceName = "qlkh_tiendonhiemvunam_id_seq", allocationSize = 1)
 	private Long id;
-	
-	@Column(name = "nhiemvunam_id")
+
+	@Column(name = "nhiemvunam_id", nullable = false)
 	private Long nhiemVuNamId;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "nhiemvunam_id", referencedColumnName = "id", updatable = false, insertable = false)
-	private NhiemVuNam nhiemVuNam;
-	
-	@Column(name = "tinhtrang")
+
+	@Column(name = "tinhtrang", nullable = false)
 	private Integer tinhTrang;
-	
-	@Column(name = "mucdohoanthanh")
+
+	@Column(name = "mucdohoanthanh", nullable = false)
 	private Integer mucDoHoanThanh;
-	
+
 	@Column(name = "ngaybaocao")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private LocalDate ngayBaoCao;
-	
+
 	@Column(name = "ketqua", length = 4000)
 	private String ketQua;
+
+	@JsonIgnore
+	@Column(name = "daxoa")
+	private Boolean daXoa;
 	
 	@CreatedBy
 	@Column(name = "nguoitao", length = 250)
@@ -70,8 +73,4 @@ public class TienDoNhiemVuNam {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
 	@Column(name = "ngaycapnhat")
 	private LocalDateTime ngayCapNhat;
-	
-	@JsonIgnore
-	@Column(name = "daxoa")
-	private boolean daXoa;
 }

@@ -8,12 +8,14 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NotFound;
@@ -41,46 +43,53 @@ import vn.dnict.microservice.nnptnt.kehoach.kehoachthang.dao.model.KeHoachThang;
 @Setter
 public class NhiemVuThang {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", unique = true, nullable = false)
+	@GeneratedValue(generator = "qlkh_nhiemvuthang_seq", strategy = GenerationType.AUTO)
+	@SequenceGenerator(name = "qlkh_nhiemvuthang_seq", sequenceName = "qlkh_nhiemvuthang_id_seq", allocationSize = 1)
 	private Long id;
-	
-	@Column(name = "tennhiemvu", length = 1000)
-	private String tenNhiemVu;
-	
-	@Column(name = "kehoachthang_id")
-	private Long keHoachThangId;
-	
-	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-	@ManyToOne(cascade = CascadeType.ALL)
-	@NotFound(action = NotFoundAction.IGNORE)
-	@JoinColumn(name = "kehoachthang_id", insertable=false, updatable=false)	
-	@Where(clause = "daxoa = false")
+
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "kehoachthang_id", insertable = false, updatable = false)
 	private KeHoachThang keHoachThang;
-	
-	@Column(name = "canbothuchien_id")
+
+	@Column(name = "kehoachthang_id", nullable = false)
+	private Long keHoachThangId;
+
+	@Column(name = "tennhiemvu", length = 1000, nullable = false)
+	private String tenNhiemVu;
+
+	@Column(name = "canbothuchien_id", nullable = false)
 	private Long canBoThucHienId;
-	
+
+	@Column(name = "tencanbo", length = 250, nullable = false)
+	private String tenCanBo;
+
 	@Column(name = "donviphoihop", length = 1000)
 	private String donViPhoiHop;
-	
+
 	@Column(name = "thoigian")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private LocalDate thoiGian;
-	
+
 	@Column(name = "ghichu", length = 1000)
 	private String ghiChu;
-	
+
 	@Column(name = "is_nhiemvuthangtruoc")
 	private Boolean isNhiemVuThangTruoc;
-	
+
 	@Column(name = "nhiemvuthangtruoc_id")
 	private Long nhiemVuThangTruocId;
-	
+
 	@Column(name = "tinhtrang")
 	private Integer tinhTrang;
-	
+
 	@Column(name = "tiendonhiemvu_id")
 	private Long tienDoNhiemVuId;
+
+	@JsonIgnore
+	@Column(name = "daxoa")
+	private Boolean daXoa;
 	
 	@Column(name = "nguoitao")
 	@CreatedBy
@@ -99,8 +108,4 @@ public class NhiemVuThang {
 	@LastModifiedDate
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
 	private LocalDateTime ngayCapNhat;
-	
-	@JsonIgnore
-	@Column(name = "daxoa")
-	private Boolean daXoa;
 }

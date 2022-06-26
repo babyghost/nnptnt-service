@@ -41,14 +41,6 @@ public class NhiemVuThangServiceImpl implements NhiemVuThangService{
 	}
 
 	@Override
-	public Page<NhiemVuThang> findAll(Long donViChuTriId, List<LocalDate> thangs, String tenNhiemVu, Long canBoThucHienId,
-			LocalDate thoiHanTuNgay, LocalDate thoiHanDenNgay, Integer tinhTrang, Pageable pageable) {
-		// TODO Auto-generated method stub
-		return repo.findAll(NhiemVuThangSpecifications.quickSearch(donViChuTriId, thangs, tenNhiemVu, canBoThucHienId,
-				thoiHanTuNgay, thoiHanDenNgay, tinhTrang), pageable);
-	}
-
-	@Override
 	public List<NhiemVuThang> findByKeHoachThangIdAndDaXoa(Long keHoachThangId, Boolean daXoa) {
 		// TODO Auto-generated method stub
 		return repo.findByKeHoachThangIdAndDaXoa(keHoachThangId, daXoa);
@@ -61,18 +53,18 @@ public class NhiemVuThangServiceImpl implements NhiemVuThangService{
 	}
 
 	@Override
-	public Optional<NhiemVuThang> findByKeHoachThangId(Long keHoachThangId) {
+	public Page<NhiemVuThang> findAll(Long donViChuTriId, List<LocalDate> thangs, Integer tinhTrang, String tenNhiemVu, LocalDate tuNgay,
+			LocalDate denNgay, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findByKeHoachThangId(keHoachThangId);
+		return repo.findAll(NhiemVuThangSpecifications.quichSearch(donViChuTriId, thangs, tinhTrang, tenNhiemVu, tuNgay, denNgay), pageable);
 	}
 
 	@Override
-	public Page<NhiemVuThang> tongHopKeHoachThang(Long donViChuTriId, List<LocalDate> thangs, String tenNhiemVu,
-			Integer tinhTrang, Long canBoThucHienId, LocalDate thoiHanTuNgay, LocalDate thoiHanDenNgay,
-			Pageable pageable) {
+	public Page<NhiemVuThang> getThongKeSoLuong(Long donViChuTriId, List<LocalDate> thangs, String tenNhiemVu, Integer tinhTrang,
+			Long canBoThucHienId, LocalDate tuNgay, LocalDate denNgay, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findAll(NhiemVuThangSpecifications.tongHopKeHoachThang(donViChuTriId, thangs, tenNhiemVu, tinhTrang,
-				canBoThucHienId, thoiHanTuNgay, thoiHanDenNgay), pageable);
+		return repo.findAll(NhiemVuThangSpecifications.thongKeThang(donViChuTriId, thangs, tenNhiemVu, tinhTrang, canBoThucHienId, tuNgay,
+				denNgay), pageable);
 	}
 
 }
