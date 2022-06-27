@@ -86,11 +86,10 @@ public class NhiemVuNamServiceImpl implements NhiemVuNamService{
 	}
 
 	@Override
-	public Page<NhiemVuNam> getThongKeSoLuong(Long donViChuTriId, Integer nam, Long keHoachId, List<Integer> tinhTrangs,
-			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu, Pageable pageable) {
+	public List<NhiemVuNam> getThongKeSoLuong(Long donViChuTriId, Integer nam, Long keHoachId, List<Integer> tinhTrangs,
+			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu) {
 		// TODO Auto-generated method stub
-		return repo.findAll(NhiemVuNamSpecifications.thongke(donViChuTriId, nam, keHoachId, tinhTrangs, tuNgay, denNgay,
-				tenNhiemVu), pageable);
+		return repo.findAll(NhiemVuNamSpecifications.thongke(donViChuTriId, nam, keHoachId, tinhTrangs, tuNgay, denNgay, tenNhiemVu));
 	}
 
 }

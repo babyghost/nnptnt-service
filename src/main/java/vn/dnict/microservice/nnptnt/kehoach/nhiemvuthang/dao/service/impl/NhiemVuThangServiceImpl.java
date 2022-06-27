@@ -60,11 +60,10 @@ public class NhiemVuThangServiceImpl implements NhiemVuThangService{
 	}
 
 	@Override
-	public Page<NhiemVuThang> getThongKeSoLuong(Long donViChuTriId, List<LocalDate> thangs, String tenNhiemVu, Integer tinhTrang,
-			Long canBoThucHienId, LocalDate tuNgay, LocalDate denNgay, Pageable pageable) {
+	public List<NhiemVuThang> getThongKeSoLuong(Long donViChuTriId, List<LocalDate> thangs, Long keHoachThangId,
+			String tenNhiemVu, List<Integer> tinhTrangs, Long canBoThucHienId, LocalDate tuNgay, LocalDate denNgay) {
 		// TODO Auto-generated method stub
-		return repo.findAll(NhiemVuThangSpecifications.thongKeThang(donViChuTriId, thangs, tenNhiemVu, tinhTrang, canBoThucHienId, tuNgay,
-				denNgay), pageable);
+		return repo.findAll(NhiemVuThangSpecifications.thongKeThang(donViChuTriId, thangs, tenNhiemVu, tinhTrangs, canBoThucHienId, tuNgay, denNgay));
 	}
 
 }

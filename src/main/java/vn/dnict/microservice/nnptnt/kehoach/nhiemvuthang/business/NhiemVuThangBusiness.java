@@ -84,20 +84,61 @@ public class NhiemVuThangBusiness {
 		}
 	};
 
-	public Page<NhiemVuThangData> findAll(int page, int size, String sortBy, String sortDir,Long donViChuTriId, List<LocalDate> thangs,
-			Integer tinhTrang, String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay) {
+	public Page<NhiemVuThangData> findAll(int page, int size, String sortBy, String sortDir, Long donViChuTriId,
+			List<LocalDate> thangs, Integer tinhTrang, String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-		final Page<NhiemVuThang> pageNhiemVuThang = serviceNhiemVuThangService.findAll(donViChuTriId, thangs, tinhTrang, tenNhiemVu, tuNgay,
-				denNgay, PageRequest.of(page, size, direction, sortBy));
+		final Page<NhiemVuThang> pageNhiemVuThang = serviceNhiemVuThangService.findAll(donViChuTriId, thangs, tinhTrang,
+				tenNhiemVu, tuNgay, denNgay, PageRequest.of(page, size, direction, sortBy));
 		final Page<NhiemVuThangData> pageNhiemVuThangData = pageNhiemVuThang.map(this::convertToNhiemVuThangData);
 		return pageNhiemVuThangData;
 	}
 
+	public String getThongKeSoLuong(Long donViChuTriId, List<LocalDate> thangs, Long keHoachThangId, String tenNhiemVu,
+			List<Integer> tinhTrangs, Long canBoThucHienId, LocalDate tuNgay, LocalDate denNgay) {
+
+		List<NhiemVuThang> nhiemVuThangs = serviceNhiemVuThangService.getThongKeSoLuong(donViChuTriId, thangs,
+				keHoachThangId, tenNhiemVu, tinhTrangs, canBoThucHienId, tuNgay, denNgay);
+
+		String thongKe = "Tổng số: " + nhiemVuThangs.size();
+
+		if (Objects.nonNull(tinhTrangs) && !tinhTrangs.isEmpty()) {
+			for (Integer tinhTrang : tinhTrangs) {
+				if (Objects.nonNull(tinhTrang)) {
+					if (tinhTrang.equals(Constants.QLKH_TINHTRANG_CHUATHUCHIEN)) {
+						thongKe += "; " + mapTrangThai.get(tinhTrang) + ": "
+								+ (nhiemVuThangs.stream().filter(t -> Objects.isNull(t.getTinhTrang())).count()
+										+ nhiemVuThangs.stream().filter(t -> Objects.nonNull(t.getTinhTrang()))
+												.filter(t -> t.getTinhTrang().equals(tinhTrang)).count());
+					} else {
+						thongKe += "; " + mapTrangThai.get(tinhTrang) + ": "
+								+ nhiemVuThangs.stream().filter(t -> Objects.nonNull(t.getTinhTrang()))
+										.filter(t -> t.getTinhTrang().equals(tinhTrang)).count();
+					}
+				}
+			}
+		} else {
+			for (Map.Entry<Integer, String> entry : mapTrangThai.entrySet()) {
+				if (entry.getKey().equals(Constants.QLKH_TINHTRANG_CHUATHUCHIEN)) {
+					thongKe += "; " + entry.getValue() + ": "
+							+ (nhiemVuThangs.stream().filter(t -> Objects.isNull(t.getTinhTrang())).count()
+									+ nhiemVuThangs.stream().filter(t -> Objects.nonNull(t.getTinhTrang()))
+											.filter(t -> t.getTinhTrang().equals(entry.getKey())).count());
+				} else {
+					thongKe += "; " + entry.getValue() + ": "
+							+ nhiemVuThangs.stream().filter(t -> Objects.nonNull(t.getTinhTrang()))
+									.filter(t -> t.getTinhTrang().equals(entry.getKey())).count();
+				}
+			}
+		}
+
+		return thongKe;
+	}
+	
 	private NhiemVuThangData convertToNhiemVuThangData(NhiemVuThang nhiemVuThang) {
 		NhiemVuThangData nhiemVuThangData = new NhiemVuThangData();
 		nhiemVuThangData.setId(nhiemVuThang.getId());
@@ -133,7 +174,8 @@ public class NhiemVuThangBusiness {
 		tienDoNhiemVuThangData.setNgayCapNhat(LocalDate.now());
 		nhiemVuThangData.setTienDoNhiemVuThangData(tienDoNhiemVuThangData);
 		// log
-		List<NhiemVuThangLog> nhiemVuThangLogs = serviceNhiemVuThangLogService.findByNhiemVuThangId(nhiemVuThang.getId());
+		List<NhiemVuThangLog> nhiemVuThangLogs = serviceNhiemVuThangLogService
+				.findByNhiemVuThangId(nhiemVuThang.getId());
 		List<NhiemVuThangLogData> nhiemVuThangLogDatas = new ArrayList<NhiemVuThangLogData>();
 		if (Objects.nonNull(nhiemVuThangLogs) && !nhiemVuThangLogs.isEmpty()) {
 			for (NhiemVuThangLog nhiemVuThangLog : nhiemVuThangLogs) {
@@ -158,100 +200,6 @@ public class NhiemVuThangBusiness {
 		}
 		nhiemVuThangData.setNhiemVuThangLogDatas(nhiemVuThangLogDatas);
 		return nhiemVuThangData;
-	}
-	
-	public Page<ThongKeKeHoachThangData> thongKeKeHoachThang(int page, int size, String sortBy, String sortDir, Long donViChuTriId,
-			List<LocalDate> thangs, String tenNhiemVu, Integer tinhTrang, Long canBoThucHienId, LocalDate tuNgay,
-			LocalDate denNgay) {
-		Direction direction;
-		if (sortDir.equals("ASC")) {
-			direction = Direction.ASC;
-		} else {
-			direction = Direction.DESC;
-		}
-		
-		final Page<NhiemVuThang> pageNhiemVuThang = serviceNhiemVuThangService.findAll(donViChuTriId, thangs, tinhTrang, tenNhiemVu,
-				tuNgay, denNgay, PageRequest.of(page, size, direction, sortBy));
-		final Page<ThongKeKeHoachThangData> pageThongKe = pageNhiemVuThang.map(this::convertToThongKeKeHoachThangDaTa);
-		return pageThongKe;
-	}
-	
-	private ThongKeKeHoachThangData convertToThongKeKeHoachThangDaTa(NhiemVuThang nhiemVuThang) {
-		ThongKeKeHoachThangData thongKeKeHoachThangData = new ThongKeKeHoachThangData();
-		thongKeKeHoachThangData.setKeHoachThangId(nhiemVuThang.getKeHoachThangId());
-		if(nhiemVuThang.getKeHoachThangId() != null && nhiemVuThang.getKeHoachThangId() > 0) {
-			Optional<KeHoachThang> optKeHoach = serviceKeHoachThangService.findById(nhiemVuThang.getKeHoachThangId());
-			if(optKeHoach.isPresent()) {
-				thongKeKeHoachThangData.setDonViChuTriId(optKeHoach.get().getDonViChuTriId());
-				if(optKeHoach.get().getDonViChuTriId() != null && optKeHoach.get().getDonViChuTriId() > 0) {
-					Optional<DmDonVi> optDonVi = serviceDmDonViService.findById(optKeHoach.get().getDonViChuTriId());
-					if(optDonVi.isPresent()) {
-						thongKeKeHoachThangData.setDoViChuTriTen(optDonVi.get().getTenDonVi());
-					}
-				}
-				thongKeKeHoachThangData.setThang(optKeHoach.get().getThang());
-			}
-		}
-		thongKeKeHoachThangData.setTenNhiemVu(nhiemVuThang.getTenNhiemVu());
-		thongKeKeHoachThangData.setCanBoThucHienId(nhiemVuThang.getCanBoThucHienId());
-		if(nhiemVuThang.getCanBoThucHienId() != null && nhiemVuThang.getCanBoThucHienId() > 0) {
-			Optional<DmCanBo> optCanBo = serviceDmCanBoService.findById(nhiemVuThang.getCanBoThucHienId());
-			if(optCanBo.isPresent()) {
-				thongKeKeHoachThangData.setCanBoThucHienTen(optCanBo.get().getHoTen());
-			}
-		}
-		thongKeKeHoachThangData.setDonViPhoiHop(nhiemVuThang.getDonViPhoiHop());
-		thongKeKeHoachThangData.setThoiGian(nhiemVuThang.getThoiGian());
-		thongKeKeHoachThangData.setGhiChu(nhiemVuThang.getGhiChu());
-		thongKeKeHoachThangData.setIsNhiemVuThangTruoc(nhiemVuThang.getIsNhiemVuThangTruoc());
-		thongKeKeHoachThangData.setNhiemVuThangTruocId(nhiemVuThang.getNhiemVuThangTruocId());
-		thongKeKeHoachThangData.setTinhTrang(nhiemVuThang.getTinhTrang());
-		thongKeKeHoachThangData.setTienDoNhiemVuId(nhiemVuThang.getTienDoNhiemVuId());
-		if(nhiemVuThang.getTienDoNhiemVuId() != null && nhiemVuThang.getTienDoNhiemVuId() > 0) {
-			Optional<TienDoNhiemVuThang> optTienDo = serviceTienDoNhiemVuThangService.findById(nhiemVuThang.getTienDoNhiemVuId());
-			if(optTienDo.isPresent()) {
-				thongKeKeHoachThangData.setTienDoMucDoHoanThanh(optTienDo.get().getMucDoHoanThanh());
-				thongKeKeHoachThangData.setTienDoKetQua(optTienDo.get().getKetQua());
-			}
-		}
-		return thongKeKeHoachThangData;
-	}
-	
-	public ModelAndView exportExcelThongKeKeHoachThang(HttpServletRequest request, HttpServletResponse response, int page,
-			int size, String sortBy, String sortDir, Long donViChuTriId, List<LocalDate> thangs, String tenNhiemVu, Integer tinhTrang,
-			Long canBoThucHienId, LocalDate thoiHanTuNgay, LocalDate thoiHanDenNgay) {
-		LocalDate localDate = LocalDate.now();// For reference
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-		String formattedString = localDate.format(formatter);
-		Map<String, Object> model = new HashMap<String, Object>();
-
-		Direction direction;
-		if (sortDir.equals("ASC")) {
-			direction = Direction.ASC;
-		} else {
-			direction = Direction.DESC;
-		}
-		
-		Page<NhiemVuThang> pageNhiemVu = serviceNhiemVuThangService.getThongKeSoLuong(donViChuTriId, thangs, tenNhiemVu, tinhTrang,
-				canBoThucHienId, thoiHanTuNgay, thoiHanDenNgay, PageRequest.of(page, size, direction, sortBy));
-		Page<ThongKeKeHoachThangData> pageThongKe = pageNhiemVu.map(this::convertToThongKeKeHoachThangDaTa);
-		
-		List<ThongKeKeHoachThangData> thongKeThangDatas = new ArrayList<>(pageThongKe.getContent());
-		
-		while(pageNhiemVu.hasNext()) {
-			Page<NhiemVuThang> nextPageOfEmployees = serviceNhiemVuThangService.getThongKeSoLuong(donViChuTriId, thangs,
-					tenNhiemVu, tinhTrang, canBoThucHienId, thoiHanTuNgay, thoiHanDenNgay,
-					PageRequest.of(page, size, direction, sortBy));
-			Page<ThongKeKeHoachThangData> nextPageOfThongKeThangData = nextPageOfEmployees.map(this::convertToThongKeKeHoachThangDaTa);
-			if(Objects.nonNull(nextPageOfThongKeThangData) && !nextPageOfThongKeThangData.isEmpty()) {
-				thongKeThangDatas.addAll(nextPageOfThongKeThangData.getContent());
-			}
-			pageNhiemVu = nextPageOfEmployees;
-		}
-		model.put("thongKeThangDatas", thongKeThangDatas);
-		response.setContentType("application/ms-excel");
-		response.setHeader("Content-disposition", "attachment; filename=ThongKeKeHoachRiengCuaPhong.xls");
-		return new ModelAndView(new MyExcelViewThongKeThang(), model);
 	}
 
 	public NhiemVuThangData findById(Long id) throws EntityNotFoundException {

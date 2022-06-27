@@ -39,13 +39,13 @@ public class KeHoachThangController {
 			@RequestParam(name = "donViChuTriId", required = false) Long donViChuTriId,
 			@RequestParam(name = "thang", required = false) Integer thang,
 			@RequestParam(name = "tenNhiemVu", required = false) String tenNhiemVu,
-			@RequestParam(name = "canBoThucHienTen", required = false) String canBoThucHienTen,
+			@RequestParam(name = "canBoThucHienId", required = false) Long canBoThucHienId,
 			@DateTimeFormat(pattern = "dd/MM/yyyy") @RequestParam(name = "tuThoiHan", required = false) LocalDate tuThoiHan,
 			@DateTimeFormat(pattern = "dd/MM/yyyy") @RequestParam(name = "denThoiHan", required = false) LocalDate denThoiHan,
 			@RequestParam(name = "tinhTrang", required = false) Integer tinhTrang) {
 
 		Page<KeHoachThangData> pageKeHoachThangData = businessKeHoachThangBusiness.findAll(page, size, sortBy,
-				sortDir, donViChuTriId, thang, tenNhiemVu, canBoThucHienTen, tuThoiHan, denThoiHan, tinhTrang);
+				sortDir, donViChuTriId, thang, tenNhiemVu, canBoThucHienId, tuThoiHan, denThoiHan, tinhTrang);
 		return ResponseEntity.ok(pageKeHoachThangData);
 	}
 

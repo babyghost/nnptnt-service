@@ -2,16 +2,22 @@ package vn.dnict.microservice.nnptnt.kehoach.kehoachthang.dao.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.OrderBy;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -23,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
+import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang.dao.model.NhiemVuThang;
 
 @Entity
 @Table(name = "qlkh_kehoachthang")
@@ -42,6 +49,12 @@ public class KeHoachThang {
 	@Column(name = "thang", nullable = false)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private LocalDate thang;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "keHoachThangId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@Where(clause = "DAXOA = " + false)
+	@OrderBy(clause = "NGAYBAOCAO DESC")
+	private List<NhiemVuThang> nhiemVuThangs;
 
 	@JsonIgnore
 	@Column(name = "daxoa")

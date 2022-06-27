@@ -52,40 +52,21 @@ public class NhiemVuThangController {
 				donViChuTriId, thangs, tinhTrang, tenNhiemVu, thoiHanTuNgay, thoiHanDenNgay);
 		return ResponseEntity.ok(pageNhiemVuThangData);
 	}
-
-	@GetMapping(value = { "/thongKeKeHoachThang" })
-	public ResponseEntity<Page<ThongKeKeHoachThangData>> thongKeKeHoachThang(
-			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
-			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
-			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
-			@RequestParam(name = "donViChuTriId", required = false) Long donViChuTriId,
-			@RequestParam(name = "thang", required = false) List<LocalDate> thangs,
-			@RequestParam(name = "tenNhiemVu", required = false) String tenNhiemVu,
-			@RequestParam(name = "tinhTrang", required = false) Integer tinhTrang,
-			@RequestParam(name = "canBoThucHienId", required = false) Long canBoThucHienId,
-			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "thoiHanTuNgay", required = false) LocalDate tuNgay,
-			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "thoiHanDenNgay", required = false) LocalDate denNgay) {
-		Page<ThongKeKeHoachThangData> pageThongKeKeHoachThang = businessNhiemVuThangBusiness.thongKeKeHoachThang(page, size, sortBy, sortDir,
-				donViChuTriId, thangs, tenNhiemVu, tinhTrang, canBoThucHienId, tuNgay, denNgay);
-		return ResponseEntity.ok(pageThongKeKeHoachThang);
-	}
 	
-	@GetMapping(value = { "/thongKeKeHoachThang/export" })
-	public ModelAndView thongKeKeHoachThang(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
-			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
-			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
+	@GetMapping(value = { "/thongkesoluong" })
+	public ResponseEntity<String> getThongKeSoLuong(
 			@RequestParam(name = "donViChuTriId", required = false) Long donViChuTriId,
-			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "thang", required = false) List<LocalDate> thangs,
+			@RequestParam(name = "thangs", required = false) List<LocalDate> thangs,
+			@RequestParam(name = "keHoachThangId", required = false) Long keHoachThangId,
 			@RequestParam(name = "tenNhiemVu", required = false) String tenNhiemVu,
-			@RequestParam(name = "tinhTrang", required = false) Integer tinhTrang,
+			@RequestParam(name = "tinhTrangs", required = false) List<Integer> tinhTrangs,
 			@RequestParam(name = "canBoThucHienId", required = false) Long canBoThucHienId,
-			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "thoiHanTuNgay", required = false) LocalDate thoiHanTuNgay,
-			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "thoiHanDenNgay", required = false) LocalDate thoiHanDenNgay) {
-		return businessNhiemVuThangBusiness.exportExcelThongKeKeHoachThang(request, response, page, size, sortBy, sortDir, donViChuTriId,
-				thangs, tenNhiemVu, tinhTrang, canBoThucHienId, thoiHanTuNgay, thoiHanDenNgay);
+			@DateTimeFormat(pattern = "dd/MM/yyyy") @RequestParam(name = "tuNgay", required = false) LocalDate tuNgay,
+			@DateTimeFormat(pattern = "dd/MM/yyyy") @RequestParam(name = "denNgay", required = false) LocalDate denNgay) {
+
+		String thongKe = businessNhiemVuThangBusiness.getThongKeSoLuong(donViChuTriId, thangs, keHoachThangId, tenNhiemVu,
+				tinhTrangs, canBoThucHienId, tuNgay, denNgay);
+		return ResponseEntity.ok(thongKe);
 	}
 
 	@GetMapping(value = "/{id}")

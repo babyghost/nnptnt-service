@@ -15,7 +15,7 @@ import vn.dnict.microservice.nnptnt.kehoach.kehoachthang.dao.model.KeHoachThang;
 
 public class KeHoachThangSpecifications {
 	public static Specification<KeHoachThang> quichSearch(final Long donViChuTriId, final Integer thang,
-			final String tenNhiemVu, final String canBoThucHienTen, final LocalDate tuThoiHan, final LocalDate denThoiHan,
+			final String tenNhiemVu, final Long canBoThucHienId, final LocalDate tuThoiHan, final LocalDate denThoiHan,
 			final Integer tinhTrang) {
 		return new Specification<KeHoachThang>() {
 
@@ -39,8 +39,8 @@ public class KeHoachThangSpecifications {
 				if (tenNhiemVu != null && !tenNhiemVu.isEmpty()) {
 					predicates.add(cb.like(cb.lower(root.<String>get("tenNhiemVu")), "%" + tenNhiemVu.toLowerCase().trim() + "%"));
 				}
-				if (canBoThucHienTen != null && !canBoThucHienTen.isEmpty()) {
-					predicates.add(cb.like(cb.lower(root.<String>get("canBoThucHienTen")), "%" + canBoThucHienTen.toLowerCase().trim() + "%"));
+				if (canBoThucHienId != null && canBoThucHienId > -1) {
+					predicates.add(cb.equal(root.join("nhiemVuThangs").<String>get("canBoThucHienId"), canBoThucHienId));
 				}
 				if (tuThoiHan != null) {
 					predicates.add(cb.greaterThanOrEqualTo(root.get("thoiGian").as(LocalDate.class), tuThoiHan));

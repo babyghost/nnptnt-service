@@ -61,14 +61,14 @@ public class KeHoachThangBusiness {
 	NhiemVuThangLogService serviceNhiemVuThangLogService;
 	
 	public Page<KeHoachThangData> findAll(int page, int size, String sortBy, String sortDir, Long donViChuTriId, Integer thang,
-			String tenNhiemVu, String canBoThucHienTen, LocalDate tuThoiHan, LocalDate denThoiHan, Integer tinhTrang) {
+			String tenNhiemVu, Long canBoThucHienId, LocalDate tuThoiHan, LocalDate denThoiHan, Integer tinhTrang) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-		final Page<KeHoachThang> pageKeHoachThang = serviceKeHoachThangService.findAll(donViChuTriId, thang, tenNhiemVu, canBoThucHienTen,
+		final Page<KeHoachThang> pageKeHoachThang = serviceKeHoachThangService.findAll(donViChuTriId, thang, tenNhiemVu, canBoThucHienId,
 				tuThoiHan, denThoiHan, tinhTrang, PageRequest.of(page, size, direction, sortBy));
 		final Page<KeHoachThangData> pageKeHoachThangData = pageKeHoachThang
 				.map(this::convertToKeHoachThangData);

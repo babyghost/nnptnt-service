@@ -18,7 +18,7 @@ public interface KeHoachThangService {
 
 	public Optional<KeHoachThang> findById(Long id);
 
-	public Page<KeHoachThang> findAll(Long donViChuTriId, Integer thang, String tenNhiemVu, String canBoThucHienTen,
+	public Page<KeHoachThang> findAll(Long donViChuTriId, Integer thang, String tenNhiemVu, Long canBoThucHienId,
 			LocalDate tuThoiHan, LocalDate denThoiHan, Integer tinhTrang, Pageable pageable);
 	
 	public List<KeHoachThang> findByDonViChuTriIdAndThangAndDaXoa(Long donViChuTriId, LocalDate thang, Boolean daXoa);

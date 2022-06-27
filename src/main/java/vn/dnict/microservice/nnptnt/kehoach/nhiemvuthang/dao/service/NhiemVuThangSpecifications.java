@@ -71,7 +71,7 @@ public class NhiemVuThangSpecifications {
 	}
 	
 	public static Specification<NhiemVuThang> thongKeThang(final Long donViChuTriId, final List<LocalDate > thangs,
-			final String tenNhiemVu,final Integer tinhTrang, final Long canBoThucHienId, final LocalDate tuNgay,
+			final String tenNhiemVu,final List<Integer> tinhTrangs, final Long canBoThucHienId, final LocalDate tuNgay,
 			LocalDate denNgay) {
 		return new Specification<NhiemVuThang>() {
 			private static final long serialVersionUID = -5902884843433373982L;
@@ -104,8 +104,11 @@ public class NhiemVuThangSpecifications {
 				if (tenNhiemVu != null && !tenNhiemVu.isEmpty()) {
 					predicates.add(cb.like(cb.lower(root.<String>get("tenNhiemVu")), "%" + tenNhiemVu.toLowerCase().trim() + "%"));
 				}
-				if(tinhTrang != null) {
-					predicates.add(cb.equal(root.<Integer>get("tinhTrang"), tinhTrang));
+				if (tinhTrangs != null && !tinhTrangs.isEmpty()) {
+					Expression<List<Integer>> valuetinhTrangs = cb.literal(tinhTrangs);
+					Expression<String> expression = root.get("tinhTrang");
+					Predicate inList = expression.in(valuetinhTrangs);
+					predicates.add(inList);
 				}
 				if(canBoThucHienId != null) {
 					predicates.add(cb.equal(root.<Long>get("canBoThucHienId"), canBoThucHienId));

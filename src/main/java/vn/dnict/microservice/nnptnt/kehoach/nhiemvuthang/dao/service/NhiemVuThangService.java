@@ -19,10 +19,10 @@ public interface NhiemVuThangService {
 	public List<NhiemVuThang> findByKeHoachThangIdAndDaXoa(Long keHoachThangId, Boolean daXoa);
 
 	public int setFixedDaXoaForKeHoachThangId(Boolean daXoa, Long keHoachThangId);
+	
+	public Page<NhiemVuThang> findAll(Long donViChuTriId, List<LocalDate> thangs, Integer tinhTrang, String tenNhiemVu,
+			LocalDate tuNgay, LocalDate denNgay, Pageable pageable);
 
-	public Page<NhiemVuThang> findAll(Long donViChuTriId, List<LocalDate> thangs, Integer tinhTrang, String tenNhiemVu, LocalDate tuNgay,
-			LocalDate denNgay, Pageable pageable);
-
-	public Page<NhiemVuThang> getThongKeSoLuong(Long donViChuTriId, List<LocalDate> thangs, String tenNhiemVu, Integer tinhTrang,
-			Long canBoThucHienId, LocalDate tuNgay, LocalDate denNgay, Pageable pageable);
+	public List<NhiemVuThang> getThongKeSoLuong(Long donViChuTriId, List<LocalDate> thangs, Long keHoachThangId, String tenNhiemVu,
+			List<Integer> tinhTrangs, Long canBoThucHienId, LocalDate tuNgay, LocalDate denNgay);
 }
