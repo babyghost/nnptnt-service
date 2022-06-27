@@ -44,7 +44,7 @@ public class NhiemVuNamData {
 
 	private List<TienDoNhiemVuNamData> tienDoNhiemVuNamDatas = new ArrayList<TienDoNhiemVuNamData>();
 
-	private TienDoNhiemVuNamData tienDoNhiemVuNamData = new TienDoNhiemVuNamData();
+//	private TienDoNhiemVuNamData tienDoNhiemVuNamData = new TienDoNhiemVuNamData();
 
 	@Valid
 	private List<NhiemVuNamData> children = new ArrayList<NhiemVuNamData>();

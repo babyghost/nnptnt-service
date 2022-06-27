@@ -12,11 +12,11 @@ public interface FileDinhKemNhiemVuNamService {
 
 	public Optional<FileDinhKemNhiemVuNam> findById(Long id);
 	
-	public Optional<FileDinhKemNhiemVuNam> findByTienDoNvNamId(Long tienDoNvNamId);
+	public Optional<FileDinhKemNhiemVuNam> findByTienDoNhiemVuNamId(Long tienDoNhiemVuNamId);
 
-	public List<FileDinhKemNhiemVuNam> findByTienDoNvNamIdAndDaXoa(Long tienDoNvNamId, Boolean daXoa);
+	public List<FileDinhKemNhiemVuNam> findByTienDoNhiemVuNamIdAndDaXoa(Long tienDoNhiemVuNamId, Boolean daXoa);
 
-	public int setFixedDaXoaForTienDoNvNamId(Boolean daXoa, Long tienDoNvNamId);
+	public int setFixedDaXoaForTienDoNhiemVuNamId(Boolean daXoa, Long tienDoNhiemVuNamId);
 
-	public List<FileDinhKemNhiemVuNam> findByTienDoNvNamIdAndFileDinhKemId(Long tienDoNvNamId, Long fileDinhKemId);
+	public List<FileDinhKemNhiemVuNam> findByTienDoNhiemVuNamIdAndFileDinhKemId(Long tienDoNhiemVuNamId, Long fileDinhKemId);
 }

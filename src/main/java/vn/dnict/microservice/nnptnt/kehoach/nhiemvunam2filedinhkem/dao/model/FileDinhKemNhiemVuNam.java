@@ -37,7 +37,7 @@ public class FileDinhKemNhiemVuNam {
 	private Long fileDinhKemId;
 
 	@Column(name = "tiendonvnam_id", nullable = false)
-	private Long tienDoNvNamId;
+	private Long tienDoNhiemVuNamId;
 
 	@JsonIgnore
 	@Column(name = "daxoa")

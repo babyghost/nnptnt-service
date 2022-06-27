@@ -36,26 +36,26 @@ public class FileDinhKemNhiemVuNamServiceImpl implements FileDinhKemNhiemVuNamSe
 	}
 
 	@Override
-	public List<FileDinhKemNhiemVuNam> findByTienDoNvNamIdAndDaXoa(Long tienDoNvNamId, Boolean daXoa) {
+	public List<FileDinhKemNhiemVuNam> findByTienDoNhiemVuNamIdAndDaXoa(Long tienDoNhiemVuNamId, Boolean daXoa) {
 		// TODO Auto-generated method stub
-		return repo.findByTienDoNvNamIdAndDaXoa(tienDoNvNamId, daXoa);
+		return repo.findByTienDoNhiemVuNamIdAndDaXoa(tienDoNhiemVuNamId, daXoa);
 	}
 
 	@Override
-	public int setFixedDaXoaForTienDoNvNamId(Boolean daXoa, Long tienDoNvNamId) {
+	public int setFixedDaXoaForTienDoNhiemVuNamId(Boolean daXoa, Long tienDoNhiemVuNamId) {
 		// TODO Auto-generated method stub
-		return repo.setFixedDaXoaForTienDoNvNamId(daXoa, tienDoNvNamId);
+		return repo.setFixedDaXoaForTienDoNhiemVuNamId(daXoa, tienDoNhiemVuNamId);
 	}
 
 	@Override
-	public List<FileDinhKemNhiemVuNam> findByTienDoNvNamIdAndFileDinhKemId(Long tienDoNvNamId, Long fileDinhKemId) {
+	public List<FileDinhKemNhiemVuNam> findByTienDoNhiemVuNamIdAndFileDinhKemId(Long tienDoNhiemVuNamId, Long fileDinhKemId) {
 		// TODO Auto-generated method stub
-		return repo.findByTienDoNvNamIdAndFileDinhKemId(tienDoNvNamId, fileDinhKemId);
+		return repo.findByTienDoNhiemVuNamIdAndFileDinhKemId(tienDoNhiemVuNamId, fileDinhKemId);
 	}
 
 	@Override
-	public Optional<FileDinhKemNhiemVuNam> findByTienDoNvNamId(Long tienDoNvNamId) {
+	public Optional<FileDinhKemNhiemVuNam> findByTienDoNhiemVuNamId(Long tienDoNhiemVuNamId) {
 		// TODO Auto-generated method stub
-		return repo.findByTienDoNvNamId(tienDoNvNamId);
+		return repo.findByTienDoNhiemVuNamId(tienDoNhiemVuNamId);
 	}
 }

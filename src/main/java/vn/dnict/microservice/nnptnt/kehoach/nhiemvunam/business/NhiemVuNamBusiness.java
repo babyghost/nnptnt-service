@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import vn.dnict.microservice.core.business.CoreAttachmentBusiness;
 import vn.dnict.microservice.core.dao.model.CoreAttachment;
@@ -193,34 +195,23 @@ public class NhiemVuNamBusiness {
 				tienDoNhiemVuNamData.setTinhTrang(tienDoNhiemVuNam.getTinhTrang());
 
 				// xử lý đính kèm
-				List<FileDinhKemNhiemVuNam> fileDinhKemNhiemVuNams = serviceFileDinhKemNhiemVuNamService
-						.findByTienDoNvNamIdAndDaXoa(tienDoNhiemVuNam.getId(), false);
-				List<Long> fileDinhKemIds = new ArrayList<Long>();
-				if (Objects.nonNull(fileDinhKemNhiemVuNams) && !fileDinhKemNhiemVuNams.isEmpty()) {
-					for (FileDinhKemNhiemVuNam fileDinhKemNhiemVuNam : fileDinhKemNhiemVuNams) {
-						if (Objects.nonNull(fileDinhKemNhiemVuNam.getFileDinhKemId())) {
-							fileDinhKemIds.add(fileDinhKemNhiemVuNam.getFileDinhKemId());
-						}
-					}
+				if(Objects.nonNull(tienDoNhiemVuNam)) {
+					int type = Constants.DINH_KEM_1_FILE;
+					Optional<FileDinhKemNhiemVuNam> fileDinhKemNhiemVuNam = serviceFileDinhKemNhiemVuNamService
+							.findByTienDoNhiemVuNamId(tienDoNhiemVuNam.getId());
+					Long fileDinhKemId = null;
+					Long objectId = tienDoNhiemVuNam.getId();
+					String appCode = TienDoNhiemVuNam.class.getSimpleName();
+					FileDinhKem fileDinhKem = coreAttachmentBusiness
+							.getAttachments(fileDinhKemNhiemVuNam.get().getFileDinhKemId(), appCode, objectId, type);
+					tienDoNhiemVuNamData.setFileDinhKem(fileDinhKem);
+					tienDoNhiemVuNamData.setFileDinhKemIds(fileDinhKem.getIds());
 				}
-				int type = Constants.DINH_KEM_NHIEU_FILE;
-				Optional<FileDinhKemNhiemVuNam> fileDinhKemNhiemVuNam = serviceFileDinhKemNhiemVuNamService
-						.findByTienDoNvNamId(tienDoNhiemVuNam.getId());
-				Long fileDinhKemId = null;
-				Long objectId = tienDoNhiemVuNam.getId();
-				String appCode = TienDoNhiemVuNam.class.getSimpleName();
-				FileDinhKem fileDinhKem = coreAttachmentBusiness
-						.getAttachments( fileDinhKemNhiemVuNam.get().getFileDinhKemId(), appCode, objectId, type);
-				tienDoNhiemVuNamData.setFileDinhKem(fileDinhKem);
-				tienDoNhiemVuNamData.setFileDinhKemIds(fileDinhKem.getIds());
 
 				tienDoNhiemVuNamDatas.add(tienDoNhiemVuNamData);
 			}
 		}
 		nhiemVuNamData.setTienDoNhiemVuNamDatas(tienDoNhiemVuNamDatas);
-		if (Objects.nonNull(tienDoNhiemVuNamDatas) && !tienDoNhiemVuNamDatas.isEmpty()) {
-			nhiemVuNamData.setTienDoNhiemVuNamData(tienDoNhiemVuNamDatas.get(0));
-		}
 
 		return nhiemVuNamData;
 	}
@@ -231,8 +222,155 @@ public class NhiemVuNamBusiness {
 			throw new EntityNotFoundException(NhiemVuNam.class, "id", String.valueOf(id));
 		}
 		NhiemVuNam nhiemVuNam = optional.get();
-		return this.convertToNhiemVuNamData(nhiemVuNam);
+		NhiemVuNamData nhiemVuNamData = new NhiemVuNamData();
+		nhiemVuNamData.setId(nhiemVuNam.getId());
+		nhiemVuNamData.setKeHoachId(nhiemVuNam.getKeHoachId());
+		if (Objects.nonNull(nhiemVuNam.getLoaiNhiemVuId())) {
+			Optional<DmLoaiNhiemVu> optionalDmLoaiNhiemVu = serviceDmLoaiNhiemVuService
+					.findById(nhiemVuNam.getLoaiNhiemVuId());
+			if (optionalDmLoaiNhiemVu.isPresent()) {
+				nhiemVuNamData.setLoaiNhiemVuId(optionalDmLoaiNhiemVu.get().getId());
+				nhiemVuNamData.setLoaiNhiemVuTen(optionalDmLoaiNhiemVu.get().getTen());
+			}
+		}
+		nhiemVuNamData.setTenNhiemVu(nhiemVuNam.getTenNhiemVu());
+		nhiemVuNamData.setNhiemVuChaId(null);
+		nhiemVuNamData.setDonViPhoiHop(nhiemVuNam.getDonViPhoiHop());
+		nhiemVuNamData.setGhiChu(nhiemVuNam.getGhiChu());
+		nhiemVuNamData.setTuNgay(nhiemVuNam.getTuNgay());
+		nhiemVuNamData.setDenNgay(nhiemVuNam.getDenNgay());
+		String thoiGianThucHien = "";
+		if (Objects.nonNull(nhiemVuNam.getTuNgay())) {
+			thoiGianThucHien = formatter.format(nhiemVuNam.getTuNgay());
+		}
+		if (Objects.nonNull(nhiemVuNam.getDenNgay())) {
+			if (Objects.nonNull(thoiGianThucHien) && !thoiGianThucHien.isEmpty()) {
+				thoiGianThucHien += " - ";
+			}
+			thoiGianThucHien += formatter.format(nhiemVuNam.getDenNgay());
+		}
+		nhiemVuNamData.setThoiGianThucHien(thoiGianThucHien);
+
+		// tiến độ
+		List<TienDoNhiemVuNam> tienDoNhiemVuNams = serviceTienDoNhiemVuNamService
+				.findByNhiemVuNamIdAndDaXoa(nhiemVuNam.getId(), false);
+		List<TienDoNhiemVuNamData> tienDoNhiemVuNamDatas = new ArrayList<TienDoNhiemVuNamData>();
+		if (Objects.nonNull(tienDoNhiemVuNams) && !tienDoNhiemVuNams.isEmpty()) {
+			for (TienDoNhiemVuNam tienDoNhiemVuNam : tienDoNhiemVuNams) {
+				TienDoNhiemVuNamData tienDoNhiemVuNamData = new TienDoNhiemVuNamData();
+				tienDoNhiemVuNamData.setId(tienDoNhiemVuNam.getId());
+				tienDoNhiemVuNamData.setKetQua(tienDoNhiemVuNam.getKetQua());
+				tienDoNhiemVuNamData.setMucDoHoanThanh(tienDoNhiemVuNam.getMucDoHoanThanh());
+				tienDoNhiemVuNamData.setNgayBaoCao(tienDoNhiemVuNam.getNgayBaoCao());
+				tienDoNhiemVuNamData.setNhiemVuNamId(tienDoNhiemVuNam.getNhiemVuNamId());
+				tienDoNhiemVuNamData.setTinhTrang(tienDoNhiemVuNam.getTinhTrang());
+
+				// xử lý đính kèm
+				if(Objects.nonNull(tienDoNhiemVuNam)) {
+					int type = Constants.DINH_KEM_1_FILE;
+					Optional<FileDinhKemNhiemVuNam> fileDinhKemNhiemVuNam = serviceFileDinhKemNhiemVuNamService
+							.findByTienDoNhiemVuNamId(tienDoNhiemVuNam.getId());
+					Long fileDinhKemId = null;
+					Long objectId = tienDoNhiemVuNam.getId();
+					String appCode = TienDoNhiemVuNam.class.getSimpleName();
+					FileDinhKem fileDinhKem = coreAttachmentBusiness
+							.getAttachments(fileDinhKemNhiemVuNam.get().getFileDinhKemId(), appCode, objectId, type);
+					tienDoNhiemVuNamData.setFileDinhKem(fileDinhKem);
+					tienDoNhiemVuNamData.setFileDinhKemIds(fileDinhKem.getIds());
+				}
+
+				tienDoNhiemVuNamDatas.add(tienDoNhiemVuNamData);
+			}
+		}
+		nhiemVuNamData.setTienDoNhiemVuNamDatas(tienDoNhiemVuNamDatas);
+
+		return nhiemVuNamData;
 	}
+	
+//	public List<NhiemVuNam> create(NhiemVuNamData nhiemVuNamData, BindingResult result) throws MethodArgumentNotValidException {
+//		if (result.hasErrors()) {
+//			throw new MethodArgumentNotValidException(null, result);
+//		}
+//		
+//		List<NhiemVuNam> list = new ArrayList<NhiemVuNam>();
+//		if(nhiemVuNamData.getChildren().size() > 0) {
+//			for(int i = 0; i < nhiemVuNamData.getChildren().size(); i++) {
+//				NhiemVuNam nhiemVuNam = new NhiemVuNam();
+//				if(nhiemVuNamData.getChildren().get(i).getId() > 0) {
+//					Optional<NhiemVuNam> optNvNam = serviceNhiemVuNamService.findById(nhiemVuNamData.getChildren().get(i).getId());
+//					if(optNvNam.isPresent()) {
+//						nhiemVuNam = optNvNam.get();
+//					}
+//				}
+//				nhiemVuNam.setKeHoachId(nhiemVuNamData.getKeHoachId());
+//				nhiemVuNam.setTenNhiemVu(nhiemVuNamData.getTenNhiemVu());
+//				nhiemVuNam.setNhiemVuChaId(nhiemVuNamData.getNhiemVuChaId());
+//				nhiemVuNam.setDonViPhoiHop(nhiemVuNamData.getDonViPhoiHop());
+//				nhiemVuNam.setTuNgay(nhiemVuNamData.getTuNgay());
+//				nhiemVuNam.setDenNgay(nhiemVuNamData.getDenNgay());
+//				nhiemVuNam.setLoaiNhiemVuId(nhiemVuNamData.getLoaiNhiemVuId());
+//				nhiemVuNam.setGhiChu(nhiemVuNamData.getGhiChu());
+//				nhiemVuNam = serviceNhiemVuNamService.save(nhiemVuNam);
+//				
+//				serviceTienDoNhiemVuNamService.setFixedDaXoaForNhiemVuNamId(true, nhiemVuNam.getId());
+//				List<TienDoNhiemVuNamData> tienDoDatas = nhiemVuNamData.getTienDoNhiemVuNamDatas();
+//				if(Objects.nonNull(tienDoDatas) && !tienDoDatas.isEmpty()) {
+//					for(TienDoNhiemVuNamData tienDoData : tienDoDatas) {
+//						TienDoNhiemVuNam tienDo = new TienDoNhiemVuNam();
+//						if(Objects.nonNull(tienDo.getId())) {
+//							Optional<TienDoNhiemVuNam> optTienDo = serviceTienDoNhiemVuNamService.findById(tienDoData.getId());
+//							if(optTienDo.isPresent()) {
+//								tienDo = optTienDo.get();
+//							}
+//						}
+//						tienDo.setId(tienDoData.getId());
+//						tienDo.setNhiemVuNamId(tienDoData.getNhiemVuNamId());
+//						tienDo.setMucDoHoanThanh(tienDoData.getMucDoHoanThanh());
+//						tienDo.setNgayBaoCao(tienDoData.getNgayBaoCao());
+//						tienDo.setKetQua(tienDoData.getKetQua());
+//						tienDo = serviceTienDoNhiemVuNamService.save(tienDo);
+//						
+//						serviceFileDinhKemNhiemVuNamService.setFixedDaXoaForTienDoNhiemVuNamId(true, tienDo.getId());
+//						List<Long> fileDinhKemIds = tienDoData.getFileDinhKemIds();
+//						int type = Constants.DINH_KEM_1_FILE;
+//						long objectId = tienDo.getId();
+//						String appCode = TienDoNhiemVuNam.class.getSimpleName();
+//						
+//						/* Xóa mềm đính kèm cũ nếu có trước khi set file đính kèm nếu đính kèm nhiều */
+//						if (type == Constants.DINH_KEM_NHIEU_FILE) {
+//							coreAttachmentBusiness.setFixDaXoaByObjectIdAndAppCodeAndType(objectId, appCode, type);
+//						}
+//						if(Objects.nonNull(tienDoDatas) && !tienDoDatas.isEmpty()) {
+//							for(Long fileDinhKemId : fileDinhKemIds) {
+//								CoreAttachment coreAttachment = coreAttachmentBusiness.dinhKemFile(fileDinhKemId, objectId, type, appCode);
+//								
+//								/* set db nếu có trường lưu và chuyển file từ temp sang thư mục chính */
+//								if (coreAttachment.getId() > 0) {
+//									FileDinhKemNhiemVuNam fileDinhKemNam = new FileDinhKemNhiemVuNam();
+//									List<FileDinhKemNhiemVuNam> fileDinhKemNams = serviceFileDinhKemNhiemVuNamService
+//											.findByTienDoNhiemVuNamIdAndFileDinhKemId(tienDo.getId(), fileDinhKemId);
+//									if(Objects.nonNull(fileDinhKemNams) && !fileDinhKemNams.isEmpty()) {
+//										fileDinhKemNam = fileDinhKemNams.get(0);
+//									}
+//									fileDinhKemNam.setDaXoa(false);
+//									fileDinhKemNam.setTienDoNhiemVuNamId(tienDo.getId());
+//									fileDinhKemNam.setFileDinhKemId(coreAttachment.getId());
+//									fileDinhKemNam = serviceFileDinhKemNhiemVuNamService.save(fileDinhKemNam);
+//									
+//									coreAttachmentBusiness.saveAndMove(coreAttachment);
+//								}
+//								if (type == Constants.DINH_KEM_1_FILE) {
+//									break;
+//								}
+//							}
+//						}
+//					}
+//				}
+//				list.add(nhiemVuNam);
+//			}
+//		}
+//		return list;
+//	}
 
 	public NhiemVuNamData saveTienDo(Long nhiemVuId, NhiemVuNamData nhiemVuNamData)
 			throws EntityNotFoundException {
@@ -241,70 +379,93 @@ public class NhiemVuNamBusiness {
 			throw new EntityNotFoundException(NhiemVuNam.class, "id", String.valueOf(nhiemVuId));
 		}
 		NhiemVuNam nhiemVuNam = optional.get();
-		TienDoNhiemVuNamData tienDoNhiemVuNamData = nhiemVuNamData.getTienDoNhiemVuNamData();
-
-		TienDoNhiemVuNam tienDoNhiemVuNam = new TienDoNhiemVuNam();
-		if (Objects.nonNull(tienDoNhiemVuNamData.getId())) {
-			Optional<TienDoNhiemVuNam> optionalTienDoNhiemVuNam = serviceTienDoNhiemVuNamService
-					.findById(tienDoNhiemVuNamData.getId());
-			if (optionalTienDoNhiemVuNam.isPresent()) {
-				tienDoNhiemVuNam = optionalTienDoNhiemVuNam.get();
-			}
-		}
-		tienDoNhiemVuNam.setDaXoa(false);
-		tienDoNhiemVuNam.setKetQua(tienDoNhiemVuNamData.getKetQua());
-		tienDoNhiemVuNam.setMucDoHoanThanh(tienDoNhiemVuNamData.getMucDoHoanThanh());
-		tienDoNhiemVuNam.setNgayBaoCao(tienDoNhiemVuNamData.getNgayBaoCao());
-		tienDoNhiemVuNam.setNhiemVuNamId(nhiemVuId);
-		tienDoNhiemVuNam.setTinhTrang(tienDoNhiemVuNamData.getTinhTrang());
-		tienDoNhiemVuNam = serviceTienDoNhiemVuNamService.save(tienDoNhiemVuNam);
-
-		// đính kèm
-		serviceFileDinhKemNhiemVuNamService.setFixedDaXoaForTienDoNvNamId(false, tienDoNhiemVuNam.getId());
-		/* Begin đính kèm file *******************************************************/
-
-		/*
-		 * Khởi tạo biến **************************************************************
-		 * - fileDinhKemIds: danh sách id file đã đính kèm ****************************
-		 * - type: loại đính kèm (DINH_KEM_1_FILE || DINH_KEM_NHIEU_FILE) *************
-		 * - objectId: id đối tượng đính kèm ******************************************
-		 * - appCode: tên model của đối tượng đính kèm*********************************
-		 */
-		List<Long> fileDinhKemIds = tienDoNhiemVuNamData.getFileDinhKemIds();
-		int type = Constants.DINH_KEM_NHIEU_FILE;
-		long objectId = tienDoNhiemVuNam.getId();
-		String appCode = TienDoNhiemVuNam.class.getSimpleName();
-		/* Xóa mềm đính kèm cũ nếu có trước khi set file đính kèm nếu đính kèm nhiều */
-		if (type == Constants.DINH_KEM_NHIEU_FILE) {
-			coreAttachmentBusiness.setFixDaXoaByObjectIdAndAppCodeAndType(objectId, appCode, type);
-		}
-		if (Objects.nonNull(fileDinhKemIds) && !fileDinhKemIds.isEmpty()) {
-			for (Long fileDinhKemId : fileDinhKemIds) {
-				CoreAttachment coreAttachment = coreAttachmentBusiness.dinhKemFile(fileDinhKemId, objectId, type,
-						appCode);
-
-				/* set db nếu có trường lưu và chuyển file từ temp sang thư mục chính */
-				if (coreAttachment.getId() > 0) {
-					FileDinhKemNhiemVuNam fileDinhKemNhiemVuNam = new FileDinhKemNhiemVuNam();
-					List<FileDinhKemNhiemVuNam> fileDinhKemNhiemVuNams = serviceFileDinhKemNhiemVuNamService
-							.findByTienDoNvNamIdAndFileDinhKemId(tienDoNhiemVuNam.getId(), fileDinhKemId);
-					if (Objects.nonNull(fileDinhKemNhiemVuNams) && !fileDinhKemNhiemVuNams.isEmpty()) {
-						fileDinhKemNhiemVuNam = fileDinhKemNhiemVuNams.get(0);
+		
+		serviceTienDoNhiemVuNamService.setFixedDaXoaForNhiemVuNamId(false, nhiemVuNam.getId());
+		List<TienDoNhiemVuNamData> tienDoDatas = nhiemVuNamData.getTienDoNhiemVuNamDatas();
+//		TienDoNhiemVuNamData tienDoNhiemVuNamData = nhiemVuNamData.getTienDoNhiemVuNamData();
+		if(Objects.nonNull(tienDoDatas) && !tienDoDatas.isEmpty()) {
+			for(TienDoNhiemVuNamData tienDoData : tienDoDatas) {
+				TienDoNhiemVuNam tienDo = new TienDoNhiemVuNam();
+				if(Objects.nonNull(tienDo.getId())) {
+					Optional<TienDoNhiemVuNam> optTienDo = serviceTienDoNhiemVuNamService.findById(tienDoData.getId());
+					if(optTienDo.isPresent()) {
+						tienDo = optTienDo.get();
 					}
-					fileDinhKemNhiemVuNam.setDaXoa(false);
-					fileDinhKemNhiemVuNam.setTienDoNvNamId(tienDoNhiemVuNam.getId());
-					fileDinhKemNhiemVuNam.setFileDinhKemId(coreAttachment.getId());
-					fileDinhKemNhiemVuNam = serviceFileDinhKemNhiemVuNamService.save(fileDinhKemNhiemVuNam);
-
-					coreAttachmentBusiness.saveAndMove(coreAttachment);
 				}
+				tienDo.setDaXoa(false);
+				tienDo.setKetQua(tienDoData.getKetQua());
+				tienDo.setMucDoHoanThanh(tienDoData.getMucDoHoanThanh());
+				tienDo.setNgayBaoCao(tienDoData.getNgayBaoCao());
+				tienDo.setNhiemVuNamId(nhiemVuId);
+				tienDo.setTinhTrang(tienDoData.getTinhTrang());
+				tienDo = serviceTienDoNhiemVuNamService.save(tienDo);
+				
+				// đính kèm
+				serviceFileDinhKemNhiemVuNamService.setFixedDaXoaForTienDoNhiemVuNamId(true, tienDo.getId());
+				/* Begin đính kèm file *******************************************************/
 
-				/* thoát nếu đính kèm 1 file */
-				if (type == Constants.DINH_KEM_1_FILE) {
-					break;
+				/*
+				 * Khởi tạo biến **************************************************************
+				 * - fileDinhKemIds: danh sách id file đã đính kèm ****************************
+				 * - type: loại đính kèm (DINH_KEM_1_FILE || DINH_KEM_NHIEU_FILE) *************
+				 * - objectId: id đối tượng đính kèm ******************************************
+				 * - appCode: tên model của đối tượng đính kèm*********************************
+				 */
+				List<Long> fileDinhKemIds = tienDoData.getFileDinhKemIds();
+				int type = Constants.DINH_KEM_NHIEU_FILE;
+				long objectId = tienDo.getId();
+				String appCode = TienDoNhiemVuNam.class.getSimpleName();
+				/* Xóa mềm đính kèm cũ nếu có trước khi set file đính kèm nếu đính kèm nhiều */
+				if (type == Constants.DINH_KEM_NHIEU_FILE) {
+					coreAttachmentBusiness.setFixDaXoaByObjectIdAndAppCodeAndType(objectId, appCode, type);
+				}
+				if (Objects.nonNull(fileDinhKemIds) && !fileDinhKemIds.isEmpty()) {
+					for (Long fileDinhKemId : fileDinhKemIds) {
+						CoreAttachment coreAttachment = coreAttachmentBusiness.dinhKemFile(fileDinhKemId, objectId, type,
+								appCode);
+
+						/* set db nếu có trường lưu và chuyển file từ temp sang thư mục chính */
+						if (coreAttachment.getId() > 0) {
+							FileDinhKemNhiemVuNam fileDinhKemNhiemVuNam = new FileDinhKemNhiemVuNam();
+							List<FileDinhKemNhiemVuNam> fileDinhKemNhiemVuNams = serviceFileDinhKemNhiemVuNamService
+									.findByTienDoNhiemVuNamIdAndFileDinhKemId(tienDo.getId(), fileDinhKemId);
+							if (Objects.nonNull(fileDinhKemNhiemVuNams) && !fileDinhKemNhiemVuNams.isEmpty()) {
+								fileDinhKemNhiemVuNam = fileDinhKemNhiemVuNams.get(0);
+							}
+							fileDinhKemNhiemVuNam.setDaXoa(false);
+							fileDinhKemNhiemVuNam.setTienDoNhiemVuNamId(tienDo.getId());
+							fileDinhKemNhiemVuNam.setFileDinhKemId(coreAttachment.getId());
+							fileDinhKemNhiemVuNam = serviceFileDinhKemNhiemVuNamService.save(fileDinhKemNhiemVuNam);
+
+							coreAttachmentBusiness.saveAndMove(coreAttachment);
+						}
+
+						/* thoát nếu đính kèm 1 file */
+						if (type == Constants.DINH_KEM_1_FILE) {
+							break;
+						}
+					}
 				}
 			}
 		}
+
+//		TienDoNhiemVuNam tienDoNhiemVuNam = new TienDoNhiemVuNam();
+//		if (Objects.nonNull(tienDoNhiemVuNamData.getId())) {
+//			Optional<TienDoNhiemVuNam> optionalTienDoNhiemVuNam = serviceTienDoNhiemVuNamService
+//					.findById(tienDoNhiemVuNamData.getId());
+//			if (optionalTienDoNhiemVuNam.isPresent()) {
+//				tienDoNhiemVuNam = optionalTienDoNhiemVuNam.get();
+//			}
+//		}
+//		tienDoNhiemVuNam.setDaXoa(false);
+//		tienDoNhiemVuNam.setKetQua(tienDoNhiemVuNamData.getKetQua());
+//		tienDoNhiemVuNam.setMucDoHoanThanh(tienDoNhiemVuNamData.getMucDoHoanThanh());
+//		tienDoNhiemVuNam.setNgayBaoCao(tienDoNhiemVuNamData.getNgayBaoCao());
+//		tienDoNhiemVuNam.setNhiemVuNamId(nhiemVuId);
+//		tienDoNhiemVuNam.setTinhTrang(tienDoNhiemVuNamData.getTinhTrang());
+//		tienDoNhiemVuNam = serviceTienDoNhiemVuNamService.save(tienDoNhiemVuNam);
+
+		
 		/* End đính kèm file **********************************************************/
 
 		return this.convertToNhiemVuNamData(nhiemVuNam);

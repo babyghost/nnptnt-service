@@ -283,14 +283,10 @@ public class MyExcelViewTongHopSoLuongNgay extends AbstractXlsView {
 		cell2.setCellValue("Ngày");
 		currentColumn++;
 
-		if(listCoSo != null && !listCoSo.isEmpty()) {
-			for(CoSoGietMo coSo : listCoSo) {
-				cell2 = headerRow.createCell(currentColumn);
-				cell2.setCellStyle(styleHeaderB);
-				cell2.setCellValue(coSo.getTenCoSo());
-				currentColumn++;				
-			}
-		}
+		cell2 = headerRow.createCell(currentColumn);
+		cell2.setCellStyle(styleHeaderB);
+		cell2.setCellValue(thongKeSoLuongDatas.get(0).getCoSoTen());
+		currentColumn++;
 
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);
