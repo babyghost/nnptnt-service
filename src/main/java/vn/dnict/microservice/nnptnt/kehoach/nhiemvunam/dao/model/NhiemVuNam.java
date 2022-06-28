@@ -50,7 +50,7 @@ public class NhiemVuNam {
 	private KeHoachNam keHoachNam;
 
 	@Column(name = "kehoach_id", nullable = false)
-	private Long keHoachId;
+	private Long keHoachNamId;
 
 	@Column(name = "tennhiemvu", length = 500, nullable = false)
 	private String tenNhiemVu;

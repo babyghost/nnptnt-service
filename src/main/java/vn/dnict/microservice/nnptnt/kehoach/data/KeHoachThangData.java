@@ -22,5 +22,6 @@ public class KeHoachThangData {
 	private LocalDate thang;
 
 	@Valid
-	private List<NhiemVuTongHopThangData> nhiemVuTongHopThangDatas = new ArrayList<NhiemVuTongHopThangData>();
+//	private List<NhiemVuTongHopThangData> nhiemVuTongHopThangDatas = new ArrayList<NhiemVuTongHopThangData>();
+	private List<NhiemVuThangData> nhiemVuThangDatas = new ArrayList<NhiemVuThangData>();
 }

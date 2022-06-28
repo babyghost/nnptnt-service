@@ -37,5 +37,7 @@ public class KeHoachNamData {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private LocalDate ngayBanHanh;
 
-	private List<DmLoaiNhiemVuData> dmLoaiNhiemVuDatas = new ArrayList<DmLoaiNhiemVuData>();
+	@Valid
+//	private List<DmLoaiNhiemVuData> dmLoaiNhiemVuDatas = new ArrayList<DmLoaiNhiemVuData>();
+	private List<NhiemVuNamData> nhiemVuNamDatas = new ArrayList<NhiemVuNamData>();
 }

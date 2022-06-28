@@ -16,23 +16,23 @@ public interface NhiemVuNamService {
 
 	public Optional<NhiemVuNam> findById(Long id);
 
-	public List<NhiemVuNam> findByKeHoachIdAndDaXoa(Long keHoachId, Boolean daXoa);
+	public List<NhiemVuNam> findByKeHoachNamIdAndDaXoa(Long keHoachNamId, Boolean daXoa);
 
-	public int setFixedDaXoaForKeHoachId(Boolean daXoa, Long keHoachId);
+	public int setFixedDaXoaForKeHoachNamId(Boolean daXoa, Long keHoachId);
 
-	public List<NhiemVuNam> findByKeHoachIdAndNhiemVuChaIdIsNullAndDaXoa(Long keHoachId, Boolean daXoa);
+	public List<NhiemVuNam> findByKeHoachNamIdAndNhiemVuChaIdIsNullAndDaXoa(Long keHoachNamId, Boolean daXoa);
 
-	public List<NhiemVuNam> findByKeHoachIdAndNhiemVuChaIdAndDaXoa(Long keHoachId, Long nhiemVuChaId, Boolean daXoa);
+	public List<NhiemVuNam> findByKeHoachNamIdAndNhiemVuChaIdAndDaXoa(Long keHoachNamId, Long nhiemVuChaId, Boolean daXoa);
 
-	public List<NhiemVuNam> findByKeHoachIdAndLoaiNhiemVuIdAndNhiemVuChaIdIsNullAndDaXoa(Long keHoachId, Long loaiNhiemVuId,
+	public List<NhiemVuNam> findByKeHoachNamIdAndLoaiNhiemVuIdAndNhiemVuChaIdIsNullAndDaXoa(Long keHoachNamId, Long loaiNhiemVuId,
 			Boolean daXoa);
 
-	public List<NhiemVuNam> findByKeHoachIdAndLoaiNhiemVuIdAndNhiemVuChaIdAndDaXoa(Long keHoachId, Long loaiNhiemVuId,
+	public List<NhiemVuNam> findByKeHoachNamIdAndLoaiNhiemVuIdAndNhiemVuChaIdAndDaXoa(Long keHoachNamId, Long loaiNhiemVuId,
 			Long nhiemVuChaId, Boolean daXoa);
 	
-	public Page<NhiemVuNam> findAll(Long donViChuTriId, List<Integer> tinhTrangs, Integer nam, Long keHoachId, LocalDate tuNgay,
+	public Page<NhiemVuNam> findAll(Long donViChuTriId, List<Integer> tinhTrangs, Integer nam, Long keHoachNamId, LocalDate tuNgay,
 			LocalDate denNgay, String tenNhiemVu, Pageable pageable);
 
-	public List<NhiemVuNam> getThongKeSoLuong(Long donViChuTriId, Integer nam, Long keHoachId, List<Integer> tinhTrangs,
+	public List<NhiemVuNam> getThongKeSoLuong(Long donViChuTriId, Integer nam, Long keHoachNamId, List<Integer> tinhTrangs,
 			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu);
 }

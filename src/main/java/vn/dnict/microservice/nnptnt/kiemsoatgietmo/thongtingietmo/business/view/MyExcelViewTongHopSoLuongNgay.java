@@ -302,10 +302,16 @@ public class MyExcelViewTongHopSoLuongNgay extends AbstractXlsView {
 		sheet.addMergedRegion(new CellRangeAddress(currentRow - 1, currentRow, currentColumn, currentColumn));
 		currentColumn++;
 
-		cell2 = headerRow.createCell(currentColumn);
-		cell2.setCellStyle(styleHeaderB);
-		cell2.setCellValue(thongKeSoLuongDatas.get(0).getLoaiVatNuoiTen());
-		currentColumn++;
+		for(int i = 0; i < thongKeSoLuongDatas.size(); i++) {
+			ThongKeSoLuongData thongKeSoLuongData = new ThongKeSoLuongData();
+			if(thongKeSoLuongDatas.get(i).getCoSoTen() != null && thongKeSoLuongDatas.get(i).getCoSoTen().isEmpty()) {
+
+				cell2 = headerRow.createCell(currentColumn);
+				cell2.setCellStyle(styleHeaderB);
+				cell2.setCellValue(thongKeSoLuongDatas.get(0).getLoaiVatNuoiTen());
+				currentColumn++;
+			}
+		}
 
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);

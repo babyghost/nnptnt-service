@@ -154,7 +154,7 @@ public class NhiemVuNamBusiness {
 	private NhiemVuNamData convertToNhiemVuNamData(NhiemVuNam nhiemVuNam) {
 		NhiemVuNamData nhiemVuNamData = new NhiemVuNamData();
 		nhiemVuNamData.setId(nhiemVuNam.getId());
-		nhiemVuNamData.setKeHoachId(nhiemVuNam.getKeHoachId());
+		nhiemVuNamData.setKeHoachNamId(nhiemVuNam.getKeHoachNamId());
 		if (Objects.nonNull(nhiemVuNam.getLoaiNhiemVuId())) {
 			Optional<DmLoaiNhiemVu> optionalDmLoaiNhiemVu = serviceDmLoaiNhiemVuService
 					.findById(nhiemVuNam.getLoaiNhiemVuId());
@@ -211,7 +211,7 @@ public class NhiemVuNamBusiness {
 		NhiemVuNam nhiemVuNam = optional.get();
 		NhiemVuNamData nhiemVuNamData = new NhiemVuNamData();
 		nhiemVuNamData.setId(nhiemVuNam.getId());
-		nhiemVuNamData.setKeHoachId(nhiemVuNam.getKeHoachId());
+		nhiemVuNamData.setKeHoachNamId(nhiemVuNam.getKeHoachNamId());
 		if (Objects.nonNull(nhiemVuNam.getLoaiNhiemVuId())) {
 			Optional<DmLoaiNhiemVu> optionalDmLoaiNhiemVu = serviceDmLoaiNhiemVuService
 					.findById(nhiemVuNam.getLoaiNhiemVuId());

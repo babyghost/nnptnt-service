@@ -60,24 +60,18 @@ public class KeHoachNamController {
 		return ResponseEntity.ok(keHoachNam);
 	}
 
-	@GetMapping(value = "/initdata")
-	public ResponseEntity<KeHoachNamData> getKeHoachNamDaTa() {
-		KeHoachNamData keHoachNam = businessKeHoachNamBusiness.getKeHoachNamDaTa();
-		return ResponseEntity.ok(keHoachNam);
-	}
-
 	@PostMapping(value = { "" })
-	public ResponseEntity<KeHoachNamData> create(@Valid @RequestBody KeHoachNamData keHoachNamData)
+	public ResponseEntity<KeHoachNam> create(@Valid @RequestBody KeHoachNamData keHoachNamData)
 			throws EntityNotFoundException {
-		keHoachNamData = businessKeHoachNamBusiness.create(keHoachNamData);
-		return ResponseEntity.status(HttpStatus.CREATED).body(keHoachNamData);
+		KeHoachNam keHoachNam = businessKeHoachNamBusiness.create(keHoachNamData);
+		return ResponseEntity.status(HttpStatus.CREATED).body(keHoachNam);
 	}
 
 	@PutMapping(value = { "/{id}" })
-	public ResponseEntity<KeHoachNamData> update(@PathVariable("id") Long id,
+	public ResponseEntity<KeHoachNam> update(@PathVariable("id") Long id,
 			@Valid @RequestBody KeHoachNamData keHoachNamData) throws EntityNotFoundException {
-		keHoachNamData = businessKeHoachNamBusiness.update(id, keHoachNamData);
-		return ResponseEntity.ok(keHoachNamData);
+		KeHoachNam keHoachNam = businessKeHoachNamBusiness.update(id, keHoachNamData);
+		return ResponseEntity.ok(keHoachNam);
 	}
 
 	@DeleteMapping(value = { "/{id}" })

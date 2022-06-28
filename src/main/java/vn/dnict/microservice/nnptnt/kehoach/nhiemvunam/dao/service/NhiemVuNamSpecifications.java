@@ -19,7 +19,7 @@ import vn.dnict.microservice.utils.Constants;
 
 public class NhiemVuNamSpecifications {
 	public static Specification<NhiemVuNam> quichSearch(final Long donViChuTriId, final List<Integer> tinhTrangs, final Integer nam,
-			final Long keHoachId, final LocalDate tuNgay, final LocalDate denNgay, final String tenNhiemVu) {
+			final Long keHoachNamId, final LocalDate tuNgay, final LocalDate denNgay, final String tenNhiemVu) {
 		return new Specification<NhiemVuNam>() {
 
 			/**
@@ -58,8 +58,8 @@ public class NhiemVuNamSpecifications {
 				if (nam != null && nam > -1) {
 					predicates.add(cb.equal(root.get("keHoachNam").get("nam"), nam));
 				}
-				if (keHoachId != null && keHoachId > -1) {
-					predicates.add(cb.equal(root.<String>get("keHoachId"), keHoachId));
+				if (keHoachNamId != null && keHoachNamId > -1) {
+					predicates.add(cb.equal(root.<String>get("keHoachNamId"), keHoachNamId));
 				}
 				if (tuNgay != null) {
 					predicates.add(cb.greaterThanOrEqualTo(root.get("tuNgay").as(LocalDate.class), tuNgay));
@@ -81,7 +81,7 @@ public class NhiemVuNamSpecifications {
 		};
 	}
 	
-	public static Specification<NhiemVuNam> thongke(final Long donViChuTriId, final Integer nam, final Long keHoachId, 
+	public static Specification<NhiemVuNam> thongke(final Long donViChuTriId, final Integer nam, final Long keHoachNamId, 
 			final List<Integer> tinhTrangs, final LocalDate tuNgay, final LocalDate denNgay, final String tenNhiemVu) {
 		return new Specification<NhiemVuNam>() {
 
@@ -103,8 +103,8 @@ public class NhiemVuNamSpecifications {
 				if (nam != null && nam > -1) {
 					predicates.add(cb.equal(root.get("keHoachNam").get("nam"), nam));
 				}
-				if (keHoachId != null && keHoachId > -1) {
-					predicates.add(cb.equal(root.<String>get("keHoachId"), keHoachId));
+				if (keHoachNamId != null && keHoachNamId > -1) {
+					predicates.add(cb.equal(root.<String>get("keHoachNamId"), keHoachNamId));
 				}
 				if (tinhTrangs != null && !tinhTrangs.isEmpty()) {
 					Predicate nullTinhTrang = null;

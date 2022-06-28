@@ -87,11 +87,9 @@ public class KeHoachThangBusiness {
 		}
 		keHoachThangData.setThang(keHoachThang.getThang());
 
-		List<NhiemVuThang> nhiemVuThangs = serviceNhiemVuThangService
-				.findByKeHoachThangIdAndDaXoa(keHoachThang.getId(), false);
+		List<NhiemVuThang> nhiemVuThangs = serviceNhiemVuThangService.findByKeHoachThangIdAndDaXoa(keHoachThang.getId(), false);
 		List<NhiemVuThangData> nhiemVuThangDatas = new ArrayList<NhiemVuThangData>();
-		List<NhiemVuThangData> nhiemVuThangTruocDatas = new ArrayList<NhiemVuThangData>();
-		if (Objects.nonNull(nhiemVuThangDatas) && !nhiemVuThangDatas.isEmpty()) {
+		if (Objects.nonNull(nhiemVuThangs) && !nhiemVuThangs.isEmpty()) {
 			for (NhiemVuThang nhiemVuThang : nhiemVuThangs) {
 				NhiemVuThangData nhiemVuThangData = new NhiemVuThangData();
 				nhiemVuThangData.setId(nhiemVuThang.getId());
@@ -110,70 +108,10 @@ public class KeHoachThangBusiness {
 						nhiemVuThangData.setCanBoThucHienTen(optionalDmCanBo.get().getHoTen());
 					}
 				}
-				if (Objects.nonNull(nhiemVuThang.getIsNhiemVuThangTruoc()) && nhiemVuThang.getIsNhiemVuThangTruoc() == false) {
-					nhiemVuThangTruocDatas.add(nhiemVuThangData);
-				} else {
-					nhiemVuThangTruocDatas.add(nhiemVuThangData);
-				}
-
-				// tiến độ
-				TienDoNhiemVuThang tienDoNhiemVuThang = new TienDoNhiemVuThang();
-				if (Objects.nonNull(nhiemVuThang.getTienDoNhiemVuId())) {
-					Optional<TienDoNhiemVuThang> optionalTienDoNhiemVuThang = serviceTienDoNhiemVuThangService
-							.findById(nhiemVuThang.getTienDoNhiemVuId());
-					if (optionalTienDoNhiemVuThang.isPresent()) {
-						tienDoNhiemVuThang = optionalTienDoNhiemVuThang.get();
-					}
-				}
-				TienDoNhiemVuThangData tienDoNhiemVuThangData = new TienDoNhiemVuThangData();
-				tienDoNhiemVuThangData.setId(tienDoNhiemVuThang.getId());
-				tienDoNhiemVuThangData.setKetQua(tienDoNhiemVuThang.getKetQua());
-				tienDoNhiemVuThangData.setMucDoHoanThanh(tienDoNhiemVuThang.getMucDoHoanThanh());
-				tienDoNhiemVuThangData.setTenNguoiCapNhat(tienDoNhiemVuThang.getTenNguoiCapNhat());
-				tienDoNhiemVuThangData.setNgayCapNhat(LocalDate.now());
-				nhiemVuThangData.setTienDoNhiemVuThangData(tienDoNhiemVuThangData);
-
-				// log
-				List<NhiemVuThangLog> nhiemVuThangLogs = serviceNhiemVuThangLogService.findByNhiemVuThangId(nhiemVuThang.getId());
-				List<NhiemVuThangLogData> nhiemVuThangLogDatas = new ArrayList<NhiemVuThangLogData>();
-				if (Objects.nonNull(nhiemVuThangLogs) && !nhiemVuThangLogs.isEmpty()) {
-					for (NhiemVuThangLog nhiemVuThangLog : nhiemVuThangLogs) {
-						NhiemVuThangLogData nhiemVuThangLogData = new NhiemVuThangLogData();
-						nhiemVuThangLogData.setId(nhiemVuThangLog.getId());
-						nhiemVuThangLogData.setKetQua(nhiemVuThangLog.getKetQua());
-						nhiemVuThangLogData.setMucDoHoanThanh(nhiemVuThangLog.getMucDoHoanThanh());
-						nhiemVuThangLogData.setNhiemVuThangId(nhiemVuThangLog.getNhiemVuThangId());
-						nhiemVuThangLogData.setTenNguoiCapNhat(nhiemVuThangLog.getTenNguoiCapNhat());
-						nhiemVuThangLogData.setTenNhiemVu(nhiemVuThangLog.getTenNhiemVu());
-						nhiemVuThangLogData.setTinhTrang(nhiemVuThangLog.getTinhTrang());
-						nhiemVuThangLogData.setNgayCapNhat(nhiemVuThangLog.getNgayCapNhat().toLocalDate());
-						if (Objects.nonNull(nhiemVuThangLog.getCanBoThucHienId())) {
-							Optional<DmCanBo> optionalDmCanBo = serviceDmCanBoService
-									.findById(nhiemVuThangLog.getCanBoThucHienId());
-							if (optionalDmCanBo.isPresent()) {
-								nhiemVuThangLogData.setCanBoThucHienId(optionalDmCanBo.get().getId());
-								nhiemVuThangLogData.setCanBoThucHienTen(optionalDmCanBo.get().getHoTen());
-							}
-						}
-						nhiemVuThangLogDatas.add(nhiemVuThangLogData);
-					}
-				}
-				nhiemVuThangData.setNhiemVuThangLogDatas(nhiemVuThangLogDatas);
+				nhiemVuThangDatas.add(nhiemVuThangData);
 			}
 		}
-		List<NhiemVuTongHopThangData> nhiemVuTongHopThangDatas = new ArrayList<NhiemVuTongHopThangData>();
-		NhiemVuTongHopThangData nhiemVuTongHopThangData = new NhiemVuTongHopThangData();
-		nhiemVuTongHopThangData.setStt("I");
-		nhiemVuTongHopThangData.setTen("Nhiệm vụ trong tháng");
-		nhiemVuTongHopThangData.setNhiemVuThangDatas(nhiemVuThangDatas);
-		nhiemVuTongHopThangDatas.add(nhiemVuTongHopThangData);
-		NhiemVuTongHopThangData nhiemVuTongHopThangTruocData = new NhiemVuTongHopThangData();
-		nhiemVuTongHopThangTruocData.setStt("II");
-		nhiemVuTongHopThangTruocData.setTen("Nhiệm vụ tháng trước chuyển sang");
-		nhiemVuTongHopThangTruocData.setNhiemVuThangDatas(nhiemVuThangTruocDatas);
-		nhiemVuTongHopThangDatas.add(nhiemVuTongHopThangTruocData);
-
-		keHoachThangData.setNhiemVuTongHopThangDatas(nhiemVuTongHopThangDatas);
+		keHoachThangData.setNhiemVuThangDatas(nhiemVuThangDatas);
 		return keHoachThangData;
 	}
 
@@ -183,7 +121,43 @@ public class KeHoachThangBusiness {
 			throw new EntityNotFoundException(KeHoachThang.class, "id", String.valueOf(id));
 		}
 		KeHoachThang keHoachThang = optional.get();
-		return this.convertToKeHoachThangData(keHoachThang);
+		KeHoachThangData keHoachThangData = new KeHoachThangData();
+		keHoachThangData.setId(keHoachThang.getId());
+		if (Objects.nonNull(keHoachThang.getDonViChuTriId())) {
+			Optional<DmDonVi> optionalDmDonVi = serviceDmDonViService.findById(keHoachThang.getDonViChuTriId());
+			if (optionalDmDonVi.isPresent()) {
+				keHoachThangData.setDonViChuTriId(optionalDmDonVi.get().getId());
+				keHoachThangData.setDonViChuTriTen(optionalDmDonVi.get().getTenDonVi());
+			}
+		}
+		keHoachThangData.setThang(keHoachThang.getThang());
+
+		List<NhiemVuThang> nhiemVuThangs = serviceNhiemVuThangService.findByKeHoachThangIdAndDaXoa(keHoachThang.getId(), false);
+		List<NhiemVuThangData> nhiemVuThangDatas = new ArrayList<NhiemVuThangData>();
+		if (Objects.nonNull(nhiemVuThangs) && !nhiemVuThangs.isEmpty()) {
+			for (NhiemVuThang nhiemVuThang : nhiemVuThangs) {
+				NhiemVuThangData nhiemVuThangData = new NhiemVuThangData();
+				nhiemVuThangData.setId(nhiemVuThang.getId());
+				nhiemVuThangData.setTenNhiemVu(nhiemVuThang.getTenNhiemVu());
+				nhiemVuThangData.setDonViPhoiHop(nhiemVuThang.getDonViPhoiHop());
+				nhiemVuThangData.setIsNhiemVuThangTruoc(nhiemVuThang.getIsNhiemVuThangTruoc());
+				nhiemVuThangData.setKeHoachThangId(nhiemVuThang.getKeHoachThangId());
+				nhiemVuThangData.setNhiemVuThangTruocId(nhiemVuThang.getNhiemVuThangTruocId());
+				nhiemVuThangData.setThoiGian(nhiemVuThang.getThoiGian());
+				nhiemVuThangData.setGhiChu(nhiemVuThang.getGhiChu());
+				nhiemVuThangData.setTinhTrang(nhiemVuThang.getTinhTrang());
+				if (Objects.nonNull(nhiemVuThang.getCanBoThucHienId())) {
+					Optional<DmCanBo> optionalDmCanBo = serviceDmCanBoService.findById(nhiemVuThang.getCanBoThucHienId());
+					if (optionalDmCanBo.isPresent()) {
+						nhiemVuThangData.setCanBoThucHienId(optionalDmCanBo.get().getId());
+						nhiemVuThangData.setCanBoThucHienTen(optionalDmCanBo.get().getHoTen());
+					}
+				}
+				nhiemVuThangDatas.add(nhiemVuThangData);
+			}
+		}
+		keHoachThangData.setNhiemVuThangDatas(nhiemVuThangDatas);
+		return keHoachThangData;
 	}
 
 	public KeHoachThangData findByDonViChuTriIdAndThang(Long donViChuTriId, LocalDate thang) {
@@ -216,40 +190,35 @@ public class KeHoachThangBusiness {
 		keHoachThang.setThang(keHoachThangData.getThang());
 		keHoachThang = serviceKeHoachThangService.save(keHoachThang);
 		serviceNhiemVuThangService.setFixedDaXoaForKeHoachThangId(true, keHoachThang.getId());
-		List<NhiemVuTongHopThangData> nhiemVuTongHopThangDatas = keHoachThangData.getNhiemVuTongHopThangDatas();
-		if (Objects.nonNull(nhiemVuTongHopThangDatas) && !nhiemVuTongHopThangDatas.isEmpty()) {
-			for (NhiemVuTongHopThangData nhiemVuTongHopThangData : nhiemVuTongHopThangDatas) {
-				List<NhiemVuThangData> nhiemVuThangDatas = nhiemVuTongHopThangData.getNhiemVuThangDatas();
-				if (Objects.nonNull(nhiemVuThangDatas) && !nhiemVuThangDatas.isEmpty()) {
-					for (NhiemVuThangData nhiemVuThangData : nhiemVuThangDatas) {
-						NhiemVuThang nhiemVuThang = new NhiemVuThang();
-						if (Objects.nonNull(nhiemVuThangData.getId())) {
-							Optional<NhiemVuThang> optionalNhiemVuThang = serviceNhiemVuThangService.findById(nhiemVuThangData.getId());
-							if (optionalNhiemVuThang.isPresent()) {
-								nhiemVuThang = optionalNhiemVuThang.get();
-							}
-						}
-						nhiemVuThang.setDaXoa(false);
-						nhiemVuThang.setTenNhiemVu(nhiemVuThangData.getTenNhiemVu());
-						nhiemVuThang.setDonViPhoiHop(nhiemVuThangData.getDonViPhoiHop());
-						nhiemVuThang.setIsNhiemVuThangTruoc(nhiemVuThangData.getIsNhiemVuThangTruoc());
-						nhiemVuThang.setKeHoachThangId(nhiemVuThangData.getId());
-						nhiemVuThang.setNhiemVuThangTruocId(nhiemVuThangData.getNhiemVuThangTruocId());
-						nhiemVuThang.setThoiGian(nhiemVuThangData.getThoiGian());
-						nhiemVuThang.setGhiChu(nhiemVuThangData.getGhiChu());
-						nhiemVuThang.setTinhTrang(nhiemVuThangData.getTinhTrang());
-						if (Objects.isNull(nhiemVuThang.getTinhTrang())) {
-							nhiemVuThang.setTinhTrang(Constants.QLKH_TINHTRANG_CHUATHUCHIEN);
-						}
-						nhiemVuThang.setCanBoThucHienId(null);
-						if (Objects.nonNull(nhiemVuThangData.getCanBoThucHienId())) {
-							Optional<DmCanBo> optionalDmCanBo = serviceDmCanBoService.findById(nhiemVuThangData.getCanBoThucHienId());
-							if (optionalDmCanBo.isPresent()) {
-								nhiemVuThang.setCanBoThucHienId(optionalDmCanBo.get().getId());
-							}
-						}
-						nhiemVuThang = serviceNhiemVuThangService.save(nhiemVuThang);
+		List<NhiemVuThangData> nhiemVuThangDatas = keHoachThangData.getNhiemVuThangDatas();
+		if (Objects.nonNull(nhiemVuThangDatas) && !nhiemVuThangDatas.isEmpty()) {
+			for (NhiemVuThangData nhiemVuThangData : nhiemVuThangDatas) {
+				NhiemVuThang nhiemVuThang = new NhiemVuThang();
+				if (Objects.nonNull(nhiemVuThang.getId())) {
+					Optional<NhiemVuThang> optNhiemVu = serviceNhiemVuThangService.findById(nhiemVuThang.getId());
+					if(optNhiemVu.isPresent()) {
+						nhiemVuThang = optNhiemVu.get();
+				}
+				nhiemVuThang.setDaXoa(false);
+				nhiemVuThang.setTenNhiemVu(nhiemVuThangData.getTenNhiemVu());
+				nhiemVuThang.setDonViPhoiHop(nhiemVuThangData.getDonViPhoiHop());
+				nhiemVuThang.setIsNhiemVuThangTruoc(nhiemVuThangData.getIsNhiemVuThangTruoc());
+				nhiemVuThang.setKeHoachThangId(nhiemVuThangData.getId());
+				nhiemVuThang.setNhiemVuThangTruocId(nhiemVuThangData.getNhiemVuThangTruocId());
+				nhiemVuThang.setThoiGian(nhiemVuThangData.getThoiGian());
+				nhiemVuThang.setGhiChu(nhiemVuThangData.getGhiChu());
+				nhiemVuThang.setTinhTrang(nhiemVuThangData.getTinhTrang());
+				if (Objects.isNull(nhiemVuThang.getTinhTrang())) {
+					nhiemVuThang.setTinhTrang(Constants.QLKH_TINHTRANG_CHUATHUCHIEN);
+				}
+				nhiemVuThang.setCanBoThucHienId(null);
+				if (Objects.nonNull(nhiemVuThangData.getCanBoThucHienId())) {
+					Optional<DmCanBo> optionalDmCanBo = serviceDmCanBoService.findById(nhiemVuThangData.getCanBoThucHienId());
+					if (optionalDmCanBo.isPresent()) {
+						nhiemVuThang.setCanBoThucHienId(optionalDmCanBo.get().getId());
 					}
+				}
+				nhiemVuThang = serviceNhiemVuThangService.save(nhiemVuThang);
 				}
 			}
 		}

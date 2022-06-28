@@ -16,7 +16,7 @@ import lombok.Data;
 public class NhiemVuNamData {
 	private Long id;
 
-	private Long keHoachId;
+	private Long keHoachNamId;
 
 	@NotBlank(message = "Vui lòng nhập tên nhiệm vụ")
 	@Size(max = 500, message = "Nhập tên nhiệm vụ quá {max} ký tự")
@@ -33,8 +33,6 @@ public class NhiemVuNamData {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private LocalDate denNgay;
 
-	private String thoiGianThucHien;
-
 	private Long loaiNhiemVuId;
 
 	private String loaiNhiemVuTen;
@@ -44,8 +42,12 @@ public class NhiemVuNamData {
 
 	private List<TienDoNhiemVuNamData> tienDoNhiemVuNamDatas = new ArrayList<TienDoNhiemVuNamData>();
 
-//	private TienDoNhiemVuNamData tienDoNhiemVuNamData = new TienDoNhiemVuNamData();
-
 	@Valid
 	private List<NhiemVuNamData> children = new ArrayList<NhiemVuNamData>();
+	
+	private Integer sapXep;
+	
+	private Integer danhSo;
+	
+	private String thoiGianThucHien;
 }

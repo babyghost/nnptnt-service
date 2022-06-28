@@ -40,56 +40,56 @@ public class NhiemVuNamServiceImpl implements NhiemVuNamService{
 	}
 
 	@Override
-	public List<NhiemVuNam> findByKeHoachIdAndDaXoa(Long keHoachId, Boolean daXoa) {
+	public List<NhiemVuNam> findByKeHoachNamIdAndDaXoa(Long keHoachNamId, Boolean daXoa) {
 		// TODO Auto-generated method stub
-		return repo.findByKeHoachIdAndDaXoa(keHoachId, daXoa);
+		return repo.findByKeHoachNamIdAndDaXoa(keHoachNamId, daXoa);
 	}
 
 	@Override
-	public int setFixedDaXoaForKeHoachId(Boolean daXoa, Long keHoachId) {
+	public int setFixedDaXoaForKeHoachNamId(Boolean daXoa, Long keHoachNamId) {
 		// TODO Auto-generated method stub
-		return repo.setFixedDaXoaForKeHoachId(daXoa, keHoachId);
+		return repo.setFixedDaXoaForKeHoachNamId(daXoa, keHoachNamId);
 	}
 
 	@Override
-	public List<NhiemVuNam> findByKeHoachIdAndNhiemVuChaIdIsNullAndDaXoa(Long keHoachId, Boolean daXoa) {
+	public List<NhiemVuNam> findByKeHoachNamIdAndNhiemVuChaIdIsNullAndDaXoa(Long keHoachNamId, Boolean daXoa) {
 		// TODO Auto-generated method stub
-		return repo.findByKeHoachIdAndNhiemVuChaIdIsNullAndDaXoa(keHoachId, daXoa);
+		return repo.findByKeHoachNamIdAndNhiemVuChaIdIsNullAndDaXoa(keHoachNamId, daXoa);
 	}
 
 	@Override
-	public List<NhiemVuNam> findByKeHoachIdAndNhiemVuChaIdAndDaXoa(Long keHoachId, Long nhiemVuChaId, Boolean daXoa) {
+	public List<NhiemVuNam> findByKeHoachNamIdAndNhiemVuChaIdAndDaXoa(Long keHoachNamId, Long nhiemVuChaId, Boolean daXoa) {
 		// TODO Auto-generated method stub
-		return repo.findByKeHoachIdAndNhiemVuChaIdAndDaXoa(keHoachId, nhiemVuChaId, daXoa);
+		return repo.findByKeHoachNamIdAndNhiemVuChaIdAndDaXoa(keHoachNamId, nhiemVuChaId, daXoa);
 	}
 
 	@Override
-	public List<NhiemVuNam> findByKeHoachIdAndLoaiNhiemVuIdAndNhiemVuChaIdIsNullAndDaXoa(Long keHoachId, Long loaiNhiemVuId,
+	public List<NhiemVuNam> findByKeHoachNamIdAndLoaiNhiemVuIdAndNhiemVuChaIdIsNullAndDaXoa(Long keHoachNamId, Long loaiNhiemVuId,
 			Boolean daXoa) {
 		// TODO Auto-generated method stub
-		return repo.findByKeHoachIdAndLoaiNhiemVuIdAndNhiemVuChaIdAndDaXoa(keHoachId, loaiNhiemVuId, loaiNhiemVuId, daXoa);
+		return repo.findByKeHoachNamIdAndLoaiNhiemVuIdAndNhiemVuChaIdAndDaXoa(keHoachNamId, loaiNhiemVuId, loaiNhiemVuId, daXoa);
 	}
 
 	@Override
-	public List<NhiemVuNam> findByKeHoachIdAndLoaiNhiemVuIdAndNhiemVuChaIdAndDaXoa(Long keHoachId, Long loaiNhiemVuId,
+	public List<NhiemVuNam> findByKeHoachNamIdAndLoaiNhiemVuIdAndNhiemVuChaIdAndDaXoa(Long keHoachNamId, Long loaiNhiemVuId,
 			Long nhiemVuChaId, Boolean daXoa) {
 		// TODO Auto-generated method stub
-		return repo.findByKeHoachIdAndLoaiNhiemVuIdAndNhiemVuChaIdAndDaXoa(keHoachId, loaiNhiemVuId, nhiemVuChaId, daXoa);
+		return repo.findByKeHoachNamIdAndLoaiNhiemVuIdAndNhiemVuChaIdAndDaXoa(keHoachNamId, loaiNhiemVuId, nhiemVuChaId, daXoa);
 	}
 
 	@Override
-	public Page<NhiemVuNam> findAll(Long donViChuTriId, List<Integer> tinhTrangs, Integer nam, Long keHoachId,
+	public Page<NhiemVuNam> findAll(Long donViChuTriId, List<Integer> tinhTrangs, Integer nam, Long keHoachNamId,
 			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findAll(NhiemVuNamSpecifications.quichSearch(donViChuTriId, tinhTrangs, nam, keHoachId, tuNgay, denNgay,
+		return repo.findAll(NhiemVuNamSpecifications.quichSearch(donViChuTriId, tinhTrangs, nam, keHoachNamId, tuNgay, denNgay,
 				tenNhiemVu), pageable);
 	}
 
 	@Override
-	public List<NhiemVuNam> getThongKeSoLuong(Long donViChuTriId, Integer nam, Long keHoachId, List<Integer> tinhTrangs,
+	public List<NhiemVuNam> getThongKeSoLuong(Long donViChuTriId, Integer nam, Long keHoachNamId, List<Integer> tinhTrangs,
 			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu) {
 		// TODO Auto-generated method stub
-		return repo.findAll(NhiemVuNamSpecifications.thongke(donViChuTriId, nam, keHoachId, tinhTrangs, tuNgay, denNgay, tenNhiemVu));
+		return repo.findAll(NhiemVuNamSpecifications.thongke(donViChuTriId, nam, keHoachNamId, tinhTrangs, tuNgay, denNgay, tenNhiemVu));
 	}
 
 }
