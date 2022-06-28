@@ -11,11 +11,13 @@ public interface FileDinhKemNhiemVuThangService {
 	public void deleteById(Long id);
 
 	public Optional<FileDinhKemNhiemVuThang> findById(Long id);
+	
+	public Optional<FileDinhKemNhiemVuThang> findByTienDoNhiemVuThangId(Long tienDoNhiemVuThangId);
 
-	public List<FileDinhKemNhiemVuThang> findByTienDoNvThangIdAndDaXoa(Long tienDoNvThangId, Boolean daXoa);
+	public List<FileDinhKemNhiemVuThang> findByTienDoNhiemVuThangIdAndDaXoa(Long tienDoNhiemVuThangId, Boolean daXoa);
 
-	public int setFixedDaXoaForTienDoNvThangId(Boolean daXoa, Long tienDoNvThangId);
+	public int setFixedDaXoaForTienDoNhiemVuThangId(Boolean daXoa, Long tienDoNhiemVuThangId);
 
-	public List<FileDinhKemNhiemVuThang> findByTienDoNvThangIdAndFileDinhKemId(Long tienDoNvThangId,
+	public List<FileDinhKemNhiemVuThang> findByTienDoNhiemVuThangIdAndFileDinhKemId(Long tienDoNhiemVuThangId,
 			Long fileDinhKemId);
 }

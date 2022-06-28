@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import vn.dnict.microservice.core.business.CoreAttachmentBusiness;
 import vn.dnict.microservice.core.dao.model.CoreAttachment;
+import vn.dnict.microservice.core.data.FileDinhKem;
 import vn.dnict.microservice.danhmuc.dao.model.DmCanBo;
 import vn.dnict.microservice.danhmuc.dao.model.DmDonVi;
 import vn.dnict.microservice.danhmuc.dao.service.DmCanBoService;
@@ -85,14 +86,14 @@ public class NhiemVuThangBusiness {
 	};
 
 	public Page<NhiemVuThangData> findAll(int page, int size, String sortBy, String sortDir, Long donViChuTriId,
-			List<LocalDate> thangs, Integer tinhTrang, String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay) {
+			List<LocalDate> thangs, List<Integer> tinhTrangs, String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-		final Page<NhiemVuThang> pageNhiemVuThang = serviceNhiemVuThangService.findAll(donViChuTriId, thangs, tinhTrang,
+		final Page<NhiemVuThang> pageNhiemVuThang = serviceNhiemVuThangService.findAll(donViChuTriId, thangs, tinhTrangs,
 				tenNhiemVu, tuNgay, denNgay, PageRequest.of(page, size, direction, sortBy));
 		final Page<NhiemVuThangData> pageNhiemVuThangData = pageNhiemVuThang.map(this::convertToNhiemVuThangData);
 		return pageNhiemVuThangData;
@@ -208,7 +209,79 @@ public class NhiemVuThangBusiness {
 			throw new EntityNotFoundException(NhiemVuThang.class, "id", String.valueOf(id));
 		}
 		NhiemVuThang nhiemVuThang = optional.get();
-		return this.convertToNhiemVuThangData(nhiemVuThang);
+		NhiemVuThangData nhiemVuThangData = new NhiemVuThangData();
+		nhiemVuThangData.setId(nhiemVuThang.getId());
+		nhiemVuThangData.setTenNhiemVu(nhiemVuThang.getTenNhiemVu());
+		nhiemVuThangData.setDonViPhoiHop(nhiemVuThang.getDonViPhoiHop());
+		nhiemVuThangData.setIsNhiemVuThangTruoc(nhiemVuThang.getIsNhiemVuThangTruoc());
+		nhiemVuThangData.setKeHoachThangId(nhiemVuThang.getKeHoachThangId());
+		nhiemVuThangData.setNhiemVuThangTruocId(nhiemVuThang.getNhiemVuThangTruocId());
+		nhiemVuThangData.setThoiGian(nhiemVuThang.getThoiGian());
+		nhiemVuThangData.setGhiChu(nhiemVuThang.getGhiChu());
+		nhiemVuThangData.setTinhTrang(nhiemVuThang.getTinhTrang());
+		if (Objects.nonNull(nhiemVuThang.getCanBoThucHienId())) {
+			Optional<DmCanBo> optionalDmCanBo = serviceDmCanBoService.findById(nhiemVuThang.getCanBoThucHienId());
+			if (optionalDmCanBo.isPresent()) {
+				nhiemVuThangData.setCanBoThucHienId(optionalDmCanBo.get().getId());
+				nhiemVuThangData.setCanBoThucHienTen(optionalDmCanBo.get().getHoTen());
+			}
+		}
+
+		TienDoNhiemVuThang tienDoNhiemVuThang = new TienDoNhiemVuThang();
+		if (Objects.nonNull(nhiemVuThang.getTienDoNhiemVuId())) {
+			Optional<TienDoNhiemVuThang> optionalTienDoNhiemVuThang = serviceTienDoNhiemVuThangService
+					.findById(nhiemVuThang.getTienDoNhiemVuId());
+			if (optionalTienDoNhiemVuThang.isPresent()) {
+				tienDoNhiemVuThang = optionalTienDoNhiemVuThang.get();
+			}
+		}
+		TienDoNhiemVuThangData tienDoNhiemVuThangData = new TienDoNhiemVuThangData();
+		tienDoNhiemVuThangData.setId(tienDoNhiemVuThang.getId());
+		tienDoNhiemVuThangData.setKetQua(tienDoNhiemVuThang.getKetQua());
+		tienDoNhiemVuThangData.setMucDoHoanThanh(tienDoNhiemVuThang.getMucDoHoanThanh());
+		tienDoNhiemVuThangData.setTenNguoiCapNhat(tienDoNhiemVuThang.getTenNguoiCapNhat());
+		tienDoNhiemVuThangData.setNgayCapNhat(LocalDate.now());
+		nhiemVuThangData.setTienDoNhiemVuThangData(tienDoNhiemVuThangData);
+		// log
+		List<NhiemVuThangLog> nhiemVuThangLogs = serviceNhiemVuThangLogService
+				.findByNhiemVuThangId(nhiemVuThang.getId());
+		List<NhiemVuThangLogData> nhiemVuThangLogDatas = new ArrayList<NhiemVuThangLogData>();
+		if (Objects.nonNull(nhiemVuThangLogs) && !nhiemVuThangLogs.isEmpty()) {
+			for (NhiemVuThangLog nhiemVuThangLog : nhiemVuThangLogs) {
+				NhiemVuThangLogData nhiemVuThangLogData = new NhiemVuThangLogData();
+				nhiemVuThangLogData.setId(nhiemVuThangLog.getId());
+				nhiemVuThangLogData.setKetQua(nhiemVuThangLog.getKetQua());
+				nhiemVuThangLogData.setMucDoHoanThanh(nhiemVuThangLog.getMucDoHoanThanh());
+				nhiemVuThangLogData.setNhiemVuThangId(nhiemVuThangLog.getNhiemVuThangId());
+				nhiemVuThangLogData.setTenNguoiCapNhat(nhiemVuThangLog.getTenNguoiCapNhat());
+				nhiemVuThangLogData.setTenNhiemVu(nhiemVuThangLog.getTenNhiemVu());
+				nhiemVuThangLogData.setTinhTrang(nhiemVuThangLog.getTinhTrang());
+				nhiemVuThangLogData.setNgayCapNhat(nhiemVuThangLog.getNgayCapNhat().toLocalDate());
+				if (Objects.nonNull(nhiemVuThangLog.getCanBoThucHienId())) {
+					Optional<DmCanBo> optionalDmCanBo = serviceDmCanBoService.findById(nhiemVuThangLog.getCanBoThucHienId());
+					if (optionalDmCanBo.isPresent()) {
+						nhiemVuThangLogData.setCanBoThucHienId(optionalDmCanBo.get().getId());
+						nhiemVuThangLogData.setCanBoThucHienTen(optionalDmCanBo.get().getHoTen());
+					}
+				}
+				nhiemVuThangLogDatas.add(nhiemVuThangLogData);
+			}
+		}
+		
+		if(Objects.nonNull(tienDoNhiemVuThang)) {
+			int type = Constants.DINH_KEM_1_FILE;
+			Optional<FileDinhKemNhiemVuThang> fileDinhKemThang = serviceFileDinhKemNhiemVuThangService
+					.findByTienDoNhiemVuThangId(tienDoNhiemVuThang.getId());
+			Long fileDinhKemId = null;
+			Long objectId = tienDoNhiemVuThang.getId();
+			String appCode = TienDoNhiemVuThang.class.getSimpleName();
+			FileDinhKem fileDinhKem = coreAttachmentBusiness
+					.getAttachments(fileDinhKemThang.get().getFileDinhKemId(), appCode, objectId, type);
+			tienDoNhiemVuThangData.setFileDinhKem(fileDinhKem);
+			tienDoNhiemVuThangData.setFileDinhKemIds(fileDinhKem.getIds());
+		}
+		nhiemVuThangData.setNhiemVuThangLogDatas(nhiemVuThangLogDatas);
+		return nhiemVuThangData;
 	}
 
 	public NhiemVuThangData saveTienDo(Long nhiemVuId, NhiemVuThangData nhiemVuThangData)
@@ -251,7 +324,7 @@ public class NhiemVuThangBusiness {
 		serviceNhiemVuThangLogService.save(nhiemVuThangLog);
 
 		// đính kèm
-		serviceFileDinhKemNhiemVuThangService.setFixedDaXoaForTienDoNvThangId(true, tienDoNhiemVuThang.getId());
+		serviceFileDinhKemNhiemVuThangService.setFixedDaXoaForTienDoNhiemVuThangId(true, tienDoNhiemVuThang.getId());
 		/* Begin đính kèm file *******************************************************/
 
 		/*
@@ -278,12 +351,12 @@ public class NhiemVuThangBusiness {
 				if (coreAttachment.getId() > 0) {
 					FileDinhKemNhiemVuThang fileDinhKemNhiemVuThang = new FileDinhKemNhiemVuThang();
 					List<FileDinhKemNhiemVuThang> fileDinhKemNhiemVuThangs = serviceFileDinhKemNhiemVuThangService
-							.findByTienDoNvThangIdAndFileDinhKemId(tienDoNhiemVuThang.getId(), fileDinhKemId);
+							.findByTienDoNhiemVuThangIdAndFileDinhKemId(tienDoNhiemVuThang.getId(), fileDinhKemId);
 					if (Objects.nonNull(fileDinhKemNhiemVuThangs) && !fileDinhKemNhiemVuThangs.isEmpty()) {
 						fileDinhKemNhiemVuThang = fileDinhKemNhiemVuThangs.get(0);
 					}
 					fileDinhKemNhiemVuThang.setDaXoa(false);
-					fileDinhKemNhiemVuThang.setTienDoNvThangId(tienDoNhiemVuThang.getId());
+					fileDinhKemNhiemVuThang.setTienDoNhiemVuThangId(tienDoNhiemVuThang.getId());
 					fileDinhKemNhiemVuThang.setFileDinhKemId(coreAttachment.getId());
 					fileDinhKemNhiemVuThang = serviceFileDinhKemNhiemVuThangService.save(fileDinhKemNhiemVuThang);
 

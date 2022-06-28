@@ -14,13 +14,15 @@ import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang2filedinhkem.dao.model.F
 @Repository
 public interface FileDinhKemNhiemVuThangRepo extends JpaRepository<FileDinhKemNhiemVuThang, Long>,
 		JpaSpecificationExecutor<FileDinhKemNhiemVuThang> {
-	@Query("SELECT u FROM FileDinhKemNhiemVuThang u WHERE u.tienDoNvThangId = ?1 AND u.daXoa = ?2")
-	public List<FileDinhKemNhiemVuThang> findByTienDoNvThangIdAndDaXoa(Long tienDoNvThangId, Boolean daXoa);
+	@Query("SELECT u FROM FileDinhKemNhiemVuThang u WHERE u.tienDoNhiemVuThangId = ?1 AND u.daXoa = ?2")
+	public List<FileDinhKemNhiemVuThang> findByTienDoNhiemVuThangIdAndDaXoa(Long tienDoNhiemVuThangId, Boolean daXoa);
 
 	@Modifying(clearAutomatically = true)
-	@Query("update FileDinhKemNhiemVuThang u set u.daXoa = ?1 where u.tienDoNvThangId = ?2")
-	public int setFixedDaXoaForTienDoNvThangId(Boolean daXoa, Long tienDoNvThangId);
+	@Query("update FileDinhKemNhiemVuThang u set u.daXoa = ?1 where u.tienDoNhiemVuThangId = ?2")
+	public int setFixedDaXoaForTienDoNhiemVuThangId(Boolean daXoa, Long tienDoNhiemVuThangId);
 
-	@Query("SELECT u FROM FileDinhKemNhiemVuThang u WHERE u.tienDoNvThangId = ?1 AND u.fileDinhKemId = ?2")
-	public List<FileDinhKemNhiemVuThang> findByTienDoNvThangIdAndFileDinhKemId(Long tienDoNvThangId, Long fileDinhKemId);
+	@Query("SELECT u FROM FileDinhKemNhiemVuThang u WHERE u.tienDoNhiemVuThangId = ?1 AND u.fileDinhKemId = ?2")
+	public List<FileDinhKemNhiemVuThang> findByTienDoNhiemVuThangIdAndFileDinhKemId(Long tienDoNhiemVuThangId, Long fileDinhKemId);
+	
+	public Optional<FileDinhKemNhiemVuThang> findByTienDoNhiemVuThangId(Long tienDoNhiemVuThangId);
 }

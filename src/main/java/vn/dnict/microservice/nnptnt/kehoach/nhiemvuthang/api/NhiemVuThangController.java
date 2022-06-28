@@ -44,12 +44,12 @@ public class NhiemVuThangController {
 			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
 			@RequestParam(name = "donViChuTriId", required = false) Long donViChuTriId,
 			@RequestParam(name = "thang", required = false) List<LocalDate> thangs,
-			@RequestParam(name = "tinhTrang", required = false) Integer tinhTrang,
+			@RequestParam(name = "tinhTrang", required = false) List<Integer> tinhTrangs,
 			@RequestParam(name = "tenNhiemVu", required = false) String tenNhiemVu,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "thoiHanTuNgay", required = false) LocalDate thoiHanTuNgay,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "thoiHanDenNgay", required = false) LocalDate thoiHanDenNgay) {
 		Page<NhiemVuThangData> pageNhiemVuThangData = businessNhiemVuThangBusiness.findAll(page, size, sortBy, sortDir,
-				donViChuTriId, thangs, tinhTrang, tenNhiemVu, thoiHanTuNgay, thoiHanDenNgay);
+				donViChuTriId, thangs, tinhTrangs, tenNhiemVu, thoiHanTuNgay, thoiHanDenNgay);
 		return ResponseEntity.ok(pageNhiemVuThangData);
 	}
 	

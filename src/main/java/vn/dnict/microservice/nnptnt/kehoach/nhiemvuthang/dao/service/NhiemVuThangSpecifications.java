@@ -15,8 +15,8 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang.dao.model.NhiemVuThang;
 
 public class NhiemVuThangSpecifications {
-	public static Specification<NhiemVuThang> quichSearch(final Long donViChuTriId, final List<LocalDate> thangs, final Integer tinhTrang,
-			final String tenNhiemVu, final LocalDate tuNgay, final LocalDate denNgay) {
+	public static Specification<NhiemVuThang> quichSearch(final Long donViChuTriId, final List<LocalDate> thangs,
+			final List<Integer> tinhTrangs, final String tenNhiemVu, final LocalDate tuNgay, final LocalDate denNgay) {
 		return new Specification<NhiemVuThang>() {
 
 			/**
@@ -48,8 +48,11 @@ public class NhiemVuThangSpecifications {
 					Predicate inMonth = month.in(valueMonths);
 					predicates.add(cb.and(inYear, inMonth));
 				}
-				if(tinhTrang != null) {
-					predicates.add(cb.equal(root.<Integer>get("tinhTrang"), tinhTrang));
+				if (tinhTrangs != null && !tinhTrangs.isEmpty()) {
+					Expression<List<Integer>> valuetinhTrangs = cb.literal(tinhTrangs);
+					Expression<String> expression = root.get("tinhTrang");
+					Predicate inList = expression.in(valuetinhTrangs);
+					predicates.add(inList);
 				}
 				if (tenNhiemVu != null && !tenNhiemVu.isEmpty()) {
 					predicates.add(cb.like(cb.lower(root.<String>get("tenNhiemVu")), "%" + tenNhiemVu.toLowerCase().trim() + "%"));
