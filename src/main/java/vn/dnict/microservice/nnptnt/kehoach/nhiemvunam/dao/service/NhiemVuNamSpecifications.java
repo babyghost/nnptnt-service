@@ -18,7 +18,7 @@ import vn.dnict.microservice.nnptnt.kehoach.tiendonhiemvunam.dao.model.TienDoNhi
 import vn.dnict.microservice.utils.Constants;
 
 public class NhiemVuNamSpecifications {
-	public static Specification<NhiemVuNam> quichSearch(final Long donViChuTriId, final Integer tinhTrang, final Integer nam,
+	public static Specification<NhiemVuNam> quichSearch(final Long donViChuTriId, final List<Integer> tinhTrangs, final Integer nam,
 			final Long keHoachId, final LocalDate tuNgay, final LocalDate denNgay, final String tenNhiemVu) {
 		return new Specification<NhiemVuNam>() {
 
@@ -37,8 +37,23 @@ public class NhiemVuNamSpecifications {
 				if (donViChuTriId != null && donViChuTriId > -1) {
 					predicates.add(cb.equal(root.get("keHoachNam").get("donViChuTriId"), donViChuTriId));
 				}
-				if (tinhTrang != null && tinhTrang > -1) {
-					predicates.add(cb.equal(root.get("tienDoNhiemVuNam").get("tinhTrang"), tinhTrang));
+				if (tinhTrangs != null && !tinhTrangs.isEmpty()) {
+					Predicate nullTinhTrang = null;
+					if (tinhTrangs.contains(Constants.QLKH_TINHTRANG_CHUATHUCHIEN)) {
+						Expression<List<TienDoNhiemVuNam>> tienDos = root.get("tienDoNhiemVuNams");
+						Expression<Integer> size = cb.size(tienDos);
+						nullTinhTrang = cb.equal(size, 0);
+						Expression<List<Integer>> valuetinhTrangs = cb.literal(tinhTrangs);
+						Expression<String> expression = root.join("tienDoNhiemVuNams", JoinType.LEFT)
+								.get("tinhTrang");
+						Predicate inList = expression.in(valuetinhTrangs);
+						predicates.add(cb.or(inList, nullTinhTrang));
+					} else {
+						Expression<List<Integer>> valuetinhTrangs = cb.literal(tinhTrangs);
+						Expression<String> expression = root.join("tienDoNhiemVuNams").get("tinhTrang");
+						Predicate inList = expression.in(valuetinhTrangs);
+						predicates.add(inList);
+					}
 				}
 				if (nam != null && nam > -1) {
 					predicates.add(cb.equal(root.get("keHoachNam").get("nam"), nam));

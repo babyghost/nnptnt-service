@@ -30,7 +30,7 @@ public interface NhiemVuNamService {
 	public List<NhiemVuNam> findByKeHoachIdAndLoaiNhiemVuIdAndNhiemVuChaIdAndDaXoa(Long keHoachId, Long loaiNhiemVuId,
 			Long nhiemVuChaId, Boolean daXoa);
 	
-	public Page<NhiemVuNam> findAll(Long donViChuTriId, Integer tinhTrang, Integer nam, Long keHoachId, LocalDate tuNgay,
+	public Page<NhiemVuNam> findAll(Long donViChuTriId, List<Integer> tinhTrangs, Integer nam, Long keHoachId, LocalDate tuNgay,
 			LocalDate denNgay, String tenNhiemVu, Pageable pageable);
 
 	public List<NhiemVuNam> getThongKeSoLuong(Long donViChuTriId, Integer nam, Long keHoachId, List<Integer> tinhTrangs,

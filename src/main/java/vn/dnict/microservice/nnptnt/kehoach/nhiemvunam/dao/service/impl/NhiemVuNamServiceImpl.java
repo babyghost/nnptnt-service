@@ -78,10 +78,10 @@ public class NhiemVuNamServiceImpl implements NhiemVuNamService{
 	}
 
 	@Override
-	public Page<NhiemVuNam> findAll(Long donViChuTriId, Integer tinhTrang, Integer nam, Long keHoachId,
+	public Page<NhiemVuNam> findAll(Long donViChuTriId, List<Integer> tinhTrangs, Integer nam, Long keHoachId,
 			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findAll(NhiemVuNamSpecifications.quichSearch(donViChuTriId, tinhTrang, nam, keHoachId, tuNgay, denNgay,
+		return repo.findAll(NhiemVuNamSpecifications.quichSearch(donViChuTriId, tinhTrangs, nam, keHoachId, tuNgay, denNgay,
 				tenNhiemVu), pageable);
 	}
 

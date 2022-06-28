@@ -50,7 +50,7 @@ public class NhiemVuNamController {
 			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
 			@RequestParam(name = "donViChuTriId", required = false) Long donViChuTriId,
-			@RequestParam(name = "tinhTrangs", required = false) Integer tinhTrang,
+			@RequestParam(name = "tinhTrangs", required = false) List<Integer> tinhTrangs,
 			@RequestParam(name = "nam", required = false) Integer nam,
 			@RequestParam(name = "keHoachId", required = false) Long keHoachId,
 			@DateTimeFormat(pattern = "dd/MM/yyyy") @RequestParam(name = "tuNgay", required = false) LocalDate tuNgay,
@@ -58,7 +58,7 @@ public class NhiemVuNamController {
 			@RequestParam(name = "tenNhiemVu", required = false) String tenNhiemVu) {
 
 		Page<NhiemVuNamData> pageNhiemVuNamData = businessNhiemVuNamBusiness.findAll(page, size, sortBy, sortDir,
-				donViChuTriId, tinhTrang, nam, keHoachId, tuNgay, denNgay, tenNhiemVu);
+				donViChuTriId, tinhTrangs, nam, keHoachId, tuNgay, denNgay, tenNhiemVu);
 		return ResponseEntity.ok(pageNhiemVuNamData);
 	}
 

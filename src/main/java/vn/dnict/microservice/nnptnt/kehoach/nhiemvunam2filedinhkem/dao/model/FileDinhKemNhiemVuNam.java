@@ -28,7 +28,7 @@ import lombok.Data;
 @Data
 public class FileDinhKemNhiemVuNam {
 	@Id
-	@Column(name = "ID", unique = true, nullable = false)
+	@Column(name = "id", unique = true, nullable = false)
 	@GeneratedValue(generator = "qlkh_nhiemvunam2filebaocao_seq", strategy = GenerationType.AUTO)
 	@SequenceGenerator(name = "qlkh_nhiemvunam2filebaocao_seq", sequenceName = "qlkh_nhiemvunam2filebaocao_id_seq", allocationSize = 1)
 	private Long id;
