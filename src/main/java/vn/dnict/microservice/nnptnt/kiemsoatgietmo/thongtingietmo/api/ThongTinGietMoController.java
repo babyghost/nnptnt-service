@@ -62,7 +62,7 @@ public class ThongTinGietMoController {
 		return ResponseEntity.ok(businessThongTinGietMoBusiness.findById(id));
 	}
 	
-	@GetMapping(value = { "/tongHopSoLuongNgay" })
+	@GetMapping(value = { "/tonghopsoluongngay" })
 	public ResponseEntity<Page<ThongKeSoLuongData>> tongHopSoLuongNgay(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
@@ -77,7 +77,7 @@ public class ThongTinGietMoController {
 		return ResponseEntity.ok(pageThongKeNgay);
 	}
 	
-	@GetMapping(value = { "/tongHopSoLuongNgay/export" })
+	@GetMapping(value = { "/tonghopsoluongngay/export" })
 	public ModelAndView thongKeSoLuongNgay(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,

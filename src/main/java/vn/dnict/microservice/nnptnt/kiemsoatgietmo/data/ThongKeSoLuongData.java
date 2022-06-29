@@ -11,16 +11,20 @@ import lombok.Data;
 @Data
 public class ThongKeSoLuongData {
 	
+	private Long id;
+	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private LocalDate ngayThang;
 	
 	private Long coSoGietMoId;
 	private String coSoTen;
 	
-	private Long loaiVatNuoiId;
-	private String loaiVatNuoiTen;
+//	private Long loaiVatNuoiId;
+//	private String loaiVatNuoiTen;
+//	
+//	private Integer soLuongGietMo;
 	
-	private Integer soLuongGietMo;
+	private List<SoLuongGietMoData> soLuongGietMoDatas = new ArrayList<SoLuongGietMoData>();
 	
 	private List<ThongKeSoLuongData> thongKeSoLuongDatas = new ArrayList<ThongKeSoLuongData>();
 }

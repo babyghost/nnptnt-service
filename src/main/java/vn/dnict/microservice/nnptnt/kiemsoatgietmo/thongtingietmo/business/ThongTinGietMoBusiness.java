@@ -164,6 +164,7 @@ public class ThongTinGietMoBusiness {
 	
 	public ThongKeSoLuongData convertToThongKeSoLuongNgayData(ThongTinGietMo thongTinGietMo) {
 		ThongKeSoLuongData thongKeNgayData = new ThongKeSoLuongData();
+		thongKeNgayData.setId(thongTinGietMo.getId());
 		thongKeNgayData.setCoSoGietMoId(thongTinGietMo.getCoSoGietMoId());
 		if(thongTinGietMo.getCoSoGietMoId() != null && thongTinGietMo.getCoSoGietMoId() > 0) {
 			Optional<CoSoGietMo> optCoSo = serviceCoSoGietMoService.findById(thongTinGietMo.getCoSoGietMoId());
@@ -173,19 +174,23 @@ public class ThongTinGietMoBusiness {
 		}
 		thongKeNgayData.setNgayThang(thongTinGietMo.getNgayThang());
 		
+		List<SoLuongGietMoData> soLuongGietMoDatas = new ArrayList<SoLuongGietMoData>();
 		List<SoLuongGietMo> listSoLuongs = serviceSoLuongGietMoService.findByThongTinGietMoIdAndDaXoa(thongTinGietMo.getId(), false);
 		if(Objects.nonNull(listSoLuongs) && !listSoLuongs.isEmpty()) {
 			for(SoLuongGietMo soLuongGietMo : listSoLuongs) {
-				thongKeNgayData.setLoaiVatNuoiId(soLuongGietMo.getLoaiVatNuoiId());
+				SoLuongGietMoData soLuongData = new SoLuongGietMoData();
+				soLuongData.setLoaiVatNuoiId(soLuongGietMo.getLoaiVatNuoiId());
 				if(soLuongGietMo.getLoaiVatNuoiId() != null && soLuongGietMo.getLoaiVatNuoiId() > 0) {
 					Optional<DmLoaiVatNuoi> optVatNuoi = serviceDmLoaiVatNuoiService.findById(soLuongGietMo.getLoaiVatNuoiId());
 					if(optVatNuoi.isPresent()) {
-						thongKeNgayData.setLoaiVatNuoiTen(optVatNuoi.get().getTen());
+						soLuongData.setLoaiVatNuoiTen(optVatNuoi.get().getTen());
 					}
 				}
-				thongKeNgayData.setSoLuongGietMo(soLuongGietMo.getSoLuongGietMo());
+				soLuongData.setSoLuongGietMo(soLuongGietMo.getSoLuongGietMo());
+				soLuongGietMoDatas.add(soLuongData);
 			}
 		}
+		thongKeNgayData.setSoLuongGietMoDatas(soLuongGietMoDatas);
 		return thongKeNgayData;
 	}
 	

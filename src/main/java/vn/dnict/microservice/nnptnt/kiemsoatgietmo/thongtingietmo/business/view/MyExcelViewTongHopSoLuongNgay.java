@@ -23,6 +23,7 @@ import org.springframework.web.servlet.view.document.AbstractXlsView;
 import vn.dnict.microservice.nnptnt.kehoach.data.ThongKeKeHoachNamData;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.cosogietmo.dao.model.CoSoGietMo;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.data.CoSoGietMoData;
+import vn.dnict.microservice.nnptnt.kiemsoatgietmo.data.SoLuongGietMoData;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.data.ThongKeSoLuongData;
 
 public class MyExcelViewTongHopSoLuongNgay extends AbstractXlsView {
@@ -268,6 +269,7 @@ public class MyExcelViewTongHopSoLuongNgay extends AbstractXlsView {
 				5 // last column (0-based)
 		));
 		List<CoSoGietMo> listCoSo = (List<CoSoGietMo>) model.get("listCoSo");
+		List<SoLuongGietMoData> listSoLuongData = (List<SoLuongGietMoData>) model.get("listSoLuongData");
 		List<ThongKeSoLuongData> thongKeSoLuongDatas = (List<ThongKeSoLuongData>) model
 				.get("thongKeSoLuongDatas");
 
@@ -302,20 +304,14 @@ public class MyExcelViewTongHopSoLuongNgay extends AbstractXlsView {
 		sheet.addMergedRegion(new CellRangeAddress(currentRow - 1, currentRow, currentColumn, currentColumn));
 		currentColumn++;
 
-		for(int i = 0; i < thongKeSoLuongDatas.size(); i++) {
-			ThongKeSoLuongData thongKeSoLuongData = new ThongKeSoLuongData();
-			if(thongKeSoLuongDatas.get(i).getCoSoTen() != null && thongKeSoLuongDatas.get(i).getCoSoTen().isEmpty()) {
-
-				cell2 = headerRow.createCell(currentColumn);
-				cell2.setCellStyle(styleHeaderB);
-				cell2.setCellValue(thongKeSoLuongDatas.get(0).getLoaiVatNuoiTen());
-				currentColumn++;
-			}
-		}
+		cell2 = headerRow.createCell(currentColumn);
+		cell2.setCellStyle(styleHeaderB);
+		cell2.setCellValue(listSoLuongData.get(0).getLoaiVatNuoiTen());
+		currentColumn++;
 
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);
-		cell2.setCellValue(thongKeSoLuongDatas.get(0).getLoaiVatNuoiTen());
+		cell2.setCellValue(listSoLuongData.get(0).getLoaiVatNuoiTen());
 		currentColumn++;
 	
 		if (Objects.nonNull(thongKeSoLuongDatas) && !thongKeSoLuongDatas.isEmpty()) {
@@ -334,10 +330,17 @@ public class MyExcelViewTongHopSoLuongNgay extends AbstractXlsView {
 				cell2.setCellValue(ngay);
 				currentColumn++;
 
-				cell2 = headerRow.createCell(currentColumn);
-				cell2.setCellStyle(styleCellCenter);
-				cell2.setCellValue(thongKeSoLuongData.getSoLuongGietMo());
-				currentColumn++;
+				if(Objects.nonNull(listSoLuongData) && !listSoLuongData.isEmpty()) {
+					for(SoLuongGietMoData listSoLuong : listSoLuongData) {
+						currentRow++;
+						currentColumn = 0;					
+
+						cell2 = headerRow.createCell(currentColumn);
+						cell2.setCellStyle(styleCellCenter);
+						cell2.setCellValue(listSoLuong.getSoLuongGietMo());
+						currentColumn++;
+					}
+				}
 			
 			}
 			
