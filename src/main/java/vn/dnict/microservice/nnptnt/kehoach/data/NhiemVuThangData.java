@@ -41,6 +41,8 @@ public class NhiemVuThangData {
 	private Long nhiemVuThangTruocId;
 
 	private Integer tinhTrang;
+	
+	private Integer danhSo;
 
 	private List<NhiemVuThangLogData> nhiemVuThangLogDatas = new ArrayList<NhiemVuThangLogData>();
 

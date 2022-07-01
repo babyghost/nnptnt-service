@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
 import vn.dnict.microservice.nnptnt.kehoach.data.KeHoachThangData;
 import vn.dnict.microservice.nnptnt.kehoach.kehoachthang.business.KeHoachThangBusiness;
+import vn.dnict.microservice.nnptnt.kehoach.kehoachthang.dao.model.KeHoachThang;
 
 @CrossOrigin
 @RestController
@@ -62,13 +64,26 @@ public class KeHoachThangController {
 		KeHoachThangData keHoachThang = businessKeHoachThangBusiness.findByDonViChuTriIdAndThang(donViChuTriId, thang);
 		return ResponseEntity.ok(keHoachThang);
 	}
-
+	
 	@PostMapping(value = { "" })
-	public ResponseEntity<KeHoachThangData> save(@Valid @RequestBody KeHoachThangData keHoachThangData)
-			throws EntityNotFoundException {
-		keHoachThangData = businessKeHoachThangBusiness.save(keHoachThangData);
-		return ResponseEntity.status(HttpStatus.CREATED).body(keHoachThangData);
+	public ResponseEntity<KeHoachThang> create(@Valid @RequestBody KeHoachThangData keHoachThangData) throws EntityNotFoundException {
+		KeHoachThang keHoachThang = businessKeHoachThangBusiness.create(keHoachThangData);
+		return ResponseEntity.status(HttpStatus.CREATED).body(keHoachThang);
 	}
+	
+	@PutMapping(value = { "/{id}" })
+	public ResponseEntity<KeHoachThang> update(@PathVariable("id") Long id, @Valid @RequestBody KeHoachThangData keHoachThangData)
+			throws EntityNotFoundException {
+		KeHoachThang keHoachThang = businessKeHoachThangBusiness.update(id, keHoachThangData);
+		return ResponseEntity.ok(keHoachThang);
+	}
+
+//	@PostMapping(value = { "" })
+//	public ResponseEntity<KeHoachThangData> save(@Valid @RequestBody KeHoachThangData keHoachThangData)
+//			throws EntityNotFoundException {
+//		keHoachThangData = businessKeHoachThangBusiness.save(keHoachThangData);
+//		return ResponseEntity.status(HttpStatus.CREATED).body(keHoachThangData);
+//	}
 
 	@DeleteMapping(value = { "/{id}" })
 	public ResponseEntity<KeHoachThangData> delete(@PathVariable("id") Long id) throws EntityNotFoundException {

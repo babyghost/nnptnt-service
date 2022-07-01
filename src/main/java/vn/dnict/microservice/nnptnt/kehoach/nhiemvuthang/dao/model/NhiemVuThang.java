@@ -87,6 +87,9 @@ public class NhiemVuThang {
 	@Column(name = "tiendonhiemvu_id")
 	private Long tienDoNhiemVuId;
 
+	@Column(name = "danhso")
+	private Integer danhSo;
+	
 	@JsonIgnore
 	@Column(name = "daxoa")
 	private Boolean daXoa;
