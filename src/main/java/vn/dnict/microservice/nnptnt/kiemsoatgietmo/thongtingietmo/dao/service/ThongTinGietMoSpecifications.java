@@ -79,10 +79,10 @@ public class ThongTinGietMoSpecifications {
 					predicates.add(inList);
 				}
 				
-				if (loaiVatNuoiIds != null) {
-					Expression<List<Long>> valueloaiVatNuoiId = cb.literal(loaiVatNuoiIds);
+				if (loaiVatNuoiIds != null && !loaiVatNuoiIds.isEmpty()) {
+					Expression<List<Long>> valueloaiVatNuoiIds = cb.literal(loaiVatNuoiIds);
 					Expression<String> expression = root.join("soLuongGietMo").get("loaiVatNuoiId");
-					Predicate inList = expression.in(valueloaiVatNuoiId);
+					Predicate inList = expression.in(valueloaiVatNuoiIds);
 					predicates.add(inList);
 				}
 				

@@ -149,14 +149,14 @@ public class ThongTinGietMoBusiness {
 	}
 	
 	public Page<ThongKeSoLuongData> tongHopSoLuongNgay(int page, int size, String sortBy, String sortDir, List<String> tenCoSos,
-			List<Long> loaiVatNuoiId, LocalDate gietMoTuNgay, LocalDate gietMoDenNgay) {
+			List<Long> loaiVatNuoiIds, LocalDate gietMoTuNgay, LocalDate gietMoDenNgay) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-		Page<ThongTinGietMo> pageThongTin = serviceThongTinGietMoService.tongHopSoLuongNgay(tenCoSos, loaiVatNuoiId, gietMoTuNgay,
+		Page<ThongTinGietMo> pageThongTin = serviceThongTinGietMoService.tongHopSoLuongNgay(tenCoSos, loaiVatNuoiIds, gietMoTuNgay,
 				gietMoDenNgay, PageRequest.of(page, size, direction, sortBy));
 		final Page<ThongKeSoLuongData> pageThongKeNgay = pageThongTin.map(this::convertToThongKeSoLuongNgayData);
 		return pageThongKeNgay;

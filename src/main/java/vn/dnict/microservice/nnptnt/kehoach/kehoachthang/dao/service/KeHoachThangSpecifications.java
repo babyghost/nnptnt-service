@@ -14,7 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.kehoach.kehoachthang.dao.model.KeHoachThang;
 
 public class KeHoachThangSpecifications {
-	public static Specification<KeHoachThang> quichSearch(final Long donViChuTriId, final Integer thang,
+	public static Specification<KeHoachThang> quichSearch(final Long donViChuTriId, final LocalDate thang,
 			final String tenNhiemVu, final Long canBoThucHienId, final LocalDate tuThoiHan, final LocalDate denThoiHan,
 			final Integer tinhTrang) {
 		return new Specification<KeHoachThang>() {
@@ -33,8 +33,8 @@ public class KeHoachThangSpecifications {
 				if (donViChuTriId != null && donViChuTriId > -1) {
 					predicates.add(cb.equal(root.<String>get("donViChuTriId"), donViChuTriId));
 				}
-				if (thang != null && thang > -1) {
-					predicates.add(cb.equal(root.<String>get("thang"), thang));
+				if (thang != null) {
+					predicates.add(cb.equal(root.get("thang").as(LocalDate.class), thang));
 				}
 				if (tenNhiemVu != null && !tenNhiemVu.isEmpty()) {
 					predicates.add(cb.like(cb.lower(root.<String>get("tenNhiemVu")), "%" + tenNhiemVu.toLowerCase().trim() + "%"));

@@ -37,7 +37,7 @@ public class KeHoachThangController {
 			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
 			@RequestParam(name = "donViChuTriId", required = false) Long donViChuTriId,
-			@RequestParam(name = "thang", required = false) Integer thang,
+			@RequestParam(name = "thang", required = false) LocalDate thang,
 			@RequestParam(name = "tenNhiemVu", required = false) String tenNhiemVu,
 			@RequestParam(name = "canBoThucHienId", required = false) Long canBoThucHienId,
 			@DateTimeFormat(pattern = "dd/MM/yyyy") @RequestParam(name = "tuThoiHan", required = false) LocalDate tuThoiHan,

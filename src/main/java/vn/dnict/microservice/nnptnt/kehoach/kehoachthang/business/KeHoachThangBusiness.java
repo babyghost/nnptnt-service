@@ -60,7 +60,7 @@ public class KeHoachThangBusiness {
 	@Autowired
 	NhiemVuThangLogService serviceNhiemVuThangLogService;
 	
-	public Page<KeHoachThangData> findAll(int page, int size, String sortBy, String sortDir, Long donViChuTriId, Integer thang,
+	public Page<KeHoachThangData> findAll(int page, int size, String sortBy, String sortDir, Long donViChuTriId, LocalDate thang,
 			String tenNhiemVu, Long canBoThucHienId, LocalDate tuThoiHan, LocalDate denThoiHan, Integer tinhTrang) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {

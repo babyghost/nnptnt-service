@@ -66,7 +66,7 @@ public class ThongTinGietMoController {
 	public ResponseEntity<Page<ThongKeSoLuongData>> tongHopSoLuongNgay(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "coSoGietMoId", required = false) String sortBy,
+			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
 			@RequestParam(name = "tenCoSo", required = false) List<String> tenCoSos,
 			@RequestParam(name = "loaiVatNuoiId", required = false) List<Long> loaiVatNuoiIds,

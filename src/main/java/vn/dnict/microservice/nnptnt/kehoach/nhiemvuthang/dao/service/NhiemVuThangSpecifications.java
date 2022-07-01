@@ -42,8 +42,8 @@ public class NhiemVuThangSpecifications {
 					}
 					Expression<List<Integer>> valueMonths = cb.literal(monThs);
 					Expression<List<Integer>> valueYears = cb.literal(years);
-					Expression<Integer> year = cb.function("YEAR", Integer.class, root.get("thang"));
-					Expression<Integer> month = cb.function("MONTH", Integer.class, root.get("thang"));
+					Expression<Integer> year = cb.function("YEAR", Integer.class, root.join("keHoachThang").get("thang"));
+					Expression<Integer> month = cb.function("MONTH", Integer.class, root.join("keHoachThang").get("thang"));
 					Predicate inYear = year.in(valueYears);
 					Predicate inMonth = month.in(valueMonths);
 					predicates.add(cb.and(inYear, inMonth));

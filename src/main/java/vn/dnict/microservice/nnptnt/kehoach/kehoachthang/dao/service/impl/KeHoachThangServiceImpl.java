@@ -47,7 +47,7 @@ public class KeHoachThangServiceImpl implements KeHoachThangService {
 	}
 
 	@Override
-	public Page<KeHoachThang> findAll(Long donViChuTriId, Integer thang, String tenNhiemVu, Long canBoThucHienId,
+	public Page<KeHoachThang> findAll(Long donViChuTriId, LocalDate thang, String tenNhiemVu, Long canBoThucHienId,
 			LocalDate tuThoiHan, LocalDate denThoiHan, Integer tinhTrang, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return repo.findAll(KeHoachThangSpecifications.quichSearch(donViChuTriId, thang, tenNhiemVu, canBoThucHienId, tuThoiHan, denThoiHan,
