@@ -61,17 +61,17 @@ public class KeHoachNamController {
 	}
 
 	@PostMapping(value = { "" })
-	public ResponseEntity<KeHoachNam> create(@Valid @RequestBody KeHoachNamData keHoachNamData)
-			throws EntityNotFoundException {
-		KeHoachNam keHoachNam = businessKeHoachNamBusiness.create(keHoachNamData);
-		return ResponseEntity.status(HttpStatus.CREATED).body(keHoachNam);
+	public ResponseEntity<KeHoachNamData> create(@Valid @RequestBody KeHoachNamData keHoachNamData)
+			throws MethodArgumentNotValidException {
+		keHoachNamData = businessKeHoachNamBusiness.create(keHoachNamData);
+		return ResponseEntity.status(HttpStatus.CREATED).body(keHoachNamData);
 	}
 
 	@PutMapping(value = { "/{id}" })
-	public ResponseEntity<KeHoachNam> update(@PathVariable("id") Long id,
-			@Valid @RequestBody KeHoachNamData keHoachNamData) throws EntityNotFoundException {
-		KeHoachNam keHoachNam = businessKeHoachNamBusiness.update(id, keHoachNamData);
-		return ResponseEntity.ok(keHoachNam);
+	public ResponseEntity<KeHoachNamData> update(@PathVariable("id") Long id,
+			@Valid @RequestBody KeHoachNamData keHoachNamData) throws EntityNotFoundException, MethodArgumentNotValidException {
+		keHoachNamData = businessKeHoachNamBusiness.update(id, keHoachNamData);
+		return ResponseEntity.ok(keHoachNamData);
 	}
 
 	@DeleteMapping(value = { "/{id}" })

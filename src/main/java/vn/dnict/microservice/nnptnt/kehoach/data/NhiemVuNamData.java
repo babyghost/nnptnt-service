@@ -16,7 +16,17 @@ import lombok.Data;
 public class NhiemVuNamData {
 	private Long id;
 
-	private Long keHoachNamId;
+	private Long keHoachNamId;	
+	private String keHoachNamTen;
+	
+	private Long donViChuTriId;
+	private String donViChuTriTen;
+	
+	private Integer nam;
+	
+	private String soKyHieu;
+	
+	private LocalDate ngayBanHanh;
 
 	@NotBlank(message = "Vui lòng nhập tên nhiệm vụ")
 	@Size(max = 500, message = "Nhập tên nhiệm vụ quá {max} ký tự")
@@ -34,8 +44,8 @@ public class NhiemVuNamData {
 	private LocalDate denNgay;
 
 	private Long loaiNhiemVuId;
-
 	private String loaiNhiemVuTen;
+	private String loaiNhiemVuMa;
 
 	@Size(max = 1000, message = "Nhập ghi chú quá {max} ký tự")
 	private String ghiChu;

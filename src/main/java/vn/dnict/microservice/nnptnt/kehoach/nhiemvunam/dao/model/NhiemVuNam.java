@@ -15,7 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -75,7 +74,6 @@ public class NhiemVuNam {
 	@JsonIgnore
 	@OneToMany(mappedBy = "nhiemVuNamId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@Where(clause = "DAXOA = " + false)
-	@OrderBy(clause = "NGAYBAOCAO DESC")
 	private List<TienDoNhiemVuNam> tienDoNhiemVuNams;
 
 	@Column(name = "ghichu", length = 1000)

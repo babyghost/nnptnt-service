@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import vn.dnict.microservice.danhmuc.dao.model.DmDonVi;
 import vn.dnict.microservice.danhmuc.dao.service.DmDonViService;
@@ -57,203 +59,212 @@ public class KeHoachNamBusiness {
 	private KeHoachNamData convertToKeHoachNamData(KeHoachNam keHoachNam) {
 		KeHoachNamData keHoachNamData = new KeHoachNamData();
 		keHoachNamData.setId(keHoachNam.getId());
-		if (Objects.nonNull(keHoachNam.getDonViChuTriId())) {
+		keHoachNamData.setTenKeHoach(keHoachNam.getTenKeHoach());
+		keHoachNamData.setDonViChuTriId(keHoachNam.getDonViChuTriId());
+		if(keHoachNam.getDonViChuTriId() != null && keHoachNam.getDonViChuTriId() > 0) {
 			Optional<DmDonVi> optionalDmDonVi = serviceDmDonViService.findById(keHoachNam.getDonViChuTriId());
-			if (optionalDmDonVi.isPresent()) {
-				keHoachNamData.setDonViChuTriId(optionalDmDonVi.get().getId());
+			if(optionalDmDonVi.isPresent()) {
 				keHoachNamData.setDonViChuTriTen(optionalDmDonVi.get().getTenDonVi());
 			}
 		}
 		keHoachNamData.setNam(keHoachNam.getNam());
-		keHoachNamData.setTenKeHoach(keHoachNam.getTenKeHoach());
 		keHoachNamData.setSoKyHieu(keHoachNam.getSoKyHieu());
 		keHoachNamData.setNgayBanHanh(keHoachNam.getNgayBanHanh());
 		keHoachNamData.setTrangThai(keHoachNam.getTrangThai());
-
-		if (Objects.nonNull(keHoachNam.getDonViChuTriId())) {
-			Optional<DmDonVi> optionalDmDonVi = serviceDmDonViService.findById(keHoachNam.getDonViChuTriId());
-			if (optionalDmDonVi.isPresent()) {
-				keHoachNamData.setDonViChuTriId(optionalDmDonVi.get().getId());
-				keHoachNamData.setDonViChuTriTen(optionalDmDonVi.get().getTenDonVi());
-			}
-		}
 		
+		List<NhiemVuNamData> nhiemVuNamDatas = new ArrayList<>();
 		List<NhiemVuNam> nhiemVuNams = serviceNhiemVuNamService.findByKeHoachNamIdAndDaXoa(keHoachNam.getId(), false);
-		List<NhiemVuNamData> nhiemVuNamDatas = new ArrayList<NhiemVuNamData>();
 		if(Objects.nonNull(nhiemVuNams) && !nhiemVuNams.isEmpty()) {
 			for(NhiemVuNam nhiemVuNam : nhiemVuNams) {
 				NhiemVuNamData nhiemVuNamData = new NhiemVuNamData();
 				nhiemVuNamData.setId(nhiemVuNam.getId());
-				nhiemVuNamData.setTenNhiemVu(nhiemVuNam.getTenNhiemVu());
 				nhiemVuNamData.setNhiemVuChaId(nhiemVuNam.getNhiemVuChaId());
+				nhiemVuNamData.setTenNhiemVu(nhiemVuNam.getTenNhiemVu());
+				nhiemVuNamData.setSapXep(nhiemVuNam.getSapXep());
 				nhiemVuNamData.setDonViPhoiHop(nhiemVuNam.getDonViPhoiHop());
 				nhiemVuNamData.setTuNgay(nhiemVuNam.getTuNgay());
 				nhiemVuNamData.setDenNgay(nhiemVuNam.getDenNgay());
 				nhiemVuNamData.setLoaiNhiemVuId(nhiemVuNam.getLoaiNhiemVuId());
-				if(Objects.nonNull(nhiemVuNam.getLoaiNhiemVuId())) {
-					Optional<DmLoaiNhiemVu> optNhiemVu = serviceDmLoaiNhiemVuService.findById(nhiemVuNam.getLoaiNhiemVuId());
-					if(optNhiemVu.isPresent()) {
-						nhiemVuNamData.setLoaiNhiemVuTen(optNhiemVu.get().getTen());
+				if(nhiemVuNam.getLoaiNhiemVuId() != null && nhiemVuNam.getLoaiNhiemVuId() > 0) {
+					Optional<DmLoaiNhiemVu> optLoaiNhiemVu = serviceDmLoaiNhiemVuService.findById(nhiemVuNam.getLoaiNhiemVuId());
+					if(optLoaiNhiemVu.isPresent()) {
+						nhiemVuNamData.setLoaiNhiemVuTen(optLoaiNhiemVu.get().getTen());
+						nhiemVuNamData.setLoaiNhiemVuMa(optLoaiNhiemVu.get().getMa());
 					}
 				}
 				nhiemVuNamData.setGhiChu(nhiemVuNam.getGhiChu());
-				nhiemVuNamData.setSapXep(nhiemVuNam.getSapXep());
 				nhiemVuNamData.setDanhSo(nhiemVuNam.getDanhSo());
+				
 				nhiemVuNamDatas.add(nhiemVuNamData);
 			}
-		}
-		keHoachNamData.setNhiemVuNamDatas(nhiemVuNamDatas);
+		}		
 		return keHoachNamData;
 	}
-
+	
+	private KeHoachNamData convertToKeHoachNamIdAndNhiemVuNamId(KeHoachNam keHoachNam) {
+		KeHoachNamData keHoachNamData = new KeHoachNamData();
+		keHoachNamData.setId(keHoachNam.getId());
+		keHoachNamData.setTenKeHoach(keHoachNam.getTenKeHoach());
+		keHoachNamData.setDonViChuTriId(keHoachNam.getDonViChuTriId());
+		if(keHoachNam.getDonViChuTriId() != null && keHoachNam.getDonViChuTriId() > 0) {
+			Optional<DmDonVi> optionalDmDonVi = serviceDmDonViService.findById(keHoachNam.getDonViChuTriId());
+			if(optionalDmDonVi.isPresent()) {
+				keHoachNamData.setDonViChuTriTen(optionalDmDonVi.get().getTenDonVi());
+			}
+		}
+		keHoachNamData.setNam(keHoachNam.getNam());
+		keHoachNamData.setSoKyHieu(keHoachNam.getSoKyHieu());
+		keHoachNamData.setNgayBanHanh(keHoachNam.getNgayBanHanh());
+		keHoachNamData.setTrangThai(keHoachNam.getTrangThai());
+		
+		List<NhiemVuNam> listNhiemVu = serviceNhiemVuNamService.findByKeHoachNamIdAndNhiemVuChaIdIsNullAndDaXoa(keHoachNam.getId(), false);
+		if(Objects.nonNull(listNhiemVu) && !listNhiemVu.isEmpty()) {
+			keHoachNamData.setNhiemVuNamDatas(setNhiemVuNamDatas(listNhiemVu, keHoachNam.getId()));
+		}
+		
+		return keHoachNamData;
+	}
+	
+	private List<NhiemVuNamData> setNhiemVuNamDatas(List<NhiemVuNam> listNhiemVu, Long keHoachNamId) {
+		List<NhiemVuNamData> listNhiemVuDatas = new ArrayList<NhiemVuNamData>();
+		for (NhiemVuNam nhiemVuNam : listNhiemVu) {
+			NhiemVuNamData nhiemVuData = new NhiemVuNamData();
+			nhiemVuData.setId(nhiemVuNam.getId());
+			nhiemVuData.setKeHoachNamId(nhiemVuNam.getKeHoachNamId());
+			if(nhiemVuNam.getKeHoachNamId() != null && nhiemVuNam.getKeHoachNamId() > 0) {
+				Optional<KeHoachNam> optKeHoach = serviceKeHoachNamService.findById(nhiemVuNam.getKeHoachNamId());
+				if(optKeHoach.isPresent()) {
+					nhiemVuData.setKeHoachNamTen(optKeHoach.get().getTenKeHoach());
+					nhiemVuData.setDonViChuTriId(optKeHoach.get().getDonViChuTriId());
+					if(optKeHoach.get().getDonViChuTriId() != null && optKeHoach.get().getDonViChuTriId() > 0) {
+						Optional<DmDonVi> optDonVi = serviceDmDonViService.findById(optKeHoach.get().getDonViChuTriId());
+						if(optDonVi.isPresent()) {
+							nhiemVuData.setDonViChuTriTen(optDonVi.get().getTenDonVi());
+						}
+					}
+					nhiemVuData.setNam(optKeHoach.get().getNam());
+					nhiemVuData.setSoKyHieu(optKeHoach.get().getSoKyHieu());
+					nhiemVuData.setNgayBanHanh(optKeHoach.get().getNgayBanHanh());
+				}
+			}
+			nhiemVuData.setNhiemVuChaId(nhiemVuNam.getNhiemVuChaId());
+			nhiemVuData.setTenNhiemVu(nhiemVuNam.getTenNhiemVu());
+			nhiemVuData.setSapXep(nhiemVuNam.getSapXep());
+			nhiemVuData.setDonViPhoiHop(nhiemVuNam.getDonViPhoiHop());
+			nhiemVuData.setTuNgay(nhiemVuNam.getTuNgay());
+			nhiemVuData.setDenNgay(nhiemVuNam.getDenNgay());
+			nhiemVuData.setLoaiNhiemVuId(nhiemVuNam.getLoaiNhiemVuId());
+			if(nhiemVuNam.getLoaiNhiemVuId() != null && nhiemVuNam.getLoaiNhiemVuId() > 0) {
+				Optional<DmLoaiNhiemVu> optLoaiNhiemVu = serviceDmLoaiNhiemVuService.findById(nhiemVuNam.getLoaiNhiemVuId());
+				if(optLoaiNhiemVu.isPresent()) {
+					nhiemVuData.setLoaiNhiemVuTen(optLoaiNhiemVu.get().getTen());
+					nhiemVuData.setLoaiNhiemVuMa(optLoaiNhiemVu.get().getMa());
+				}
+			}
+			nhiemVuData.setGhiChu(nhiemVuNam.getGhiChu());
+			nhiemVuData.setDanhSo(nhiemVuNam.getDanhSo());
+			
+			List<NhiemVuNam> listNhiemVuChildren = serviceNhiemVuNamService.findByKeHoachNamIdAndNhiemVuChaIdAndDaXoa(keHoachNamId,
+					nhiemVuNam.getId(), false);
+			List<NhiemVuNamData> children = new ArrayList<NhiemVuNamData>();
+			if(Objects.nonNull(listNhiemVuChildren) && !listNhiemVuChildren.isEmpty()) {
+				children = setNhiemVuNamDatas(listNhiemVuChildren, keHoachNamId);
+			}
+			nhiemVuData.setChildren(children);
+			listNhiemVuDatas.add(nhiemVuData);
+		}
+		
+		return listNhiemVuDatas;
+	}
+	
 	public KeHoachNamData findById(Long id) throws EntityNotFoundException {
 		Optional<KeHoachNam> optional = serviceKeHoachNamService.findById(id);
 		if (!optional.isPresent()) {
-			throw new EntityNotFoundException(KeHoachNam.class, "id", String.valueOf(id));
+			throw new EntityNotFoundException(KeHoachNamData.class, "id", String.valueOf(id));
 		}
 		KeHoachNam keHoachNam = optional.get();
-		KeHoachNamData keHoachNamData = new KeHoachNamData();
-		keHoachNamData.setId(keHoachNam.getId());
-		if (Objects.nonNull(keHoachNam.getDonViChuTriId())) {
-			Optional<DmDonVi> optionalDmDonVi = serviceDmDonViService.findById(keHoachNam.getDonViChuTriId());
-			if (optionalDmDonVi.isPresent()) {
-				keHoachNamData.setDonViChuTriId(optionalDmDonVi.get().getId());
-				keHoachNamData.setDonViChuTriTen(optionalDmDonVi.get().getTenDonVi());
-			}
-		}
-		keHoachNamData.setNam(keHoachNam.getNam());
-		keHoachNamData.setTenKeHoach(keHoachNam.getTenKeHoach());
-		keHoachNamData.setSoKyHieu(keHoachNam.getSoKyHieu());
-		keHoachNamData.setNgayBanHanh(keHoachNam.getNgayBanHanh());
-		keHoachNamData.setTrangThai(keHoachNam.getTrangThai());
-
-		if (Objects.nonNull(keHoachNam.getDonViChuTriId())) {
-			Optional<DmDonVi> optionalDmDonVi = serviceDmDonViService.findById(keHoachNam.getDonViChuTriId());
-			if (optionalDmDonVi.isPresent()) {
-				keHoachNamData.setDonViChuTriId(optionalDmDonVi.get().getId());
-				keHoachNamData.setDonViChuTriTen(optionalDmDonVi.get().getTenDonVi());
-			}
-		}
-		List<NhiemVuNam> nhiemVuNams = serviceNhiemVuNamService.findByKeHoachNamIdAndDaXoa(keHoachNam.getId(), false);
-		List<NhiemVuNamData> nhiemVuNamDatas = new ArrayList<NhiemVuNamData>();
-		if(Objects.nonNull(nhiemVuNams) && !nhiemVuNams.isEmpty()) {
-			for(NhiemVuNam nhiemVuNam : nhiemVuNams) {
-				NhiemVuNamData nhiemVuNamData = new NhiemVuNamData();
-				nhiemVuNamData.setId(nhiemVuNam.getId());
-				nhiemVuNamData.setKeHoachNamId(nhiemVuNam.getKeHoachNamId());
-				nhiemVuNamData.setTenNhiemVu(nhiemVuNam.getTenNhiemVu());
-				nhiemVuNamData.setNhiemVuChaId(nhiemVuNam.getNhiemVuChaId());
-				nhiemVuNamData.setDonViPhoiHop(nhiemVuNam.getDonViPhoiHop());
-				nhiemVuNamData.setTuNgay(nhiemVuNam.getTuNgay());
-				nhiemVuNamData.setDenNgay(nhiemVuNam.getDenNgay());
-				nhiemVuNamData.setLoaiNhiemVuId(nhiemVuNam.getLoaiNhiemVuId());
-				if(Objects.nonNull(nhiemVuNam.getLoaiNhiemVuId())) {
-					Optional<DmLoaiNhiemVu> optNhiemVu = serviceDmLoaiNhiemVuService.findById(nhiemVuNam.getLoaiNhiemVuId());
-					if(optNhiemVu.isPresent()) {
-						nhiemVuNamData.setLoaiNhiemVuTen(optNhiemVu.get().getTen());
-					}
-				}
-				nhiemVuNamData.setGhiChu(nhiemVuNam.getGhiChu());
-				nhiemVuNamData.setSapXep(nhiemVuNam.getSapXep());
-				nhiemVuNamData.setDanhSo(nhiemVuNam.getDanhSo());
-				nhiemVuNamDatas.add(nhiemVuNamData);
-			}
-		}
-		keHoachNamData.setNhiemVuNamDatas(nhiemVuNamDatas);
-		return keHoachNamData;
+		return this.convertToKeHoachNamIdAndNhiemVuNamId(keHoachNam);
 	}
-
-	public KeHoachNam create(KeHoachNamData keHoachNamData) throws EntityNotFoundException {
-
+	
+	public KeHoachNamData create(KeHoachNamData keHoachNamData) throws MethodArgumentNotValidException {
 		KeHoachNam keHoachNam = new KeHoachNam();
 		keHoachNam.setDaXoa(false);
-		keHoachNam.setNam(keHoachNamData.getNam());
 		keHoachNam.setTenKeHoach(keHoachNamData.getTenKeHoach());
+		keHoachNam.setDonViChuTriId(keHoachNamData.getDonViChuTriId());
+		keHoachNam.setNam(keHoachNamData.getNam());
 		keHoachNam.setSoKyHieu(keHoachNamData.getSoKyHieu());
 		keHoachNam.setNgayBanHanh(keHoachNamData.getNgayBanHanh());
 		keHoachNam.setTrangThai(keHoachNamData.getTrangThai());
-		if (Objects.nonNull(keHoachNamData.getDonViChuTriId())) {
-			Optional<DmDonVi> optionalDmDonVi = serviceDmDonViService.findById(keHoachNamData.getDonViChuTriId());
-			if (optionalDmDonVi.isPresent()) {
-				keHoachNam.setDonViChuTriId(optionalDmDonVi.get().getId());
-			}
-		}
 		keHoachNam = serviceKeHoachNamService.save(keHoachNam);
 		
-		serviceNhiemVuNamService.setFixedDaXoaForKeHoachNamId(false, keHoachNam.getId());
-		List<NhiemVuNamData> nhiemVuNamDatas = new ArrayList<NhiemVuNamData>();
+		serviceNhiemVuNamService.setFixedDaXoaForKeHoachNamId(false, keHoachNam.getId());		
+		List<NhiemVuNamData> nhiemVuNamDatas = keHoachNamData.getNhiemVuNamDatas();
 		if(Objects.nonNull(nhiemVuNamDatas) && !nhiemVuNamDatas.isEmpty()) {
-			for(NhiemVuNamData nhiemVuNamData : nhiemVuNamDatas) {
-				NhiemVuNam nhiemVuNam = new NhiemVuNam();
-				if(Objects.nonNull(nhiemVuNam.getId())) {
-					Optional<NhiemVuNam> optNhiemVu = serviceNhiemVuNamService.findById(nhiemVuNamData.getId());
-					if(optNhiemVu.isPresent()) {
-						nhiemVuNam = optNhiemVu.get();
-					}
-				}
-				nhiemVuNam.setId(nhiemVuNamData.getId());
-				nhiemVuNam.setTenNhiemVu(nhiemVuNamData.getTenNhiemVu());
-				nhiemVuNam.setNhiemVuChaId(nhiemVuNamData.getNhiemVuChaId());
-				nhiemVuNam.setDonViPhoiHop(nhiemVuNamData.getDonViPhoiHop());
-				nhiemVuNam.setTuNgay(nhiemVuNamData.getTuNgay());
-				nhiemVuNam.setDenNgay(nhiemVuNamData.getDenNgay());
-				nhiemVuNam.setLoaiNhiemVuId(nhiemVuNamData.getLoaiNhiemVuId());
-				nhiemVuNam.setGhiChu(nhiemVuNamData.getGhiChu());
-				nhiemVuNam.setSapXep(nhiemVuNamData.getSapXep());
-				nhiemVuNam.setDanhSo(nhiemVuNamData.getDanhSo());
-				serviceNhiemVuNamService.save(nhiemVuNam);
-			}
+			saveNhiemVuNamDatas(nhiemVuNamDatas, keHoachNam, null);
 		}
-
-		return keHoachNam;
+		return this.convertToKeHoachNamIdAndNhiemVuNamId(keHoachNam);
 	}
-
-	public KeHoachNam update(Long id, KeHoachNamData keHoachNamData) throws EntityNotFoundException {
+	
+	public KeHoachNamData update(Long id, KeHoachNamData keHoachNamData) throws EntityNotFoundException, MethodArgumentNotValidException {
 		Optional<KeHoachNam> optionalKeHoachNam = serviceKeHoachNamService.findById(id);
-		if (!optionalKeHoachNam.isPresent()) {
-			throw new EntityNotFoundException(KeHoachNam.class, "id", String.valueOf(id));
+		if(!optionalKeHoachNam.isPresent()) {
+			throw new EntityNotFoundException(KeHoachNamData.class, "id", String.valueOf(id));
 		}
 		KeHoachNam keHoachNam = optionalKeHoachNam.get();
-		keHoachNam.setNam(keHoachNamData.getNam());
 		keHoachNam.setTenKeHoach(keHoachNamData.getTenKeHoach());
+		keHoachNam.setDonViChuTriId(keHoachNamData.getDonViChuTriId());
+		keHoachNam.setNam(keHoachNamData.getNam());
 		keHoachNam.setSoKyHieu(keHoachNamData.getSoKyHieu());
 		keHoachNam.setNgayBanHanh(keHoachNamData.getNgayBanHanh());
 		keHoachNam.setTrangThai(keHoachNamData.getTrangThai());
 		keHoachNam = serviceKeHoachNamService.save(keHoachNam);
 		
-		serviceNhiemVuNamService.setFixedDaXoaForKeHoachNamId(false, keHoachNam.getId());
-		List<NhiemVuNamData> nhiemVuNamDatas = new ArrayList<NhiemVuNamData>();
+		serviceNhiemVuNamService.setFixedDaXoaForKeHoachNamId(true, keHoachNam.getId());		
+		List<NhiemVuNamData> nhiemVuNamDatas = keHoachNamData.getNhiemVuNamDatas();
 		if(Objects.nonNull(nhiemVuNamDatas) && !nhiemVuNamDatas.isEmpty()) {
-			for(NhiemVuNamData nhiemVuNamData : nhiemVuNamDatas) {
-				NhiemVuNam nhiemVuNam = new NhiemVuNam();
-				if(Objects.nonNull(nhiemVuNam.getId())) {
-					Optional<NhiemVuNam> optNhiemVu = serviceNhiemVuNamService.findById(nhiemVuNamData.getId());
-					if(optNhiemVu.isPresent()) {
-						nhiemVuNam = optNhiemVu.get();
-					}
+			saveNhiemVuNamDatas(nhiemVuNamDatas, keHoachNam, null);
+		}
+		return this.convertToKeHoachNamIdAndNhiemVuNamId(keHoachNam);
+	}
+	
+	private void saveNhiemVuNamDatas(List<NhiemVuNamData> nhiemVuNamDatas, KeHoachNam keHoachNam, Long nhiemVuChaId) {
+		int sapXep = 0;
+		for(NhiemVuNamData nhiemVuNamData : nhiemVuNamDatas) {
+			sapXep++;
+			NhiemVuNam nhiemVuNam = new NhiemVuNam();
+			if(Objects.nonNull(nhiemVuNamData.getId())) {
+				Optional<NhiemVuNam> optNhiemVuNam = serviceNhiemVuNamService.findById(nhiemVuNamData.getId());
+				if(optNhiemVuNam.isPresent()) {
+					nhiemVuNam = optNhiemVuNam.get();
 				}
-				nhiemVuNam.setId(nhiemVuNamData.getId());
-				nhiemVuNam.setTenNhiemVu(nhiemVuNamData.getTenNhiemVu());
-				nhiemVuNam.setNhiemVuChaId(nhiemVuNamData.getNhiemVuChaId());
-				nhiemVuNam.setDonViPhoiHop(nhiemVuNamData.getDonViPhoiHop());
-				nhiemVuNam.setTuNgay(nhiemVuNamData.getTuNgay());
-				nhiemVuNam.setDenNgay(nhiemVuNamData.getDenNgay());
-				nhiemVuNam.setLoaiNhiemVuId(nhiemVuNamData.getLoaiNhiemVuId());
-				nhiemVuNam.setGhiChu(nhiemVuNamData.getGhiChu());
-				nhiemVuNam.setSapXep(nhiemVuNamData.getSapXep());
-				nhiemVuNam.setDanhSo(nhiemVuNamData.getDanhSo());
-				serviceNhiemVuNamService.save(nhiemVuNam);
+			}
+			nhiemVuNam.setDaXoa(false);
+			nhiemVuNam.setKeHoachNamId(keHoachNam.getId());
+			nhiemVuNam.setNhiemVuChaId(nhiemVuChaId);
+			nhiemVuNam.setTenNhiemVu(nhiemVuNamData.getTenNhiemVu());
+			nhiemVuNam.setSapXep(sapXep);
+			nhiemVuNam.setDonViPhoiHop(nhiemVuNamData.getDonViPhoiHop());
+			nhiemVuNam.setTuNgay(nhiemVuNamData.getTuNgay());
+			nhiemVuNam.setDenNgay(nhiemVuNamData.getDenNgay());
+			nhiemVuNam.setLoaiNhiemVuId(nhiemVuNamData.getLoaiNhiemVuId());
+			nhiemVuNam.setGhiChu(nhiemVuNamData.getGhiChu());	
+			nhiemVuNam.setDanhSo(nhiemVuNamData.getDanhSo());
+			nhiemVuNam = serviceNhiemVuNamService.save(nhiemVuNam);
+			
+			List<NhiemVuNamData> children = nhiemVuNamData.getChildren();
+			if(Objects.nonNull(children) && !children.isEmpty()) {
+				saveNhiemVuNamDatas(children, keHoachNam, nhiemVuNam.getId());
 			}
 		}
-		return keHoachNam;
 	}
-
+	
+	@DeleteMapping(value = { "/{id}" })
 	public KeHoachNamData delete(Long id) throws EntityNotFoundException {
-		Optional<KeHoachNam> optional = serviceKeHoachNamService.findById(id);
-		if (!optional.isPresent()) {
-			throw new EntityNotFoundException(KeHoachNam.class, "id", String.valueOf(id));
+		Optional<KeHoachNam> optionalKeHoachNam = serviceKeHoachNamService.findById(id);
+		if(!optionalKeHoachNam.isPresent()) {
+			throw new EntityNotFoundException(KeHoachNamData.class, "id", String.valueOf(id));
 		}
-		KeHoachNam keHoachNam = optional.get();
+		KeHoachNam keHoachNam = optionalKeHoachNam.get();
 		keHoachNam.setDaXoa(true);
 		keHoachNam = serviceKeHoachNamService.save(keHoachNam);
 		return this.convertToKeHoachNamData(keHoachNam);

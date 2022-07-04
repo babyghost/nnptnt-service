@@ -18,5 +18,5 @@ public interface FileDinhKemNhiemVuNamService {
 
 	public int setFixedDaXoaForTienDoNhiemVuNamId(Boolean daXoa, Long tienDoNhiemVuNamId);
 
-	public List<FileDinhKemNhiemVuNam> findByTienDoNhiemVuNamIdAndFileDinhKemId(Long tienDoNhiemVuNamId, Long fileDinhKemId);
+	public List<FileDinhKemNhiemVuNam> findByFileDinhKemIdAndTienDoNhiemVuNamId(Long fileDinhKemId, Long tienDoNhiemVuNamId);
 }

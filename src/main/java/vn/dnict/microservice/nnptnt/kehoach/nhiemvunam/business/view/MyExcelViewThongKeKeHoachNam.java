@@ -296,7 +296,6 @@ public class MyExcelViewThongKeKeHoachNam extends AbstractXlsView {
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);
 		cell2.setCellValue("Thời gian thực hiện");
-	//	sheet.addMergedRegion(new CellRangeAddress(currentRow, currentRow, currentColumn-1 , currentColumn));
 		currentColumn++;
 		
 		cell2 = headerRow.createCell(currentColumn);
@@ -317,7 +316,6 @@ public class MyExcelViewThongKeKeHoachNam extends AbstractXlsView {
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);
 		cell2.setCellValue("Kết quả thực hiện");
-		//currentColumn++;
 
 		currentRow++;
 		headerRow = sheet.createRow(currentRow);
@@ -421,6 +419,7 @@ public class MyExcelViewThongKeKeHoachNam extends AbstractXlsView {
 				cell2.setCellStyle(styleCellCenter);
 				cell2.setCellValue(thongKeKeHoachData.getGhiChu());
 				currentColumn++;
+				
 				String tinhTrangTen="";
 				if(thongKeKeHoachData.getTinhTrang() !=null) {
 					if(thongKeKeHoachData.getTinhTrang() == 1) {
@@ -433,7 +432,6 @@ public class MyExcelViewThongKeKeHoachNam extends AbstractXlsView {
 				}else {
 					tinhTrangTen="Chưa Thực Hiện";
 				}
-	//			System.out.println("+++++++++"+(thongKeKeHoachData.getTinhTrang().toString() !=null ? (thongKeKeHoachData.getTinhTrang().toString() == "1" ? "Đang thực hiện": "Đã Hoàn thành" ): "chưa thực hiện")+"**********" );
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellCenter);
 				cell2.setCellValue(tinhTrangTen);

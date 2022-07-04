@@ -48,9 +48,9 @@ public class FileDinhKemNhiemVuNamServiceImpl implements FileDinhKemNhiemVuNamSe
 	}
 
 	@Override
-	public List<FileDinhKemNhiemVuNam> findByTienDoNhiemVuNamIdAndFileDinhKemId(Long tienDoNhiemVuNamId, Long fileDinhKemId) {
+	public List<FileDinhKemNhiemVuNam> findByFileDinhKemIdAndTienDoNhiemVuNamId(Long fileDinhKemId, Long tienDoNhiemVuNamId) {
 		// TODO Auto-generated method stub
-		return repo.findByTienDoNhiemVuNamIdAndFileDinhKemId(tienDoNhiemVuNamId, fileDinhKemId);
+		return repo.findByFileDinhKemIdAndTienDoNhiemVuNamId(fileDinhKemId, tienDoNhiemVuNamId);
 	}
 
 	@Override

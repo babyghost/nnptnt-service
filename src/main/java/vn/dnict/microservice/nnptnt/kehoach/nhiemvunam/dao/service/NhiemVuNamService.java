@@ -33,6 +33,9 @@ public interface NhiemVuNamService {
 	public Page<NhiemVuNam> findAll(Long donViChuTriId, List<Integer> tinhTrangs, Integer nam, Long keHoachNamId, LocalDate tuNgay,
 			LocalDate denNgay, String tenNhiemVu, Pageable pageable);
 
-	public List<NhiemVuNam> getThongKeSoLuong(Long donViChuTriId, Integer nam, Long keHoachNamId, List<Integer> tinhTrangs,
-			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu);
+//	public List<NhiemVuNam> getThongKeSoLuong(Long donViChuTriId, Integer nam, Long keHoachNamId, List<Integer> tinhTrangs,
+//			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu);
+	
+	public Page<NhiemVuNam> thongke(Long donViChuTriId, Integer nam, Long keHoachNamId, List<Integer> tinhTrangs,
+			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu, Pageable pageable);
 }

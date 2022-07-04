@@ -39,6 +39,10 @@ public class TienDoNhiemVuNam {
 
 	@Column(name = "nhiemvunam_id", nullable = false)
 	private Long nhiemVuNamId;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "nhiemvunam_id", referencedColumnName = "id", updatable = false, insertable = false)
+	private NhiemVuNam nhiemVuNam;
 
 	@Column(name = "tinhtrang", nullable = false)
 	private Integer tinhTrang;

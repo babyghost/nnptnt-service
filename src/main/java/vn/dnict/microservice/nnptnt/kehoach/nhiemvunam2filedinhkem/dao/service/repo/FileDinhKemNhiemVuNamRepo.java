@@ -21,7 +21,7 @@ public interface FileDinhKemNhiemVuNamRepo extends JpaRepository<FileDinhKemNhie
 	public int setFixedDaXoaForTienDoNhiemVuNamId(Boolean daXoa, Long tienDoNhiemVuNamId);
 
 	@Query("SELECT u FROM FileDinhKemNhiemVuNam u WHERE u.tienDoNhiemVuNamId = ?1 AND u.fileDinhKemId = ?2")
-	public List<FileDinhKemNhiemVuNam> findByTienDoNhiemVuNamIdAndFileDinhKemId(Long tienDoNhiemVuNamId, Long fileDinhKemId);
+	public List<FileDinhKemNhiemVuNam> findByFileDinhKemIdAndTienDoNhiemVuNamId(Long fileDinhKemId, Long tienDoNhiemVuNamId);
 	
 	public Optional<FileDinhKemNhiemVuNam> findByTienDoNhiemVuNamId(Long tienDoNhiemVuNamId);
 }

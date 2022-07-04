@@ -47,4 +47,5 @@ public class TienDoNhiemVuNamServiceImpl implements TienDoNhiemVuNamService {
 		// TODO Auto-generated method stub
 		return repo.setFixedDaXoaForNhiemVuNamId(daXoa, nhiemVuNamId);
 	}
+
 }

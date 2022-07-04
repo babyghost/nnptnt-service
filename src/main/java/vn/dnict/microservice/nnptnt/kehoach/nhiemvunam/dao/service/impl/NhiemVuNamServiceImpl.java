@@ -85,11 +85,18 @@ public class NhiemVuNamServiceImpl implements NhiemVuNamService{
 				tenNhiemVu), pageable);
 	}
 
+//	@Override
+//	public List<NhiemVuNam> getThongKeSoLuong(Long donViChuTriId, Integer nam, Long keHoachNamId, List<Integer> tinhTrangs,
+//			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu) {
+//		// TODO Auto-generated method stub
+//		return repo.findAll(NhiemVuNamSpecifications.thongke(donViChuTriId, nam, keHoachNamId, tinhTrangs, tuNgay, denNgay, tenNhiemVu));
+//	}
+
 	@Override
-	public List<NhiemVuNam> getThongKeSoLuong(Long donViChuTriId, Integer nam, Long keHoachNamId, List<Integer> tinhTrangs,
-			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu) {
+	public Page<NhiemVuNam> thongke(Long donViChuTriId, Integer nam, Long keHoachNamId, List<Integer> tinhTrangs,
+			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return repo.findAll(NhiemVuNamSpecifications.thongke(donViChuTriId, nam, keHoachNamId, tinhTrangs, tuNgay, denNgay, tenNhiemVu));
+		return repo.findAll(NhiemVuNamSpecifications.thongke(donViChuTriId, nam, keHoachNamId, tinhTrangs, tuNgay, denNgay, tenNhiemVu), pageable);
 	}
 
 }
