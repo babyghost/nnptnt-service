@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
@@ -54,5 +56,12 @@ public class ThongKeData {
 	
 	private Float keHoach;
 	
+	private Integer danhSo;
+	
+	private Long chaId;
+	
 	private List<ThongKeData> thongKeData = new ArrayList<ThongKeData>();
+	
+	@Valid
+	private List<ChiTieuData> chiTieuDatas = new ArrayList<ChiTieuData>();
 }

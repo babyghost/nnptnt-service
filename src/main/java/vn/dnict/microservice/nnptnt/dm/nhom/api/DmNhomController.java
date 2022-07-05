@@ -1,12 +1,9 @@
 package vn.dnict.microservice.nnptnt.dm.nhom.api;
 
-import java.time.LocalDate;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -37,10 +34,10 @@ public class DmNhomController {
 			@RequestParam(name = "sortBy", defaultValue = "ten", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
 			@RequestParam(name = "ten", required = false) String ten,
-			@RequestParam(name = "dmPhanNhomId", required = false) Long dmPhanNhomId,
+			@RequestParam(name = "dmNganhHangId", required = false) Long dmNganhHangId,
 			@RequestParam(name = "trangThai", required = false) Boolean trangThai) {
 
-		Page<DmNhomData> pageDmNhomData = bussinessDmNhomBussiness.findAll(page, size, sortBy, sortDir, ten, dmPhanNhomId, trangThai);
+		Page<DmNhomData> pageDmNhomData = bussinessDmNhomBussiness.findAll(page, size, sortBy, sortDir, ten, dmNganhHangId, trangThai);
 		return ResponseEntity.ok(pageDmNhomData);
 	}
 

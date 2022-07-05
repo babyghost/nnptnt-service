@@ -30,7 +30,7 @@ public class SanPhamSpecifications {
 
 				}
 				if (chuThe != null && !chuThe.isEmpty()) {
-					predicates.add(cb.like(cb.lower(root.join("doanhNghiep").<String>get("chuThe")), "%" + chuThe.toLowerCase() + "%"));
+					predicates.add(cb.like(cb.lower(root.join("doanhNghiep").<String>get("ten")), "%" + chuThe.toLowerCase() + "%"));
 
 				}
 				if (quyetDinh != null && !quyetDinh.isEmpty()) {
@@ -48,7 +48,7 @@ public class SanPhamSpecifications {
 					predicates.add(cb.equal(root.<String>get("phanNhomId"), phanNhomId));
 				}
 				if (phanHangId != null) {
-					predicates.add(cb.equal(root.<String>get("phanHangId"), phanHangId));
+					predicates.add(cb.equal(root.join("danhGiaSanPhams").<String>get("phanHangId"), phanHangId));
 				}
 				if (nhomId != null) {
 					predicates.add(cb.equal(root.<String>get("nhomId"), nhomId));

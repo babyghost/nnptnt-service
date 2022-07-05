@@ -28,4 +28,7 @@ public interface ChiTieuService {
 	
 	public List<ChiTieu> getByChiTieuNamIdAndChaIdAndDaXoa(Long chiTieuNamId, Long chaId,
 			boolean daXoa);
+	
+	public List<ChiTieu> getByChaIdAndDaXoa( Long chaId,
+			boolean daXoa);
 }

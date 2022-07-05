@@ -37,7 +37,7 @@ public class ChiTieuSpecifications {
 					predicates.add(cb.equal(root.<String>get("chiTieuNamId"), chiTieuNamId));
 				}
 				if (nam != null && nam > -1) {
-					predicates.add(cb.equal(root.<String>get("trangThai"), nam));
+					predicates.add(cb.equal(root.<String>get("nam"), nam));
 				}
 			
 				if (!predicates.isEmpty()) {

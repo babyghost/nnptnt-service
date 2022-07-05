@@ -54,11 +54,11 @@ public class BaoCaoThongKeServiceImpl implements BaoCaoThongKeService {
 			params.put("trangThai", trangThai);
 		}
 		if (tuThanhToanNgay != null) {
-			whereString += " AND thanhtoan_ngay <= :tuThanhToanNgay";
+			whereString += " AND thanhtoan_ngay >= :tuThanhToanNgay";
 			params.put("tuThanhToanNgay", tuThanhToanNgay);
 		}
 		if (denThanhToanNgay != null) {
-			whereString += " AND thanhtoan_ngay >= :denThanhToanNgay";
+			whereString += " AND thanhtoan_ngay <= :denThanhToanNgay";
 			params.put("denThanhToanNgay", denThanhToanNgay);
 		}
 		queryString += whereString;

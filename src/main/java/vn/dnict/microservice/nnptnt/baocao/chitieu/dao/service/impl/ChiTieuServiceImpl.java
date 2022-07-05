@@ -67,6 +67,12 @@ public class ChiTieuServiceImpl implements ChiTieuService{
 		// TODO Auto-generated method stub
 		return repo.getByChiTieuNamIdAndChaIdAndDaXoa(chiTieuNamId, chaId, daXoa);
 	}
+
+	@Override
+	public List<ChiTieu> getByChaIdAndDaXoa(Long chaId, boolean daXoa) {
+		// TODO Auto-generated method stub
+		return repo.getByChaIdAndDaXoa(chaId, daXoa);
+	}
 	
 	
 	

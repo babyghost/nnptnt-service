@@ -22,4 +22,8 @@ public interface ChiTieuRepo extends JpaRepository<ChiTieu, Long>,JpaSpecificati
 	@Query(name = "SELECT u FROM ChiTieu u WHERE ct.chiTieuNamId = ?1 AND u.chaId ?2 AND u.daXoa = ?3 ORDER BY u.sapXep ASC", nativeQuery = true)
 	public List<ChiTieu> getByChiTieuNamIdAndChaIdAndDaXoa(Long chiTieuNamId, Long chaId,
 			boolean daXoa);
+	
+	@Query(name = "SELECT u FROM ChiTieu u WHERE  AND u.chaId ?2 AND u.daXoa = ?3 ORDER BY u.sapXep ASC", nativeQuery = true)
+	public List<ChiTieu> getByChaIdAndDaXoa( Long chaId,
+			boolean daXoa);
 }

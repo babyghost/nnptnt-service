@@ -36,9 +36,9 @@ public class DmPhanNhomController {
 			@RequestParam(name = "sortBy", defaultValue = "ten", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
 			@RequestParam(name = "ten", required = false) String ten,
-			@RequestParam(name = "dmNganhHangId", required = false) Long dmNganhHangId,
+			@RequestParam(name = "dmNhomId", required = false) Long dmNhomId,
 			@RequestParam(name = "trangThai",required=false) Boolean trangThai) {
-		Page<DmPhanNhomInput> pageNganhHang = businessDmPhanNhomBusiness.findAll(page, size, sortBy, sortDir, ten, dmNganhHangId,trangThai);
+		Page<DmPhanNhomInput> pageNganhHang = businessDmPhanNhomBusiness.findAll(page, size, sortBy, sortDir, ten, dmNhomId,trangThai);
 		return ResponseEntity.ok(pageNganhHang);
 	}
 
