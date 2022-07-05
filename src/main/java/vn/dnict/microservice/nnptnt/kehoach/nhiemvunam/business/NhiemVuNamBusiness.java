@@ -99,66 +99,6 @@ public class NhiemVuNamBusiness {
 		return pageNhiemVuNamData;
 	}
 
-//	public String getThongKeSoLuong(Long donViChuTriId, Integer nam, Long keHoachId, List<Integer> tinhTrangs, LocalDate tuNgay,
-//			LocalDate denNgay, String tenNhiemVu) {
-//
-//		List<NhiemVuNam> nhiemVuNams = serviceNhiemVuNamService.getThongKeSoLuong(donViChuTriId, nam, keHoachId, tinhTrangs,
-//				tuNgay, denNgay, tenNhiemVu);
-//
-//		String thongKe = "Tổng số: " + nhiemVuNams.size();
-//
-//		if (Objects.nonNull(tinhTrangs) && !tinhTrangs.isEmpty()) {
-//			for (Integer tinhTrang : tinhTrangs) {
-//				if (Objects.nonNull(tinhTrang)) {
-//					if (tinhTrang.equals(Constants.QLKH_TINHTRANG_CHUATHUCHIEN)) {
-//						thongKe += "; " + mapTrangThai.get(tinhTrang) + ": " + (nhiemVuNams.stream()
-//								.filter(t -> Objects.isNull(t.getTienDoNhiemVuNams())).count()
-//								+ nhiemVuNams.stream().filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams()))
-//										.filter(t -> t.getTienDoNhiemVuNams().size() == 0).count()
-//								+ nhiemVuNams.stream().filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams()))
-//										.filter(t -> t.getTienDoNhiemVuNams().size() > 0)
-//										.filter(t -> Objects
-//												.nonNull(t.getTienDoNhiemVuNams().get(0).getTinhTrang()))
-//										.filter(t -> t.getTienDoNhiemVuNams().get(0).getTinhTrang()
-//												.equals(tinhTrang))
-//										.count());
-//					} else {
-//						thongKe += "; " + mapTrangThai.get(tinhTrang) + ": " + nhiemVuNams.stream()
-//								.filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams()))
-//								.filter(t -> t.getTienDoNhiemVuNams().size() > 0)
-//								.filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams().get(0).getTinhTrang()))
-//								.filter(t -> t.getTienDoNhiemVuNams().get(0).getTinhTrang().equals(tinhTrang))
-//								.count();
-//					}
-//				}
-//			}
-//		} else {
-//			for (Map.Entry<Integer, String> entry : mapTrangThai.entrySet()) {
-//				if (entry.getKey().equals(Constants.QLKH_TINHTRANG_CHUATHUCHIEN)) {
-//					thongKe += "; " + entry.getValue() + ": " + (nhiemVuNams.stream()
-//							.filter(t -> Objects.isNull(t.getTienDoNhiemVuNams())).count()
-//							+ nhiemVuNams.stream().filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams()))
-//									.filter(t -> t.getTienDoNhiemVuNams().size() == 0).count()
-//							+ nhiemVuNams.stream().filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams()))
-//									.filter(t -> t.getTienDoNhiemVuNams().size() > 0)
-//									.filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams().get(0).getTinhTrang()))
-//									.filter(t -> t.getTienDoNhiemVuNams().get(0).getTinhTrang()
-//											.equals(entry.getKey()))
-//									.count());
-//				} else {
-//					thongKe += "; " + entry.getValue() + ": " + nhiemVuNams.stream()
-//							.filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams()))
-//							.filter(t -> t.getTienDoNhiemVuNams().size() > 0)
-//							.filter(t -> Objects.nonNull(t.getTienDoNhiemVuNams().get(0).getTinhTrang()))
-//							.filter(t -> t.getTienDoNhiemVuNams().get(0).getTinhTrang().equals(entry.getKey()))
-//							.count();
-//				}
-//			}
-//		}
-//
-//		return thongKe;
-//	}
-
 	private NhiemVuNamData convertToNhiemVuNamData(NhiemVuNam nhiemVuNam) {
 		NhiemVuNamData nhiemVuNamData = new NhiemVuNamData();
 		nhiemVuNamData.setId(nhiemVuNam.getId());
