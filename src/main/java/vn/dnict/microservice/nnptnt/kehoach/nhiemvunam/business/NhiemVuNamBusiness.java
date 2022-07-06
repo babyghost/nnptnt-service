@@ -171,6 +171,7 @@ public class NhiemVuNamBusiness {
 
 	private ThongKeKeHoachNamData convertToThongKeKeHoachNamData(NhiemVuNam nhiemVuNam) {
 		ThongKeKeHoachNamData thongKeKeHoachData = new ThongKeKeHoachNamData();
+		thongKeKeHoachData.setId(nhiemVuNam.getId());
 		thongKeKeHoachData.setKeHoachNamId(nhiemVuNam.getKeHoachNamId());
 		if(nhiemVuNam.getKeHoachNamId() != null && nhiemVuNam.getKeHoachNamId() > 0) {
 			Optional<KeHoachNam> optionalKeHoachNam = serviceKeHoachNamService.findById(nhiemVuNam.getKeHoachNamId());

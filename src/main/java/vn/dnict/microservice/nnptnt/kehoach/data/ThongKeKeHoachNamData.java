@@ -11,6 +11,8 @@ import lombok.Data;
 @Data
 public class ThongKeKeHoachNamData {
 	
+	private Long id;
+	
 	private Long keHoachNamId;	
 	private String keHoachNamTen;
 	private String khSoKyHieu;

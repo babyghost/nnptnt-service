@@ -86,7 +86,7 @@ public class NhiemVuNamController {
 			@RequestParam(name = "donViChuTriId",required = false) Long donViChuTriId,
 			@RequestParam(name = "nam",required = false) Integer nam,
 			@RequestParam(name = "keHoachId",required = false) Long keHoachId,
-			@RequestParam(name = "tinhTrang",required = false) List<Integer> tinhTrangs,
+			@RequestParam(name = "tinhTrangs",required = false) List<Integer> tinhTrangs,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "tuNgay", required = false) LocalDate tuNgay,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "denNgay", required = false) LocalDate denNgay,
 			@RequestParam(name = "tenNhiemVu", required = false) String tenNhiemVu) {
@@ -104,7 +104,7 @@ public class NhiemVuNamController {
 			@RequestParam(name = "donViChuTriId",required = false) Long donViChuTriId,
 			@RequestParam(name = "nam",required = false) Integer nam,
 			@RequestParam(name = "keHoachId",required = false) Long keHoachId,
-			@RequestParam(name = "tinhTrang",required = false) List<Integer> tinhTrangs,
+			@RequestParam(name = "tinhTrangs",required = false) List<Integer> tinhTrangs,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "tuNgay", required = false) LocalDate tuNgay,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "denNgay", required = false) LocalDate denNgay,
 			@RequestParam(name = "tenNhiemVu", required = false) String tenNhiemVu) {
