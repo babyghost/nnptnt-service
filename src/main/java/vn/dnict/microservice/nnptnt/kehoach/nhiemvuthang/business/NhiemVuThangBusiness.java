@@ -272,13 +272,15 @@ public class NhiemVuThangBusiness {
 			int type = Constants.DINH_KEM_1_FILE;
 			Optional<FileDinhKemNhiemVuThang> fileDinhKemThang = serviceFileDinhKemNhiemVuThangService
 					.findByTienDoNhiemVuThangId(tienDoNhiemVuThang.getId());
-			Long fileDinhKemId = null;
-			Long objectId = tienDoNhiemVuThang.getId();
-			String appCode = TienDoNhiemVuThang.class.getSimpleName();
-			FileDinhKem fileDinhKem = coreAttachmentBusiness
-					.getAttachments(fileDinhKemThang.get().getFileDinhKemId(), appCode, objectId, type);
-			tienDoNhiemVuThangData.setFileDinhKem(fileDinhKem);
-			tienDoNhiemVuThangData.setFileDinhKemIds(fileDinhKem.getIds());
+			if(fileDinhKemThang.isPresent()) {
+				Long fileDinhKemId = null;
+				Long objectId = tienDoNhiemVuThang.getId();
+				String appCode = TienDoNhiemVuThang.class.getSimpleName();
+				FileDinhKem fileDinhKem = coreAttachmentBusiness
+						.getAttachments(fileDinhKemThang.get().getFileDinhKemId(), appCode, objectId, type);
+				tienDoNhiemVuThangData.setFileDinhKem(fileDinhKem);
+				tienDoNhiemVuThangData.setFileDinhKemIds(fileDinhKem.getIds());
+			}
 		}
 		nhiemVuThangData.setNhiemVuThangLogDatas(nhiemVuThangLogDatas);
 		return nhiemVuThangData;

@@ -24,12 +24,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.model.NhiemVuNam;
 
 @Entity
 @Table(name = "qlkh_tiendonhiemvunam")
 @EntityListeners(AuditingEntityListener.class)
-@Data
+@Getter
+@Setter
 public class TienDoNhiemVuNam {
 	@Id
 	@Column(name = "id", unique = true, nullable = false)

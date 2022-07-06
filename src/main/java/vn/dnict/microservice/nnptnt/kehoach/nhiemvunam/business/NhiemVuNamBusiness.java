@@ -270,12 +270,14 @@ public class NhiemVuNamBusiness {
 		if (!optional.isPresent()) {
 			throw new EntityNotFoundException(NhiemVuNam.class, "id", String.valueOf(id));
 		}
+		System.out.println("qqqqqqqqqqqq" + optional);
 		NhiemVuNam nhiemVuNam = optional.get();
 		NhiemVuNamData nhiemVuNamData = new NhiemVuNamData();
 		nhiemVuNamData.setId(nhiemVuNam.getId());
 		nhiemVuNamData.setKeHoachNamId(nhiemVuNam.getKeHoachNamId());
 		if(nhiemVuNam.getKeHoachNamId() != null && nhiemVuNam.getKeHoachNamId() > 0) {
 			Optional<KeHoachNam> optKeHoachNam = serviceKeHoachNamService.findById(nhiemVuNam.getKeHoachNamId());
+			System.out.println(nhiemVuNam.getKeHoachNamId() + "aaaaaaaaaaaaa" + optKeHoachNam);
 			if(optKeHoachNam.isPresent()) {
 				nhiemVuNamData.setKeHoachNamTen(optKeHoachNam.get().getTenKeHoach());
 				nhiemVuNamData.setDonViChuTriId(optKeHoachNam.get().getDonViChuTriId());
@@ -297,6 +299,7 @@ public class NhiemVuNamBusiness {
 		nhiemVuNamData.setLoaiNhiemVuId(nhiemVuNam.getLoaiNhiemVuId());
 		if(nhiemVuNam.getLoaiNhiemVuId() != null && nhiemVuNam.getLoaiNhiemVuId() > 0) {
 			Optional<DmLoaiNhiemVu> optLoaiNhiemVu = serviceDmLoaiNhiemVuService.findById(nhiemVuNam.getLoaiNhiemVuId());
+			System.out.println("-------------"+optLoaiNhiemVu);
 			if(optLoaiNhiemVu.isPresent()) {
 				nhiemVuNamData.setLoaiNhiemVuTen(optLoaiNhiemVu.get().getTen());
 				nhiemVuNamData.setLoaiNhiemVuMa(optLoaiNhiemVu.get().getMa());
@@ -319,19 +322,24 @@ public class NhiemVuNamBusiness {
 				
 				if(Objects.nonNull(tienDoNhiemVuNam)) {
 					int type = Constants.DINH_KEM_1_FILE;
+					System.out.println(tienDoNhiemVuNam.getId() + "00000000000000" );
 					Optional<FileDinhKemNhiemVuNam> fileDinhKemNam = serviceFileDinhKemNhiemVuNamService
-							.findByTienDoNhiemVuNamId(tienDoNhiemVuNam.getId());
-					Long fileDinhKemId = null;
-					Long objectId = tienDoNhiemVuNam.getId();
-					String appCode = TienDoNhiemVuNam.class.getSimpleName();
-					FileDinhKem fileDinhKem = coreAttachmentBusiness.getAttachments(fileDinhKemNam.get().getFileDinhKemId(), appCode,
-							objectId, type);
-					tienDoNhiemVuNamData.setFileDinhKem(fileDinhKem);
-					tienDoNhiemVuNamData.setFileDinhKemIds(fileDinhKem.getIds());
+							.findByTienDoNhiemVuNamIdAndDaXoa(tienDoNhiemVuNam.getId(), false);
+					if(fileDinhKemNam.isPresent()) {
+						Long fileDinhKemId = null;
+						Long objectId = tienDoNhiemVuNam.getId();
+						String appCode = TienDoNhiemVuNam.class.getSimpleName();
+						System.out.println("cehaks"+fileDinhKemNam.get().getFileDinhKemId());
+						FileDinhKem fileDinhKem = coreAttachmentBusiness.getAttachments(fileDinhKemNam.get().getFileDinhKemId(), appCode,
+								objectId, type);
+						tienDoNhiemVuNamData.setFileDinhKem(fileDinhKem);
+						tienDoNhiemVuNamData.setFileDinhKemIds(fileDinhKem.getIds());
+					}
 				}
 			}
 		}
 		nhiemVuNamData.setTienDoNhiemVuNamDatas(tienDoNhiemVuNamDatas);
+		
 		return nhiemVuNamData;
  	}
 
@@ -343,7 +351,7 @@ public class NhiemVuNamBusiness {
 		}
 		NhiemVuNam nhiemVuNam = optional.get();
 		
-		serviceTienDoNhiemVuNamService.setFixedDaXoaForNhiemVuNamId(false, nhiemVuNam.getId());
+		serviceTienDoNhiemVuNamService.setFixedDaXoaForNhiemVuNamId(true, nhiemVuNam.getId());
 		List<TienDoNhiemVuNamData> tienDoDatas = nhiemVuNamData.getTienDoNhiemVuNamDatas();
 		if(Objects.nonNull(tienDoDatas) && !tienDoDatas.isEmpty()) {
 			for(TienDoNhiemVuNamData tienDoData : tienDoDatas) {
@@ -365,7 +373,7 @@ public class NhiemVuNamBusiness {
 				tienDo = serviceTienDoNhiemVuNamService.save(tienDo);
 				
 				// đính kèm
-				serviceFileDinhKemNhiemVuNamService.setFixedDaXoaForTienDoNhiemVuNamId(false, tienDo.getId());
+				serviceFileDinhKemNhiemVuNamService.setFixedDaXoaForTienDoNhiemVuNamId(true, tienDo.getId());
 				/* Begin đính kèm file *******************************************************/
 
 				/*

@@ -36,9 +36,9 @@ public class FileDinhKemNhiemVuNamServiceImpl implements FileDinhKemNhiemVuNamSe
 	}
 
 	@Override
-	public List<FileDinhKemNhiemVuNam> findByTienDoNhiemVuNamIdAndDaXoa(Long tienDoNhiemVuNamId, Boolean daXoa) {
+	public List<FileDinhKemNhiemVuNam> findListByTienDoNhiemVuNamIdAndDaXoa(Long tienDoNhiemVuNamId, Boolean daXoa) {
 		// TODO Auto-generated method stub
-		return repo.findByTienDoNhiemVuNamIdAndDaXoa(tienDoNhiemVuNamId, daXoa);
+		return repo.findListByTienDoNhiemVuNamIdAndDaXoa(tienDoNhiemVuNamId, daXoa);
 	}
 
 	@Override
@@ -54,8 +54,8 @@ public class FileDinhKemNhiemVuNamServiceImpl implements FileDinhKemNhiemVuNamSe
 	}
 
 	@Override
-	public Optional<FileDinhKemNhiemVuNam> findByTienDoNhiemVuNamId(Long tienDoNhiemVuNamId) {
+	public Optional<FileDinhKemNhiemVuNam> findByTienDoNhiemVuNamIdAndDaXoa(Long tienDoNhiemVuNamId, Boolean daXoa) {
 		// TODO Auto-generated method stub
-		return repo.findByTienDoNhiemVuNamId(tienDoNhiemVuNamId);
+		return repo.findByTienDoNhiemVuNamIdAndDaXoa(tienDoNhiemVuNamId, daXoa);
 	}
 }
