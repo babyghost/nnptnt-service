@@ -69,4 +69,12 @@ public class ThongTinGietMoServiceImpl implements ThongTinGietMoService {
 				pageable);
 	}
 
+	@Override
+	public Page<ThongTinGietMo> tongHopSoLuongThang(List<String> tenCoSos, List<Long> loaiVatNuoiIds,
+			LocalDate tuThangNam, LocalDate denThangNam, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return repo.findAll(ThongTinGietMoSpecifications.tongHopSoLuongThang(tenCoSos, loaiVatNuoiIds, tuThangNam, denThangNam),
+				pageable);
+	}
+
 }

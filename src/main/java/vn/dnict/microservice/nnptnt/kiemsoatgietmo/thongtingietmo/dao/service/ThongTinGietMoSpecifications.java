@@ -101,4 +101,55 @@ public class ThongTinGietMoSpecifications {
 			
 		};
 	}
+	
+	public static Specification<ThongTinGietMo> tongHopSoLuongThang(final List<String> tenCoSos, final List<Long> loaiVatNuoiIds,
+			final LocalDate gietMoTuNgay, LocalDate gietMoDenNgay) {
+		return new Specification<ThongTinGietMo>() {
+			private static final long serialVersionUID = -4615834727542993669L;
+
+			@Override
+			public Predicate toPredicate(Root<ThongTinGietMo> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				List<Predicate> predicates = new ArrayList<>();
+				predicates.add(cb.equal(root.<String>get("daXoa"), false));
+				if (tenCoSos != null && !tenCoSos.isEmpty()) {
+					Expression<List<String>> valuecoSoGietMoId = cb.literal(tenCoSos);
+					Expression<String> expression = root.join("coSoGietMo").get("tenCoSo");
+					Predicate inList = expression.in(valuecoSoGietMoId);
+					predicates.add(inList);
+				}
+				
+				if (loaiVatNuoiIds != null && !loaiVatNuoiIds.isEmpty()) {
+					Expression<List<Long>> valueloaiVatNuoiIds = cb.literal(loaiVatNuoiIds);
+					Expression<String> expression = root.join("soLuongGietMo").get("loaiVatNuoiId");
+					Predicate inList = expression.in(valueloaiVatNuoiIds);
+					predicates.add(inList);
+				}
+				
+				if (gietMoTuNgay != null) {
+					List<Integer> years = new ArrayList<Integer>();
+					List<Integer> monThs = new ArrayList<Integer>();
+					for (LocalDate localDate : gietMoTuNgay) {
+						years.add(localDate.getYear());
+						monThs.add(localDate.getMonthValue());
+					}
+					Expression<List<Integer>> valueMonths = cb.literal(monThs);
+					Expression<List<Integer>> valueYears = cb.literal(years);
+					Expression<Integer> year = cb.function("YEAR", Integer.class, root.get("gietMoTuNgay"));
+					Expression<Integer> month = cb.function("MONTH", Integer.class, root.get("gietMoTuNgay"));
+					Predicate inYear = year.in(valueYears);
+					Predicate inMonth = month.in(valueMonths);
+					predicates.add(cb.and(inYear, inMonth));
+				}
+				if (gietMoDenNgay != null) {
+					predicates.add(cb.lessThanOrEqualTo(root.get("ngayThang").as(LocalDate.class),gietMoDenNgay));
+				}
+				
+				if (!predicates.isEmpty()) {
+					return cb.and(predicates.toArray(new Predicate[] {}));
+				}
+				return null;
+			}
+			
+		};
+	}
 }

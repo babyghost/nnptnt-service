@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ import vn.dnict.microservice.nnptnt.kiemsoatgietmo.soluonggietmo.dao.service.SoL
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.thongtingietmo.business.view.MyExcelViewTongHopSoLuongNgay;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.thongtingietmo.dao.model.ThongTinGietMo;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.thongtingietmo.dao.service.ThongTinGietMoService;
+import vn.dnict.microservice.nnptnt.vatnuoi.data.ThongKeSoLuongChanNuoiData;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.model.HoatDongChanNuoi;
 
 @Service
@@ -159,7 +161,20 @@ public class ThongTinGietMoBusiness {
 		Page<ThongTinGietMo> pageThongTin = serviceThongTinGietMoService.tongHopSoLuongNgay(tenCoSos, loaiVatNuoiIds, gietMoTuNgay,
 				gietMoDenNgay, PageRequest.of(page, size, direction, sortBy));
 		final Page<ThongKeSoLuongData> pageThongKeNgay = pageThongTin.map(this::convertToThongKeSoLuongNgayData);
-		return pageThongKeNgay;
+		
+		List<ThongKeSoLuongData> thongKeSoLuongDatass = new ArrayList<>(
+				pageThongKeNgay.getContent());
+
+		 List<ThongKeSoLuongData> thongKeSoLuongDatas = new ArrayList<>();
+
+		for (ThongKeSoLuongData element : thongKeSoLuongDatass) {
+           // Check if element not exist in list, perform add element to list
+           if (!thongKeSoLuongDatas.contains(element)) {
+           	thongKeSoLuongDatas.add(element);
+           }
+       }
+		Page<ThongKeSoLuongData> thongKeSoLuongDataImpl = new PageImpl<>(thongKeSoLuongDatas);
+		return thongKeSoLuongDataImpl;
 	}
 	
 	public ThongKeSoLuongData convertToThongKeSoLuongNgayData(ThongTinGietMo thongTinGietMo) {
@@ -214,17 +229,26 @@ public class ThongTinGietMoBusiness {
 				gietMoDenNgay, PageRequest.of(page, size, direction, sortBy));
 		Page<ThongKeSoLuongData> pageThongKeNgay = pageThongTin.map(this::convertToThongKeSoLuongNgayData);
 		
-		List<ThongKeSoLuongData> thongKeSoLuongDatas = new ArrayList<>(pageThongKeNgay.getContent());
+		List<ThongKeSoLuongData> thongKeSoLuongDatass = new ArrayList<>(pageThongKeNgay.getContent());
 		
 		while(pageThongKeNgay.hasNext()) {
 			Page<ThongTinGietMo> nextPageOfEmployees = serviceThongTinGietMoService.tongHopSoLuongNgay(tenCoSos, loaiVatNuoiIds,
 					gietMoTuNgay, gietMoDenNgay, PageRequest.of(page, size, direction, sortBy));
 			Page<ThongKeSoLuongData> nextPageOfThongKeSoLuongNgayData = nextPageOfEmployees.map(this::convertToThongKeSoLuongNgayData);
 			if(Objects.nonNull(nextPageOfThongKeSoLuongNgayData.getContent())) {
-				thongKeSoLuongDatas.addAll(nextPageOfThongKeSoLuongNgayData.getContent());
+				thongKeSoLuongDatass.addAll(nextPageOfThongKeSoLuongNgayData.getContent());
 			}
 			pageThongTin = nextPageOfEmployees;
 		}
+		List<ThongKeSoLuongData> thongKeSoLuongDatas = new ArrayList<>();
+
+		for (ThongKeSoLuongData element : thongKeSoLuongDatass) {
+            // Check if element not exist in list, perform add element to list
+            if (!thongKeSoLuongDatas.contains(element)) {
+            	thongKeSoLuongDatas.add(element);
+            }
+        }
+		
 		model.put("thongKeSoLuongDatas", thongKeSoLuongDatas);
 		response.setContentType("application/ms-excel");
 		response.setHeader("Content-disposition", "attachment; filename=ThongKeSoLuongGietMoNgay.xls");

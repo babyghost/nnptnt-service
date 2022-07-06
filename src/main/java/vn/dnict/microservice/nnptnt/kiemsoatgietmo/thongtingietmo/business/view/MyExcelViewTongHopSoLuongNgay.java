@@ -269,7 +269,7 @@ public class MyExcelViewTongHopSoLuongNgay extends AbstractXlsView {
 				5 // last column (0-based)
 		));
 		List<CoSoGietMo> listCoSo = (List<CoSoGietMo>) model.get("listCoSo");
-		List<SoLuongGietMoData> listSoLuongData = (List<SoLuongGietMoData>) model.get("listSoLuongData");
+		List<SoLuongGietMoData> soLuongGietMoDatas = (List<SoLuongGietMoData>) model.get("listSoLuongData");
 		List<ThongKeSoLuongData> thongKeSoLuongDatas = (List<ThongKeSoLuongData>) model
 				.get("thongKeSoLuongDatas");
 
@@ -306,12 +306,12 @@ public class MyExcelViewTongHopSoLuongNgay extends AbstractXlsView {
 
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);
-		cell2.setCellValue(listSoLuongData.get(0).getLoaiVatNuoiTen());
+		cell2.setCellValue(soLuongGietMoDatas.get(0).getLoaiVatNuoiTen());
 		currentColumn++;
 
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);
-		cell2.setCellValue(listSoLuongData.get(0).getLoaiVatNuoiTen());
+		cell2.setCellValue(soLuongGietMoDatas.get(0).getLoaiVatNuoiTen());
 		currentColumn++;
 	
 		if (Objects.nonNull(thongKeSoLuongDatas) && !thongKeSoLuongDatas.isEmpty()) {
@@ -330,8 +330,8 @@ public class MyExcelViewTongHopSoLuongNgay extends AbstractXlsView {
 				cell2.setCellValue(ngay);
 				currentColumn++;
 
-				if(Objects.nonNull(listSoLuongData) && !listSoLuongData.isEmpty()) {
-					for(SoLuongGietMoData listSoLuong : listSoLuongData) {
+				if(Objects.nonNull(soLuongGietMoDatas) && !soLuongGietMoDatas.isEmpty()) {
+					for(SoLuongGietMoData listSoLuong : soLuongGietMoDatas) {
 						currentRow++;
 						currentColumn = 0;					
 
