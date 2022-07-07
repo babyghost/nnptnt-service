@@ -49,4 +49,6 @@ public class NhiemVuThangData {
 	@Valid
 	private TienDoNhiemVuThangData tienDoNhiemVuThangData = new TienDoNhiemVuThangData();
 	
+	private List<NhiemVuThangData> children = new ArrayList<NhiemVuThangData>();
+	
 }
