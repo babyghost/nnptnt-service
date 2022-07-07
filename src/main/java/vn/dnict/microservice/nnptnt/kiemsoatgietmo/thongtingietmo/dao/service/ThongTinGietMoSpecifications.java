@@ -103,7 +103,7 @@ public class ThongTinGietMoSpecifications {
 	}
 	
 	public static Specification<ThongTinGietMo> tongHopSoLuongThang(final List<String> tenCoSos, final List<Long> loaiVatNuoiIds,
-			final LocalDate gietMoTuNgay, LocalDate gietMoDenNgay) {
+			final LocalDate gietMoTuThang, LocalDate gietMoDenThang) {
 		return new Specification<ThongTinGietMo>() {
 			private static final long serialVersionUID = -4615834727542993669L;
 
@@ -125,23 +125,11 @@ public class ThongTinGietMoSpecifications {
 					predicates.add(inList);
 				}
 				
-				if (gietMoTuNgay != null) {
-					List<Integer> years = new ArrayList<Integer>();
-					List<Integer> monThs = new ArrayList<Integer>();
-					for (LocalDate localDate : gietMoTuNgay) {
-						years.add(localDate.getYear());
-						monThs.add(localDate.getMonthValue());
-					}
-					Expression<List<Integer>> valueMonths = cb.literal(monThs);
-					Expression<List<Integer>> valueYears = cb.literal(years);
-					Expression<Integer> year = cb.function("YEAR", Integer.class, root.get("gietMoTuNgay"));
-					Expression<Integer> month = cb.function("MONTH", Integer.class, root.get("gietMoTuNgay"));
-					Predicate inYear = year.in(valueYears);
-					Predicate inMonth = month.in(valueMonths);
-					predicates.add(cb.and(inYear, inMonth));
+				if (gietMoTuThang != null) {
+					predicates.add(cb.greaterThanOrEqualTo(root.get("ngayThang").as(LocalDate.class),gietMoTuThang));
 				}
-				if (gietMoDenNgay != null) {
-					predicates.add(cb.lessThanOrEqualTo(root.get("ngayThang").as(LocalDate.class),gietMoDenNgay));
+				if (gietMoDenThang != null) {
+					predicates.add(cb.lessThanOrEqualTo(root.get("ngayThang").as(LocalDate.class),gietMoDenThang));
 				}
 				
 				if (!predicates.isEmpty()) {

@@ -26,6 +26,6 @@ public interface ThongTinGietMoService {
 	public Page<ThongTinGietMo> tongHopSoLuongNgay(List<String> tenCoSos, List<Long> loaiVatNuoiIds, LocalDate gietMoTuNgay,
 			LocalDate gietMoDenNgay, Pageable pageable);
 	
-	public Page<ThongTinGietMo> tongHopSoLuongThang(List<String> tenCoSos, List<Long> loaiVatNuoiIds, LocalDate tuThangNam,
-			LocalDate denThangNam, Pageable pageable);
+	public Page<ThongTinGietMo> tongHopSoLuongThang(List<String> tenCoSos, List<Long> loaiVatNuoiIds, LocalDate gietMoTuThang,
+			LocalDate gietMoDenThang, Pageable pageable);
 }

@@ -91,6 +91,35 @@ public class ThongTinGietMoController {
 				tenCoSos, loaiVatNuoiIds, gietMoTuNgay, gietMoDenNgay);
 	}
 	
+	@GetMapping(value = { "/tonghopsoluongthang" })
+	public ResponseEntity<Page<ThongKeSoLuongData>> tongHopSoLuongThang(
+			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
+			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
+			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
+			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
+			@RequestParam(name = "tenCoSo", required = false) List<String> tenCoSos,
+			@RequestParam(name = "loaiVatNuoiId", required = false) List<Long> loaiVatNuoiIds,
+			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "gietMoTuNgay", required = false) LocalDate gietMoTuThang,
+			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "gietMoDenNgay", required = false) LocalDate gietMoDenThang) {
+		Page<ThongKeSoLuongData> pageThongKeThang = businessThongTinGietMoBusiness.tongHopSoLuongThang(page, size, sortBy, sortDir,
+				tenCoSos, loaiVatNuoiIds, gietMoTuThang, gietMoDenThang);
+		return ResponseEntity.ok(pageThongKeThang);
+	}
+	
+	@GetMapping(value = { "/tonghopsoluongthang/export" })
+	public ModelAndView thongKeSoLuongThang(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
+			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
+			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
+			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
+			@RequestParam(name = "tenCoSo", required = false) List<String> tenCoSos,
+			@RequestParam(name = "loaiVatNuoiId", required = false) List<Long> loaiVatNuoiIds,
+			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "gietMoTuNgay", required = false) LocalDate gietMoTuThang,
+			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "gietMoDenNgay", required = false) LocalDate gietMoDenThang) {
+		return businessThongTinGietMoBusiness.exportExcelTongHopSoLuongThang(request, response, page, size, sortBy, sortDir,
+				tenCoSos, loaiVatNuoiIds, gietMoTuThang, gietMoDenThang);
+	}
+	
 	@PostMapping(value = { "" })
 	public ResponseEntity<ThongTinGietMo> create(@Valid @RequestBody ThongTinGietMoData thongTinGietMoData)
 			throws MethodArgumentNotValidException {
