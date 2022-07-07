@@ -30,6 +30,7 @@ import vn.dnict.microservice.danhmuc.dao.service.DmQuanHuyenService;
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
 import vn.dnict.microservice.nnptnt.dm.loaivatnuoi.dao.model.DmLoaiVatNuoi;
 import vn.dnict.microservice.nnptnt.dm.loaivatnuoi.dao.service.DmLoaiVatNuoiService;
+import vn.dnict.microservice.nnptnt.kiemsoatgietmo.data.ThongKeSoLuongData;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.model.CoSoChanNuoi;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.dao.service.CoSoChanNuoiService;
 import vn.dnict.microservice.nnptnt.vatnuoi.data.BaoCaoHoatDongChanNuoiData;
@@ -73,12 +74,24 @@ public class HoatDongChanNuoiBusiness {
 		final Page<HoatDongChanNuoiOutput> pageHoatDongChanNuoiOutput = pageHoatDongChanNuoi
 				.map(this::convertToHoatDongChanNuoiOutput);
 		
-		return pageHoatDongChanNuoiOutput;
+		List<HoatDongChanNuoiOutput> hoatDongChanNuoiOutputss = new ArrayList<>(
+				pageHoatDongChanNuoiOutput.getContent());
+
+		 List<HoatDongChanNuoiOutput> hoatDongChanNuoiOutputs = new ArrayList<>();
+
+		for (HoatDongChanNuoiOutput element : hoatDongChanNuoiOutputss) {
+           // Check if element not exist in list, perform add element to list
+           if (!hoatDongChanNuoiOutputs.contains(element)) {
+        	   hoatDongChanNuoiOutputs.add(element);
+           }
+       }
+		Page<HoatDongChanNuoiOutput> hoatDongChanNuoiOutputImpl = new PageImpl<>(hoatDongChanNuoiOutputs);
+		return hoatDongChanNuoiOutputImpl;
 	}
 	
 	private HoatDongChanNuoiOutput convertToHoatDongChanNuoiOutput(HoatDongChanNuoi hoatDongChanNuoi) {
 		HoatDongChanNuoiOutput hoatDongChanNuoiOutput = new HoatDongChanNuoiOutput();
-		hoatDongChanNuoiOutput.setId(hoatDongChanNuoi.getId());
+//		hoatDongChanNuoiOutput.setId(hoatDongChanNuoi.getId());
 		hoatDongChanNuoiOutput.setCoSoChanNuoiId(hoatDongChanNuoi.getCoSoChanNuoiId());
 
 		if(hoatDongChanNuoi.getCoSoChanNuoiId() != null && hoatDongChanNuoi.getCoSoChanNuoiId() > 0) {
@@ -141,8 +154,16 @@ public class HoatDongChanNuoiBusiness {
 				listHoatDongChanNuois.add(thongTinChanNuoi);
 			}
 		}
+		List<ThongTinHoatDongChanNuoiOutput> listHoatDongChanNuoiss = new ArrayList<>();
+
+		for (ThongTinHoatDongChanNuoiOutput element : listHoatDongChanNuois) {
+            // Check if element not exist in list, perform add element to list
+            if (!listHoatDongChanNuoiss.contains(element)) {
+            	listHoatDongChanNuoiss.add(element);
+            }
+        }
 		
-		hoatDongChanNuoiOutput.setListHoatDongChanNuoi(listHoatDongChanNuois);
+		hoatDongChanNuoiOutput.setListHoatDongChanNuoi(listHoatDongChanNuoiss);
 		return hoatDongChanNuoiOutput;
 	}
 	
