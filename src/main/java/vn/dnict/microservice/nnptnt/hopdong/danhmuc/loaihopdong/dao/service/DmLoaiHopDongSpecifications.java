@@ -14,7 +14,7 @@ import vn.dnict.microservice.nnptnt.hopdong.danhmuc.loaihopdong.dao.model.DmLoai
 
 public class DmLoaiHopDongSpecifications {
 
-	public static Specification<DmLoaiHopDong> quickSearch(final String search, final Boolean trangThai) {
+	public static Specification<DmLoaiHopDong> quickSearch(final String ten, final String ma, final Boolean trangThai) {
 		return new Specification<DmLoaiHopDong>() {
 			/**
 			 * 
@@ -26,10 +26,11 @@ public class DmLoaiHopDongSpecifications {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 				predicates.add(cb.equal(root.<String>get("daXoa"), false));
-				if (search != null && !search.isEmpty()) {
-					Predicate ten = cb.like(cb.lower(root.<String>get("ten")), "%" + search.toLowerCase() + "%");
-					Predicate ma = cb.like(cb.lower(root.<String>get("ma")), "%" + search.toLowerCase() + "%");
-					predicates.add(cb.or(ten, ma));
+				if (ten != null && !ten.isEmpty()) {
+					predicates.add(cb.like(cb.lower(root.<String>get("ten")), "%" + ten.toLowerCase() + "%"));
+				}
+				if (ma != null && !ma.isEmpty()) {
+					predicates.add(cb.like(cb.lower(root.<String>get("ma")), "%" + ma.toLowerCase() + "%"));
 				}
 				if (trangThai != null) {
 					predicates.add(cb.equal(root.<String>get("trangThai"), trangThai));

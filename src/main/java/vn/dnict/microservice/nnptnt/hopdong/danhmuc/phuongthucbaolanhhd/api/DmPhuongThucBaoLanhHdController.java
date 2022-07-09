@@ -35,11 +35,12 @@ public class DmPhuongThucBaoLanhHdController {
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
 			@RequestParam(name = "sortBy", defaultValue = "ten", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
-			@RequestParam(name = "type", defaultValue = "-1", required = false) Integer type,
+			@RequestParam(name = "ten", required = false) String ten,
+			@RequestParam(name = "ma", required = false) String ma,
 			@RequestParam(name = "trangThai", required = false) Boolean trangThai,
-			@RequestParam(name = "search", required = false) String search) {
+			@RequestParam(name = "type", defaultValue = "-1", required = false) Integer type) {
 		Page<DmPhuongThucBaoLanhHd> pageDmPhuongThucBaoLanhHd = businessPhuongThucBaoLanhHdBusiness
-				.findAll(page, size, sortBy, sortDir, search, type, trangThai);
+				.findAll(page, size, sortBy, sortDir, ten, ma, trangThai, type);
 		return ResponseEntity.ok(pageDmPhuongThucBaoLanhHd);
 	}
 

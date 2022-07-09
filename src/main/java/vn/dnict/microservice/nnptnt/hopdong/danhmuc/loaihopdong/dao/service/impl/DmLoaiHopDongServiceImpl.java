@@ -29,8 +29,8 @@ public class DmLoaiHopDongServiceImpl implements DmLoaiHopDongService {
 		return repo.findById(id);
 	}
 
-	public Page<DmLoaiHopDong> findAll(String search, Boolean trangThai, Pageable pageable) {
-		return repo.findAll(DmLoaiHopDongSpecifications.quickSearch(search, trangThai), pageable);
+	public Page<DmLoaiHopDong> findAll(String ten, String ma, Boolean trangThai, Pageable pageable) {
+		return repo.findAll(DmLoaiHopDongSpecifications.quickSearch(ten, ma, trangThai), pageable);
 	}
 
 	public boolean existsById(Long id) {

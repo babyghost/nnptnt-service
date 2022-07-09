@@ -29,13 +29,12 @@ public class DmPhuongThucBaoLanhHdServiceImpl implements DmPhuongThucBaoLanhHdSe
 		return repo.findById(id);
 	}
 
-	public Page<DmPhuongThucBaoLanhHd> findByDaXoaAndSearch(String search, Integer type, Pageable pageable) {
-		return repo.findAll(DmPhuongThucBaoLanhHdSpecifications.findByDaXoaAndSearch(search, type), pageable);
+	public Page<DmPhuongThucBaoLanhHd> findByDaXoaAndSearch(String ten, String ma, Integer type, Pageable pageable) {
+		return repo.findAll(DmPhuongThucBaoLanhHdSpecifications.findByDaXoaAndSearch(ten, ma, type), pageable);
 	}
 
-	public Page<DmPhuongThucBaoLanhHd> findAll(String search, Integer type, Boolean trangThai,
-			Pageable pageable) {
-		return repo.findAll(DmPhuongThucBaoLanhHdSpecifications.quickSearch(search, type, trangThai), pageable);
+	public Page<DmPhuongThucBaoLanhHd> findAll(String ten, String ma, Boolean trangThai, Integer type, Pageable pageable) {
+		return repo.findAll(DmPhuongThucBaoLanhHdSpecifications.quickSearch(ten, ma, trangThai, type), pageable);
 	}
 
 	public boolean existsById(Long id) {

@@ -16,5 +16,5 @@ public interface DmLoaiHopDongService {
 
 	public Optional<DmLoaiHopDong> findById(Long id);
 
-	public Page<DmLoaiHopDong> findAll(String search, Boolean trangThai, Pageable pageable);
+	public Page<DmLoaiHopDong> findAll(String ten, String ma, Boolean trangThai, Pageable pageable);
 }

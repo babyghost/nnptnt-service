@@ -16,8 +16,7 @@ public interface DmPhuongThucBaoLanhHdService {
 
 	public Optional<DmPhuongThucBaoLanhHd> findById(Long id);
 
-	public Page<DmPhuongThucBaoLanhHd> findByDaXoaAndSearch(String search, Integer type, Pageable pageable);
+	public Page<DmPhuongThucBaoLanhHd> findByDaXoaAndSearch(String ten, String ma, Integer type, Pageable pageable);
 
-	public Page<DmPhuongThucBaoLanhHd> findAll(String search, Integer type, Boolean trangThai,
-			Pageable pageable);
+	public Page<DmPhuongThucBaoLanhHd> findAll(String ten, String ma, Boolean trangThai, Integer type, Pageable pageable);
 }

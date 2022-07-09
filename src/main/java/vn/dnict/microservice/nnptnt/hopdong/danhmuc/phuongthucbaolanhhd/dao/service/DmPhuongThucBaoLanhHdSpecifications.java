@@ -13,8 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.hopdong.danhmuc.phuongthucbaolanhhd.dao.model.DmPhuongThucBaoLanhHd;
 
 public class DmPhuongThucBaoLanhHdSpecifications {
-	public static Specification<DmPhuongThucBaoLanhHd> findByDaXoaAndSearch(final String search,
-			final Integer type) {
+	public static Specification<DmPhuongThucBaoLanhHd> findByDaXoaAndSearch(final String ten, final String ma, final Integer type) {
 		return new Specification<DmPhuongThucBaoLanhHd>() {
 			/**
 			 * 
@@ -27,10 +26,11 @@ public class DmPhuongThucBaoLanhHdSpecifications {
 
 				List<Predicate> predicates = new ArrayList<>();
 				predicates.add(cb.equal(root.<String>get("daXoa"), false));
-				if (search != null && !search.isEmpty()) {
-					Predicate ten = cb.like(cb.lower(root.<String>get("ten")), "%" + search.toLowerCase() + "%");
-					Predicate ma = cb.like(cb.lower(root.<String>get("ma")), "%" + search.toLowerCase() + "%");
-					predicates.add(cb.or(ten, ma));
+				if (ten != null && !ten.isEmpty()) {
+					predicates.add(cb.like(cb.lower(root.<String>get("ten")), "%" + ten.toLowerCase() + "%"));
+				}
+				if (ma != null && !ma.isEmpty()) {
+					predicates.add(cb.like(cb.lower(root.<String>get("ma")), "%" + ma.toLowerCase() + "%"));
 				}
 				if (type != null && type > 0) {
 					predicates.add(cb.equal(root.<String>get("type"), type));
@@ -44,8 +44,8 @@ public class DmPhuongThucBaoLanhHdSpecifications {
 		};
 	}
 
-	public static Specification<DmPhuongThucBaoLanhHd> quickSearch(final String search, final Integer type,
-			final Boolean trangThai) {
+	public static Specification<DmPhuongThucBaoLanhHd> quickSearch(final String ten, final String ma, final Boolean trangThai,
+			final Integer type) {
 		return new Specification<DmPhuongThucBaoLanhHd>() {
 
 			/**
@@ -59,16 +59,17 @@ public class DmPhuongThucBaoLanhHdSpecifications {
 
 				List<Predicate> predicates = new ArrayList<>();
 				predicates.add(cb.equal(root.<String>get("daXoa"), false));
-				if (search != null && !search.isEmpty()) {
-					Predicate ten = cb.like(cb.lower(root.<String>get("ten")), "%" + search.toLowerCase() + "%");
-					Predicate ma = cb.like(cb.lower(root.<String>get("ma")), "%" + search.toLowerCase() + "%");
-					predicates.add(cb.or(ten, ma));
+				if (ten != null && !ten.isEmpty()) {
+					predicates.add(cb.like(cb.lower(root.<String>get("ten")), "%" + ten.toLowerCase() + "%"));
 				}
-				if (type != null && type > 0) {
-					predicates.add(cb.equal(root.<String>get("type"), type));
+				if (ma != null && !ma.isEmpty()) {
+					predicates.add(cb.like(cb.lower(root.<String>get("ma")), "%" + ma.toLowerCase() + "%"));
 				}
 				if (trangThai != null) {
 					predicates.add(cb.equal(root.<String>get("trangThai"), trangThai));
+				}
+				if (type != null && type > 0) {
+					predicates.add(cb.equal(root.<String>get("type"), type));
 				}
 				if (!predicates.isEmpty()) {
 					return cb.and(predicates.toArray(new Predicate[] {}));

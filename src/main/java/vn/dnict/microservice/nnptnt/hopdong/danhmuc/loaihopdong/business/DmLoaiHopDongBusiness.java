@@ -18,7 +18,7 @@ public class DmLoaiHopDongBusiness {
 	@Autowired
 	private DmLoaiHopDongService serviceDmLoaiHopDongService;
 
-	public Page<DmLoaiHopDong> findAll(int page, int size, String sortBy, String sortDir, String search,
+	public Page<DmLoaiHopDong> findAll(int page, int size, String sortBy, String sortDir, String ten, String ma,
 			Boolean trangThai) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
@@ -26,7 +26,7 @@ public class DmLoaiHopDongBusiness {
 		} else {
 			direction = Direction.DESC;
 		}
-		Page<DmLoaiHopDong> pageDmLoaiHopDong = serviceDmLoaiHopDongService.findAll(search, trangThai,
+		Page<DmLoaiHopDong> pageDmLoaiHopDong = serviceDmLoaiHopDongService.findAll(ten, ma, trangThai,
 				PageRequest.of(page, size, direction, sortBy));
 		return pageDmLoaiHopDong;
 	}

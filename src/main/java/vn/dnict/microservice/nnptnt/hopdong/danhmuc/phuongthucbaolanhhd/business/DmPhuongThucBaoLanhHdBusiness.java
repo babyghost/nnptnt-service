@@ -18,8 +18,8 @@ public class DmPhuongThucBaoLanhHdBusiness {
 	@Autowired
 	private DmPhuongThucBaoLanhHdService serviceDmPhuongThucBaoLanhHdService;
 
-	public Page<DmPhuongThucBaoLanhHd> findAll(int page, int size, String sortBy, String sortDir, String search,
-			Integer type, Boolean trangThai) {
+	public Page<DmPhuongThucBaoLanhHd> findAll(int page, int size, String sortBy, String sortDir, String ten, String ma,
+			Boolean trangThai, Integer type) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
@@ -27,7 +27,7 @@ public class DmPhuongThucBaoLanhHdBusiness {
 			direction = Direction.DESC;
 		}
 		Page<DmPhuongThucBaoLanhHd> pageDmPhuongThucBaoLanhHd = serviceDmPhuongThucBaoLanhHdService
-				.findAll(search, type, trangThai, PageRequest.of(page, size, direction, sortBy));
+				.findAll(ten, ma, trangThai, type, PageRequest.of(page, size, direction, sortBy));
 		return pageDmPhuongThucBaoLanhHd;
 	}
 
