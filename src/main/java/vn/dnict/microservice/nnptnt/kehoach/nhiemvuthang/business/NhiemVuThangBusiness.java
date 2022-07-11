@@ -271,7 +271,7 @@ public class NhiemVuThangBusiness {
 		if(Objects.nonNull(tienDoNhiemVuThang)) {
 			int type = Constants.DINH_KEM_1_FILE;
 			Optional<FileDinhKemNhiemVuThang> fileDinhKemThang = serviceFileDinhKemNhiemVuThangService
-					.findByTienDoNhiemVuThangId(tienDoNhiemVuThang.getId());
+					.findByTienDoNhiemVuThangIdAndDaXoa(tienDoNhiemVuThang.getId(), false);
 			if(fileDinhKemThang.isPresent()) {
 				Long fileDinhKemId = null;
 				Long objectId = tienDoNhiemVuThang.getId();
