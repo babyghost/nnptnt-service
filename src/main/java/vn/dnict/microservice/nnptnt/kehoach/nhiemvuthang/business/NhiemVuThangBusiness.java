@@ -173,6 +173,20 @@ public class NhiemVuThangBusiness {
 		tienDoNhiemVuThangData.setMucDoHoanThanh(tienDoNhiemVuThang.getMucDoHoanThanh());
 		tienDoNhiemVuThangData.setTenNguoiCapNhat(tienDoNhiemVuThang.getTenNguoiCapNhat());
 		tienDoNhiemVuThangData.setNgayCapNhat(LocalDate.now());
+		if(Objects.nonNull(tienDoNhiemVuThang)) {
+			int type = Constants.DINH_KEM_1_FILE;
+			Optional<FileDinhKemNhiemVuThang> fileDinhKemThang = serviceFileDinhKemNhiemVuThangService
+					.findByTienDoNhiemVuThangIdAndDaXoa(tienDoNhiemVuThang.getId(), false);
+			if(fileDinhKemThang.isPresent()) {
+				Long fileDinhKemId = null;
+				Long objectId = tienDoNhiemVuThang.getId();
+				String appCode = TienDoNhiemVuThang.class.getSimpleName();
+				FileDinhKem fileDinhKem = coreAttachmentBusiness
+						.getAttachments(fileDinhKemThang.get().getFileDinhKemId(), appCode, objectId, type);
+				tienDoNhiemVuThangData.setFileDinhKem(fileDinhKem);
+				tienDoNhiemVuThangData.setFileDinhKemIds(fileDinhKem.getIds());
+			}
+		}
 		nhiemVuThangData.setTienDoNhiemVuThangData(tienDoNhiemVuThangData);
 		// log
 		List<NhiemVuThangLog> nhiemVuThangLogs = serviceNhiemVuThangLogService
@@ -241,6 +255,21 @@ public class NhiemVuThangBusiness {
 		tienDoNhiemVuThangData.setMucDoHoanThanh(tienDoNhiemVuThang.getMucDoHoanThanh());
 		tienDoNhiemVuThangData.setTenNguoiCapNhat(tienDoNhiemVuThang.getTenNguoiCapNhat());
 		tienDoNhiemVuThangData.setNgayCapNhat(LocalDate.now());
+		
+		if(Objects.nonNull(tienDoNhiemVuThang)) {
+			int type = Constants.DINH_KEM_1_FILE;
+			Optional<FileDinhKemNhiemVuThang> fileDinhKemThang = serviceFileDinhKemNhiemVuThangService
+					.findByTienDoNhiemVuThangIdAndDaXoa(tienDoNhiemVuThang.getId(), false);
+			if(fileDinhKemThang.isPresent()) {
+				Long fileDinhKemId = null;
+				Long objectId = tienDoNhiemVuThang.getId();
+				String appCode = TienDoNhiemVuThang.class.getSimpleName();
+				FileDinhKem fileDinhKem = coreAttachmentBusiness
+						.getAttachments(fileDinhKemThang.get().getFileDinhKemId(), appCode, objectId, type);
+				tienDoNhiemVuThangData.setFileDinhKem(fileDinhKem);
+				tienDoNhiemVuThangData.setFileDinhKemIds(fileDinhKem.getIds());
+			}
+		}
 		nhiemVuThangData.setTienDoNhiemVuThangData(tienDoNhiemVuThangData);
 		// log
 		List<NhiemVuThangLog> nhiemVuThangLogs = serviceNhiemVuThangLogService
@@ -265,21 +294,6 @@ public class NhiemVuThangBusiness {
 					}
 				}
 				nhiemVuThangLogDatas.add(nhiemVuThangLogData);
-			}
-		}
-		
-		if(Objects.nonNull(tienDoNhiemVuThang)) {
-			int type = Constants.DINH_KEM_1_FILE;
-			Optional<FileDinhKemNhiemVuThang> fileDinhKemThang = serviceFileDinhKemNhiemVuThangService
-					.findByTienDoNhiemVuThangIdAndDaXoa(tienDoNhiemVuThang.getId(), false);
-			if(fileDinhKemThang.isPresent()) {
-				Long fileDinhKemId = null;
-				Long objectId = tienDoNhiemVuThang.getId();
-				String appCode = TienDoNhiemVuThang.class.getSimpleName();
-				FileDinhKem fileDinhKem = coreAttachmentBusiness
-						.getAttachments(fileDinhKemThang.get().getFileDinhKemId(), appCode, objectId, type);
-				tienDoNhiemVuThangData.setFileDinhKem(fileDinhKem);
-				tienDoNhiemVuThangData.setFileDinhKemIds(fileDinhKem.getIds());
 			}
 		}
 		nhiemVuThangData.setNhiemVuThangLogDatas(nhiemVuThangLogDatas);
