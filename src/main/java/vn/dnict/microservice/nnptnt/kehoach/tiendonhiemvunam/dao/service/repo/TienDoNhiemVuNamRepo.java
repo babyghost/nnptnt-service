@@ -14,7 +14,7 @@ import vn.dnict.microservice.nnptnt.kehoach.tiendonhiemvunam.dao.model.TienDoNhi
 @Repository
 public interface TienDoNhiemVuNamRepo extends JpaRepository<TienDoNhiemVuNam, Long>,JpaSpecificationExecutor<TienDoNhiemVuNam> {
 	
-	@Query("SELECT u FROM TienDoNhiemVuNam u WHERE u.nhiemVuNamId = ?1 AND u.daXoa = ?2 ORDER BY u.ngayBaoCao DESC")
+	@Query("SELECT u FROM TienDoNhiemVuNam u WHERE u.nhiemVuNamId = ?1 AND u.daXoa = ?2 ORDER BY u.id DESC")
 	public List<TienDoNhiemVuNam> findByNhiemVuNamIdAndDaXoa(Long nhiemVuNamId, Boolean daXoa);
 
 	@Modifying(clearAutomatically = true)
