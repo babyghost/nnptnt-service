@@ -38,6 +38,5 @@ public class KeHoachNamData {
 	private LocalDate ngayBanHanh;
 
 	@Valid
-//	private List<DmLoaiNhiemVuData> dmLoaiNhiemVuDatas = new ArrayList<DmLoaiNhiemVuData>();
 	private List<NhiemVuNamData> nhiemVuNamDatas = new ArrayList<NhiemVuNamData>();
 }

@@ -58,6 +58,4 @@ public class NhiemVuNamData {
 	private Integer sapXep;
 	
 	private Integer danhSo;
-	
-	private String thoiGianThucHien;
 }
