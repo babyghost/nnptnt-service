@@ -1,7 +1,6 @@
 package vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang.business;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,31 +8,23 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
 
 import vn.dnict.microservice.core.business.CoreAttachmentBusiness;
 import vn.dnict.microservice.core.dao.model.CoreAttachment;
 import vn.dnict.microservice.core.data.FileDinhKem;
 import vn.dnict.microservice.danhmuc.dao.model.DmCanBo;
-import vn.dnict.microservice.danhmuc.dao.model.DmDonVi;
 import vn.dnict.microservice.danhmuc.dao.service.DmCanBoService;
 import vn.dnict.microservice.danhmuc.dao.service.DmDonViService;
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
 import vn.dnict.microservice.nnptnt.kehoach.data.NhiemVuThangData;
 import vn.dnict.microservice.nnptnt.kehoach.data.NhiemVuThangLogData;
-import vn.dnict.microservice.nnptnt.kehoach.data.ThongKeKeHoachThangData;
 import vn.dnict.microservice.nnptnt.kehoach.data.TienDoNhiemVuThangData;
-import vn.dnict.microservice.nnptnt.kehoach.kehoachthang.dao.model.KeHoachThang;
 import vn.dnict.microservice.nnptnt.kehoach.kehoachthang.dao.service.KeHoachThangService;
-import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang.business.view.MyExcelViewThongKeThang;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang.dao.model.NhiemVuThang;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang.dao.service.NhiemVuThangService;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang2filedinhkem.dao.model.FileDinhKemNhiemVuThang;

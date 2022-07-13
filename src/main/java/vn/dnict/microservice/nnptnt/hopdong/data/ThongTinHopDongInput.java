@@ -125,7 +125,6 @@ public class ThongTinHopDongInput {
 	@Size(max = 150, message = "Nhập người nhận quá {max} ký tự")
 	private String baoLanhBaoHanhNguoiNhan;
 
-	@NotNull(message = "Có cam kết chi không để trống")
 	private Boolean coCamKetChi;
 
 	@Size(max = 30, message = "Nhập số cam kết quá {max} ký tự")

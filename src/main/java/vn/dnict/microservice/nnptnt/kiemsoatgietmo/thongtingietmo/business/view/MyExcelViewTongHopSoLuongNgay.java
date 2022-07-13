@@ -20,9 +20,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.web.servlet.view.document.AbstractXlsView;
 
-import vn.dnict.microservice.nnptnt.kehoach.data.ThongKeKeHoachNamData;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.cosogietmo.dao.model.CoSoGietMo;
-import vn.dnict.microservice.nnptnt.kiemsoatgietmo.data.CoSoGietMoData;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.data.SoLuongGietMoData;
 import vn.dnict.microservice.nnptnt.kiemsoatgietmo.data.ThongKeSoLuongData;
 

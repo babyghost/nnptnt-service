@@ -18,6 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.OrderBy;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
@@ -27,6 +29,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 import lombok.Getter;
@@ -46,13 +49,16 @@ public class NhiemVuNam {
 	@SequenceGenerator(name = "qlkh_nhiemvunam_seq", sequenceName = "qlkh_nhiemvunam_id_seq", allocationSize = 1)
 	private Long id;
 
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "kehoach_id", insertable = false, updatable = false)
-	private KeHoachNam keHoachNam;
-
 	@Column(name = "kehoach_id", nullable = false)
 	private Long keHoachNamId;
+
+	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+	@NotFound(action = NotFoundAction.IGNORE)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "kehoach_id" , referencedColumnName = "id",updatable = false, insertable = false)
+	@Where(clause = "daxoa = false")
+	private KeHoachNam keHoachNam;
+
 
 	@Column(name = "tennhiemvu", length = 500, nullable = false)
 	private String tenNhiemVu;
@@ -76,7 +82,7 @@ public class NhiemVuNam {
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "nhiemVuNamId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@Where(clause = "DAXOA = " + false)
+	@Where(clause = "daxoa = false")
 	private List<TienDoNhiemVuNam> tienDoNhiemVuNams;
 
 	@Column(name = "ghichu", length = 1000)

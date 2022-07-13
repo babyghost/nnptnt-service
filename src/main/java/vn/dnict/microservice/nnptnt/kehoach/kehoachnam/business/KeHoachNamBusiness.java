@@ -247,4 +247,18 @@ public class KeHoachNamBusiness {
 		keHoachNam = serviceKeHoachNamService.save(keHoachNam);
 		return this.convertToKeHoachNamIdAndNhiemVuNamId(keHoachNam);
 	}
+	//-----------------Thong ke ke hoach------------------------------
+	public Page<KeHoachNamData> thongKe(int page, int size, String sortBy, String sortDir, Long donViChuTriId, Integer nam,
+			Long keHoachNamId, List<Integer> tinhTrangs, LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu) {
+		Direction direction;
+		if (sortDir.equals("ASC")) {
+			direction = Direction.ASC;
+		} else {
+			direction = Direction.DESC;
+		}
+		Page<KeHoachNam> pageKeHoachNam = serviceKeHoachNamService.thongke(donViChuTriId, nam, keHoachNamId, tinhTrangs, tuNgay,
+				denNgay, tenNhiemVu, PageRequest.of(page, size, direction, sortBy));
+		final Page<KeHoachNamData> pageThongKe = pageKeHoachNam.map(this::convertToKeHoachNamIdAndNhiemVuNamId);
+		return pageThongKe;
+	}
 }

@@ -1,7 +1,9 @@
 package vn.dnict.microservice.nnptnt.kehoach.kehoachnam.dao.model;
 
 import java.time.LocalDate;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,10 +13,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -26,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.model.NhiemVuNam;
+import vn.dnict.microservice.nnptnt.kehoach.tiendonhiemvunam.dao.model.TienDoNhiemVuNam;
 
 @Entity
 @Table(name = "qlkh_kehoachnam")
@@ -78,4 +84,14 @@ public class KeHoachNam {
 	@LastModifiedDate
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
 	private LocalDateTime ngayCapNhat;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "keHoachNam")
+	@Where(clause = "daxoa = false")
+	private  List<NhiemVuNam> nhiemVuNams;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "nhiemVuNamId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@Where(clause = "daxoa = false")
+	private List<TienDoNhiemVuNam> tienDoNhiemVuNams;
 }

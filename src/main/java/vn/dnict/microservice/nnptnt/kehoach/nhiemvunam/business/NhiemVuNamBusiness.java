@@ -1,25 +1,16 @@
 package vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.business;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.servlet.ModelAndView;
 
 import vn.dnict.microservice.core.business.CoreAttachmentBusiness;
 import vn.dnict.microservice.core.dao.model.CoreAttachment;
@@ -27,15 +18,12 @@ import vn.dnict.microservice.core.data.FileDinhKem;
 import vn.dnict.microservice.danhmuc.dao.model.DmDonVi;
 import vn.dnict.microservice.danhmuc.dao.service.DmDonViService;
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
-import vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.dao.model.KeHoachTiemPhong;
 import vn.dnict.microservice.nnptnt.dm.loainhiemvu.dao.model.DmLoaiNhiemVu;
 import vn.dnict.microservice.nnptnt.dm.loainhiemvu.dao.service.DmLoaiNhiemVuService;
 import vn.dnict.microservice.nnptnt.kehoach.data.NhiemVuNamData;
-import vn.dnict.microservice.nnptnt.kehoach.data.ThongKeKeHoachNamData;
 import vn.dnict.microservice.nnptnt.kehoach.data.TienDoNhiemVuNamData;
 import vn.dnict.microservice.nnptnt.kehoach.kehoachnam.dao.model.KeHoachNam;
 import vn.dnict.microservice.nnptnt.kehoach.kehoachnam.dao.service.KeHoachNamService;
-import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.business.view.MyExcelViewThongKeKeHoachNam;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.model.NhiemVuNam;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam.dao.service.NhiemVuNamService;
 import vn.dnict.microservice.nnptnt.kehoach.nhiemvunam2filedinhkem.dao.model.FileDinhKemNhiemVuNam;
@@ -66,23 +54,6 @@ public class NhiemVuNamBusiness {
 	
 	@Autowired
 	CoreAttachmentBusiness coreAttachmentBusiness;
-	
-	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-	private Map<Integer, String> mapTrangThai = new HashMap<Integer, String>() {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = -3483264819808030205L;
-
-		{
-			put(Constants.QLKH_TINHTRANG_CHUATHUCHIEN, "Chưa thực hiện");
-			put(Constants.QLKH_TINHTRANG_DANGTHUCHIEN, "Đang thực hiện");
-			put(Constants.QLKH_TINHTRANG_DAHOANTHANH, "Đã hoàn thành");
-			put(Constants.QLKH_TINHTRANG_NGUNGTHUCHIEN, "Ngừng thực hiện");
-		}
-	};
 
 	public Page<NhiemVuNamData> findAll(int page, int size, String sortBy, String sortDir, Long donViChuTriId, List<Integer> tinhTrangs,
 			Integer nam, Long keHoachId, LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu) {
@@ -153,116 +124,6 @@ public class NhiemVuNamBusiness {
 		}
 		nhiemVuNamData.setTienDoNhiemVuNamDatas(tienDoNhiemVuNamDatas);
 		return nhiemVuNamData;
-	}
-	
-	public Page<ThongKeKeHoachNamData> thongKe(int page, int size, String sortBy, String sortDir, Long donViChuTriId, Integer nam,
-			Long keHoachNamId, List<Integer> tinhTrangs, LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu) {
-		Direction direction;
-		if (sortDir.equals("ASC")) {
-			direction = Direction.ASC;
-		} else {
-			direction = Direction.DESC;
-		}
-		final Page<NhiemVuNam> pageNhiemVuNam = serviceNhiemVuNamService.findAll(donViChuTriId, tinhTrangs, nam, keHoachNamId, tuNgay,
-				denNgay, tenNhiemVu, PageRequest.of(page, size, direction, sortBy));
-		final Page<ThongKeKeHoachNamData> pageThongKeKeHoach = pageNhiemVuNam.map(this::convertToThongKeKeHoachNamData);
-		return pageThongKeKeHoach;
-	}
-
-	private ThongKeKeHoachNamData convertToThongKeKeHoachNamData(NhiemVuNam nhiemVuNam) {
-		ThongKeKeHoachNamData thongKeKeHoachData = new ThongKeKeHoachNamData();
-		thongKeKeHoachData.setId(nhiemVuNam.getId());
-		thongKeKeHoachData.setKeHoachNamId(nhiemVuNam.getKeHoachNamId());
-		if(nhiemVuNam.getKeHoachNamId() != null && nhiemVuNam.getKeHoachNamId() > 0) {
-			Optional<KeHoachNam> optionalKeHoachNam = serviceKeHoachNamService.findById(nhiemVuNam.getKeHoachNamId());
-			if(optionalKeHoachNam.isPresent()) {
-				thongKeKeHoachData.setKeHoachNamTen(optionalKeHoachNam.get().getTenKeHoach());
-				thongKeKeHoachData.setKhDonViChuTriId(optionalKeHoachNam.get().getDonViChuTriId());
-				if(optionalKeHoachNam.get().getDonViChuTriId() != null && optionalKeHoachNam.get().getDonViChuTriId() > 0) {
-					Optional<DmDonVi> optionalDmDonVi = serviceDmDonViService.findById(optionalKeHoachNam.get().getDonViChuTriId());
-					if(optionalDmDonVi.isPresent()) {
-						thongKeKeHoachData.setKhDonViChuTriTen(optionalDmDonVi.get().getTenDonVi());
-					}
-				}
-				thongKeKeHoachData.setKhNam(optionalKeHoachNam.get().getNam());
-				thongKeKeHoachData.setKhSoKyHieu(optionalKeHoachNam.get().getSoKyHieu());
-				thongKeKeHoachData.setKhNgayBanHanh(optionalKeHoachNam.get().getNgayBanHanh());
-			}
-		}
-		thongKeKeHoachData.setNhiemVuChaId(nhiemVuNam.getNhiemVuChaId());
-		thongKeKeHoachData.setTenNhiemVu(nhiemVuNam.getTenNhiemVu());
-		thongKeKeHoachData.setSapXep(nhiemVuNam.getSapXep());
-		thongKeKeHoachData.setDonViPhoiHop(nhiemVuNam.getDonViPhoiHop());
-		thongKeKeHoachData.setTuNgay(nhiemVuNam.getTuNgay());
-		thongKeKeHoachData.setDenNgay(nhiemVuNam.getDenNgay());
-		thongKeKeHoachData.setLoaiNhiemVuId(nhiemVuNam.getLoaiNhiemVuId());
-		if(nhiemVuNam.getLoaiNhiemVuId() != null && nhiemVuNam.getLoaiNhiemVuId() > 0) {
-			Optional<DmLoaiNhiemVu> optLoaiNhiemVu = serviceDmLoaiNhiemVuService.findById(nhiemVuNam.getLoaiNhiemVuId());
-			if(optLoaiNhiemVu.isPresent()) {
-				thongKeKeHoachData.setLoaiNhiemVuTen(optLoaiNhiemVu.get().getTen());
-				thongKeKeHoachData.setLoaiNvMa(optLoaiNhiemVu.get().getMa());
-			}
-		}
-		thongKeKeHoachData.setGhiChu(nhiemVuNam.getGhiChu());
-		thongKeKeHoachData.setDanhSo(nhiemVuNam.getDanhSo());
-		
-		List<TienDoNhiemVuNam> tienDoNams = serviceTienDoNhiemVuNamService.findByNhiemVuNamIdAndDaXoa(nhiemVuNam.getId(), false);
-		List<ThongKeKeHoachNamData> thongKeDatas = new ArrayList<ThongKeKeHoachNamData>();
-		if(Objects.nonNull(tienDoNams) && !tienDoNams.isEmpty()) {
-			for(TienDoNhiemVuNam tienDoNam : tienDoNams) {
-				thongKeKeHoachData.setMucDoHoanThanh(tienDoNam.getMucDoHoanThanh());
-				thongKeKeHoachData.setKetQua(tienDoNam.getKetQua());
-				thongKeKeHoachData.setTinhTrang(tienDoNam.getTinhTrang());
-				
-				thongKeDatas.add(thongKeKeHoachData);
-			}
-		}
-//		
-//		Optional<TienDoNhiemVuNam> optTienDo = serviceTienDoNhiemVuNamService.findByNhiemVuNamId(nhiemVuNam.getId());
-//		if(optTienDo.isPresent()) {
-//			thongKeKeHoachData.setTinhTrang(optTienDo.get().getTinhTrang());
-//			thongKeKeHoachData.setMucDoHoanThanh(optTienDo.get().getMucDoHoanThanh());
-//			thongKeKeHoachData.setKetQua(optTienDo.get().getKetQua());
-//		}
-
-		return thongKeKeHoachData;
-	}
-	
-	public ModelAndView exportExcelThongKeKeHoachNam(HttpServletRequest request, HttpServletResponse response, int page, int size,
-			String sortBy, String sortDir, Long donViChuTriId, Integer nam, Long keHoachNamId, List<Integer> tinhTrangs,
-			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu) {
-		
-		LocalDate localDate = LocalDate.now();// For reference
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-		String formattedString = localDate.format(formatter);
-		Map<String, Object> model = new HashMap<String, Object>();
-
-		Direction direction;
-		if (sortDir.equals("ASC")) {
-			direction = Direction.ASC;
-		} else {
-			direction = Direction.DESC;
-		}
-		
-		Page<NhiemVuNam> pageNhiemVuNam = serviceNhiemVuNamService.thongke(donViChuTriId, nam, keHoachNamId, tinhTrangs, tuNgay, denNgay,
-				tenNhiemVu, PageRequest.of(page, size, direction, sortBy));
-		Page<ThongKeKeHoachNamData> pageThongKeKeHoachData = pageNhiemVuNam.map(this::convertToThongKeKeHoachNamData);
-		
-		List<ThongKeKeHoachNamData> thongKeKeHoachDatas = new ArrayList<>(pageThongKeKeHoachData.getContent());
-		
-		while(pageNhiemVuNam.hasNext()) {
-			Page<NhiemVuNam> nextPageOfEmployees = serviceNhiemVuNamService.thongke(donViChuTriId, nam, keHoachNamId, tinhTrangs,
-					tuNgay, denNgay, tenNhiemVu, pageNhiemVuNam.nextPageable());
-			Page<ThongKeKeHoachNamData> nextPageOfThongKeKeHoachNamData = nextPageOfEmployees.map(this::convertToThongKeKeHoachNamData);
-			if(Objects.nonNull(nextPageOfThongKeKeHoachNamData.getContent())) {
-				thongKeKeHoachDatas.addAll(nextPageOfThongKeKeHoachNamData.getContent());
-			}
-			pageNhiemVuNam = nextPageOfEmployees;
-		}
-		model.put("thongKeKeHoachDatas", thongKeKeHoachDatas);
-		response.setContentType("application/ms-excel");
-		response.setHeader("Content-disposition", "attachment; filename=ThongKeKeHoachNam.xls");
-		return new ModelAndView(new MyExcelViewThongKeKeHoachNam(), model);
 	}
 
 	public NhiemVuNamData findById(Long id) throws EntityNotFoundException {

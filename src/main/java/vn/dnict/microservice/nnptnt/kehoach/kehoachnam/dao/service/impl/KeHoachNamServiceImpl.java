@@ -1,6 +1,7 @@
 package vn.dnict.microservice.nnptnt.kehoach.kehoachnam.dao.service.impl;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,13 @@ public class KeHoachNamServiceImpl implements KeHoachNamService {
 		// TODO Auto-generated method stub
 		return repo.findAll(KeHoachNamSpecifications.quichSearch(donViChuTriId, nam, tenKeHoach, soKyHieu, trangThai, tuNgayBanHanh,
 				denNgayBanHanh), pageable);
+	}
+
+	@Override
+	public Page<KeHoachNam> thongke(Long donViChuTriId, Integer nam, Long keHoachNamId, List<Integer> tinhTrangs,
+			LocalDate tuNgay, LocalDate denNgay, String tenNhiemVu, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return repo.findAll(KeHoachNamSpecifications.thongke(donViChuTriId, nam, keHoachNamId, tinhTrangs, tuNgay, denNgay,
+				tenNhiemVu), pageable);
 	}
 }
