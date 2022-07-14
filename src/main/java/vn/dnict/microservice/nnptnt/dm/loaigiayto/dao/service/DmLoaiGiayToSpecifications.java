@@ -1,4 +1,4 @@
-package vn.dnict.microservice.nnptnt.kiemsoatgietmo.danhmuc.loaigiayto.dao.service;
+package vn.dnict.microservice.nnptnt.dm.loaigiayto.dao.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import vn.dnict.microservice.nnptnt.kiemsoatgietmo.danhmuc.loaigiayto.dao.model.DmLoaiGiayTo;
+import vn.dnict.microservice.nnptnt.dm.loaigiayto.dao.model.DmLoaiGiayTo;
 
 public class DmLoaiGiayToSpecifications {
 	public static Specification<DmLoaiGiayTo> quickSearch(final String search, final Integer trangThai) {

@@ -1,4 +1,4 @@
-package vn.dnict.microservice.nnptnt.kiemsoatgietmo.danhmuc.loaigiayto.dao.service.impl;
+package vn.dnict.microservice.nnptnt.dm.loaigiayto.dao.service.impl;
 
 import java.util.Optional;
 
@@ -8,10 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import vn.dnict.microservice.nnptnt.kiemsoatgietmo.danhmuc.loaigiayto.dao.model.DmLoaiGiayTo;
-import vn.dnict.microservice.nnptnt.kiemsoatgietmo.danhmuc.loaigiayto.dao.service.DmLoaiGiayToService;
-import vn.dnict.microservice.nnptnt.kiemsoatgietmo.danhmuc.loaigiayto.dao.service.DmLoaiGiayToSpecifications;
-import vn.dnict.microservice.nnptnt.kiemsoatgietmo.danhmuc.loaigiayto.dao.service.repo.DmLoaiGiayToRepo;
+import vn.dnict.microservice.nnptnt.dm.loaigiayto.dao.model.DmLoaiGiayTo;
+import vn.dnict.microservice.nnptnt.dm.loaigiayto.dao.service.DmLoaiGiayToService;
+import vn.dnict.microservice.nnptnt.dm.loaigiayto.dao.service.DmLoaiGiayToSpecifications;
+import vn.dnict.microservice.nnptnt.dm.loaigiayto.dao.service.repo.DmLoaiGiayToRepo;
 
 @Service
 @Transactional
@@ -19,7 +19,6 @@ public class DmLoaiGiayToServiceImpl implements DmLoaiGiayToService {
 
 	@Autowired
 	DmLoaiGiayToRepo repo;
-	
 	@Override
 	public DmLoaiGiayTo save(DmLoaiGiayTo entity) {
 		// TODO Auto-generated method stub

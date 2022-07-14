@@ -1,4 +1,4 @@
-package vn.dnict.microservice.nnptnt.kiemsoatgietmo.danhmuc.loaigiayto.api;
+package vn.dnict.microservice.nnptnt.dm.loaigiayto.api;
 
 import javax.validation.Valid;
 
@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
-import vn.dnict.microservice.nnptnt.kiemsoatgietmo.danhmuc.loaigiayto.business.DmLoaiGiayToBusiness;
-import vn.dnict.microservice.nnptnt.kiemsoatgietmo.danhmuc.loaigiayto.dao.model.DmLoaiGiayTo;
-import vn.dnict.microservice.nnptnt.kiemsoatgietmo.data.DmLoaiGiayToData;
+import vn.dnict.microservice.nnptnt.dm.data.DmLoaiGiayToInput;
+import vn.dnict.microservice.nnptnt.dm.loaigiayto.business.DmLoaiGiayToBusiness;
+import vn.dnict.microservice.nnptnt.dm.loaigiayto.dao.model.DmLoaiGiayTo;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/danhmuc/loaigiayto")
+@RequestMapping(value = "/dm/loaigiayto")
 public class DmLoaiGiayToController {
 	@Autowired
 	DmLoaiGiayToBusiness businessDmLoaiGiayToBusiness;
@@ -47,15 +47,15 @@ public class DmLoaiGiayToController {
 	}
 	
 	@PostMapping(value = { "" })
-	public ResponseEntity<DmLoaiGiayTo> create(@Valid @RequestBody DmLoaiGiayToData dmLoaiGiayToData) {
-		DmLoaiGiayTo loaiGiayTo = businessDmLoaiGiayToBusiness.create(dmLoaiGiayToData);
+	public ResponseEntity<DmLoaiGiayTo> create(@Valid @RequestBody DmLoaiGiayToInput dmLoaiGiayToInput) {
+		DmLoaiGiayTo loaiGiayTo = businessDmLoaiGiayToBusiness.create(dmLoaiGiayToInput);
 		return ResponseEntity.status(HttpStatus.CREATED).body(loaiGiayTo);
 	}
 	
 	@PutMapping(value = { "/{id}" })
-	public ResponseEntity<DmLoaiGiayTo> update(@PathVariable("id") Long id, @Valid @RequestBody DmLoaiGiayToData
-			loaiGiayToData) throws EntityNotFoundException {
-		DmLoaiGiayTo loaiGiayTo = businessDmLoaiGiayToBusiness.update(id, loaiGiayToData);
+	public ResponseEntity<DmLoaiGiayTo> update(@PathVariable("id") Long id, @Valid @RequestBody DmLoaiGiayToInput 
+			dmLoaiGiayToInput) throws EntityNotFoundException {
+		DmLoaiGiayTo loaiGiayTo = businessDmLoaiGiayToBusiness.update(id, dmLoaiGiayToInput);
 		return ResponseEntity.ok(loaiGiayTo);
 	}
 	

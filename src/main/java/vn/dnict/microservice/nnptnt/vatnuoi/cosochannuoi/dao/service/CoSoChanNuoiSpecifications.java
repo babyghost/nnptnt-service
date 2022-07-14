@@ -30,15 +30,15 @@ public class CoSoChanNuoiSpecifications {
 				}
 				
 				if (tenChuCoSo != null && !tenChuCoSo.isEmpty()) {
-					predicates.add(cb.equal(root.<String>get("tenChuCoSo"), tenChuCoSo));
+					predicates.add(cb.like(cb.lower(root.<String>get("tenChuCoSo")), "%" + tenChuCoSo.toLowerCase() + "%"));
 				}
 				
 				if (dienThoai != null && !dienThoai.isEmpty()) {
-					predicates.add(cb.equal(root.<String>get("dienThoai"), dienThoai));
+					predicates.add(cb.like(cb.lower(root.<String>get("dienThoai")), "%" + dienThoai.toLowerCase() + "%"));
 				}
 				
 				if (email != null && !email.isEmpty()) {
-					predicates.add(cb.equal(root.<String>get("email"), email));
+					predicates.add(cb.like(cb.lower(root.<String>get("email")), "%" + email.toLowerCase() + "%"));
 				}
 				
 				if (phuongXaId != null) {

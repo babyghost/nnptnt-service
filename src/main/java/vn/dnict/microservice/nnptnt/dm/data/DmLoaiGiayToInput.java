@@ -1,9 +1,10 @@
-package vn.dnict.microservice.nnptnt.kiemsoatgietmo.data;
+package vn.dnict.microservice.nnptnt.dm.data;
 
 import lombok.Data;
 
 @Data
-public class DmLoaiGiayToData {
+public class DmLoaiGiayToInput {
+	
 	private Long id;
 	
 	private String ten;

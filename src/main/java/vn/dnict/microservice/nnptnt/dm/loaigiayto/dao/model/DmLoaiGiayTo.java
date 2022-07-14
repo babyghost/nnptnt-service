@@ -1,4 +1,4 @@
-package vn.dnict.microservice.nnptnt.kiemsoatgietmo.danhmuc.loaigiayto.dao.model;
+package vn.dnict.microservice.nnptnt.dm.loaigiayto.dao.model;
 
 import java.time.LocalDateTime;
 
