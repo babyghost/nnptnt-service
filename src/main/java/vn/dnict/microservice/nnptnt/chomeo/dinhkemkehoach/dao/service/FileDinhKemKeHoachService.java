@@ -12,11 +12,13 @@ public interface FileDinhKemKeHoachService {
 
 	public Optional<FileDinhKemKeHoach> findById(Long id);
 
-	public List<FileDinhKemKeHoach> findByDinhKemFileIdAndDaXoa(Long dinhKemFileId, Boolean daXoa);
+	//public List<FileDinhKemKeHoach> findByDinhKemFileIdAndDaXoa(Long dinhKemFileId, Boolean daXoa);
 
 
 	public int setFixedDaXoaForKeHoachTiemPhongId(Boolean daXoa, Long keHoachTiemPhongId);
 	public Optional<FileDinhKemKeHoach> findBykeHoachTiemPhongId(Long keHoachTiemPhongId);
-
+	
+	public List<FileDinhKemKeHoach> findByKeHoachIdAndDaXoa(Long keHoachTiemPhongId, Boolean daXoa);
+	
 	public List<FileDinhKemKeHoach> findByDinhKemFileIdAndKeHoachTiemPhongId(Long dinhKemFileId, Long keHoachTiemPhongId);
 }

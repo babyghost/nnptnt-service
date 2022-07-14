@@ -70,6 +70,7 @@ public class SanPham {
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "sanPham")
+	@Where(clause = "daxoa = false")
 	private  List<DanhGiaSanPham> danhGiaSanPhams;
 	
 	

@@ -1,11 +1,14 @@
 package vn.dnict.microservice.nnptnt.baocao.kehoach.bussiness;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import vn.dnict.microservice.nnptnt.baocao.thuchienbaocao.dao.model.ThucHienBaoC
 import vn.dnict.microservice.nnptnt.chomeo.thoigiantiemphong.dao.model.ThoiGianTiemPhong;
 import vn.dnict.microservice.nnptnt.dm.linhvuc.dao.model.DmLinhVuc;
 import vn.dnict.microservice.nnptnt.dm.linhvuc.dao.service.DmLinhVucService;
+import vn.dnict.microservice.nnptnt.vatnuoi.data.ThongKeSoLuongChanNuoiData;
 
 @Service
 public class KeHoachBussiness {
@@ -40,7 +44,19 @@ public class KeHoachBussiness {
 		final Page<KeHoachData> pageKeHoachData = pageKeHoach
 				.map(this::convertToKeHoachData);
 		
-		return pageKeHoachData;
+		List<KeHoachData> keHoachDataDatass = new ArrayList<>(
+				pageKeHoachData.getContent());
+		 List<KeHoachData> keHoachDataDatas = new ArrayList<>();
+
+			for (KeHoachData element : keHoachDataDatass) {
+	           // Check if element not exist in list, perform add element to list
+	           if (!keHoachDataDatas.contains(element)) {
+	        	   keHoachDataDatas.add(element);
+	           }
+	       }
+			Page<KeHoachData> keHoachDataImpl = new PageImpl<>(keHoachDataDatas);
+		
+		return keHoachDataImpl;
 	}
 	
 	private KeHoachData convertToKeHoachData(KeHoach keHoach) {
@@ -108,6 +124,23 @@ public class KeHoachBussiness {
 		keHoach.setDaXoa(true);
 		keHoach = serviceKeHoachService.save(keHoach);
 		return keHoach;
+	}
+	
+	public Integer deletes(List<Long> ids) throws EntityNotFoundException {
+		List<KeHoach> result = new ArrayList<KeHoach>();
+		if (ids.size() > 0) {
+			ids.stream().forEach(item -> {
+				Optional<KeHoach> optional = serviceKeHoachService
+						.findById(item);
+				if (optional.isPresent()) {
+					KeHoach object = optional.get();
+					object.setDaXoa(true);			
+					serviceKeHoachService.save(object);
+					result.add(object);
+				}
+			});
+		}
+		return result.size();
 	}
 	
 	public KeHoachData findChiTieu( long linhVucId, Integer nam,Long chiTieuId)

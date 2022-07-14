@@ -55,15 +55,14 @@ public class KeHoachTiemPhongBusiness {
 	FileDinhKemKeHoachService serviceFileDinhKemKeHoachService;
 	
 	
-	public Page<KeHoachTiemPhongData> findAll(int page, int size, String sortBy, String sortDir,String noiDung, String soKeHoach, String tenKeHoach, LocalDate ngayBanHanhTuNgay, LocalDate ngayBanHanhDenNgay,LocalDate ngayDuKienTuNgay,LocalDate ngayDuKienDenNgay) {
+	public Page<KeHoachTiemPhongData> findAll(int page, int size, String sortBy, String sortDir, String soKeHoach, String tenKeHoach,LocalDate ngayDuKienTuNgay,LocalDate ngayDuKienDenNgay, LocalDate ngayBanHanhTuNgay, LocalDate ngayBanHanhDenNgay) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-	    final	Page<KeHoachTiemPhong> pageKeHoachTiemPhong = serviceKeHoachTiemPhongService.findAll( noiDung, soKeHoach, tenKeHoach, ngayBanHanhTuNgay, ngayBanHanhDenNgay, ngayDuKienTuNgay, ngayDuKienDenNgay,
-				PageRequest.of(page, size, direction, sortBy));
+	    final	Page<KeHoachTiemPhong> pageKeHoachTiemPhong = serviceKeHoachTiemPhongService.findAll(soKeHoach, tenKeHoach, ngayDuKienTuNgay, ngayDuKienDenNgay, ngayBanHanhTuNgay,ngayBanHanhDenNgay ,  PageRequest.of(page, size, direction, sortBy));
 	    final   Page<KeHoachTiemPhongData> pageKeHoachTiemPhongData = pageKeHoachTiemPhong.map(this::convertToKeHoachTiemPhongData);
 		return pageKeHoachTiemPhongData;
 	}
@@ -81,6 +80,7 @@ public class KeHoachTiemPhongBusiness {
 		keHoachTiemPhongData.setNgayBanHanh(keHoachTiemPhong.getNgayBanHanh());
 		keHoachTiemPhongData.setNgayDuKienTuNgay(keHoachTiemPhong.getNgayDuKienTuNgay());
 		keHoachTiemPhongData.setNgayDuKienDenNgay(keHoachTiemPhong.getNgayDuKienDenNgay());
+		keHoachTiemPhongData.setTrangThai(keHoachTiemPhong.isTrangThai());
 		List<ThoiGianTiemPhongData> thoiGianTiemPhongDatas = new ArrayList<>();
 		List<ThoiGianTiemPhong> thoiGianTiemPhongs = serviceThoiGianTiemPhongService.findByKeHoachTiemPhongIdAndDaXoa(keHoachTiemPhong.getId(), false);
 		if (Objects.nonNull(thoiGianTiemPhongs) && !thoiGianTiemPhongs.isEmpty()) {
@@ -137,10 +137,11 @@ public class KeHoachTiemPhongBusiness {
 		KeHoachTiemPhong.setNgayBanHanh(KeHoachTiemPhongData.getNgayBanHanh());
 		KeHoachTiemPhong.setNgayDuKienTuNgay(KeHoachTiemPhongData.getNgayDuKienTuNgay());
 		KeHoachTiemPhong.setNgayDuKienDenNgay(KeHoachTiemPhongData.getNgayDuKienDenNgay());
+		KeHoachTiemPhong.setTrangThai(false);
 		KeHoachTiemPhong = serviceKeHoachTiemPhongService.save(KeHoachTiemPhong);
 		
 		
-		serviceThoiGianTiemPhongService.setFixedDaXoaForKeHoachTiemPhongId(false, KeHoachTiemPhong.getId());
+		serviceThoiGianTiemPhongService.setFixedDaXoaForKeHoachTiemPhongId(true, KeHoachTiemPhong.getId());
 		List<ThoiGianTiemPhongData> thoiGianTiemPhongDatas = KeHoachTiemPhongData.getThoiGianTiemPhongDatas();
 		if (Objects.nonNull(thoiGianTiemPhongDatas) && !thoiGianTiemPhongDatas.isEmpty()) {
 			for (ThoiGianTiemPhongData thoiGianTiemPhongData : thoiGianTiemPhongDatas) {
@@ -163,7 +164,7 @@ public class KeHoachTiemPhongBusiness {
 			}
 		}
 		
-		serviceFileDinhKemKeHoachService.setFixedDaXoaForKeHoachTiemPhongId(false, KeHoachTiemPhong.getId());
+		serviceFileDinhKemKeHoachService.setFixedDaXoaForKeHoachTiemPhongId(true, KeHoachTiemPhong.getId());
 		List<Long> fileDinhKemIds = KeHoachTiemPhongData.getFileDinhKemIds();
 		int type = Constants.DINH_KEM_1_FILE;
 		long objectId = KeHoachTiemPhong.getId();
@@ -204,7 +205,7 @@ public class KeHoachTiemPhongBusiness {
 		return KeHoachTiemPhong;
 	}
 
-	public KeHoachTiemPhong update(Long id, KeHoachTiemPhongData KeHoachTiemPhongData) throws EntityNotFoundException {
+	public KeHoachTiemPhongData update(Long id, KeHoachTiemPhongData KeHoachTiemPhongData) throws EntityNotFoundException {
 		Optional<KeHoachTiemPhong> optional = serviceKeHoachTiemPhongService.findById(id);
 		if (!optional.isPresent()) {
 			throw new EntityNotFoundException(KeHoachTiemPhong.class, "id", String.valueOf(id));
@@ -216,9 +217,10 @@ public class KeHoachTiemPhongBusiness {
 		KeHoachTiemPhong.setNgayBanHanh(KeHoachTiemPhongData.getNgayBanHanh());
 		KeHoachTiemPhong.setNgayDuKienTuNgay(KeHoachTiemPhongData.getNgayDuKienTuNgay());
 		KeHoachTiemPhong.setNgayDuKienDenNgay(KeHoachTiemPhongData.getNgayDuKienDenNgay());
+		KeHoachTiemPhong.setTrangThai(KeHoachTiemPhongData.isTrangThai());
 		KeHoachTiemPhong = serviceKeHoachTiemPhongService.save(KeHoachTiemPhong);
 		
-		serviceThoiGianTiemPhongService.setFixedDaXoaForKeHoachTiemPhongId(false, KeHoachTiemPhong.getId());
+		serviceThoiGianTiemPhongService.setFixedDaXoaForKeHoachTiemPhongId(true, KeHoachTiemPhong.getId());
 		List<ThoiGianTiemPhongData> thoiGianTiemPhongDatas = KeHoachTiemPhongData.getThoiGianTiemPhongDatas();
 		if (Objects.nonNull(thoiGianTiemPhongDatas) && !thoiGianTiemPhongDatas.isEmpty()) {
 			for (ThoiGianTiemPhongData thoiGianTiemPhongData : thoiGianTiemPhongDatas) {
@@ -240,7 +242,7 @@ public class KeHoachTiemPhongBusiness {
 				serviceThoiGianTiemPhongService.save(thoiGianTiemPhong);
 			}
 		}
-		serviceFileDinhKemKeHoachService.setFixedDaXoaForKeHoachTiemPhongId(false, KeHoachTiemPhong.getId());
+		serviceFileDinhKemKeHoachService.setFixedDaXoaForKeHoachTiemPhongId(true, KeHoachTiemPhong.getId());
 		List<Long> fileDinhKemIds = KeHoachTiemPhongData.getFileDinhKemIds();
 		int type = Constants.DINH_KEM_1_FILE;
 		long objectId = KeHoachTiemPhong.getId();
@@ -282,7 +284,7 @@ public class KeHoachTiemPhongBusiness {
 			}
 		}
 		System.out.println(fileDinhKemIds);
-		return KeHoachTiemPhong;
+		return this.convertToKeHoachTiemPhongData(KeHoachTiemPhong);
 	}
 
 	@DeleteMapping(value = { "/{id}" })
@@ -306,10 +308,11 @@ public class KeHoachTiemPhongBusiness {
 		keHoachTiemPhongData.setNgayBanHanh(keHoachTiemPhong.getNgayBanHanh());
 		keHoachTiemPhongData.setNgayDuKienTuNgay(keHoachTiemPhong.getNgayDuKienTuNgay());
 		keHoachTiemPhongData.setNgayDuKienDenNgay(keHoachTiemPhong.getNgayDuKienDenNgay());
+		keHoachTiemPhongData.setTrangThai(keHoachTiemPhong.isTrangThai());
 		List<ThoiGianTiemPhongData> thoiGianTiemPhongDatas = new ArrayList<>();
 		List<ThoiGianTiemPhong> thoiGianTiemPhongs = serviceThoiGianTiemPhongService.findByKeHoachTiemPhongIdAndDaXoa(keHoachTiemPhong.getId(), false);
 		if (Objects.nonNull(thoiGianTiemPhongs) && !thoiGianTiemPhongs.isEmpty()) {
-			for (ThoiGianTiemPhong thoiGianTiemPhong : thoiGianTiemPhongs) {
+			for (ThoiGianTiemPhong thoiGianTiemPhong : thoiGianTiemPhongs) { 
 				ThoiGianTiemPhongData thoiGianTiemPhongData = new ThoiGianTiemPhongData();
 				thoiGianTiemPhongData.setId(thoiGianTiemPhong.getId());
 				thoiGianTiemPhongData.setDiaDiem(thoiGianTiemPhong.getDiaDiem());
@@ -337,6 +340,14 @@ public class KeHoachTiemPhongBusiness {
 		}
 
 		keHoachTiemPhongData.setThoiGianTiemPhongDatas(thoiGianTiemPhongDatas);	
+		Optional<FileDinhKemKeHoach> optFileDinhKem = serviceFileDinhKemKeHoachService.findBykeHoachTiemPhongId(keHoachTiemPhong.getId());
+		int type = Constants.DINH_KEM_1_FILE;
+		Long fileDinhKemId = optFileDinhKem.get().getFileDinhKemId();
+		Long objectId = keHoachTiemPhong.getId();
+		String appCode = KeHoachTiemPhong.class.getSimpleName();
+		FileDinhKem fileDinhKem = coreAttachmentBusiness.getAttachments(fileDinhKemId, appCode, objectId, type);
+		keHoachTiemPhongData.setFileDinhKem(fileDinhKem);
+		keHoachTiemPhongData.setFileDinhKemIds(fileDinhKem.getIds());
 		return keHoachTiemPhongData;
 	}
 }

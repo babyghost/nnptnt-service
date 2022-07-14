@@ -377,20 +377,21 @@ public class MyExcelViewChuThe extends AbstractXlsView  {
 				cell2.setCellStyle(styleCellCenter);
 				cell2.setCellValue(doanhNghiepData.getDienThoai()!= null ? doanhNghiepData.getDienThoai() : "");
 				currentColumn++;
-				Integer trangThai = doanhNghiepData.getTrangThai();
-				String trangThais;
-				if(trangThai== 0) {
-					trangThais=" Đang hoạt động";
-				}else{
+				
+				String trangThais="";
+				if( doanhNghiepData.getTrangThai()== null) {
+					
+				}else if ( doanhNghiepData.getTrangThai()== 1) {
 					trangThais=" Không Hoạt động";
+				}else {
+					trangThais=" Đang hoạt động";
 				}
+			
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellCenter);
-				cell2.setCellValue(trangThais!= null ? trangThais : "");
+				cell2.setCellValue(trangThais);
 				currentColumn++;
-
 			
-
 				stt++;
 				
 			}

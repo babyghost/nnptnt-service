@@ -48,17 +48,17 @@ public class KeHoachTiemPhongController {
 	public ResponseEntity<Page<KeHoachTiemPhongData>> findAll(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "tenKeHoach", required = false) String sortBy,
+			@RequestParam(name = "sortBy", defaultValue = "ngayBanHanh", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
 			@RequestParam(name = "soKeHoach",required = false) String soKeHoach,
-			@RequestParam(name = "tenKeHoach", required = false) String tenKeHoach,
-			@RequestParam(name = "noiDung",required=false) String noiDung,
+			@RequestParam(name = "tenKeHoach", required = false)  String tenKeHoach,
+			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayDuKienTuNgay", required = false)  LocalDate ngayDuKienTuNgay,
+			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayDuKienDenNgay", required = false) LocalDate ngayDuKienDenNgay,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayBanHanhTuNgay", required = false) LocalDate ngayBanHanhTuNgay,
-			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayBanHanhDenNgay", required = false) LocalDate ngayBanHanhDenNgay,
-			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayDuKienTuNgay", required = false) LocalDate ngayDuKienTuNgay,
-			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayDuKienDenNgay", required = false) LocalDate ngayDuKienDenNgay)
+			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayBanHanhDenNgay", required = false) LocalDate ngayBanHanhDenNgay)
+
 			{
-		Page<KeHoachTiemPhongData> pageKeHoachTiemPhongData = businessKeHoachTiemPhongBusiness.findAll(page, size, sortBy, sortDir,  noiDung, soKeHoach, tenKeHoach,ngayDuKienDenNgay,ngayDuKienTuNgay, ngayBanHanhTuNgay, ngayBanHanhDenNgay);
+		Page<KeHoachTiemPhongData> pageKeHoachTiemPhongData = businessKeHoachTiemPhongBusiness.findAll(page, size, sortBy, sortDir,  soKeHoach, tenKeHoach,ngayDuKienTuNgay,ngayDuKienDenNgay, ngayBanHanhTuNgay, ngayBanHanhDenNgay);
 		return ResponseEntity.ok(pageKeHoachTiemPhongData);
 	}
 
@@ -76,11 +76,11 @@ public class KeHoachTiemPhongController {
 	}
 
 	@PutMapping(value = { "/{id}" })
-	public ResponseEntity<KeHoachTiemPhong> update(@PathVariable("id") Long id,
+	public ResponseEntity<KeHoachTiemPhongData> update(@PathVariable("id") Long id,
 			@Valid @RequestBody KeHoachTiemPhongData keHoachTiemPhongData)
 			throws EntityNotFoundException, MethodArgumentNotValidException {
-		KeHoachTiemPhong keHoachTiemPhong = businessKeHoachTiemPhongBusiness.update(id, keHoachTiemPhongData);
-		return ResponseEntity.ok(keHoachTiemPhong);
+		 keHoachTiemPhongData = businessKeHoachTiemPhongBusiness.update(id, keHoachTiemPhongData);
+		return ResponseEntity.ok(keHoachTiemPhongData);
 	}
 	@DeleteMapping(value = { "/{id}" })
 	public ResponseEntity<KeHoachTiemPhongData> delete(@PathVariable("id") Long id)

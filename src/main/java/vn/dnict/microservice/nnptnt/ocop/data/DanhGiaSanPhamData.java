@@ -23,4 +23,6 @@ public class DanhGiaSanPhamData {
 	private String phanHangTen;
 	
 	private LocalDateTime ngayTao;
+	
+	private Boolean daXoa;
 }

@@ -35,11 +35,11 @@ public class FileDinhKemKeHoachServiceImpl implements FileDinhKemKeHoachService 
 	}
 
 
-	@Override
-	public List<FileDinhKemKeHoach> findByDinhKemFileIdAndDaXoa(Long dinhKemFileId, Boolean daXoa) {
-		// TODO Auto-generated method stub
-		return repo.findByDinhKemFileIdAndDaXoa(dinhKemFileId, daXoa);
-	}
+//	@Override
+//	public List<FileDinhKemKeHoach> findByDinhKemFileIdAndDaXoa(Long dinhKemFileId, Boolean daXoa) {
+//		// TODO Auto-generated method stub
+//		return repo.findByDinhKemFileIdAndDaXoa(dinhKemFileId, daXoa);
+//	}
 
 
 
@@ -60,6 +60,12 @@ public class FileDinhKemKeHoachServiceImpl implements FileDinhKemKeHoachService 
 	public Optional<FileDinhKemKeHoach> findBykeHoachTiemPhongId(Long keHoachTiemPhongId) {
 		// TODO Auto-generated method stub
 		return repo.findBykeHoachTiemPhongId(keHoachTiemPhongId);
+	}
+
+	@Override
+	public List<FileDinhKemKeHoach> findByKeHoachIdAndDaXoa(Long keHoachTiemPhongId, Boolean daXoa) {
+		// TODO Auto-generated method stub
+		return repo.findByKeHoachIdAndDaXoa(keHoachTiemPhongId, daXoa);
 	}
 
 	

@@ -16,6 +16,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -46,6 +47,7 @@ public class DanhGiaSanPham {
 	@NotFound(action = NotFoundAction.IGNORE)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "sanpham_id" , referencedColumnName = "id",updatable = false, insertable = false)
+	@Where(clause = "daxoa = false")
 	private SanPham sanPham;
 	
 	@Column(name = "tieuchi_id")

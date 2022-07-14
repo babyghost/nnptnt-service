@@ -1,6 +1,7 @@
 package vn.dnict.microservice.nnptnt.baocao.kehoach.api;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -70,6 +71,12 @@ public class KeHoachController {
 			throws EntityNotFoundException {
 		KeHoach KeHoach = bussinessKeHoachBussiness.delete(id);
 		return ResponseEntity.ok(KeHoach);
+	}
+	
+	@DeleteMapping(value = { "/delete/" })
+	public ResponseEntity<Integer> deletes(@Valid @RequestBody List<Long> ids) throws EntityNotFoundException {
+		Integer check = bussinessKeHoachBussiness.deletes(ids);
+		return ResponseEntity.ok(check);
 	}
 	
 	@GetMapping(value = { "/chitieu" })

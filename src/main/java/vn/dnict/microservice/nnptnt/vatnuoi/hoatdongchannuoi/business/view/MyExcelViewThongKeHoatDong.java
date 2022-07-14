@@ -399,23 +399,33 @@ public class MyExcelViewThongKeHoatDong  extends AbstractXlsView {
 								baoCaoHoatDongChanNuoiData.getLoaiVatNuoi() != null ? baoCaoHoatDongChanNuoiData.getLoaiVatNuoi()
 										: "");
 						currentColumn++;
-
+						String soLuongNuoi = "";
+						if (Objects.nonNull(baoCaoHoatDongChanNuoiData.getSoLuongNuoi()) && baoCaoHoatDongChanNuoiData.getSoLuongNuoi() >= 0) {
+							soLuongNuoi = String.valueOf(baoCaoHoatDongChanNuoiData.getSoLuongNuoi());
+						}
 						cell2 = headerRow.createCell(currentColumn);
 						cell2.setCellStyle(styleCellLeft);
-						cell2.setCellValue(
-								baoCaoHoatDongChanNuoiData.getSoLuongNuoi());
+						cell2.setCellValue(soLuongNuoi
+								);
+						currentColumn++;
+						String slVatNuoiXuat = "";
+						if (Objects.nonNull(baoCaoHoatDongChanNuoiData.getSlVatNuoiXuat()) && baoCaoHoatDongChanNuoiData.getSlVatNuoiXuat() >= 0) {
+							slVatNuoiXuat = String.valueOf(baoCaoHoatDongChanNuoiData.getSlVatNuoiXuat());
+						}
+						cell2 = headerRow.createCell(currentColumn);
+						cell2.setCellStyle(styleCellLeft);
+						cell2.setCellValue(slVatNuoiXuat
+								);
 						currentColumn++;
 						
+						String sanLuongXuat = "";
+						if (Objects.nonNull(baoCaoHoatDongChanNuoiData.getSanLuongXuat()) && baoCaoHoatDongChanNuoiData.getSanLuongXuat() >= 0) {
+							sanLuongXuat = String.valueOf(baoCaoHoatDongChanNuoiData.getSanLuongXuat());
+						}
 						cell2 = headerRow.createCell(currentColumn);
 						cell2.setCellStyle(styleCellLeft);
-						cell2.setCellValue(
-								baoCaoHoatDongChanNuoiData.getSlVatNuoiXuat());
-						currentColumn++;
-						
-						cell2 = headerRow.createCell(currentColumn);
-						cell2.setCellStyle(styleCellLeft);
-						cell2.setCellValue(
-								baoCaoHoatDongChanNuoiData.getSanLuongXuat());
+						cell2.setCellValue(sanLuongXuat
+								);
 						currentColumn++;
 						
 				stt++;

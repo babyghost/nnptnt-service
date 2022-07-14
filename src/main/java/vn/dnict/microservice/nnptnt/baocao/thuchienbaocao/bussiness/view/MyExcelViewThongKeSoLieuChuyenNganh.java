@@ -1,5 +1,6 @@
 package vn.dnict.microservice.nnptnt.baocao.thuchienbaocao.bussiness.view;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,9 @@ import vn.dnict.microservice.nnptnt.chomeo.data.ThongTinChoMeoData;
 
 @Slf4j
 public class MyExcelViewThongKeSoLieuChuyenNganh extends AbstractXlsView {
-
+	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	private DateTimeFormatter formatterMM = DateTimeFormatter.ofPattern("MM");
+	private DateTimeFormatter formatterYY = DateTimeFormatter.ofPattern("yyyy");
 	@SuppressWarnings("unchecked")
 	protected void buildExcelDocument(Map<String, Object> model, Workbook workbook, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -235,16 +238,22 @@ public class MyExcelViewThongKeSoLieuChuyenNganh extends AbstractXlsView {
 		final Sheet sheet = workbook.createSheet("BaoCao");
 		// sheet.setDefaultColumnWidth((short) 15);
 		sheet.setColumnWidth(0, 10 * 256);
-		sheet.setColumnWidth(1, 60 * 256);
+		sheet.setColumnWidth(1, 30 * 256);
 		sheet.setColumnWidth(2, 10 * 256);
 		sheet.setColumnWidth(3, 20 * 256);
 		sheet.setColumnWidth(4, 20 * 256);
-		sheet.setColumnWidth(5, 20 * 256);
-
+		sheet.setColumnWidth(5, 30 * 256);
+		sheet.setColumnWidth(6, 30 * 256);
+		sheet.setColumnWidth(7, 30 * 256);
+		sheet.setColumnWidth(8, 30 * 256);
+		sheet.setColumnWidth(9, 20 * 256);
+		sheet.setColumnWidth(10, 20 * 256);
 		// POPULATE Titles COLUMNS
 		int currentRow = 2;
 		final int col0 = 0;
 		short currentColumn;
+		List<ThongKeData> thongKeDatas = (List<ThongKeData>) model
+				.get("thongKeDatas");
 
 		Row titleRow = sheet.createRow(currentRow);
 		Cell cell = titleRow.createCell(col0);
@@ -255,19 +264,17 @@ public class MyExcelViewThongKeSoLieuChuyenNganh extends AbstractXlsView {
 				0, // first column (0-based)
 				5 // last column (0-based)
 		));
-
+		String ngayThongKe= formatter.format(thongKeDatas.get(0).getThangNam());
 		currentRow++;
 		titleRow = sheet.createRow(currentRow);
 		cell = titleRow.createCell(col0);
 		cell.setCellStyle(styleTitleB14);
-		cell.setCellValue("BÁO CÁO THỐNG KÊ SỐ LIỆU CHUYÊN NGÀNH ");
+		cell.setCellValue("BÁO CÁO THỐNG KÊ SỐ LIỆU CHUYÊN NGÀNH THUỘC LĨNH VỰC " + thongKeDatas.get(0).getLinhVucTen().toUpperCase() + " NGÀY "+ ngayThongKe);
 		sheet.addMergedRegion(new CellRangeAddress(currentRow, // first row (0-based)
 				currentRow, // last row (0-based)
 				0, // first column (0-based)
-				5 // last column (0-based)
+				10 // last column (0-based)
 		));
-		List<ThongKeData> thongKeDatas = (List<ThongKeData>) model
-				.get("thongKeDatas");
 
 		// lấy dữ liệu
 		currentRow++;
@@ -291,27 +298,29 @@ public class MyExcelViewThongKeSoLieuChuyenNganh extends AbstractXlsView {
 
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);
-		cell2.setCellValue("Kế Hoạch ");
+		cell2.setCellValue("Kế Hoạch "+ thongKeDatas.get(0).getNam());
 		currentColumn++;
 
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);
-		cell2.setCellValue("Thực Hiện ở tháng trong Năm Cũ ");
+		cell2.setCellValue("Thực Hiện "+thongKeDatas.get(0).getCountThang() +" tháng trong Năm "+ (thongKeDatas.get(0).getNam()-1));
 		currentColumn++;
 
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);
-		cell2.setCellValue("Thực Hiện ở tháng trong năm  Nay");
+		cell2.setCellValue("Thực Hiện "+thongKeDatas.get(0).getCountThangTN()+" tháng trong năm "+thongKeDatas.get(0).getNam());
+		currentColumn++;
+		String thangHienTai = formatterMM.format(thongKeDatas.get(0).getThangNam());
+		String namHienTai = formatterYY.format(thongKeDatas.get(0).getThangNam());
+
+		cell2 = headerRow.createCell(currentColumn);
+		cell2.setCellStyle(styleHeaderB);
+		cell2.setCellValue("Ước tháng " + thangHienTai+" trong năm  " + namHienTai);
 		currentColumn++;
 
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);
-		cell2.setCellValue("Ước các tháng trước trong năm  ");
-		currentColumn++;
-
-		cell2 = headerRow.createCell(currentColumn);
-		cell2.setCellStyle(styleHeaderB);
-		cell2.setCellValue("Tổng Ưóc thực hiện trong năm");
+		cell2.setCellValue("Tổng Ước thực hiện "+(thongKeDatas.get(0).getCountThangTN()+1)+" tháng trong năm "+thongKeDatas.get(0).getNam());
 		currentColumn++;
 
 		cell2 = headerRow.createCell(currentColumn);
@@ -356,7 +365,7 @@ public class MyExcelViewThongKeSoLieuChuyenNganh extends AbstractXlsView {
 		cell2.setCellValue("Thực Hiện " + " tháng trong Năm ");
 		sheet.addMergedRegion(new CellRangeAddress(currentRow - 1, currentRow, currentColumn, currentColumn));
 		currentColumn++;
-
+		
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);
 		cell2.setCellValue("Thực Hiện " + " tháng trong năm ");
@@ -371,7 +380,7 @@ public class MyExcelViewThongKeSoLieuChuyenNganh extends AbstractXlsView {
 
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);
-		cell2.setCellValue("Ưóc thực hiện " + " tháng trong năm");
+		cell2.setCellValue("Ước thực hiện " + " tháng trong năm");
 		sheet.addMergedRegion(new CellRangeAddress(currentRow - 1, currentRow, currentColumn, currentColumn));
 		currentColumn++;
 
@@ -393,13 +402,13 @@ public class MyExcelViewThongKeSoLieuChuyenNganh extends AbstractXlsView {
 			for (ThongKeData thongKeData : thongKeDatas) {
 				currentRow++;
 				currentColumn = 0;
-				
+			
 				headerRow = sheet.createRow(currentRow);
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellCenter);
 				cell2.setCellValue(stt);
 				currentColumn++;
-
+				
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellLeft);
 				cell2.setCellValue(
@@ -438,9 +447,10 @@ public class MyExcelViewThongKeSoLieuChuyenNganh extends AbstractXlsView {
 				cell2.setCellStyle(styleCellCenter);
 				cell2.setCellValue(thongKeData.getUocThang());
 				currentColumn++;
+				float cungKy;
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellCenter);
-				cell2.setCellValue(thongKeData.getCungKy());
+				cell2.setCellValue( cungKy= thongKeData.getCungKy());
 				currentColumn++;
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellCenter);
@@ -449,6 +459,7 @@ public class MyExcelViewThongKeSoLieuChuyenNganh extends AbstractXlsView {
 
 				stt++;
 			}
+
 			
 		}
 	}

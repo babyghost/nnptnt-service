@@ -34,6 +34,7 @@ import vn.dnict.microservice.nnptnt.baocao.thuchienbaocao.dao.model.ThucHienBaoC
 import vn.dnict.microservice.nnptnt.baocao.thuchienbaocao.dao.service.ThucHienBaoCaoService;
 import vn.dnict.microservice.nnptnt.dm.linhvuc.dao.model.DmLinhVuc;
 import vn.dnict.microservice.nnptnt.dm.linhvuc.dao.service.DmLinhVucService;
+
 @Slf4j
 @Service
 public class ThucHienBaoCaoBussiness {
@@ -52,7 +53,7 @@ public class ThucHienBaoCaoBussiness {
 
 	@Autowired
 	KeHoachService serviceKeHoachService;
-	
+
 	public Page<ThucHienBaoCaoData> findAll(int page, int size, String sortBy, String sortDir, Long linhVucId,
 			LocalDate thangNam, LocalDate ngayThucHien) {
 		Direction direction;
@@ -101,14 +102,16 @@ public class ThucHienBaoCaoBussiness {
 	}
 
 	public Page<ThongKeData> thongKe(int page, int size, String sortBy, String sortDir, Long linhVucId,
-			LocalDate thangNam, LocalDate ngayThucHien, LocalDate thangBatDau, LocalDate thangKetThuc, LocalDate thangBatDauTN, LocalDate thangKetThucTN) {
+			LocalDate thangNam, LocalDate ngayThucHien, LocalDate thangBatDau, LocalDate thangKetThuc,
+			LocalDate thangBatDauTN, LocalDate thangKetThucTN) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-		Page<ThucHienBaoCao> pageThucHienBaoCao = serviceThucHienBaoCaoService.thongKe(linhVucId, thangNam, ngayThucHien, thangBatDau, thangKetThuc , thangBatDauTN, thangKetThucTN,
+		Page<ThucHienBaoCao> pageThucHienBaoCao = serviceThucHienBaoCaoService.thongKe(linhVucId, thangNam,
+				ngayThucHien, thangBatDau, thangKetThuc, thangBatDauTN, thangKetThucTN,
 				PageRequest.of(page, size, direction, sortBy));
 		final Page<ThongKeData> pageThongKeData = pageThucHienBaoCao
 				.map(e -> (this.convertToThongKeData(e, thangBatDau, thangKetThuc, thangBatDauTN, thangKetThucTN)));
@@ -116,10 +119,8 @@ public class ThucHienBaoCaoBussiness {
 		return pageThongKeData;
 	}
 
-	
-	
-	
-	private ThongKeData convertToThongKeData(ThucHienBaoCao thucHienBaoCao , LocalDate thangBatDau, LocalDate thangKetThuc, LocalDate thangBatDauTN, LocalDate thangKetThucTN) {
+	private ThongKeData convertToThongKeData(ThucHienBaoCao thucHienBaoCao, LocalDate thangBatDau,
+			LocalDate thangKetThuc, LocalDate thangBatDauTN, LocalDate thangKetThucTN) {
 		ThongKeData thongKeData = new ThongKeData();
 		thongKeData.setChiTieuId(thucHienBaoCao.getChiTieuId());
 		thongKeData.setThucHien(thucHienBaoCao.getThucHien());
@@ -128,6 +129,8 @@ public class ThucHienBaoCaoBussiness {
 			Optional<ChiTieu> optChiTieu = serviceChiTieuService.findById(thucHienBaoCao.getChiTieuId());
 			thongKeData.setChiTieuTen(optChiTieu.get().getTen());
 			thongKeData.setDonViTinh(optChiTieu.get().getDonViTinh());
+			thongKeData.setChaId(optChiTieu.get().getChaId());
+			thongKeData.setDanhSo(optChiTieu.get().getKieuDanhSo());
 			if (optChiTieu.isPresent()) {
 				Optional<ChiTieuNam> optChiTieuNam = serviceChiTieuNamService
 						.findById(optChiTieu.get().getChiTieuNamId());
@@ -143,56 +146,62 @@ public class ThucHienBaoCaoBussiness {
 					}
 
 				}
-				
-			
+
 			}
-			
+
 			thongKeData.setThangBatDau(thangBatDau);
 			thongKeData.setThangKetThuc(thangKetThuc);
 			thongKeData.setThangBatDauTN(thangBatDauTN);
 			thongKeData.setThangKetThucTN(thangKetThucTN);
-			
-			Integer namCu = thongKeData.getNam()-1;
+
+			Integer namCu = thongKeData.getNam() - 1;
 			Float tongSoTN = 0.0f;
 			Float tongUocThang = 0.0f;
-			Float sumCungKy =0.0f;
-		Float tongSo = serviceThucHienBaoCaoService.TongThucHienNamTruoc(thongKeData.getThangBatDau(), thongKeData.getThangKetThuc(), thongKeData.getChiTieuTen(),thongKeData.getLinhVucId(),namCu);
-		if(Objects.isNull(tongSo)) {
-			tongSo = 0.0f;
-		}
-		tongSoTN = serviceThucHienBaoCaoService.TongThucHienTrongNam(thongKeData.getThangBatDauTN(), thongKeData.getThangKetThucTN(),thongKeData.getChiTieuId());
-		
-		if(Objects.isNull(tongSoTN)) {
-			tongSoTN = 0.0f;
-		}
-		Long countThang = serviceThucHienBaoCaoService.CountSoThangThucHienNamCu(thongKeData.getThangBatDau(), thongKeData.getThangKetThuc(), thongKeData.getChiTieuTen(),thongKeData.getLinhVucId(),namCu);
-		
-		Long countThangTN =  serviceThucHienBaoCaoService.CountSoThangThucHien(thongKeData.getThangBatDauTN(), thongKeData.getThangKetThucTN(), thongKeData.getChiTieuId());
-		
-		
-		thongKeData.setCountThang(countThang);
-		thongKeData.setCountThangTN(countThangTN);
-		thongKeData.setTongThucHienTN(tongSoTN);	
-		thongKeData.setTongThucHienCu(tongSo);
-		if(Objects.isNull(thongKeData.getThucHien())) {
-			thongKeData.setThucHien(0);		}
-		Optional<KeHoach> optKeHoach = serviceKeHoachService.findByNamAndLinhVucIdAndChiTieuId(thongKeData.getNam(), thongKeData.getLinhVucId(), thongKeData.getChiTieuId());
-			if(optKeHoach.isPresent()) {
+			Float sumCungKy = 0.0f;
+			Float tongSo = serviceThucHienBaoCaoService.TongThucHienNamTruoc(thongKeData.getThangBatDau(),
+					thongKeData.getThangKetThuc(), thongKeData.getChiTieuTen(), thongKeData.getLinhVucId(), namCu);
+			if (Objects.isNull(tongSo)) {
+				tongSo = 0.0f;
+			}
+			tongSoTN = serviceThucHienBaoCaoService.TongThucHienTrongNam(thongKeData.getThangBatDauTN(),
+					thongKeData.getThangKetThucTN(), thongKeData.getChiTieuId());
+
+			if (Objects.isNull(tongSoTN)) {
+				tongSoTN = 0.0f;
+			}
+			Long countThang = serviceThucHienBaoCaoService.CountSoThangThucHienNamCu(thongKeData.getThangBatDau(),
+					thongKeData.getThangKetThuc(), thongKeData.getChiTieuTen(), thongKeData.getLinhVucId(), namCu);
+
+			Long countThangTN = serviceThucHienBaoCaoService.CountSoThangThucHien(thongKeData.getThangBatDauTN(),
+					thongKeData.getThangKetThucTN(), thongKeData.getChiTieuId());
+
+			thongKeData.setCountThang(countThang);
+			thongKeData.setCountThangTN(countThangTN);
+			thongKeData.setTongThucHienTN(tongSoTN);
+			thongKeData.setTongThucHienCu(tongSo);
+			if (Objects.isNull(thongKeData.getThucHien())) {
+				thongKeData.setThucHien(0);
+			}
+			Optional<KeHoach> optKeHoach = serviceKeHoachService.findByNamAndLinhVucIdAndChiTieuId(thongKeData.getNam(),
+					thongKeData.getLinhVucId(), thongKeData.getChiTieuId());
+			if (optKeHoach.isPresent()) {
 				thongKeData.setKeHoach(optKeHoach.get().getKeHoach());
-			}else {
+			} else {
 				thongKeData.setKeHoach(0.0f);
 			}
-			log.info("kehoach :", optKeHoach);
-//		System.out.println(optKeHoach);
-		 tongUocThang = thongKeData.getTongThucHienTN() + thongKeData.getThucHien();		
-	thongKeData.setUocThang(tongUocThang);
+//			log.info("kehoach :", optKeHoach);
+////		System.out.println(optKeHoach);
+			tongUocThang = thongKeData.getTongThucHienTN() + thongKeData.getThucHien();
+			thongKeData.setUocThang(tongUocThang);
 //		
-		 sumCungKy = tongUocThang/tongSo * 100;
+			sumCungKy =( tongUocThang / tongSo) * 100;
 //		
-	thongKeData.setCungKy(sumCungKy);
-	
-	thongKeData.setKeHoachNam(tongUocThang/thongKeData.getKeHoach()*100);
+			thongKeData.setCungKy(sumCungKy);
+
+			thongKeData.setKeHoachNam((tongUocThang / thongKeData.getKeHoach()) * 100);
+
 		}
+
 		return thongKeData;
 	}
 
@@ -243,6 +252,22 @@ public class ThucHienBaoCaoBussiness {
 		thucHienBaoCao = serviceThucHienBaoCaoService.save(thucHienBaoCao);
 		return thucHienBaoCao;
 	}
+	public Integer deletes(List<Long> ids) throws EntityNotFoundException {
+		List<ThucHienBaoCao> result = new ArrayList<ThucHienBaoCao>();
+		if (ids.size() > 0) {
+			ids.stream().forEach(item -> {
+				Optional<ThucHienBaoCao> optional = serviceThucHienBaoCaoService
+						.findById(item);
+				if (optional.isPresent()) {
+					ThucHienBaoCao object = optional.get();
+					object.setDaXoa(true);			
+					serviceThucHienBaoCaoService.save(object);
+					result.add(object);
+				}
+			});
+		}
+		return result.size();
+	}
 
 	public ThucHienBaoCaoData findChiTieu(LocalDate thangNam, long linhVucId, Integer nam)
 			throws EntityNotFoundException {
@@ -251,14 +276,12 @@ public class ThucHienBaoCaoBussiness {
 				.findByLinhVucIdAndThangNamAndDaXoa(thangNam, linhVucId, nam);
 
 		return this.convertToThucHienBaoCaoData(thucHienBaoCao);
-		
-		
-
-
 	}
-	public ModelAndView exportExcelThongKeSoLieuChuyenNganh(HttpServletRequest request, HttpServletResponse response, int page,
-			int size, String sortBy, String sortDir,Long linhVucId,
-			LocalDate thangNam, LocalDate ngayThucHien, LocalDate thangBatDau, LocalDate thangKetThuc, LocalDate thangBatDauTN, LocalDate thangKetThucTN) {
+
+	public ModelAndView exportExcelThongKeSoLieuChuyenNganh(HttpServletRequest request, HttpServletResponse response,
+			int page, int size, String sortBy, String sortDir, Long linhVucId, LocalDate thangNam,
+			LocalDate ngayThucHien, LocalDate thangBatDau, LocalDate thangKetThuc, LocalDate thangBatDauTN,
+			LocalDate thangKetThucTN) {
 		LocalDate localDate = LocalDate.now();// For reference
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		String formattedString = localDate.format(formatter);
@@ -271,18 +294,20 @@ public class ThucHienBaoCaoBussiness {
 			direction = Direction.DESC;
 		}
 
-		Page<ThucHienBaoCao> pageThucHienBaoCao = serviceThucHienBaoCaoService.thongKe(linhVucId, thangNam, ngayThucHien, thangBatDau, thangKetThuc, thangBatDauTN, thangKetThucTN,  PageRequest.of(page, size, direction, sortBy));
+		Page<ThucHienBaoCao> pageThucHienBaoCao = serviceThucHienBaoCaoService.thongKe(linhVucId, thangNam,
+				ngayThucHien, thangBatDau, thangKetThuc, thangBatDauTN, thangKetThucTN,
+				PageRequest.of(page, size, direction, sortBy));
 		Page<ThongKeData> pageThongKeData = pageThucHienBaoCao
 				.map(e -> (this.convertToThongKeData(e, thangBatDau, thangKetThuc, thangBatDauTN, thangKetThucTN)));
 
-		List<ThongKeData> thongKeDatas = new ArrayList<>(
-				pageThongKeData.getContent());
-		
-	System.out.println(thongKeDatas+"----------//"+ response);
+		List<ThongKeData> thongKeDatas = new ArrayList<>(pageThongKeData.getContent());
+
+		System.out.println(thongKeDatas + "----------//" + response);
 
 		// All the remaining employees
 		while (pageThucHienBaoCao.hasNext()) {
-			Page<ThucHienBaoCao> nextPageOfEmployees = serviceThucHienBaoCaoService.thongKe(linhVucId, thangNam, ngayThucHien, thangBatDau, thangKetThuc, thangBatDauTN, thangKetThucTN, 
+			Page<ThucHienBaoCao> nextPageOfEmployees = serviceThucHienBaoCaoService.thongKe(linhVucId, thangNam,
+					ngayThucHien, thangBatDau, thangKetThuc, thangBatDauTN, thangKetThucTN,
 					pageThucHienBaoCao.nextPageable());
 			Page<ThongKeData> nextPageOfThongKeData = nextPageOfEmployees
 					.map(e -> (this.convertToThongKeData(e, thangBatDau, thangKetThuc, thangBatDauTN, thangKetThucTN)));
@@ -291,16 +316,16 @@ public class ThucHienBaoCaoBussiness {
 			}
 			// update the page reference to the current page
 			pageThucHienBaoCao = nextPageOfEmployees;
-			System.out.println(pageThucHienBaoCao+"++++++++++++");
+			System.out.println(pageThucHienBaoCao + "++++++++++++");
 		}
 
 		model.put("thongKeDatas", thongKeDatas);
-		System.out.println("?????????????????????????????????"+ model);
+		System.out.println("?????????????????????????????????" + model);
 		response.setContentType("application/ms-excel");
-		response.setHeader("Content-disposition", "attachment; filename=ThongKe.xls");
-		return new ModelAndView(new MyExcelViewThongKeSoLieuChuyenNganh(), model);
-		
-	}
+		response.setHeader("Content-disposition", "attachment; filename=" + formattedString + "ThongKe.xls");
 
+		return new ModelAndView(new MyExcelViewThongKeSoLieuChuyenNganh(), model);
+
+	}
 
 }

@@ -15,9 +15,8 @@ import org.springframework.data.jpa.domain.Specification;
 import vn.dnict.microservice.nnptnt.chomeo.kehoachtiemphong.dao.model.KeHoachTiemPhong;
 
 public class KeHoachTiemPhongSpecifications {
-	public static Specification<KeHoachTiemPhong> quickSearch(final String soKeHoach,
-			 final LocalDate ngayDuKienTuNgay, final LocalDate ngayDuKienDenNgay,final LocalDate ngayBanHanhTuNgay,final LocalDate ngayBanHanhDenNgay,
-			final String tenKeHoach) {
+	public static Specification<KeHoachTiemPhong> quickSearch(String soKeHoach, String tenKeHoach,
+			 LocalDate ngayDuKienTuNgay, LocalDate ngayDuKienDenNgay,LocalDate ngayBanHanhTuNgay,LocalDate ngayBanHanhDenNgay) {
 		return new Specification<KeHoachTiemPhong>() {
 
 			private static final long serialVersionUID = -4615834727542993669L;
@@ -45,11 +44,12 @@ public class KeHoachTiemPhongSpecifications {
 				if (ngayBanHanhDenNgay != null) {
 					predicates.add(cb.lessThanOrEqualTo(root.get("ngayBanHanh").as(LocalDate.class), ngayBanHanhDenNgay));
 				}
+			
 				if (ngayDuKienTuNgay != null) {
-					predicates.add(cb.lessThanOrEqualTo(root.get("ngayDuKienTuNgay").as(LocalDate.class),ngayDuKienTuNgay));
+					predicates.add(cb.greaterThanOrEqualTo(root.get("ngayDuKienTuNgay").as(LocalDate.class),ngayDuKienTuNgay));
 				}
 				if (ngayDuKienDenNgay != null) {
-					predicates.add(cb.greaterThanOrEqualTo(root.get("ngayDuKienDenNgay").as(LocalDate.class), ngayDuKienDenNgay));
+					predicates.add(cb.lessThanOrEqualTo(root.get("ngayDuKienDenNgay").as(LocalDate.class), ngayDuKienDenNgay));
 				}
 				if (!predicates.isEmpty()) {
 					return cb.and(predicates.toArray(new Predicate[] {}));

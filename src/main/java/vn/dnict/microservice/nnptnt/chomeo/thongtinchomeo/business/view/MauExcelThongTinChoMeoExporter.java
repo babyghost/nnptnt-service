@@ -136,64 +136,61 @@ public class MauExcelThongTinChoMeoExporter {
 		style.setAlignment(HorizontalAlignment.CENTER);
 		int i;
 		int rowCount = 1;
-		for(i = 0; i < 3; i++ ) {
+		for(i = 0; i < 2; i++ ) {
 			Row row = sheet.createRow(rowCount);
 			Cell cell = row.createCell(0);
-			cell.setCellValue("");
+			cell.setCellValue(i);
 			cell.setCellStyle(style);
 			
 			cell = row.createCell(1);
-			cell.setCellValue("");
+			cell.setCellValue("Lê Văn A");
 			cell.setCellStyle(style);
 			
 			cell = row.createCell(2);
-			cell.setCellValue("");
-			cell.setCellStyle(style);
-			
-			cell = row.createCell(2);
-			cell.setCellValue("");
+			cell.setCellValue(" 165 Lê Văn Hiến");
 			cell.setCellStyle(style);
 			
 			cell = row.createCell(3);
-			cell.setCellValue("");
+			cell.setCellValue("Quận Cẩm Lệ");
 			cell.setCellStyle(style);
 			
 			cell = row.createCell(4);
-			cell.setCellValue("");
+			cell.setCellValue("Phường Hòa Thọ Đông");
 			cell.setCellStyle(style);
 			
 			cell = row.createCell(5);
-			cell.setCellValue("");
+			cell.setCellValue("19001091");
 			cell.setCellStyle(style);
 			
 			cell = row.createCell(6);
-			cell.setCellValue("");
+			cell.setCellValue("Chó");
 			cell.setCellStyle(style);
 			
 			cell = row.createCell(7);
-			cell.setCellValue("");
-			cell.setCellStyle(style);
-		
-			cell = row.createCell(8);
-			cell.setCellValue("");
+			cell.setCellValue("Alaska");
 			cell.setCellStyle(style);
 			
+			cell = row.createCell(8);
+			cell.setCellValue("Milky");
+			cell.setCellStyle(style);
+		
 			cell = row.createCell(9);
-			cell.setCellValue("");
+			cell.setCellValue("2018");
 			cell.setCellStyle(style);
 			
 			cell = row.createCell(10);
-			cell.setCellValue("");
+			cell.setCellValue("Vàng khói");
 			cell.setCellStyle(style);
 			
 			cell = row.createCell(11);
-			cell.setCellValue("");
+			cell.setCellValue("Đực");
 			cell.setCellStyle(style);
 			
 			cell = row.createCell(12);
-			cell.setCellValue("");
+			cell.setCellValue("Bình thường");
 			cell.setCellStyle(style);
 			
+		
 			
 			
 			rowCount++;

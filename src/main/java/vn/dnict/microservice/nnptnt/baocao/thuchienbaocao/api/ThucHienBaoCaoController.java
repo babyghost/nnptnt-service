@@ -1,6 +1,7 @@
 package vn.dnict.microservice.nnptnt.baocao.thuchienbaocao.api;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -112,6 +113,12 @@ public class ThucHienBaoCaoController {
 			throws EntityNotFoundException {
 		ThucHienBaoCao thucHienBaoCao = bussinessThucHienBaoCaoBussiness.delete(id);
 		return ResponseEntity.ok(thucHienBaoCao);
+	}
+	
+	@DeleteMapping(value = { "/delete/" })
+	public ResponseEntity<Integer> deletes(@Valid @RequestBody List<Long> ids) throws EntityNotFoundException {
+		Integer check = bussinessThucHienBaoCaoBussiness.deletes(ids);
+		return ResponseEntity.ok(check);
 	}
 	@GetMapping(value = { "/chitieu" })
 	public ResponseEntity<ThucHienBaoCaoData> findByChiTieu(

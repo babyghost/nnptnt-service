@@ -1,6 +1,7 @@
 package vn.dnict.microservice.nnptnt.chomeo.data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
@@ -26,6 +27,6 @@ public class ThongTinChoMeoOutput {
 	private Long chuQuanLyId;
 
 	private List<KeHoach2ChoMeo> listKeHoach2ChoMeo;
-	
+	private ArrayList<LocalDate> ngayTiemPhongList;
 	private LocalDate ngayTiemPhong;
 }

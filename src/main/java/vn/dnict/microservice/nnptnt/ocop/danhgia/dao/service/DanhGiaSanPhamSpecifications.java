@@ -23,7 +23,7 @@ public class DanhGiaSanPhamSpecifications {
 			public Predicate toPredicate(Root<DanhGiaSanPham> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				List<Predicate> predicates = new ArrayList<>();
-				predicates.add(cb.equal(root.<String>get("daXoa"), false));
+
 				
 				if (sanPhamId != null) {
 					predicates.add(cb.equal(root.<String>get("sanPhamId"), sanPhamId));

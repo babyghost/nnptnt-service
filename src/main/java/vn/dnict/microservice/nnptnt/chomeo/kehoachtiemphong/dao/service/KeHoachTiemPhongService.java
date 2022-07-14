@@ -15,7 +15,7 @@ public interface KeHoachTiemPhongService {
 
 	public Optional<KeHoachTiemPhong> findById(Long id);
 
-	public Page<KeHoachTiemPhong> findAll( String noiDung, String soKeHoach, String tenKeHoach,
-			 LocalDate ngayDuKienTuNgay, LocalDate ngayDuKienDenNgay,LocalDate ngayBanHanhTuNgay,LocalDate ngayBanHanh,
+	public Page<KeHoachTiemPhong> findAll(String soKeHoach, String tenKeHoach,
+			 LocalDate ngayDuKienTuNgay, LocalDate ngayDuKienDenNgay,LocalDate ngayBanHanhTuNgay,LocalDate ngayBanHanhDenNgay,
 			Pageable pageable);
 }

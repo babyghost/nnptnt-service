@@ -46,6 +46,7 @@ public class DanhGiaSanPhamBussiness {
 		danhGiaSanPhamData.setTieuChiId(danhGiaSanPham.getTieuChiId());
 		danhGiaSanPhamData.setTongDiemBaPhan(danhGiaSanPham.getTongDiemBaPhan());
 		danhGiaSanPhamData.setNgayTao(danhGiaSanPham.getNgayTao());
+		danhGiaSanPhamData.setDaXoa(danhGiaSanPham.getDaXoa());
 		if (Objects.nonNull(danhGiaSanPham.getPhanHangId())) {
 			Optional<DmPhanHang> optPhanHang = servicePhanHangService.findById(danhGiaSanPham.getPhanHangId());
 			if(optPhanHang.isPresent()) {

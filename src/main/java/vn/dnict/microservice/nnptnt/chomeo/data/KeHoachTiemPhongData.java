@@ -25,5 +25,6 @@ public class KeHoachTiemPhongData {
 	private List<Long> fileDinhKemIds = new ArrayList<>();	
 	private FileDinhKem fileDinhKem = new FileDinhKem();
 	
+	private boolean trangThai;
 	
 }

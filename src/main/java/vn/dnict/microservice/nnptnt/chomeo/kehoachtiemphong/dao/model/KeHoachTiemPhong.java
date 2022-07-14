@@ -54,7 +54,7 @@ public class KeHoachTiemPhong {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Column(name = "ngaydukien_denngay")
 	private LocalDate ngayDuKienDenNgay;
-	
+	 
 	@CreatedBy
 	@Column(name = "nguoitao")
 	private String nguoiTao;
@@ -76,4 +76,7 @@ public class KeHoachTiemPhong {
 	@JsonIgnore
 	@Column(name = "daxoa")
 	private boolean daXoa;
+	
+	@Column(name = "trangthai")
+	private boolean trangThai;
 }
