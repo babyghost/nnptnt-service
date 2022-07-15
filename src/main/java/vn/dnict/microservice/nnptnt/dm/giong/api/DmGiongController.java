@@ -33,8 +33,8 @@ public class DmGiongController {
 	public ResponseEntity<Page<DmGiong>> findAll(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "ten", required = false) String sortBy,
-			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
+			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
+			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
 			@RequestParam(name = "search", required = false) String search,
 			@RequestParam(name = "loaiDongVatId", required = false) Long loaiDongVatId,
 			@RequestParam(name = "trangThai",required=false) Integer trangThai) {

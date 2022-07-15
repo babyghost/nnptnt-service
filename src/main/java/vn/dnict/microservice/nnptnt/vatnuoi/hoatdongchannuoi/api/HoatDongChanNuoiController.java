@@ -45,8 +45,8 @@ public class HoatDongChanNuoiController {
 	public ResponseEntity<Page<HoatDongChanNuoiOutput>> findAll(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "coSoChanNuoiId", required = false) String sortBy,
-			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
+			@RequestParam(name = "sortBy", defaultValue = "quy", required = false) String sortBy,
+			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
 			@RequestParam(name = "tenCoSo", required = false) String tenCoSo,
 			@RequestParam(name = "tenChuCoSo", required = false) String tenChuCoSo,
 			@RequestParam(name = "dienThoai", required = false) String dienThoai,

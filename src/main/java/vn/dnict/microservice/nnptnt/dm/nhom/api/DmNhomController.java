@@ -31,7 +31,7 @@ public class DmNhomController {
 	public ResponseEntity<Page<DmNhomData>> findAll(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "ten", required = false) String sortBy,
+			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
 			@RequestParam(name = "ten", required = false) String ten,
 			@RequestParam(name = "dmNganhHangId", required = false) Long dmNganhHangId,

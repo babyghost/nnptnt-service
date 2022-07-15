@@ -38,8 +38,8 @@ public class ThongTinHopDongController {
 	public ResponseEntity<Page<ThongTinHopDong>> findAll(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "ngayTao", required = false) String sortBy,
-			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
+			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
+			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
 			@RequestParam(name = "search", required = false) String search,
 			@RequestParam(name = "ten", required = false) String ten,
 			@RequestParam(name = "soHieu", required = false) String soHieu,

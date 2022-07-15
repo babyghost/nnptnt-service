@@ -33,8 +33,8 @@ public class DmLoaiGiayToController {
 	public ResponseEntity<Page<DmLoaiGiayTo>> findAll(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "ten", required = false) String sortBy,
-			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
+			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
+			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
 			@RequestParam(name = "search", required = false) String search,
 			@RequestParam(name = "trangThai",required=false) Integer trangThai) {
 		Page<DmLoaiGiayTo> pageLoaiGiayTo = businessDmLoaiGiayToBusiness.findAll(page, size, sortBy, sortDir, search, trangThai);
