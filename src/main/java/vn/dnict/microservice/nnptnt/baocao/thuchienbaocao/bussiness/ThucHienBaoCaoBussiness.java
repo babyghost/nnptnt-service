@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,9 @@ import vn.dnict.microservice.nnptnt.baocao.chitieu.dao.model.ChiTieu;
 import vn.dnict.microservice.nnptnt.baocao.chitieu.dao.service.ChiTieuService;
 import vn.dnict.microservice.nnptnt.baocao.chitieunam.dao.model.ChiTieuNam;
 import vn.dnict.microservice.nnptnt.baocao.chitieunam.dao.service.ChiTieuNamService;
+import vn.dnict.microservice.nnptnt.baocao.data.ChiTieuKeHoachData;
+import vn.dnict.microservice.nnptnt.baocao.data.ChiTieuThucHienData;
+import vn.dnict.microservice.nnptnt.baocao.data.KeHoachData;
 import vn.dnict.microservice.nnptnt.baocao.data.ThongKeData;
 import vn.dnict.microservice.nnptnt.baocao.data.ThucHienBaoCaoData;
 import vn.dnict.microservice.nnptnt.baocao.kehoach.dao.model.KeHoach;
@@ -54,7 +58,35 @@ public class ThucHienBaoCaoBussiness {
 	@Autowired
 	KeHoachService serviceKeHoachService;
 
-	public Page<ThucHienBaoCaoData> findAll(int page, int size, String sortBy, String sortDir, Long linhVucId,
+	public Page<ChiTieuThucHienData> findAll(int page, int size, String sortBy, String sortDir, Long linhVucId,
+			LocalDate thangNam, LocalDate ngayThucHien) {
+		Direction direction;
+		if (sortDir.equals("ASC")) {
+			direction = Direction.ASC;
+		} else {
+			direction = Direction.DESC;
+		}
+		Page<ThucHienBaoCao> pageThucHienBaoCao = serviceThucHienBaoCaoService.findAll(linhVucId, thangNam,
+				ngayThucHien, PageRequest.of(page, size, direction, sortBy));
+		final Page<ChiTieuThucHienData> pageThucHienBaoCaoData = pageThucHienBaoCao
+				.map(this::convertToChiTieuThucHienData);
+
+		List<ChiTieuThucHienData> thucHineDataDatass = new ArrayList<>(
+				pageThucHienBaoCaoData.getContent());
+		 List<ChiTieuThucHienData> thucHienDataDatas = new ArrayList<>();
+
+			for (ChiTieuThucHienData element : thucHineDataDatass) {
+	           // Check if element not exist in list, perform add element to list
+	           if (!thucHienDataDatas.contains(element)) {
+	        	   thucHienDataDatas.add(element);
+	           }
+	       }
+			Page<ChiTieuThucHienData> thucHienDataImpl = new PageImpl<>(thucHienDataDatas);
+		
+		return thucHienDataImpl;
+	}
+
+	public Page<ThucHienBaoCaoData> findByThucHien(int page, int size, String sortBy, String sortDir, Long linhVucId,
 			LocalDate thangNam, LocalDate ngayThucHien) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
@@ -69,7 +101,72 @@ public class ThucHienBaoCaoBussiness {
 
 		return pageThucHienBaoCaoData;
 	}
+	
+	private ChiTieuThucHienData convertToChiTieuThucHienData(ThucHienBaoCao thucHienBaoCao) {
+		ChiTieuThucHienData chiTieuThucHienData = new ChiTieuThucHienData();
+		
 
+		chiTieuThucHienData.setNgayThucHien(thucHienBaoCao.getNgayThucHien());
+		chiTieuThucHienData.setThangNam(thucHienBaoCao.getThangNam());
+		if (Objects.nonNull(chiTieuThucHienData)) {
+			Optional<ChiTieu> optChiTieu = serviceChiTieuService.findById(thucHienBaoCao.getChiTieuId());
+
+			if (optChiTieu.isPresent()) {
+				Optional<ChiTieuNam> optChiTieuNam = serviceChiTieuNamService
+						.findById(optChiTieu.get().getChiTieuNamId());
+				if (optChiTieuNam.get().getId() != null) {
+
+					Optional<DmLinhVuc> optLinhVuc = serviceDmLinhVucService
+							.findById(optChiTieuNam.get().getLinhVucId());
+					if (optLinhVuc.isPresent()) {
+
+						chiTieuThucHienData.setLinhVucId(optLinhVuc.get().getId());
+						chiTieuThucHienData.setLinhVucTen(optLinhVuc.get().getTen());
+
+					}
+
+				}
+			}
+		}
+		int nam = chiTieuThucHienData.getThangNam().getYear();
+		List<ThucHienBaoCaoData> listThucHienDatas = new ArrayList<ThucHienBaoCaoData>();
+		List<ThucHienBaoCao> listThucHiens = serviceThucHienBaoCaoService.findListByLinhVucIdAndThangNamAndDaXoa(chiTieuThucHienData.getThangNam(), chiTieuThucHienData.getLinhVucId(), nam);
+		if(Objects.nonNull(listThucHiens) &&! listThucHiens.isEmpty()) {
+
+			for(ThucHienBaoCao thucHienBaoCao2 : listThucHiens) {
+				ThucHienBaoCaoData thucHienBaoCaoData = new ThucHienBaoCaoData();
+				thucHienBaoCaoData.setId(thucHienBaoCao2.getId());
+				thucHienBaoCaoData.setChiTieuId(thucHienBaoCao2.getChiTieuId());
+				thucHienBaoCaoData.setThucHien(thucHienBaoCao2.getThucHien());
+				thucHienBaoCaoData.setNgayThucHien(thucHienBaoCao2.getNgayThucHien());
+				thucHienBaoCaoData.setThangNam(thucHienBaoCao2.getThangNam());
+				if (Objects.nonNull(thucHienBaoCaoData)) {
+					Optional<ChiTieu> optChiTieu = serviceChiTieuService.findById(thucHienBaoCao2.getChiTieuId());
+
+					if (optChiTieu.isPresent()) {
+						Optional<ChiTieuNam> optChiTieuNam = serviceChiTieuNamService
+								.findById(optChiTieu.get().getChiTieuNamId());
+						if (optChiTieuNam.get().getId() != null) {
+
+							Optional<DmLinhVuc> optLinhVuc = serviceDmLinhVucService
+									.findById(optChiTieuNam.get().getLinhVucId());
+							if (optLinhVuc.isPresent()) {
+
+								thucHienBaoCaoData.setLinhVucId(optLinhVuc.get().getId());
+								thucHienBaoCaoData.setLinhVucTen(optLinhVuc.get().getTen());
+
+							}
+
+						}
+					}
+				}
+		
+				listThucHienDatas.add(thucHienBaoCaoData);
+			}
+		}
+		chiTieuThucHienData.setListBaoCao(listThucHienDatas);
+		return chiTieuThucHienData;
+	}
 	private ThucHienBaoCaoData convertToThucHienBaoCaoData(ThucHienBaoCao thucHienBaoCao) {
 		ThucHienBaoCaoData thucHienBaoCaoData = new ThucHienBaoCaoData();
 		thucHienBaoCaoData.setId(thucHienBaoCao.getId());

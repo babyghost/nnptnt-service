@@ -239,9 +239,9 @@ public class ThongTinChoMeoImportBusiness {
 					}
 
 					if (checkFlat == true) {
-						object.setTrangThaiImport(false);
-					} else {
 						object.setTrangThaiImport(true);
+					} else {
+						object.setTrangThaiImport(false);
 					}
 					object = serviceThongTinChoMeoImportService.save(object);
 					listObjectTemp.add(object);
@@ -262,7 +262,7 @@ public class ThongTinChoMeoImportBusiness {
 				Optional<ThongTinChoMeoImport> optional = serviceThongTinChoMeoImportService.findById(item);
 				if (optional.isPresent()) {
 					
-					
+					System.out.println("Kiểm tra ở đây đầu tiền nè"+ optional);
 					ThongTinChoMeoImport object = optional.get();
 					if (object.isTrangThaiImport() == true) {
 						System.out.println(object);
@@ -270,10 +270,10 @@ public class ThongTinChoMeoImportBusiness {
 					
 					ChuQuanLy chuQuanLy = new ChuQuanLy();
 				
-					
+					Optional<ChuQuanLy> optChuQuanLy = serviceChuQuanLyService.findByChuHoAndDienThoaiAndDiaChiAndDaXoa(object.getChuHo(), object.getDienThoai(), object.getDiaChi() ,false);
 					
 				
-//					if (!optChuQuanLy.isPresent()) {
+					if (!optChuQuanLy.isPresent()) {
 						chuQuanLy.setChuHo(object.getChuHo());
 						chuQuanLy.setDiaChi(object.getDiaChi());
 						chuQuanLy.setDienThoai(object.getDienThoai());
@@ -291,12 +291,10 @@ public class ThongTinChoMeoImportBusiness {
 						}
 						chuQuanLy.setDaXoa(false);
 						System.out.println("-----------"+chuQuanLy+"----------");
-					//	}
-						
-					
-			
-					serviceChuQuanLyService.save(chuQuanLy);
-						 
+						serviceChuQuanLyService.save(chuQuanLy);
+						}else {
+						chuQuanLy = optChuQuanLy.get();
+					}
 					
 						ThongTinChoMeo thongTinChoMeo = new ThongTinChoMeo();
 						thongTinChoMeo.setMauLong(object.getMauLong());

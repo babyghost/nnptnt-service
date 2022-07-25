@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
 import vn.dnict.microservice.nnptnt.vatnuoi.cosochannuoi.business.CoSoChanNuoiBusiness;
 import vn.dnict.microservice.nnptnt.vatnuoi.data.BaoCaoHoatDongChanNuoiData;
+import vn.dnict.microservice.nnptnt.vatnuoi.data.CoSoChanNuoiData;
 import vn.dnict.microservice.nnptnt.vatnuoi.data.HoatDongChanNuoiOutput;
 import vn.dnict.microservice.nnptnt.vatnuoi.data.ThongKeSoLuongChanNuoiData;
 import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.business.HoatDongChanNuoiBusiness;
@@ -42,10 +43,10 @@ public class HoatDongChanNuoiController {
 	HoatDongChanNuoiBusiness businessHoatDongChanNuoiBusiness;
 
 	@GetMapping(value = { "/", "" })
-	public ResponseEntity<Page<HoatDongChanNuoiOutput>> findAll(
+	public ResponseEntity<Page<CoSoChanNuoiData>> findAll(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
+			@RequestParam(name = "sortBy", defaultValue = "nam", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
 			@RequestParam(name = "tenCoSo", required = false) String tenCoSo,
 			@RequestParam(name = "tenChuCoSo", required = false) String tenChuCoSo,
@@ -54,7 +55,7 @@ public class HoatDongChanNuoiController {
 			@RequestParam(name = "phuongXaId", required = false) Long phuongXaId,
 			@RequestParam(name= "nam",required = false) String nam,
 			@RequestParam(name= "quy",required = false) Integer quy) {
-		Page<HoatDongChanNuoiOutput> pageHoatDongChanNuoiOutput = businessHoatDongChanNuoiBusiness.findAll(page, size, 
+		Page<CoSoChanNuoiData> pageHoatDongChanNuoiOutput = businessHoatDongChanNuoiBusiness.findAll(page, size, 
 				sortBy, sortDir, tenCoSo, tenChuCoSo, dienThoai, quanHuyenId, phuongXaId, nam, quy);
 			return ResponseEntity.ok(pageHoatDongChanNuoiOutput);
 	} 
@@ -83,7 +84,11 @@ public class HoatDongChanNuoiController {
 		HoatDongChanNuoiOutput hoatDongChanNuoiOutput = businessHoatDongChanNuoiBusiness.delete(id);
 		return ResponseEntity.ok(hoatDongChanNuoiOutput);
 	}	
-	
+	@DeleteMapping(value = { "/delete/" })
+	public ResponseEntity<Integer> deletes(@Valid @RequestBody List<Long> ids) throws EntityNotFoundException {
+		Integer check = businessHoatDongChanNuoiBusiness.deletes(ids);
+		return ResponseEntity.ok(check);
+	}
 	
 //	----------------------------------------baocaothongkevatnuoi
 

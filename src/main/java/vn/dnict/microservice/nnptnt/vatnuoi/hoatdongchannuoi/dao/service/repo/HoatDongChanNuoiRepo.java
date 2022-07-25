@@ -24,6 +24,9 @@ import vn.dnict.microservice.nnptnt.vatnuoi.hoatdongchannuoi.dao.model.HoatDongC
 
 	public List<HoatDongChanNuoi> findByCoSoChanNuoiIdAndNamAndQuyAndDaXoa(Long coSoChanNuoiId, String nam, Integer quy, Boolean daXoa);
 	
+    @Query("SELECT DISTINCT a FROM HoatDongChanNuoi a WHERE a.daXoa =false AND a.nam= ?1 AND a.coSoChanNuoiId=?2")
+	public List<HoatDongChanNuoi> findQuyByNamAndcoSoChanNuoiId(String nam, Long coSoChanNuoiId);
+	
 
     @Query("SELECT a.nam, a.quy, a.loaiVatNuoiId, SUM(a.soLuongNuoi) as tongSoLuongNuoi, SUM(a.slVatNuoiXuat) as tongSLVatNuoi, SUM(a.sanLuongXuat) as tongSanLuongXuat FROM HoatDongChanNuoi AS a WHERE daXoa = false AND a.nam = ?1 AND  a.loaiVatNuoiId in ?2 AND a.quy in  ?3 GROUP BY (a.loaiVatNuoiId, a.nam, a.quy)")
     public List<Object[]> thongKeSoVatNuoi( String nam , List< Long> loaiVatNuoiIds ,List< Integer> quy);

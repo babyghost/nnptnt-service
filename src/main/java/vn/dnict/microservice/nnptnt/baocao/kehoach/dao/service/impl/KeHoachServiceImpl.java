@@ -1,5 +1,6 @@
 package vn.dnict.microservice.nnptnt.baocao.kehoach.dao.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,18 @@ public class KeHoachServiceImpl implements KeHoachService {
 	public Optional<KeHoach> findByNamAndLinhVucIdAndChiTieuId(Integer nam, Long linhVucId,Long chiTieuId) {
 		// TODO Auto-generated method stub
 		return repo.findByNamAndLinhVucIdAndChiTieuId(nam, linhVucId,chiTieuId);
+	}
+
+	@Override
+	public List<KeHoach> findListByNamAndLinhVucId(Integer nam, Long linhVucId) {
+		// TODO Auto-generated method stub
+		return repo.findListByNamAndLinhVucId(nam, linhVucId);
+	}
+
+	@Override
+	public Optional<KeHoach> findByNamAndLinhVucId(Integer nam, Long linhVucId) {
+		// TODO Auto-generated method stub
+		return repo.findByNamAndLinhVucId(nam, linhVucId);
 	}
 
 }

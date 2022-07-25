@@ -93,4 +93,12 @@ public class HoatDongChanNuoiServiceImpl implements  HoatDongChanNuoiService{
 		return repo.thongKeSoVatNuoiDemo(nam, loaiVatNuoiIds, quy, pageable);
 	}
 
+	@Override
+	public List<HoatDongChanNuoi> findQuyByNamAndcoSoChanNuoiId(String nam, Long coSoChanNuoiId) {
+		// TODO Auto-generated method stub
+		return repo.findQuyByNamAndcoSoChanNuoiId(nam, coSoChanNuoiId);
+	}
+
+
+
 }

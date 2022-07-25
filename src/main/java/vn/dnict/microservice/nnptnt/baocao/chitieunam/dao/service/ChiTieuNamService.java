@@ -14,7 +14,7 @@ public interface ChiTieuNamService {
 
 	public Optional< ChiTieuNam> findById(Long id);
 	
-	Optional<ChiTieuNam> findByLinhVucIdAndNamAndDaXoa(Long linhVucId, Integer nam );
+	public Optional<ChiTieuNam> findByLinhVucIdAndNamAndDaXoa(Long linhVucId, Integer nam );
 
 	
 	public Page< ChiTieuNam> findAll(Long linhVucId, Integer nam, Pageable pageable);

@@ -246,11 +246,15 @@ public class MyExcelViewThongKeChoMeo extends AbstractXlsView {
 		// sheet.setDefaultColumnWidth((short) 15);
 		sheet.setColumnWidth(0, 7 * 256);
 		sheet.setColumnWidth(1, 30 * 256);
-		sheet.setColumnWidth(2, 12 * 256);
-		sheet.setColumnWidth(3, 12 * 256);
-		sheet.setColumnWidth(4, 12 * 256);
-		sheet.setColumnWidth(5, 40 * 256);
+		sheet.setColumnWidth(2, 20 * 256);
+		sheet.setColumnWidth(3, 20 * 256);
+		sheet.setColumnWidth(4, 20 * 256);
 		sheet.setColumnWidth(5, 20 * 256);
+		sheet.setColumnWidth(6, 20 * 256);
+		sheet.setColumnWidth(7, 20 * 256);
+		sheet.setColumnWidth(8, 20 * 256);
+		sheet.setColumnWidth(9, 20 * 256);
+		sheet.setColumnWidth(10, 20 * 256);
 
 		int currentRow = 2;
 		int col0 = 0;
@@ -335,13 +339,16 @@ public class MyExcelViewThongKeChoMeo extends AbstractXlsView {
 		cell2.setCellValue("Thời gian tiêm phòng");
 		currentColumn++;
 
-		List<ThongTinChoMeoData> thongTinChoMeoDatas = (List<ThongTinChoMeoData>) model
-				.get("thongKeThongTinChoMeoDatas");
+		List<ChuQuanLyData> chuQuanLyDatas = (List<ChuQuanLyData>) model
+				.get("chuQuanLyData");
 		int stt = 1;
-		if (Objects.nonNull(thongTinChoMeoDatas) && !thongTinChoMeoDatas.isEmpty()) {
+		if (Objects.nonNull(chuQuanLyDatas) && !chuQuanLyDatas.isEmpty()) {
 
-			for (ThongTinChoMeoData thongTinChoMeoData : thongTinChoMeoDatas) {
-
+			for (ChuQuanLyData chuQuanLyData : chuQuanLyDatas) {
+				List<ThongTinChoMeoData> thongTinChoMeoDatas = chuQuanLyData.getThongTinChoMeoDatas();
+				if(Objects.nonNull(thongTinChoMeoDatas) && !thongTinChoMeoDatas.isEmpty()) {
+					for (ThongTinChoMeoData thongTinChoMeoData : thongTinChoMeoDatas) {
+				
 				currentRow++;
 				currentColumn = 0;
 				System.out.println(thongTinChoMeoData);
@@ -354,30 +361,30 @@ public class MyExcelViewThongKeChoMeo extends AbstractXlsView {
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellLeft);
 				cell2.setCellValue(
-						thongTinChoMeoData.getChuQuanLyTen() != null ? thongTinChoMeoData.getChuQuanLyTen() : "");
+						chuQuanLyData.getChuHo() != null ? chuQuanLyData.getChuHo() : "");
 				currentColumn++;
 
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellCenter);
 				cell2.setCellValue(
-						thongTinChoMeoData.getChuQuanLyDiaChi() != null ? thongTinChoMeoData.getChuQuanLyDiaChi() : "");
+						chuQuanLyData.getDiaChi() != null ? chuQuanLyData.getDiaChi() : "");
 				currentColumn++;
 
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellCenter);
 				cell2.setCellValue(
-						thongTinChoMeoData.getQuanHuyenTen() != null ? thongTinChoMeoData.getQuanHuyenTen() : "");
+						chuQuanLyData.getQuanHuyen_Ten() != null ? chuQuanLyData.getQuanHuyen_Ten() : "");
 				currentColumn++;
 
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellCenter);
 				cell2.setCellValue(
-						thongTinChoMeoData.getPhuongXaTen() != null ? thongTinChoMeoData.getPhuongXaTen() : "");
+						chuQuanLyData.getPhuongXa_Ten() != null ? chuQuanLyData.getPhuongXa_Ten() : "");
 				currentColumn++;
 
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellCenter);
-				cell2.setCellValue(thongTinChoMeoData.getDienthoai() != null ? thongTinChoMeoData.getDienthoai() : "");
+				cell2.setCellValue(chuQuanLyData.getDienThoai() != null ?chuQuanLyData.getDienThoai() : "");
 				currentColumn++;
 				cell2 = headerRow.createCell(currentColumn);
 				cell2.setCellStyle(styleCellCenter);
@@ -422,8 +429,85 @@ public class MyExcelViewThongKeChoMeo extends AbstractXlsView {
 //								cell2.setCellValue(thoiGianTiemPhong);
 //								currentColumn++;
 
-				System.out.println("++++++++++++++++++++++");
+					}
+					if (thongTinChoMeoDatas.size() > 1) {
+						sheet.addMergedRegion(new CellRangeAddress(
+								currentRow - thongTinChoMeoDatas.size() + 1, currentRow, 0, 0));
+						sheet.addMergedRegion(new CellRangeAddress(
+								currentRow - thongTinChoMeoDatas.size() + 1, currentRow, 1, 1));
+						sheet.addMergedRegion(new CellRangeAddress(
+								currentRow - thongTinChoMeoDatas.size() + 1, currentRow, 2, 2));
+						sheet.addMergedRegion(new CellRangeAddress(
+								currentRow - thongTinChoMeoDatas.size() + 1, currentRow, 3, 3));
+						sheet.addMergedRegion(new CellRangeAddress(
+								currentRow - thongTinChoMeoDatas.size() + 1, currentRow, 4, 4));
+						sheet.addMergedRegion(new CellRangeAddress(
+								currentRow - thongTinChoMeoDatas.size() + 1, currentRow, 5, 5));
+					}
 
+				} else {
+					currentRow++;
+					currentColumn = 0;
+
+					headerRow = sheet.createRow(currentRow);
+					cell2 = headerRow.createCell(currentColumn);
+					cell2.setCellStyle(styleCellCenter);
+					cell2.setCellValue(stt);
+					currentColumn++;
+
+					cell2 = headerRow.createCell(currentColumn);
+					cell2.setCellStyle(styleCellLeft);
+					cell2.setCellValue(
+							chuQuanLyData.getChuHo() != null ? chuQuanLyData.getChuHo() : "");
+					currentColumn++;
+
+					cell2 = headerRow.createCell(currentColumn);
+					cell2.setCellStyle(styleCellCenter);
+					cell2.setCellValue(
+							chuQuanLyData.getDiaChi() != null ? chuQuanLyData.getDiaChi() : "");
+					currentColumn++;
+
+					cell2 = headerRow.createCell(currentColumn);
+					cell2.setCellStyle(styleCellCenter);
+					cell2.setCellValue(
+							chuQuanLyData.getQuanHuyen_Ten() != null ? chuQuanLyData.getQuanHuyen_Ten() : "");
+					currentColumn++;
+
+					cell2 = headerRow.createCell(currentColumn);
+					cell2.setCellStyle(styleCellCenter);
+					cell2.setCellValue(
+							chuQuanLyData.getPhuongXa_Ten() != null ? chuQuanLyData.getPhuongXa_Ten() : "");
+					currentColumn++;
+
+					cell2 = headerRow.createCell(currentColumn);
+					cell2.setCellStyle(styleCellCenter);
+					cell2.setCellValue(chuQuanLyData.getDienThoai() != null ?chuQuanLyData.getDienThoai() : "");
+					currentColumn++;
+					cell2 = headerRow.createCell(currentColumn);
+					cell2.setCellStyle(styleCellLeft);
+					cell2.setCellValue("");
+					currentColumn++;
+
+					cell2 = headerRow.createCell(currentColumn);
+					cell2.setCellStyle(styleCellLeft);
+					cell2.setCellValue("");
+					currentColumn++;
+
+					cell2 = headerRow.createCell(currentColumn);
+					cell2.setCellStyle(styleCellLeft);
+					cell2.setCellValue("");
+					currentColumn++;
+
+					cell2 = headerRow.createCell(currentColumn);
+					cell2.setCellStyle(styleCellLeft);
+					cell2.setCellValue("");
+					currentColumn++;
+
+					cell2 = headerRow.createCell(currentColumn);
+					cell2.setCellStyle(styleCellLeft);
+					cell2.setCellValue("");
+					currentColumn++;
+				}
 				stt++;
 
 			}

@@ -1,6 +1,7 @@
 package vn.dnict.microservice.nnptnt.baocao.thuchienbaocao.dao.service.impl;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +84,13 @@ public class ThucHienBaoCaoServiceImpl implements ThucHienBaoCaoService{
 			Long LinhVucId, Integer namCu) {
 		// TODO Auto-generated method stub
 		return repo.CountSoThangThucHienNamCu(thangBatDau, thangKetThuc, chiTieuTen, LinhVucId, namCu);
+	}
+
+	@Override
+	public List<ThucHienBaoCao> findListByLinhVucIdAndThangNamAndDaXoa(LocalDate thangNam, Long linhVucId,
+			Integer nam) {
+		// TODO Auto-generated method stub
+		return repo.findListByLinhVucIdAndThangNamAndDaXoa(thangNam, linhVucId, nam);
 	}
 
 }

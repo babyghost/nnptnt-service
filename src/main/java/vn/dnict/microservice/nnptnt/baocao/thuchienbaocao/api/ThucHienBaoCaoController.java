@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
+import vn.dnict.microservice.nnptnt.baocao.data.ChiTieuThucHienData;
 import vn.dnict.microservice.nnptnt.baocao.data.ThongKeData;
 import vn.dnict.microservice.nnptnt.baocao.data.ThucHienBaoCaoData;
 import vn.dnict.microservice.nnptnt.baocao.thuchienbaocao.bussiness.ThucHienBaoCaoBussiness;
@@ -40,7 +41,7 @@ public class ThucHienBaoCaoController {
 	
 	
 	@GetMapping(value = { "/", "" })
-	public ResponseEntity<Page<ThucHienBaoCaoData>> findAll(
+	public ResponseEntity<Page<ChiTieuThucHienData>> findAll(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
 			@RequestParam(name = "sortBy", defaultValue = "ngayThucHien", required = false) String sortBy,
@@ -48,11 +49,22 @@ public class ThucHienBaoCaoController {
 			@RequestParam(name = "linhVucId", required = false) Long linhVucId,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "thangNam", required = false) LocalDate thangNam,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayThucHien", required = false) LocalDate ngayThucHien) {
-		Page<ThucHienBaoCaoData> pageThucHienBaoCaoData= bussinessThucHienBaoCaoBussiness.findAll(page, size, sortBy, sortDir, linhVucId, thangNam, ngayThucHien);
+		Page<ChiTieuThucHienData> pageThucHienBaoCaoData= bussinessThucHienBaoCaoBussiness.findAll(page, size, sortBy, sortDir, linhVucId, thangNam, ngayThucHien);
 		return ResponseEntity.ok(pageThucHienBaoCaoData);
 	}
 	
-	
+	@GetMapping(value = { "/thuchien", })
+	public ResponseEntity<Page<ThucHienBaoCaoData>> findThucHien(
+			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
+			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
+			@RequestParam(name = "sortBy", defaultValue = "ngayThucHien", required = false) String sortBy,
+			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
+			@RequestParam(name = "linhVucId", required = false) Long linhVucId,
+			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "thangNam", required = false) LocalDate thangNam,
+			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "ngayThucHien", required = false) LocalDate ngayThucHien) {
+		Page<ThucHienBaoCaoData> pageThucHienBaoCaoData= bussinessThucHienBaoCaoBussiness.findByThucHien(page, size, sortBy, sortDir, linhVucId, thangNam, ngayThucHien);
+		return ResponseEntity.ok(pageThucHienBaoCaoData);
+	}
 	@GetMapping(value = { "/thongke" })
 	public ResponseEntity<Page<ThongKeData>> thongKe(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,

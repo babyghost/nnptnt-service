@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.dnict.microservice.exceptions.EntityNotFoundException;
+import vn.dnict.microservice.nnptnt.baocao.data.ChiTieuKeHoachData;
 import vn.dnict.microservice.nnptnt.baocao.data.KeHoachData;
 import vn.dnict.microservice.nnptnt.baocao.data.ThucHienBaoCaoData;
 import vn.dnict.microservice.nnptnt.baocao.kehoach.bussiness.KeHoachBussiness;
@@ -34,7 +35,7 @@ public class KeHoachController {
 	@Autowired
 	KeHoachBussiness bussinessKeHoachBussiness;
 	@GetMapping(value = { "/", "" })
-	public ResponseEntity<Page<KeHoachData>> findAll(
+	public ResponseEntity<Page<ChiTieuKeHoachData>> findAll(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
 			@RequestParam(name = "sortBy", defaultValue = "nam", required = false) String sortBy,
@@ -42,7 +43,7 @@ public class KeHoachController {
 			@RequestParam(name = "linhVucId", required = false) Long linhVucId,
 
 			@RequestParam(name = "nam",required=false) Integer nam) {
-		Page<KeHoachData> pageKeHoachData= bussinessKeHoachBussiness.findAll(page, size, sortBy, sortDir, linhVucId,nam);
+		Page<ChiTieuKeHoachData> pageKeHoachData= bussinessKeHoachBussiness.findAll(page, size, sortBy, sortDir, linhVucId,nam);
 		return ResponseEntity.ok(pageKeHoachData);
 	}
 	
@@ -79,15 +80,16 @@ public class KeHoachController {
 		return ResponseEntity.ok(check);
 	}
 	
-	@GetMapping(value = { "/chitieu" })
-	public ResponseEntity<KeHoachData> findByChiTieu(
+	@GetMapping(value = { "/kehoach" })
+	public ResponseEntity<Page<KeHoachData>> findByKeHoach(
+			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
+			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
+			@RequestParam(name = "sortBy", defaultValue = "nam", required = false) String sortBy,
+			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
+			@RequestParam(name = "linhVucId", required = false) Long linhVucId,
 
-			@RequestParam(name = "linhVucId", required = false) long linhVucId,
-			@RequestParam(name = "nam", required = false) Integer nam,
-			@RequestParam(name = "chiTieuId", required = false) long chiTieuId
-
-			) throws EntityNotFoundException {
-		KeHoachData keHoachData = bussinessKeHoachBussiness.findChiTieu(linhVucId, nam, chiTieuId);
-		return ResponseEntity.ok(keHoachData);
+			@RequestParam(name = "nam",required=false) Integer nam) {
+		Page<KeHoachData> pageKeHoachData= bussinessKeHoachBussiness.findByKeHoach(page, size, sortBy, sortDir, linhVucId,nam);
+		return ResponseEntity.ok(pageKeHoachData);
 	}
 }
