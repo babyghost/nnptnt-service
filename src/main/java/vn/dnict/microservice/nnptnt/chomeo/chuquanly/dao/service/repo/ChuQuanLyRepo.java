@@ -13,6 +13,7 @@ import vn.dnict.microservice.nnptnt.chomeo.chuquanly.dao.model.ChuQuanLy;
 
 @Repository
 public interface ChuQuanLyRepo extends JpaRepository<ChuQuanLy,Long> , JpaSpecificationExecutor<ChuQuanLy>{
-	Optional<ChuQuanLy> findByChuHoAndDaXoa(String chuHo, Boolean daXoa);
-	List<ChuQuanLy> findByDienThoai(String dienthoai);
+	public Optional<ChuQuanLy> findByChuHoAndDaXoa(String chuHo, Boolean daXoa);
+	public List<ChuQuanLy> findByDienThoai(String dienthoai);
+	public Optional<ChuQuanLy> findByChuHoAndDienThoaiAndDiaChiAndDaXoa(String chuHo, String dienThoai,String diaChi, Boolean daXoa);
 }

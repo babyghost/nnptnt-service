@@ -58,4 +58,11 @@ class ChuQuanLyServiceImpl implements ChuQuanLyService {
 		return repo.findByDienThoai(dienthoai);
 	}
 
+	@Override
+	public Optional<ChuQuanLy> findByChuHoAndDienThoaiAndDiaChiAndDaXoa(String chuHo, String dienThoai, String diaChi,
+			Boolean daXoa) {
+		// TODO Auto-generated method stub
+		return repo.findByChuHoAndDienThoaiAndDiaChiAndDaXoa(chuHo, dienThoai, diaChi, daXoa);
+	}
+
 }

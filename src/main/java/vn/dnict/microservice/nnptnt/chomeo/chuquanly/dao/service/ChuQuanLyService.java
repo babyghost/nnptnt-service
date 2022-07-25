@@ -21,4 +21,5 @@ public interface ChuQuanLyService {
 	
 	public List<ChuQuanLy> findByDienThoai(String dienthoai);
 	
+	public Optional<ChuQuanLy> findByChuHoAndDienThoaiAndDiaChiAndDaXoa(String chuHo, String dienThoai,String diaChi, Boolean daXoa);
 }

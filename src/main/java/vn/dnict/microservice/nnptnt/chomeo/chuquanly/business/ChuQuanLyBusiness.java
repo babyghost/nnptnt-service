@@ -283,7 +283,7 @@ public class ChuQuanLyBusiness {
 		chuQuanLy.setDaXoa(false);
 		chuQuanLy = serviceChuQuanLyService.save(chuQuanLy);
 
-		serviceThongTinChoMeoService.setFixedDaXoaForChuQuanLyId(false, chuQuanLy.getId());
+		serviceThongTinChoMeoService.setFixedDaXoaForChuQuanLyId(true, chuQuanLy.getId());
 		List<ThongTinChoMeoData> thongTinChoMeoDatas = chuQuanLyData.getThongTinChoMeoDatas();
 		if (Objects.nonNull(thongTinChoMeoDatas) && !thongTinChoMeoDatas.isEmpty()) {
 			for (ThongTinChoMeoData thongTinChoMeoData : thongTinChoMeoDatas) {
