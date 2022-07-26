@@ -285,7 +285,7 @@ public class MyExcelViewTongHopSoLuongNgay extends AbstractXlsView {
 
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);
-		cell2.setCellValue(thongKeSoLuongDatas.get(0).getCoSoTen());
+//		cell2.setCellValue(thongKeSoLuongDatas.get(0).getCoSoTen());
 		currentColumn++;
 
 		cell2 = headerRow.createCell(currentColumn);

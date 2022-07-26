@@ -66,7 +66,7 @@ public class ThongTinGietMoController {
 	public ResponseEntity<Page<ThongKeSoLuongData>> tongHopSoLuongNgay(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
+			@RequestParam(name = "sortBy", defaultValue = "ngayThang", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
 			@RequestParam(name = "tenCoSo", required = false) List<String> tenCoSos,
 			@RequestParam(name = "loaiVatNuoiId", required = false) List<Long> loaiVatNuoiIds,
@@ -81,8 +81,8 @@ public class ThongTinGietMoController {
 	public ModelAndView thongKeSoLuongNgay(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
-			@RequestParam(name = "sortDir", defaultValue = "DESC", required = false) String sortDir,
+			@RequestParam(name = "sortBy", defaultValue = "ngayThang", required = false) String sortBy,
+			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
 			@RequestParam(name = "tenCoSo", required = false) List<String> tenCoSos,
 			@RequestParam(name = "loaiVatNuoiId", required = false) List<Long> loaiVatNuoiIds,
 			@DateTimeFormat(pattern = "dd/MM/yyyy")	@RequestParam(name = "gietMoTuNgay", required = false) LocalDate gietMoTuNgay,
@@ -95,7 +95,7 @@ public class ThongTinGietMoController {
 	public ResponseEntity<Page<ThongKeSoLuongData>> tongHopSoLuongThang(
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "size", defaultValue = "20", required = false) int size,
-			@RequestParam(name = "sortBy", defaultValue = "ngayCapNhat", required = false) String sortBy,
+			@RequestParam(name = "sortBy", defaultValue = "ngayThang", required = false) String sortBy,
 			@RequestParam(name = "sortDir", defaultValue = "ASC", required = false) String sortDir,
 			@RequestParam(name = "tenCoSo", required = false) List<String> tenCoSos,
 			@RequestParam(name = "loaiVatNuoiId", required = false) List<Long> loaiVatNuoiIds,

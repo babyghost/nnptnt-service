@@ -284,7 +284,7 @@ private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 		cell2 = headerRow.createCell(currentColumn);
 		cell2.setCellStyle(styleHeaderB);
-		cell2.setCellValue(thongKeSoLuongDatas.get(0).getCoSoTen());
+//		cell2.setCellValue(thongKeSoLuongDatas.get(0).getCoSoTen());
 		currentColumn++;
 
 		cell2 = headerRow.createCell(currentColumn);

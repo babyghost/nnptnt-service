@@ -77,4 +77,10 @@ public class ThongTinGietMoServiceImpl implements ThongTinGietMoService {
 				gietMoDenThang), pageable);
 	}
 
+	@Override
+	public List<ThongTinGietMo> findByNgayThangAndDaXoa(LocalDate ngayThang, Boolean daXoa) {
+		// TODO Auto-generated method stub
+		return repo.findByNgayThangAndDaXoa(ngayThang, daXoa);
+	}
+
 }
