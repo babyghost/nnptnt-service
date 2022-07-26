@@ -258,6 +258,7 @@ public class ThongTinGietMoBusiness {
            	thongKeSoLuongDatas.add(element);
            }
         }
+		System.out.println("------->"+thongKeSoLuongDatas);
 		Page<ThongKeSoLuongData> thongKeSoLuongDataImpl = new PageImpl<>(thongKeSoLuongDatas);
 		return thongKeSoLuongDataImpl;
 	}
@@ -281,7 +282,7 @@ public class ThongTinGietMoBusiness {
 				
 				List<SoLuongGietMoData> soLuongGietMoDatas = new ArrayList<SoLuongGietMoData>();
 				List<SoLuongGietMo> listSoLuongs = serviceSoLuongGietMoService
-						.findByThongTinGietMoIdAndDaXoa(thongTinGietMo.getId(), false);
+						.findByThongTinGietMoIdAndDaXoa(listThongTin.getId(), false);
 				if(Objects.nonNull(listSoLuongs) && !listSoLuongs.isEmpty()) {
 					for(SoLuongGietMo soLuongGietMo : listSoLuongs) {
 						SoLuongGietMoData soLuongData = new SoLuongGietMoData();
@@ -301,10 +302,11 @@ public class ThongTinGietMoBusiness {
 				thongTinData.setListSoLuongGietMo(soLuongGietMoDatas);
 				thongTinDatas.add(thongTinData);
 			}
+			
 		}
 
 		List<ThongTinGietMoData> thongTinDatass = new ArrayList<>();
-
+	
 		for (ThongTinGietMoData element : thongTinDatas) {
            // Check if element not exist in list, perform add element to list
            if (!thongTinDatass.contains(element)) {
