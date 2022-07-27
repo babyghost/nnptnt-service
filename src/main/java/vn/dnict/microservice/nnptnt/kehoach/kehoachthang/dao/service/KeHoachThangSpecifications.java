@@ -49,7 +49,7 @@ public class KeHoachThangSpecifications {
 					predicates.add(cb.lessThanOrEqualTo(root.get("thoiGian").as(LocalDate.class), denThoiHan));
 				}
 				if (tinhTrang != null && tinhTrang > -1) {
-					predicates.add(cb.equal(root.<String>get("tinhTrang"), tinhTrang));
+					predicates.add(cb.equal(root.join("nhiemVuThangs").<String>get("tinhTrang"), tinhTrang));
 				}
 				if (!predicates.isEmpty()) {
 					return cb.and(predicates.toArray(new Predicate[] {}));
