@@ -77,15 +77,15 @@ public class NhiemVuThangBusiness {
 	};
 
 	public Page<NhiemVuThangData> findAll(int page, int size, String sortBy, String sortDir, Long donViChuTriId,
-			List<LocalDate> thangs, List<Integer> tinhTrangs, String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay) {
+			List<LocalDate> thangs, Long canBoThucHienId, List<Integer> tinhTrangs, String tenNhiemVu, LocalDate tuNgay, LocalDate denNgay) {
 		Direction direction;
 		if (sortDir.equals("ASC")) {
 			direction = Direction.ASC;
 		} else {
 			direction = Direction.DESC;
 		}
-		final Page<NhiemVuThang> pageNhiemVuThang = serviceNhiemVuThangService.findAll(donViChuTriId, thangs, tinhTrangs,
-				tenNhiemVu, tuNgay, denNgay, PageRequest.of(page, size, direction, sortBy));
+		final Page<NhiemVuThang> pageNhiemVuThang = serviceNhiemVuThangService.findAll(donViChuTriId, thangs, canBoThucHienId,
+				tinhTrangs, tenNhiemVu, tuNgay, denNgay, PageRequest.of(page, size, direction, sortBy));
 		final Page<NhiemVuThangData> pageNhiemVuThangData = pageNhiemVuThang.map(this::convertToNhiemVuThangData);
 		return pageNhiemVuThangData;
 	}

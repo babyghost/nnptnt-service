@@ -20,7 +20,7 @@ public interface NhiemVuThangService {
 
 	public int setFixedDaXoaForKeHoachThangId(Boolean daXoa, Long keHoachThangId);
 	
-	public Page<NhiemVuThang> findAll(Long donViChuTriId, List<LocalDate> thangs, List<Integer> tinhTrangs, String tenNhiemVu,
+	public Page<NhiemVuThang> findAll(Long donViChuTriId, List<LocalDate> thangs, Long canBoThucHienId, List<Integer> tinhTrangs, String tenNhiemVu,
 			LocalDate tuNgay, LocalDate denNgay, Pageable pageable);
 
 	public List<NhiemVuThang> getThongKeSoLuong(Long donViChuTriId, List<LocalDate> thangs, Long keHoachThangId, String tenNhiemVu,

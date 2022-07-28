@@ -16,7 +16,7 @@ import vn.dnict.microservice.nnptnt.kehoach.nhiemvuthang.dao.model.NhiemVuThang;
 
 public class NhiemVuThangSpecifications {
 	public static Specification<NhiemVuThang> quichSearch(final Long donViChuTriId, final List<LocalDate> thangs,
-			final List<Integer> tinhTrangs, final String tenNhiemVu, final LocalDate tuNgay, final LocalDate denNgay) {
+			final Long canBoThucHienId, final List<Integer> tinhTrangs, final String tenNhiemVu, final LocalDate tuNgay, final LocalDate denNgay) {
 		return new Specification<NhiemVuThang>() {
 
 			/**
@@ -32,6 +32,9 @@ public class NhiemVuThangSpecifications {
 				
 				if(donViChuTriId != null && donViChuTriId > -1) {
 					predicates.add(cb.equal(root.join("keHoachThang").<Long>get("donViChuTriId"), donViChuTriId));
+				}
+				if(canBoThucHienId != null && canBoThucHienId > -1) {
+					predicates.add(cb.equal(root.<String>get("canBoThucHienId"), canBoThucHienId));
 				}
 				if (thangs != null && !thangs.isEmpty()) {
 					List<Integer> years = new ArrayList<Integer>();
