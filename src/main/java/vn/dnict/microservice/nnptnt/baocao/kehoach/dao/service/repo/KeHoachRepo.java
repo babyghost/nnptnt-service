@@ -13,7 +13,7 @@ import vn.dnict.microservice.nnptnt.baocao.kehoach.dao.model.KeHoach;
 @Repository
 public interface KeHoachRepo extends JpaRepository<KeHoach, Long>, JpaSpecificationExecutor<KeHoach> {
 	
-	@Query(value = "SELECT * FROM bc_kehoach u WHERE u.nam=?1 AND u.dmlinhvuc_id=?2  AND u.daxoa = FALSE", nativeQuery = true)
+	@Query(value = "SELECT * FROM bc_kehoach u WHERE u.nam=?1 AND u.dmlinhvuc_id=?2  AND u.chitieu_id =?3 AND u.daxoa = FALSE", nativeQuery = true)
 	public Optional<KeHoach> findByNamAndLinhVucIdAndChiTieuId(Integer nam, Long linhVucId, Long chiTieuId);
 
 	@Query(value = "SELECT * FROM bc_kehoach u WHERE u.nam=?1 AND u.dmlinhvuc_id=?2 AND u.daxoa = FALSE", nativeQuery = true)
